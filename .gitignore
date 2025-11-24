@@ -1,0 +1,58 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.pdb
+*.exe
+*.log
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio
+.vs/
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Rider
+.idea/
+*.sln.iml
+
+# Environment variables - IMPORTANT: Never commit this!
+.env
+
+# State files
+/data/
+state.json
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Rider and VS Code
+.vscode/
+*.swp
+*.swo
+*~
+
+# Docker
+.dockerignore
+docker-compose.override.yml
