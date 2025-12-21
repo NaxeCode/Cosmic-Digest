@@ -1,174 +1,105 @@
-# AI Newsletter Digest
+# Cosmic Digest
 
-An automated AI-powered newsletter system that curates personalized news digests from RSS feeds, tracks prices, and delivers customized summaries via email.
+A personal "signal over noise" digest that pulls stories from RSS feeds, scores them against your interests, tracks a small price watchlist, and emails a compact 3-day brief via Mailgun.
 
-## Features
+- Built for automation: run on a schedule, keep lightweight state, and get the digest in your inbox.
+- Built for personalization: relevance scoring via topics/regions/keywords + recency boost.
+- Built for extensibility: a clean pipeline you can swap pieces in/out (better scoring, LLM summaries, real price APIs).
 
-- ?? **RSS Feed Ingestion**: Aggregates news from multiple RSS sources
-- ?? **Personalized Relevance Scoring**: Filters news based on your topics, regions, and keywords
-- ?? **Trend Detection**: Identifies developing stories by comparing recent vs. previous periods
-- ?? **Price Tracking**: Monitors product prices and provides buy/hold recommendations
-- ?? **AI-Powered Summaries**: Uses OpenAI to generate concise, relevant news digests
-- ?? **Email Delivery**: Sends digests via Mailgun
+## Screenshots
+Add your images to `docs/screenshots/` and replace these placeholders.
+
+![Email digest preview](docs/screenshots/email-digest.png)
+![Developing stories section](docs/screenshots/developing-stories.png)
+![Price watchlist section](docs/screenshots/price-watchlist.png)
+![Configuration example](docs/screenshots/config.png)
+
+## How It Works
+1. Ingest RSS feeds into a rolling cache (`/data/state.json`).
+2. Score items for relevance (topics/regions/keywords + recency) and select the top stories.
+3. Detect "developing stories" by comparing title tokens in the last N days vs the previous window.
+4. Fetch prices for a watchlist (currently a naive HTML scan; designed to be replaced with APIs).
+5. Compose a Markdown digest and send it via Mailgun.
 
 ## Tech Stack
+- Runtime: .NET 10 (`net10.0`), C#
+- Integrations: Mailgun HTTP API
+- Content ingestion: `CodeHollow.FeedReader` (RSS)
+- HTML parsing/scraping: `AngleSharp` (price fetcher)
+- Config: `DotNetEnv` (`.env` for local dev)
+- Containerization: Docker
+- CI: GitHub Actions (.NET build workflow)
+- Optional/experimental: OpenAI .NET SDK (see `NewsAi.cs`)
 
-- **.NET 10** (C# 14.0)
-- **OpenAI API** for AI-powered summaries
-- **Mailgun** for email delivery
-- **CodeHollow.FeedReader** for RSS parsing
-- **AngleSharp** for web scraping
-- **DotNetEnv** for environment configuration
+## Sample Output
+```md
+## Developing stories (what changed)
+- **ai chips** - now: 9, prev: 2, delta: +7
 
-## Prerequisites
+## Worldwide but relevant to you
+- [Headline...](https://...)
 
-- .NET 10 SDK
-- OpenAI API key
-- Mailgun account (free sandbox tier works for testing)
-
-## Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/ai-newsletter.git
-   cd ai-newsletter
-   ```
-
-2. **Install dependencies**
-   ```bash
-   dotnet restore
-   ```
-
-3. **Configure environment variables**
-   
-   Copy `.env.example` to `.env` and fill in your credentials:
-   ```bash
-   cp .env.example .env
-   ```
-
-   Edit `.env` with your values:
-   - `OPENAI_API_KEY`: Your OpenAI API key
-   - `MAILGUN_API_KEY`: Your Mailgun API key
-   - `MAILGUN_DOMAIN`: Your Mailgun domain (sandbox or verified)
-   - `MAIL_TO`: Recipient email address
-   - `MAIL_FROM`: Sender email address (optional)
-
-4. **Configure your preferences**
-   
-   Customize these in `.env`:
-   - `PREF_TOPICS`: Topics you're interested in
-   - `PREF_REGIONS`: Regions to focus on
-   - `PREF_KEYWORDS`: Specific keywords to prioritize
-   - `RSS_FEEDS`: Comma-separated list of RSS feed URLs
-   - `PRICE_WATCH`: Products to track (format: `name|url|currency`)
-
-## Usage
-
-Run the newsletter generator:
-
-```bash
-dotnet run
+## Price trends (watchlist)
+- **Example Product** - HOLD. Price above recent lows/avg. Latest: 123.45 USD on 2025-01-01
 ```
 
-The application will:
-1. Load existing state from `/data/state.json`
-2. Fetch fresh news from configured RSS feeds
-3. Score and filter articles based on your preferences
-4. Detect trending topics
-5. Update tracked prices
-6. Generate a personalized digest
-7. Send it via email
-8. Save updated state
+## Quickstart (Local)
+**Prereqs:** .NET 10 SDK, Mailgun API key + domain.
+
+```bash
+cd Cosmic-Digest
+dotnet restore
+```
+
+Create your `.env`:
+- PowerShell: `Copy-Item .env.example .env`
+- macOS/Linux: `cp .env.example .env`
+
+Run:
+```bash
+dotnet run --project ai-newsletter.csproj
+```
+
+Note: state persists to `/data/state.json`. On Windows, this maps to `C:\\data\\state.json` (root of the current drive). For a cleaner setup, prefer Docker (below) or change the path in `StateStore.cs`.
 
 ## Configuration
+Set these in `.env` (see `.env.example`):
 
-### RSS Feeds
-Add RSS feeds as a comma-separated list:
-```
-RSS_FEEDS=https://feeds.bbci.co.uk/news/rss.xml,https://www.reuters.com/rssFeed/worldNews
-```
+| Variable | What it does |
+| --- | --- |
+| `MAILGUN_API_KEY` | Mailgun API key |
+| `MAILGUN_DOMAIN` | Mailgun domain (sandbox or verified) |
+| `MAIL_TO` | Recipient email |
+| `MAIL_FROM` | Sender email (defaults to `bot@{MAILGUN_DOMAIN}`) |
+| `RSS_FEEDS` | Comma-separated RSS feed URLs |
+| `PREF_TOPICS` | CSV topics you care about |
+| `PREF_REGIONS` | CSV regions you care about |
+| `PREF_KEYWORDS` | CSV high-signal keywords |
+| `PRICE_WATCH` | `name|url|currency` entries separated by `;` |
+| `OPENAI_API_KEY` | Only needed if you wire in LLM summaries |
 
-### Personalization
-```
-PREF_TOPICS=ai,hardware,gaming,geopolitics,macroeconomy
-PREF_REGIONS=US,EU,Middle East
-PREF_KEYWORDS=AMD,NVIDIA,SSD,GPU
-```
-
-### Price Tracking
-Track products with semicolon-separated entries:
-```
-PRICE_WATCH=GPU RTX 4090|https://example.com/gpu|USD;SSD 4TB|https://example.com/ssd|USD
-```
-
-## Deployment
-
-### Docker Support
-A Dockerfile is included for containerized deployment.
-
+## Quickstart (Docker)
 ```bash
-docker build -t ai-newsletter .
-docker run --env-file .env ai-newsletter
+cd Cosmic-Digest
+docker build -t cosmic-digest .
+docker run --rm --env-file .env -v cosmic-digest-data:/data cosmic-digest
 ```
 
-### Fly.io
-This project is ready for deployment on Fly.io. Set your secrets:
-
-```bash
-fly secrets set OPENAI_API_KEY=your_key
-fly secrets set MAILGUN_API_KEY=your_key
-fly secrets set MAILGUN_DOMAIN=your_domain
-fly secrets set MAIL_TO=your_email
-# ... set other secrets
-```
-
-## Project Structure
-
-```
-ai-newsletter/
-??? Program.cs           # Main application logic
-??? NewsAi.cs           # OpenAI integration for summaries
-??? Models.cs.cs        # Data models
-??? StateStore.cs       # State persistence
-??? RssIngestor.cs      # RSS feed parsing
-??? Relevance.cs        # Scoring and trend detection
-??? PriceTracker.cs     # Price monitoring
-??? DigestComposer.cs   # Markdown digest generation
-??? .env.example        # Environment template
-```
-
-## Security Notes
-
-?? **Never commit your `.env` file to GitHub!** It contains sensitive API keys.
-
-- The `.gitignore` is configured to exclude `.env`
-- Use `.env.example` as a template
-- For production, use environment variables or secure secret management
-
-## Mailgun Free Tier Limitations
-
-If using Mailgun's free sandbox domain:
-- You must add authorized recipients in the Mailgun dashboard
-- Recipients must confirm their email address
-- Consider upgrading or using a verified domain for production
-
-## License
-
-MIT License - feel free to use and modify as needed.
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
+## Project Highlights (Portfolio Notes)
+- Pipeline-style design: each stage is a small, testable unit (ingestion -> scoring -> trends -> prices -> compose -> send).
+- State management: rolling cache for news + time-series price history in a single JSON file.
+- Trend detection: windowed comparison to surface "what changed" instead of just "what happened".
 
 ## Roadmap
+- [ ] Wire in LLM summaries for the selected headlines (optional mode)
+- [ ] Add scheduling (cron / hosted job)
+- [ ] Replace naive price scraping with API-backed integrations
+- [ ] Add web dashboard for configuration and history
+- [ ] Swap JSON file state for a database when needed
 
-- [ ] Add more sophisticated AI summarization
-- [ ] Support additional email providers (SendGrid, AWS SES)
-- [ ] Improve price tracking with API integrations
-- [ ] Add web dashboard for configuration
-- [ ] Implement scheduling (cron/periodic runs)
-- [ ] Add database support for larger state storage
+## Security
+- Never commit `.env` (API keys). Use `.env.example` as a template.
+- For production, prefer platform secrets (GitHub Actions/Fly/your host).
 
-## Author
-
-Built with ?? for personalized news consumption
+## License
+MIT
