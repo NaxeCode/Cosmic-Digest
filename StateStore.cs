@@ -3,7 +3,8 @@ using System.Text.Json;
 
 public static class StateStore
 {
-    static readonly string PathFile = "/data/state.json";
+    static readonly string DataDir = Environment.GetEnvironmentVariable("DATA_DIR") ?? "./data";
+    static readonly string PathFile = Path.Combine(DataDir, "state.json");
     static readonly JsonSerializerOptions J = new() { WriteIndented = true };
 
     public static StateOfWorld Load()
@@ -14,7 +15,7 @@ public static class StateStore
 
     public static void Save(StateOfWorld s)
     {
-        Directory.CreateDirectory("/data");
+        Directory.CreateDirectory(DataDir);
         File.WriteAllText(PathFile, JsonSerializer.Serialize(s, J));
     }
 

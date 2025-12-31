@@ -38,9 +38,7 @@ bld/
 # Environment variables - IMPORTANT: Never commit this!
 .env
 
-# State files
-/data/
-state.json
+# State files (old - see bottom for better pattern)
 
 # OS files
 .DS_Store
@@ -56,3 +54,7 @@ desktop.ini
 # Docker
 .dockerignore
 docker-compose.override.yml
+
+# Data directory - ignore everything except state.json
+data/*
+!data/state.json
