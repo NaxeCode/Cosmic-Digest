@@ -1,269 +1,229 @@
 # Cosmic Digest
 
-A personalized AI-powered tech newsletter that delivers curated news, relevant articles, and daily coding challenges straight to your inbox. Built for developers who want signal over noise.
+A personal news aggregator that sends you a daily email with tech news you actually care about. Uses GPT to summarize the day's headlines and throws in a coding challenge to keep you sharp.
 
-**Key Features:**
-- 🤖 **AI-Powered Summaries** - GPT-5.1 generates concise, technical summaries with specific version numbers and citations
-- 🎯 **Smart Relevance Scoring** - Filters news by your interests (topics, keywords, regions) with recency boost
-- 📧 **Beautiful HTML Emails** - Styled, mobile-friendly digests via Resend
-- 💪 **Daily Coding Challenges** - Keep your skills sharp with algorithm problems, system design, and real-world scenarios
-- 📊 **Price Tracking** - Monitor product prices with buy/hold recommendations (optional)
-- ⚡ **Automated Delivery** - GitHub Actions runs daily at 8 AM UTC (free forever)
+I built this because most tech newsletters are either too broad or too niche. This one learns your interests and filters accordingly.
 
-## How It Works
+## What it does
 
-1. **Ingest** - Fetches RSS feeds from Hacker News, TechCrunch, The Verge, and more
-2. **Score** - Ranks articles by relevance to your interests (AI, frontend, backend, open-source, etc.)
-3. **Summarize** - GPT-5.1 generates a technical summary with specific details and clickable citations
-4. **Challenge** - Generates a unique daily coding challenge to keep skills sharp
-5. **Email** - Sends a beautiful HTML digest via Resend
-6. **Persist** - Saves state to prevent duplicate articles
+- Pulls from RSS feeds (Hacker News, TechCrunch, etc.)
+- Scores articles based on your topics/keywords/regions
+- GPT-5.1 writes a summary with the important bits
+- Adds a daily coding problem (algorithm, system design, or practical stuff)
+- Emails you a clean digest every morning
+- Runs for free on GitHub Actions
 
-## Sample Output
+## Example digest
 
-Your daily email includes:
-
-### AI Summary
-- **Next.js 15.0**: Released with React Server Components as default, new App Router caching strategy, and 40% faster builds via Turbopack. Breaking change: Pages Router now requires manual opt-in. Critical for teams migrating from Pages to App Router. [[1]](https://...)
-- **Claude 3.7 Sonnet**: Anthropic's latest model with 200K context window (2x previous), 88% on SWE-bench coding benchmark. Available via API today - ideal for code generation. [[3]](https://...)
-
-### Worldwide but relevant to you
-- [TypeScript 5.6 Beta Announcement](https://...) — Microsoft (2025-12-30)
-- [The State of WebAssembly 2025](https://...) — Hacker News (2025-12-29)
-
-### Challenge of the Day
-**Challenge of the Day: Implement LRU Cache**
-
-Design and implement a data structure for a Least Recently Used (LRU) cache with O(1) get and put operations.
-
-**Difficulty:** Medium
-**Skills:** Hash Tables, Doubly Linked List, Design
-
-**Example:**
 ```
-cache = LRUCache(2)
-cache.put(1, 1)
-cache.put(2, 2)
-cache.get(1)       // returns 1
-cache.put(3, 3)    // evicts key 2
-cache.get(2)       // returns -1 (not found)
+Daily Digest — Tuesday, December 31, 2024 at 8:00 AM EST
+
+## AI Summary
+- Next.js 15.0: React Server Components are now the default, new App Router caching, 40% faster builds with Turbopack. Pages Router needs manual opt-in now. [1]
+- Claude 3.7 Sonnet: 200K context (doubled), 88% on SWE-bench. Available via API. [3]
+
+## Worldwide but relevant to you
+- TypeScript 5.6 Beta Announcement — Microsoft (2024-12-30)
+- The State of WebAssembly 2025 — Hacker News (2024-12-29)
+
+## Challenge of the Day
+Implement an LRU cache with O(1) get and put operations.
+Difficulty: Medium | Skills: Hash Tables, Doubly Linked List
 ```
 
-## Tech Stack
+## Tech
 
-- **Runtime:** .NET 10 (net10.0), C#
-- **Email Service:** Resend (modern, developer-friendly email API)
-- **AI:** OpenAI GPT-5.1 (technical summaries + daily challenges)
-- **RSS:** CodeHollow.FeedReader
-- **HTML Parsing:** AngleSharp (for price scraping)
-- **Markdown:** Markdig (converts markdown to styled HTML)
-- **Config:** DotNetEnv (`.env` for local dev)
-- **Automation:** GitHub Actions (free daily runs)
+- .NET 10
+- Resend for emails (free tier: 100/day)
+- OpenAI GPT-5.1 for summaries (~$0.02 per digest)
+- Markdig for markdown → HTML
+- GitHub Actions for scheduling (free)
 
-## Quickstart (Local)
+## Setup
 
-**Prerequisites:** .NET 10 SDK, Resend API key, OpenAI API key
+You need .NET 10 SDK, a Resend API key, and an OpenAI API key.
 
-1. **Clone the repo:**
 ```bash
-git clone https://github.com/yourusername/Cosmic-Digest.git
+git clone <your-repo>
 cd Cosmic-Digest
-```
 
-2. **Install .NET 10 SDK:**
-```bash
-# On WSL/Ubuntu
+# Install .NET 10 if needed (WSL/Ubuntu)
 wget https://dot.net/v1/dotnet-install.sh
 chmod +x dotnet-install.sh
 ./dotnet-install.sh --channel 10.0
-```
 
-3. **Create `.env` file:**
-```bash
+# Config
 cp .env.example .env
-# Edit .env with your API keys and preferences
-```
+# edit .env with your keys
 
-4. **Restore dependencies:**
-```bash
 dotnet restore
-```
-
-5. **Run locally:**
-```bash
 dotnet run
 ```
 
-The digest will be sent to your email immediately.
+You'll get an email right away.
 
 ## Configuration
 
-Edit `.env` to customize your digest:
+Edit `.env`:
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `RESEND_API_KEY` | Resend API key ([get one free](https://resend.com)) | `re_xxxxx` |
-| `MAIL_TO` | Your email address | `you@example.com` |
-| `MAIL_FROM` | Sender address | `digest@resend.dev` |
-| `TIMEZONE` | Your timezone (IANA format) | `America/New_York` |
-| `OPENAI_API_KEY` | OpenAI API key | `sk-proj-xxxxx` |
-| `ENABLE_AI_SUMMARY` | Enable AI summaries | `true` or `false` |
-| `PREF_TOPICS` | Comma-separated topics | `ai,frontend,backend,open source` |
-| `PREF_REGIONS` | Comma-separated regions | `US,Silicon Valley,Canada` |
-| `PREF_KEYWORDS` | Comma-separated keywords | `React,TypeScript,Python,Docker` |
-| `RSS_FEEDS` | Comma-separated RSS feed URLs | `https://hnrss.org/frontpage,...` |
-| `PRICE_WATCH` | (Optional) Price tracking | `Item\|url\|USD;...` |
-
-### Customization Tips
-
-**For full-stack engineers:**
-- Topics: `ai, frontend, backend, web development, devops, open source, libraries, frameworks`
-- Keywords: `React, Next.js, TypeScript, Node.js, Python, Docker, Kubernetes, PostgreSQL, testing, CI/CD`
-
-**For AI/ML engineers:**
-- Topics: `ai, machine learning, deep learning, NLP, computer vision`
-- Keywords: `LLM, GPT, Claude, PyTorch, TensorFlow, transformers, fine-tuning, RAG`
-
-## GitHub Actions Setup (Free Daily Emails)
-
-**Never pay for hosting - run daily digests for free with GitHub Actions!**
-
-1. **Add secrets to your GitHub repo:**
-   - Go to Settings → Secrets and variables → Actions
-   - Add these secrets:
-     - `RESEND_API_KEY`
-     - `OPENAI_API_KEY`
-     - `MAIL_TO`
-     - `TIMEZONE`
-     - `PREF_TOPICS`
-     - `PREF_KEYWORDS`
-     - `PREF_REGIONS`
-     - `RSS_FEEDS`
-
-2. **Enable GitHub Actions:**
-   - The workflow is already configured in `.github/workflows/daily-digest.yml`
-   - Runs daily at 8 AM UTC (customize the cron schedule)
-   - Also supports manual trigger via "Run workflow" button
-
-3. **Push your changes:**
 ```bash
-git add .
-git commit -m "chore: configure daily digest"
-git push
+# Required
+RESEND_API_KEY=re_xxxxx
+OPENAI_API_KEY=sk-proj-xxxxx
+MAIL_TO=you@example.com
+TIMEZONE=America/New_York
+
+# Personalization
+PREF_TOPICS=ai,frontend,backend,open source,devops
+PREF_KEYWORDS=React,TypeScript,Python,Docker,Kubernetes,Next.js
+PREF_REGIONS=US,Silicon Valley,Canada
+
+# Sources
+RSS_FEEDS=https://hnrss.org/frontpage,https://techcrunch.com/feed/,...
+
+# Optional
+ENABLE_AI_SUMMARY=true
+PRICE_WATCH=M2 MacBook Air|https://example.com|USD
 ```
 
-4. **Test the workflow:**
-   - Go to Actions tab in GitHub
-   - Click "Daily AI Digest"
-   - Click "Run workflow" to test immediately
+**For full-stack devs:**
+Topics: `ai, frontend, backend, web development, devops, open source`
+Keywords: `React, Next.js, TypeScript, Node.js, Docker, PostgreSQL, CI/CD`
 
-See [GITHUB_ACTIONS_SETUP.md](GITHUB_ACTIONS_SETUP.md) for detailed instructions.
+**For ML engineers:**
+Topics: `ai, machine learning, deep learning, NLP`
+Keywords: `LLM, GPT, PyTorch, transformers, fine-tuning, RAG`
 
-## Features Deep Dive
+## GitHub Actions (automated daily emails)
 
-### 🤖 AI Summaries
+The workflow is already set up in `.github/workflows/daily-digest.yml`.
 
-- Uses **GPT-5.1** (latest model, 50% cheaper than GPT-4o)
-- Generates **6-8 concise bullet points** with specific technical details
-- Includes **version numbers**, **metrics**, and **why it matters**
-- **Clickable citations** link directly to source articles
-- Costs ~$0.02 per digest
+1. Add your secrets to GitHub repo settings (Settings → Secrets → Actions):
+   - `RESEND_API_KEY`
+   - `OPENAI_API_KEY`
+   - `MAIL_TO`
+   - `TIMEZONE`
+   - `PREF_TOPICS`
+   - `PREF_KEYWORDS`
+   - `PREF_REGIONS`
+   - `RSS_FEEDS`
 
-### 💪 Daily Coding Challenges
+2. Push to GitHub
 
-- Rotates between **6 challenge types**:
-  - Algorithm problems (sorting, searching, graphs, trees, DP)
-  - Data structure implementations (LRU cache, trie, heap)
-  - System design (URL shortener, rate limiter, etc.)
-  - Code optimization (improve time/space complexity)
-  - Real-world scenarios (parse CSV, debounce, etc.)
-  - Web fundamentals (Promise.all, deep clone, etc.)
-- **Deterministic** - same challenge all day, rotates daily
-- Designed to be completable in **15-30 minutes**
+3. It runs daily at 8 AM UTC. You can change the cron schedule or trigger it manually from the Actions tab.
 
-### 🎯 Smart Relevance Scoring
+See [GITHUB_ACTIONS_SETUP.md](GITHUB_ACTIONS_SETUP.md) for details.
 
-Articles are scored by:
-- **Keywords match** (+1.0 per keyword)
-- **Topics match** (+0.6 per topic)
-- **Regions match** (+0.4 per region)
-- **Recency boost** (0-0.5 based on age, decays over 3 days)
+## How it works
 
-Only articles scoring **>0.75** make it to your digest.
+**Relevance scoring:**
+Each article gets points for matching your preferences:
+- Keywords: +1.0 each
+- Topics: +0.6 each
+- Regions: +0.4 each
+- Recency boost: 0-0.5 (decays over 3 days)
 
-### 📊 Price Tracking (Optional)
+Only articles scoring >0.75 make it to your digest.
 
-Monitor product prices and get buy/hold recommendations:
-```bash
-PRICE_WATCH=M2 MacBook Air|https://example.com/m2-air|USD;RTX 4090|https://example.com/rtx-4090|USD
-```
+**AI summaries:**
+GPT-5.1 reads the top 15 articles and writes 6-8 bullets. I tuned the prompt to force specific version numbers, metrics, and citations. The citation numbers are clickable links to the source articles.
 
-Simple HTML scraping - designed to be swapped with real APIs.
+**Daily challenges:**
+Rotates between algorithms, data structures, system design, and practical problems. Same challenge all day (deterministic based on date), new one tomorrow. Should take 15-30 minutes.
 
-## Project Structure
+**Price tracking:**
+Naive HTML scraping for now. Checks if price is above/below recent average. You can plug in real APIs later.
+
+## Project structure
 
 ```
 Cosmic-Digest/
-├── Program.cs              # Main pipeline orchestration
-├── NewsAi.cs              # GPT-5.1 summarization
-├── ChallengeGenerator.cs  # Daily coding challenges
-├── DigestComposer.cs      # Markdown/HTML email builder
-├── RssIngestor.cs         # RSS feed fetcher
-├── Relevance.cs           # Scoring + trend detection
+├── Program.cs              # Main pipeline
+├── NewsAi.cs              # GPT summarization
+├── ChallengeGenerator.cs  # Daily challenges
+├── DigestComposer.cs      # Email builder
+├── RssIngestor.cs         # RSS fetcher
+├── Relevance.cs           # Scoring algorithm
 ├── PriceTracker.cs        # Price monitoring
 ├── StateStore.cs          # JSON persistence
 ├── Models.cs              # Data models
-├── .env                   # Local config (gitignored)
-├── .github/
-│   └── workflows/
-│       └── daily-digest.yml  # GitHub Actions automation
-└── data/
-    └── state.json         # Persistent state (tracked in git)
+├── .env                   # Your config (gitignored)
+└── data/state.json        # Article cache (tracked in git for Actions)
 ```
 
-## Cost Analysis
+## Cost
 
-**Completely free to run with GitHub Actions!**
+- GitHub Actions: Free (2,000 min/month)
+- Resend: Free (100 emails/day)
+- GPT-5.1: ~$0.60/month for daily digests
 
-- **GitHub Actions:** Free (2,000 minutes/month)
-- **Resend:** Free tier (100 emails/day)
-- **OpenAI GPT-5.1:** ~$0.02 per digest (~$0.60/month for daily emails)
+Total: less than a dollar a month.
 
-**Total monthly cost:** ~$0.60 💰
+## Why I built this
 
-## Portfolio Highlights
+Most news feeds are noise. I wanted something that:
+- Learns what I care about
+- Doesn't spam me with 50 headlines
+- Actually helps me stay current in tech
+- Keeps my coding skills fresh
 
-- **Clean pipeline architecture** - Each stage is a testable, swappable unit
-- **Smart relevance scoring** - Multi-factor ranking with recency decay
-- **AI integration** - Deterministic output with strict formatting rules
-- **State management** - Rolling cache with deduplication
-- **GitHub Actions automation** - Free, reliable daily execution
-- **Modern .NET 10** - Latest C# features and performance
+The relevance scoring works surprisingly well. The AI summaries save time. The daily challenges are a nice habit.
+
+## Tradeoffs
+
+**JSON file vs Database**
+
+I'm using a JSON file (`data/state.json`) for persistence instead of a database. This works because:
+- The dataset is small (few hundred articles max)
+- No concurrent writes (single daily job)
+- GitHub Actions can commit state changes back to the repo
+- Zero hosting costs
+
+If you need to scale to thousands of users or run more frequently, switch to PostgreSQL or SQLite. The `StateStore.cs` abstraction makes this swap easy.
+
+**GitHub Actions vs Cloud hosting**
+
+Running on GitHub Actions instead of a dedicated server or cloud function. The tradeoff:
+- ✅ Completely free (2,000 min/month)
+- ✅ No infrastructure to manage
+- ✅ State persists via git commits
+- ❌ Cold starts on every run
+- ❌ Must commit state to repo (pollutes git history)
+- ❌ 2,000 minute monthly limit
+
+For more frequent digests (hourly, real-time), use Vercel Cron or AWS Lambda with a real database. For personal daily use, GitHub Actions is perfect.
+
+**GPT API vs Local LLM**
+
+I'm using OpenAI's GPT-5.1 API instead of running a local model. Here's why:
+- GPT-5.1 quality is significantly better for technical summaries
+- Costs ~$0.60/month (negligible for personal use)
+- No GPU or hosting infrastructure needed
+- API is reliable and fast
+
+If privacy is critical or you're processing thousands of digests, run Llama 3 or Mistral locally. You'll need a GPU and the quality won't be as good, but it's free and private.
+
+## Known issues
+
+- Price scraping is brittle (HTML parsing always is)
+- No web UI yet (everything is env vars)
+- Citations sometimes break in certain email clients
+- State file grows unbounded (should add cleanup)
 
 ## Roadmap
 
-- [x] AI-powered summaries with GPT-5.1
-- [x] Daily coding challenges
-- [x] GitHub Actions automation
-- [x] HTML email styling
-- [x] Clickable citations
-- [ ] Web dashboard for configuration
+- [ ] Web dashboard for config
+- [ ] Replace price scraping with actual APIs
 - [ ] Article sentiment analysis
-- [ ] Replace naive price scraping with real APIs
-- [ ] Database support for larger archives
+- [ ] Database instead of JSON
 - [ ] Browser extension for reading list
+
+Pull requests welcome.
 
 ## Security
 
-- **Never commit `.env`** - Contains API keys
-- Store secrets in **GitHub Actions Secrets** for automation
-- API keys visible in `.env` should be **revoked immediately**
-- Resend and OpenAI API keys are **bearer tokens** - treat like passwords
+Don't commit your `.env` file. Use GitHub Secrets for automation. If you accidentally expose API keys (like I did), revoke them immediately.
 
 ## License
 
-MIT - Build whatever you want with it!
-
----
-
-Built with ☕ and curiosity. Questions? Open an issue or PR!
+MIT
