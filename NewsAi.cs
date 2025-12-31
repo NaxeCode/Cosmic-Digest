@@ -5,10 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenAI.Chat;
 
-namespace ai_newsletter
+public static class NewsAi
 {
-    public static class NewsAi
-    {
         public static async Task<string> SummarizeWorldNewsAsync(string userProfile)
         {
             var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY") ?? throw new Exception("OPENAI_API_KEY not set");
@@ -19,19 +17,17 @@ namespace ai_newsletter
 
             var systemPrompt =
                 @"You generate short, relevant world-news digests.
-                The user is Aladdin. Personal context:
-                - Loves gaming + tech.
-                - Follows global economy.
-                - Interested in AI, hardware trends, geopolitics, gaming industry moves.
-                - Prefers short, sharp summaries without fluff.
-                - Avoids sensationalism. Prioritize signal over noise.
+                - Provide concise, relevant summaries based on user interests.
+                - Avoid sensationalism. Prioritize signal over noise.
+                - Keep summaries short and sharp without fluff.
                 - Provide a 5-bullet digest of what matters IN THE LAST FEW DAYS.";
 
             var userPrompt =
                 $@"Use the model's current global knowledge and general world understanding.
-                Generate a customized, personal digest for:
+                Generate a customized, personal digest for a user with these interests:
                 {userProfile}
-                Output in clean Markdown.";
+
+                Output in clean Markdown with bullet points.";
 
             var chatClient = client.GetChatClient(model);
 
@@ -45,6 +41,5 @@ namespace ai_newsletter
             var response = await chatClient.CompleteChatAsync(messages);
 
             return response.Value.Content[0].Text;
-        }
     }
 }

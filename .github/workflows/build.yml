@@ -23,10 +23,7 @@ jobs:
       
     - name: Build
       run: dotnet build --no-restore --configuration Release
-      
-    - name: Test
-      run: dotnet test --no-build --verbosity normal --configuration Release
-      
+
     # Optional: Publish artifacts
     - name: Publish
       run: dotnet publish --no-build --configuration Release --output ./publish

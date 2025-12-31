@@ -10,20 +10,50 @@ public interface IPriceFetcher
 
 public class NaivePriceFetcher : IPriceFetcher
 {
+    // EXPERIMENTAL: Simple web scraping for price tracking.
+    // Limitations:
+    // - Only works on simple product pages with visible prices
+    // - May fail on JavaScript-rendered content, paywalls, or anti-scraping measures
+    // - Not reliable for production use
+    // - For better results, use official APIs (e.g., Amazon Product API, CamelCamelCamel)
+    // - Alternative: Leave PRICE_WATCH empty to disable price tracking
+
     public async Task<decimal?> FetchAsync(string url)
     {
-        // VERY naive: fetch page and try to find a $123.45 pattern.
-        // Replace with an API or site-specific parser for reliability.
         try
         {
             var config = Configuration.Default.WithDefaultLoader();
             using var ctx = BrowsingContext.New(config);
             var doc = await ctx.OpenAsync(url);
             var text = doc.DocumentElement?.TextContent ?? "";
-            var m = System.Text.RegularExpressions.Regex.Match(text, @"\$\s*([0-9]+(?:\.[0-9]{2})?)");
-            if (m.Success && decimal.TryParse(m.Groups[1].Value, out var price)) return price;
+
+            // Try multiple currency patterns: $123.45, €123.45, £123.45, 123.45 USD
+            var patterns = new[]
+            {
+                @"[\$€£¥]\s*([0-9]{1,6}(?:[.,][0-9]{2})?)",  // $123.45, €123,45
+                @"([0-9]{1,6}(?:[.,][0-9]{2})?)\s*(?:USD|EUR|GBP|JPY)"  // 123.45 USD
+            };
+
+            foreach (var pattern in patterns)
+            {
+                var m = System.Text.RegularExpressions.Regex.Match(text, pattern);
+                if (m.Success)
+                {
+                    var priceStr = m.Groups[1].Value.Replace(',', '.');
+                    if (decimal.TryParse(priceStr, out var price) && price > 0 && price < 1000000)
+                    {
+                        Console.WriteLine($"✓ Price found: {price} from {new Uri(url).Host}");
+                        return price;
+                    }
+                }
+            }
+
+            Console.WriteLine($"⚠ No price found at {new Uri(url).Host}");
         }
-        catch { /* ignore */ }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"✗ Price fetch failed for {url}: {ex.Message}");
+        }
         return null;
     }
 }

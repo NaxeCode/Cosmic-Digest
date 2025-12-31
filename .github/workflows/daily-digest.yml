@@ -1,0 +1,51 @@
+name: Daily Digest
+
+on:
+  schedule:
+    # Run every day at 8 AM UTC (adjust timezone as needed)
+    - cron: '0 8 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # Needed to commit state.json
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+
+    - name: Run digest
+      env:
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        MAIL_TO: ${{ secrets.MAIL_TO }}
+        MAIL_FROM: ${{ secrets.MAIL_FROM }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        ENABLE_AI_SUMMARY: ${{ secrets.ENABLE_AI_SUMMARY }}
+        PREF_TOPICS: ${{ secrets.PREF_TOPICS }}
+        PREF_REGIONS: ${{ secrets.PREF_REGIONS }}
+        PREF_KEYWORDS: ${{ secrets.PREF_KEYWORDS }}
+        RSS_FEEDS: ${{ secrets.RSS_FEEDS }}
+        PRICE_WATCH: ${{ secrets.PRICE_WATCH }}
+      run: dotnet run --no-build --configuration Release
+
+    - name: Commit state changes
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add -A data/state.json || true
+        git diff --quiet && git diff --staged --quiet || git commit -m "chore: update state.json [skip ci]"
+        git push || true

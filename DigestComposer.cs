@@ -6,13 +6,22 @@ public static class DigestComposer
     public static string BuildMarkdown(
         List<TopicTrend> developing,
         List<NewsItem> relevant,
-        List<PriceItem> prices)
+        List<PriceItem> prices,
+        string? aiSummary = null)
     {
         var sb = new StringBuilder();
         var now = DateTimeOffset.UtcNow.ToString("u");
 
         sb.AppendLine($"# 3-Day Digest — " + now);
         sb.AppendLine();
+
+        // AI-generated summary (if enabled)
+        if (!string.IsNullOrWhiteSpace(aiSummary))
+        {
+            sb.AppendLine("## AI Summary");
+            sb.AppendLine(aiSummary);
+            sb.AppendLine();
+        }
 
         // Developing stories
         sb.AppendLine("## Developing stories (what changed)");

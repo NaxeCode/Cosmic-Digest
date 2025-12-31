@@ -1,20 +1,12 @@
 # Security Policy
 
-## Reporting Security Vulnerabilities
+## Reporting Security Issues
 
-If you discover a security vulnerability in this project, please report it responsibly:
-
-1. **Do NOT** open a public issue
-2. Email the maintainers directly (add your email here)
-3. Provide detailed information about the vulnerability
-4. Allow time for a fix before public disclosure
+If you discover a security issue in this personal project, please open a GitHub issue or submit a pull request with a fix.
 
 ## Supported Versions
 
-| Version | Supported          |
-| ------- | ------------------ |
-| Latest  | :white_check_mark: |
-| Older   | :x:                |
+Currently supporting the latest version only.
 
 ## Security Best Practices
 
