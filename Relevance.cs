@@ -21,6 +21,19 @@ public static class Relevance
         return score; // unbounded-ish; good enough for ranking
     }
 
+    private static readonly HashSet<string> StopWords = new(StringComparer.OrdinalIgnoreCase)
+    {
+        // Common words to exclude from trends
+        "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of", "with", "by", "from",
+        "as", "is", "was", "are", "were", "be", "been", "being", "have", "has", "had", "do", "does", "did",
+        "will", "would", "could", "should", "may", "might", "can", "this", "that", "these", "those", "it",
+        "its", "they", "them", "their", "what", "which", "who", "when", "where", "why", "how", "all", "each",
+        "every", "both", "few", "more", "most", "some", "such", "no", "nor", "not", "only", "own", "same",
+        "so", "than", "too", "very", "just", "after", "before", "over", "under", "again", "further", "then",
+        "once", "here", "there", "about", "into", "through", "during", "out", "up", "down", "off", "above",
+        "below", "says", "said", "year", "years", "day", "days", "week", "weeks", "month", "months", "new"
+    };
+
     public static List<TopicTrend> Trends(IReadOnlyList<NewsItem> all, int windowDays = 3, int prevDays = 3)
     {
         // group by rough topic from title nouns/keywords; for MVP use simple tokens
@@ -46,7 +59,16 @@ public static class Relevance
         var prevCounts = prev.SelectMany(n => Tokens(n.Title)).GroupBy(t => t).ToDictionary(g => g.Key, g => g.Count());
 
         var candidates = nowCounts
-            .Where(kv => kv.Value >= 3 && kv.Key.Length > 3) // filters
+            .Where(kv => kv.Value >= 3
+                && kv.Key.Length > 3
+                && !StopWords.Contains(kv.Key)
+                && !kv.Key.All(char.IsDigit) // filter pure numbers like "2025"
+                && !kv.Key.Contains("2025") // filter any phrase with year
+                && !kv.Key.Contains("2024")
+                && !kv.Key.StartsWith("in ")
+                && !kv.Key.StartsWith("of ")
+                && !kv.Key.StartsWith("the ")
+                && kv.Key.Split(' ').Length <= 3) // limit to 3-word phrases max
             .OrderByDescending(kv => kv.Value)
             .Take(50);
 
