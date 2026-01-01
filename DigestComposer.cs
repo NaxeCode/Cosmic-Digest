@@ -12,7 +12,9 @@ public static class DigestComposer
         var sb = new StringBuilder();
 
         // Format timestamp in user's timezone
-        var tzName = Environment.GetEnvironmentVariable("TIMEZONE") ?? "America/New_York";
+        var tzName = Environment.GetEnvironmentVariable("TIMEZONE");
+        if (string.IsNullOrWhiteSpace(tzName))
+            tzName = "America/New_York";
         var tz = TimeZoneInfo.FindSystemTimeZoneById(tzName);
         var localTime = TimeZoneInfo.ConvertTimeFromUtc(DateTimeOffset.UtcNow.DateTime, tz);
         var tzAbbr = tz.IsDaylightSavingTime(localTime) ? tz.DaylightName : tz.StandardName;
