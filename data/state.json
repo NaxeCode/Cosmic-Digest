@@ -1,5 +1,5 @@
 {
-  "LastDigestUtc": "2026-01-01T08:09:05.2190701+00:00",
+  "LastDigestUtc": "2026-01-02T08:08:59.6460605+00:00",
   "CacheNews": [
     {
       "Title": "In pictures: New Year welcomed around the world",
@@ -1444,27 +1444,6 @@
       "Summary": "Ryan welcomes Anil Dash, writer and former Stack Overflow board member, back to the show to discuss how AI is not a magical technology, but rather the normal next step in computing\u2019s evolution. They explore the importance of democratizing access to technology, the unique challenges that LLMs\u2019 non-determinism poses, and how developers can keep Stack Overflow\u2019s ethos of community alive in a world of AI. "
     },
     {
-      "Title": "5 podcast episodes to help you build with confidence in 2026",
-      "Link": "https://github.blog/open-source/maintainers/5-podcast-episodes-to-help-you-build-with-confidence-in-2026/",
-      "Published": "2025-12-23T00:15:00+00:00",
-      "Source": "The GitHub Blog",
-      "Summary": "\u003Cp\u003ELooking ahead to the New Year? These GitHub Podcast episodes help you cut through the noise and build with more confidence across AI, open source, and developer tools.\u003C/p\u003E\n\u003Cp\u003EThe post \u003Ca href=\u0022https://github.blog/open-source/maintainers/5-podcast-episodes-to-help-you-build-with-confidence-in-2026/\u0022\u003E5 podcast episodes to help you build with confidence in 2026\u003C/a\u003E appeared first on \u003Ca href=\u0022https://github.blog\u0022\u003EThe GitHub Blog\u003C/a\u003E.\u003C/p\u003E\n"
-    },
-    {
-      "Title": "This year\u2019s most influential open source projects",
-      "Link": "https://github.blog/open-source/maintainers/this-years-most-influential-open-source-projects/",
-      "Published": "2025-12-22T23:48:52+00:00",
-      "Source": "The GitHub Blog",
-      "Summary": "\u003Cp\u003EFrom Appwrite to Zulip, Universe 2025\u2019s Open Source Zone was stacked with standout projects showing just how far open source can go. Meet the maintainers\u2014and if you want to join them in 2026, you can now apply for next year\u2019s cohort.\u003C/p\u003E\n\u003Cp\u003EThe post \u003Ca href=\u0022https://github.blog/open-source/maintainers/this-years-most-influential-open-source-projects/\u0022\u003EThis year\u2019s most influential open source projects\u003C/a\u003E appeared first on \u003Ca href=\u0022https://github.blog\u0022\u003EThe GitHub Blog\u003C/a\u003E.\u003C/p\u003E\n"
-    },
-    {
-      "Title": "Making your code base better will make your code coverage worse",
-      "Link": "https://stackoverflow.blog/2025/12/22/making-your-code-base-better-will-make-your-code-coverage-worse/",
-      "Published": "2025-12-22T15:00:07+00:00",
-      "Source": "Stack Overflow Blog",
-      "Summary": "Maintaining a minimum of 80% code coverage affects code decisions and not always for the better."
-    },
-    {
       "Title": "Animated AI",
       "Link": "https://animatedai.github.io/",
       "Published": "2025-12-26T09:34:57+00:00",
@@ -1659,6 +1638,237 @@
       "Published": "2025-12-31T21:55:16+00:00",
       "Source": "BBC News",
       "Summary": "The building was used as a base by Shackleton while he orchestrated the famous rescue of his stranded crew"
+    },
+    {
+      "Title": "Petkit\u2019s first automatic wet food feeder keeps track of how much your pet eats",
+      "Link": "https://www.theverge.com/news/850992/petkit-ai-camera-yumshare-daily-feast-automatic-wet-food-feeder-eversweet-ultra-fountain",
+      "Published": "2026-01-02T08:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "Petkit has announced two new automated machines at CES 2026 designed to feed and care for your pets using AI-powered cameras that track their behavior and provide health insights that may otherwise go unnoticed. Launching sometime in April 2026, the Petkit Yumshare Daily Feast is one of the first automatic dispensers that works with wet [\u0026#8230;]"
+    },
+    {
+      "Title": "Ice and snow around UK in wintry start to 2026",
+      "Link": "https://www.bbc.com/news/articles/c1jednyk611o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T07:47:50+00:00",
+      "Source": "BBC News",
+      "Summary": "The worst of the weather is expected to hit Scotland, with weather warnings in place until Sunday. "
+    },
+    {
+      "Title": "Maduro says Venezuela open to US talks on drug trafficking",
+      "Link": "https://www.bbc.com/news/articles/clyg23lj057o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T07:42:34+00:00",
+      "Source": "BBC News",
+      "Summary": "In an interview with state TV, the Venezuelan president also evaded a question about an attack in his country claimed by the US. "
+    },
+    {
+      "Title": "Venus Williams, 45, gets Australian Open wildcard",
+      "Link": "https://www.bbc.com/sport/tennis/articles/ceqzn1e4zw1o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T07:24:07+00:00",
+      "Source": "BBC News",
+      "Summary": "Venus Williams, 45, is set to play at the Australian Open for the first time in five years after receiving the final women\u0027s wildcard for the tournament. "
+    },
+    {
+      "Title": "Bashir in 12-man England squad for final Ashes Test",
+      "Link": "https://www.bbc.com/sport/cricket/articles/c8x9edxdn29o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T07:03:47+00:00",
+      "Source": "BBC News",
+      "Summary": "England name off-spinner Shoaib Bashir in a 12-man squad for the fifth Ashes Test against Australia in Sydney."
+    },
+    {
+      "Title": "Dozens missing after boat carrying 200 migrants sinks off Gambia ",
+      "Link": "https://www.bbc.com/news/articles/clynvkwglx4o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T06:50:57+00:00",
+      "Source": "BBC News",
+      "Summary": "It is the latest accident on one of the world\u2019s most dangerous routes used by West Africans trying to reach Spain. "
+    },
+    {
+      "Title": "\u0027National treasure\u0027 Brighton pier put up for sale",
+      "Link": "https://www.bbc.com/news/articles/cd6wqv9x5n7o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T06:03:30+00:00",
+      "Source": "BBC News",
+      "Summary": "Brighton Palace Pier is now on the market after warnings of \u0022difficult\u0022 trading in previous years."
+    },
+    {
+      "Title": "The Papers: \u0027Horror on the dancefloor\u0027 and \u0027Traitors twist\u0027",
+      "Link": "https://www.bbc.com/news/articles/cp3zwlj0220o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T04:50:18+00:00",
+      "Source": "BBC News",
+      "Summary": "The fire at a Swiss ski resort bar which has killed dozens dominates Friday\u0027s front pages. "
+    },
+    {
+      "Title": "China\u0027s BYD set to overtake Tesla as world\u0027s top EV seller",
+      "Link": "https://www.bbc.com/news/articles/cj9rjwpvmpzo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T03:28:07+00:00",
+      "Source": "BBC News",
+      "Summary": "It would mark the first time the Chinese firm has outpaced its American rival for annual sales."
+    },
+    {
+      "Title": "Japan PM joins fight for more female toilets in parliament",
+      "Link": "https://www.bbc.com/news/articles/c8e5lxd2gwgo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T03:10:12+00:00",
+      "Source": "BBC News",
+      "Summary": "Japan\u0027s parliament building was built in 1936, a decade before women were given the right to vote."
+    },
+    {
+      "Title": "Trump says he takes higher daily dose of aspirin than doctors recommend",
+      "Link": "https://www.bbc.com/news/articles/c701z7g0ppro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T02:22:17+00:00",
+      "Source": "BBC News",
+      "Summary": "In an interview about his health, the US president says: \u0022I don\u0027t want thick blood pouring through my heart\u0022."
+    },
+    {
+      "Title": "\u0027You\u0027re invisible, you don\u0027t exist\u0027 - life without a birth certificate",
+      "Link": "https://www.bbc.com/news/articles/cx2drqwp2eyo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T02:15:28+00:00",
+      "Source": "BBC News",
+      "Summary": "Millions around the world are living in the shadows as stateless people as they lack official papers."
+    },
+    {
+      "Title": "Deadly clashes between protesters and security forces as Iran unrest grows",
+      "Link": "https://www.bbc.com/news/articles/c36810pkz96o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T02:08:41+00:00",
+      "Source": "BBC News",
+      "Summary": "Videos on social media showed cars set on fire during running battles as protests entered their fifth day."
+    },
+    {
+      "Title": "Weekly quiz: Which Spice Girl got an invite to Adam Peaty and Holly Ramsay\u0027s wedding?",
+      "Link": "https://www.bbc.com/news/articles/cx2lgydrp5jo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T00:51:47+00:00",
+      "Source": "BBC News",
+      "Summary": "How much attention did you pay to what happened in the world over the past seven days?"
+    },
+    {
+      "Title": "\u0027I hid from a wall of heat\u0027: Eyewitnesses describe escape from Swiss bar inferno",
+      "Link": "https://www.bbc.com/news/articles/clyml77ml7jo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T00:49:05+00:00",
+      "Source": "BBC News",
+      "Summary": "One young man told the BBC he went into the bar to look for his little brother, who he thought was inside."
+    },
+    {
+      "Title": "Why you don\u0027t need electrolytes for everyday exercise",
+      "Link": "https://www.bbc.com/news/articles/cev1v8wr8m7o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T00:48:12+00:00",
+      "Source": "BBC News",
+      "Summary": "Drinks with electrolytes can be expensive but most people are spending money they don\u0027t need to."
+    },
+    {
+      "Title": "Chickenpox vaccines for young children start across UK",
+      "Link": "https://www.bbc.com/news/articles/cgexe201n81o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T00:31:23+00:00",
+      "Source": "BBC News",
+      "Summary": "For the first time, children will be offered vaccination on the NHS against the common infection which, in rare cases, can be very serious."
+    },
+    {
+      "Title": "What is chickenpox and who can get an NHS vaccine?",
+      "Link": "https://www.bbc.com/news/articles/cn0rnqj52y5o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T00:31:12+00:00",
+      "Source": "BBC News",
+      "Summary": "The standard NHS childhood vaccination programme will include chickenpox from 2 January 2026."
+    },
+    {
+      "Title": "The great debate about whether the NHS should use magic mushrooms to treat mental health",
+      "Link": "https://www.bbc.com/news/articles/ckg936l88e7o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T00:03:20+00:00",
+      "Source": "BBC News",
+      "Summary": "Many clinical trials to test the use of psychedelic medicines for conditions such as depression have been underway since 2022 - with surprising results"
+    },
+    {
+      "Title": "Retiring Khawaja criticises \u0027racial stereotypes\u0027",
+      "Link": "https://www.bbc.com/sport/cricket/articles/cy5g32l2621o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T23:52:49+00:00",
+      "Source": "BBC News",
+      "Summary": "Australia batter Usman Khawaja says he has been treated unfairly by the media and former players as he announces his retirement from international cricket."
+    },
+    {
+      "Title": "\u0027We are not happy\u0027 - Man City fall behind Arsenal in title race",
+      "Link": "https://www.bbc.com/sport/football/articles/cm248l1j7jno?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T23:33:23+00:00",
+      "Source": "BBC News",
+      "Summary": "Pep Guardiola questioned whether it was only a two-horse Premier League title race, but his Manchester City side can ill-afford many slip-ups in their quest to hunt down leaders Arsenal."
+    },
+    {
+      "Title": "The Traitors returns with new \u0027secret traitor\u0027 in major shake-up",
+      "Link": "https://www.bbc.com/news/articles/cp857g5m3zdo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T23:06:30+00:00",
+      "Source": "BBC News",
+      "Summary": "Not even the viewers know who host Claudia Winkleman has assigned as the fourth \u0022secret traitor\u0022."
+    },
+    {
+      "Title": "Littler races into semis but Humphries knocked out",
+      "Link": "https://www.bbc.com/sport/darts/articles/c4g45vznpyro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T22:54:59+00:00",
+      "Source": "BBC News",
+      "Summary": "Luke Littler beats Krzysztof Ratajski to reach the PDC World Championship semi-finals, before second seed Luke Humphries loses to Gian van Veen."
+    },
+    {
+      "Title": "\u0027Heavy metal? It\u0027s not even aluminium foil football\u0027",
+      "Link": "https://www.bbc.com/sport/articles/cr7j5z1m835o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T22:11:21+00:00",
+      "Source": "BBC News",
+      "Summary": "As Liverpool are booed off following a goalless draw against Leeds, it was hardly the start to the New Year that Arne Slot\u0027s side would have wanted."
+    },
+    {
+      "Title": "What we know so far about how the fire broke out",
+      "Link": "https://www.bbc.com/news/articles/c9dvyyjyj18o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T21:54:54+00:00",
+      "Source": "BBC News",
+      "Summary": "Several dozen people are presumed to have died in the fire at a New Year party in the resort of Crans-Montana."
+    },
+    {
+      "Title": "Liam Rosenior leading contender for Chelsea job - with five other candidates touted",
+      "Link": "https://www.bbc.com/sport/football/articles/c0er1wx3v28o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T19:58:50+00:00",
+      "Source": "BBC News",
+      "Summary": "Strasbourg boss Liam Rosenior is the leading contender to be the next Chelsea manager, but others remain under consideration."
+    },
+    {
+      "Title": "LG\u2019s new karaoke-ready party speaker uses AI to remove song vocals",
+      "Link": "https://www.theverge.com/news/852362/lg-xboom-stage-501-karaoke-launch-ces-2026",
+      "Published": "2026-01-01T18:16:10+00:00",
+      "Source": "The Verge",
+      "Summary": "LG is adding a karaoke-focused party speaker to its lineup of Xboom devices, which is built in collaboration with Will.i.am. Announced this week, LG says the Stage 501 speaker comes with an \u0022AI Karaoke Master\u0022 that can remove or adjust vocals from \u0022virtually any song,\u0022 similar to the Soundcore Rave 3S. It can also adjust [\u0026#8230;]"
+    },
+    {
+      "Title": "EastEnders actor \u0027grateful\u0027 to avoid driving ban for speeding",
+      "Link": "https://www.bbc.com/news/articles/cn0k34yy454o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T18:06:06+00:00",
+      "Source": "BBC News",
+      "Summary": "Colin Salmon was shown leniency by the court because he cares for his seriously ill wife and daughter."
+    },
+    {
+      "Title": "Public domain 2026: Betty Boop, Pluto, and Nancy Drew set free",
+      "Link": "https://www.theverge.com/policy/852332/public-domain-2026-betty-boop-nancy-drew-pluto",
+      "Published": "2026-01-01T16:30:00+00:00",
+      "Source": "The Verge",
+      "Summary": "Some years ago, I was writing a science fiction short story in which I wanted to incorporate verses from a 1928 song, \u0022Button Up Your Overcoat.\u0022 However, when I sold the story, my editor told me that since the song was still copyrighted, it was safer not to include the verses. If I had written [\u0026#8230;]"
+    },
+    {
+      "Title": "Disbelief as tragedy hits Swiss ski resort on New Year\u0027s Day",
+      "Link": "https://www.bbc.com/news/articles/c70lwkk4zkro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T16:04:02+00:00",
+      "Source": "BBC News",
+      "Summary": "BBC\u0027s Silvia Costeloe says the fire happened in the beating heart of lively Crans-Montana."
+    },
+    {
+      "Title": "Meet the new tech laws of 2026",
+      "Link": "https://www.theverge.com/policy/851664/new-tech-internet-laws-us-2026-ai-privacy-repair",
+      "Published": "2026-01-01T15:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "As usual, 2025 was a year of deep congressional dysfunction in the US. But state legislatures were passing laws that govern everything from AI to social media to the right to repair. Many of these laws, alongside rules passed in past years, take effect in 2026 - either right now or in the coming months. [\u0026#8230;]"
+    },
+    {
+      "Title": "Video shows fire spreading across bar ceiling",
+      "Link": "https://www.bbc.com/news/videos/cwy1l7jwgjvo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T14:49:31+00:00",
+      "Source": "BBC News",
+      "Summary": "The moment a Swiss bar was set ablaze appears to have been captured on video."
+    },
+    {
+      "Title": "Crypto users forced to share account details with tax officials",
+      "Link": "https://www.bbc.com/news/articles/ckgl2je65klo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-01T09:52:20+00:00",
+      "Source": "BBC News",
+      "Summary": "The move is designed to ensure people pay all relevant tax on buying and selling crypto."
     }
   ],
   "Prices": []
