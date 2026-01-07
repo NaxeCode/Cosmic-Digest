@@ -1,5 +1,5 @@
 {
-  "LastDigestUtc": "2026-01-06T08:09:29.7188935+00:00",
+  "LastDigestUtc": "2026-01-07T08:09:13.8502063+00:00",
   "CacheNews": [
     {
       "Title": "In pictures: New Year welcomed around the world",
@@ -259,13 +259,6 @@
       "Published": "2025-12-30T15:47:09+00:00",
       "Source": "The Verge",
       "Summary": "The US Cyber Trust Mark Program, an Energy Star-style certification for smart home security, could be winding down less than a year after it launched. Safety testing company UL Solutions has announced that it is stepping down as the program\u0027s lead administrator, just a few months after the Federal Communications Commission (FCC) began investigating it [\u0026#8230;]"
-    },
-    {
-      "Title": "Baz Luhrmann\u0027s epic Elvis biopic starring Austin Butler",
-      "Link": "https://www.bbc.co.uk/iplayer/episode/m002nzws?at_mid=mGEMw411dH\u0026at_campaign=Elvis\u0026at_medium=display_ad\u0026at_campaign_type=owned\u0026at_nation=NET\u0026at_audience_id=SS\u0026at_product=iplayer\u0026at_brand=m002nzws\u0026at_ptr_name=bbc\u0026at_ptr_type=media\u0026at_format=image\u0026at_objective=consumption\u0026at_link_title=Elvis\u0026at_bbc_team=BBC\u0026at_creation=Film",
-      "Published": "2025-12-27T22:12:00+00:00",
-      "Source": "BBC News",
-      "Summary": "An epic, big-screen spectacle that explores the life and music of Elvis Presley"
     },
     {
       "Title": "Man charged with murder after car hits pedestrian",
@@ -1108,111 +1101,6 @@
       "Summary": "\u003Ca href=\u0022https://news.ycombinator.com/item?id=46409359\u0022\u003EComments\u003C/a\u003E"
     },
     {
-      "Title": "Behold the Manifold, the Concept that Changed How Mathematicians View Space",
-      "Link": "https://www.wired.com/story/behold-the-manifold-the-concept-that-changed-how-mathematicians-view-space/",
-      "Published": "2025-12-28T07:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "In the mid-19th century, Bernhard Riemann conceived of a new way to think about mathematical spaces, providing the foundation for modern geometry and physics."
-    },
-    {
-      "Title": "Therabody Promo Codes and Deals: Get 30% Off This Month",
-      "Link": "https://www.wired.com/story/therabody-promo-code/",
-      "Published": "2025-12-28T06:30:00+00:00",
-      "Source": "WIRED",
-      "Summary": "Save on the science-backed devices you\u2019ve been eyeing with 15% off Theragun discount code and 30% off other great deals."
-    },
-    {
-      "Title": "Hungryroot Coupon Codes: 30% Off This Month",
-      "Link": "https://www.wired.com/story/hungryroot-promo-code/",
-      "Published": "2025-12-28T06:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "Get up to 30% off your first order and free gifts using a Hungryroot promo code today. Discover our best coupons and discounts to let you save on your healthy groceries as a new or returning customer."
-    },
-    {
-      "Title": "The 3 a.m. Call That Changed The Way I Design APIs",
-      "Link": "https://thenewstack.io/the-3-a-m-call-that-changed-the-way-i-design-apis/",
-      "Published": "2025-12-27T18:00:23+00:00",
-      "Source": "The New Stack",
-      "Summary": "\u003Cimg width=\u00221024\u0022 height=\u0022683\u0022 src=\u0022https://cdn.thenewstack.io/media/2025/12/5763f040-wakeup-1024x683.jpg\u0022 class=\u0022webfeedsFeaturedVisual wp-post-image wp-stateless-item\u0022 alt=\u0022Sleeping man answering a phone call.\u0022 style=\u0022display: block; margin: auto; margin-bottom: 20px;max-width: 100%;\u0022 link_thumbnail=\u0022\u0022 decoding=\u0022async\u0022 loading=\u0022lazy\u0022 data-image-size=\u0022large\u0022 data-stateless-media-bucket=\u0022cdn.thenewstack.io\u0022 data-stateless-media-name=\u0022media/2025/12/5763f040-wakeup.jpg\u0022 /\u003E\u003Cp\u003EAt 3:17 a.m. on a Tuesday, my phone buzzed with the alert that would reshape the way I think about\u003C/p\u003E\n\u003Cp\u003EThe post \u003Ca href=\u0022https://thenewstack.io/the-3-a-m-call-that-changed-the-way-i-design-apis/\u0022\u003EThe 3 a.m. Call That Changed The Way I Design APIs\u003C/a\u003E appeared first on \u003Ca href=\u0022https://thenewstack.io\u0022\u003EThe New Stack\u003C/a\u003E.\u003C/p\u003E\n"
-    },
-    {
-      "Title": "The Best After-Christmas Deals on Gear We\u0027ve Tested (2025)",
-      "Link": "https://www.wired.com/story/after-christmas-deals-2025/",
-      "Published": "2025-12-27T16:42:31+00:00",
-      "Source": "WIRED",
-      "Summary": "Money gifts burning a hole in your pocket? These deals on WIRED-tested gadgets and gizmos will stretch your dollars."
-    },
-    {
-      "Title": "5 Key Trends Shaping Agentic Development in 2026",
-      "Link": "https://thenewstack.io/5-key-trends-shaping-agentic-development-in-2026/",
-      "Published": "2025-12-27T15:00:03+00:00",
-      "Source": "The New Stack",
-      "Summary": "\u003Cimg width=\u00221024\u0022 height=\u0022576\u0022 src=\u0022https://cdn.thenewstack.io/media/2023/12/90fe5532-year-forecast-1-1024x576.png\u0022 class=\u0022webfeedsFeaturedVisual wp-post-image wp-stateless-item\u0022 alt=\u0022Illustration of a box being opened and showing a star emerging from it\u0022 style=\u0022display: block; margin: auto; margin-bottom: 20px;max-width: 100%;\u0022 link_thumbnail=\u0022\u0022 decoding=\u0022async\u0022 loading=\u0022lazy\u0022 data-image-size=\u0022large\u0022 data-stateless-media-bucket=\u0022cdn.thenewstack.io\u0022 data-stateless-media-name=\u0022media/2023/12/90fe5532-year-forecast-1.png\u0022 /\u003E\u003Cp\u003ESo far in my review of agentic development over the past year and heading into 2026, I\u0026#8217;ve looked at some\u003C/p\u003E\n\u003Cp\u003EThe post \u003Ca href=\u0022https://thenewstack.io/5-key-trends-shaping-agentic-development-in-2026/\u0022\u003E5 Key Trends Shaping Agentic Development in 2026\u003C/a\u003E appeared first on \u003Ca href=\u0022https://thenewstack.io\u0022\u003EThe New Stack\u003C/a\u003E.\u003C/p\u003E\n"
-    },
-    {
-      "Title": "Trends That Defined JavaScript in 2025",
-      "Link": "https://thenewstack.io/trends-that-defined-javascript-in-2025/",
-      "Published": "2025-12-27T14:00:53+00:00",
-      "Source": "The New Stack",
-      "Summary": "\u003Cimg width=\u00221024\u0022 height=\u0022576\u0022 src=\u0022https://cdn.thenewstack.io/media/2023/12/88ad96d3-year-wrapup-1-1024x576.png\u0022 class=\u0022webfeedsFeaturedVisual wp-post-image wp-stateless-item\u0022 alt=\u0022Image showing a wrapped gift with a bow. Indicates \u0026quot;year wrapup.\u0026quot;\u0022 style=\u0022display: block; margin: auto; margin-bottom: 20px;max-width: 100%;\u0022 link_thumbnail=\u0022\u0022 decoding=\u0022async\u0022 loading=\u0022lazy\u0022 data-image-size=\u0022large\u0022 data-stateless-media-bucket=\u0022cdn.thenewstack.io\u0022 data-stateless-media-name=\u0022media/2023/12/88ad96d3-year-wrapup-1.png\u0022 /\u003E\u003Cp\u003EThe year 2025 proved to be a transformative period for the JavaScript ecosystem, marked by a shift toward performance optimization\u003C/p\u003E\n\u003Cp\u003EThe post \u003Ca href=\u0022https://thenewstack.io/trends-that-defined-javascript-in-2025/\u0022\u003ETrends That Defined JavaScript in 2025\u003C/a\u003E appeared first on \u003Ca href=\u0022https://thenewstack.io\u0022\u003EThe New Stack\u003C/a\u003E.\u003C/p\u003E\n"
-    },
-    {
-      "Title": "Hyperkin The Competitor Controller Review: A DualSense Copycat",
-      "Link": "https://www.wired.com/review/hyperkin-the-competitor-controller/",
-      "Published": "2025-12-27T12:30:00+00:00",
-      "Source": "WIRED",
-      "Summary": "This copycat controller can\u2019t clone the PS5\u2019s best features, but it\u2019s a solid option for Xbox and PC gamers."
-    },
-    {
-      "Title": "RoboCop \u2013 Breaking the Law. H0ffman Cracks RoboCop Arcade from DataEast",
-      "Link": "https://hoffman.home.blog/2025/12/26/robocop-breaking-the-law/",
-      "Published": "2025-12-27T12:21:30+00:00",
-      "Source": "Hacker News",
-      "Summary": "\u003Ca href=\u0022https://news.ycombinator.com/item?id=46401340\u0022\u003EComments\u003C/a\u003E"
-    },
-    {
-      "Title": "The Environmental and Human Rights Costs of China\u2019s Clean Energy Investments Abroad",
-      "Link": "https://www.wired.com/story/chinas-clean-energy-investments-abroad-are-a-boon-for-climate-but-human-rights-and-the-environment-are-a-different-story/",
-      "Published": "2025-12-27T12:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "Chinese companies have pledged hundreds of billions of dollars in clean energy manufacturing investments overseas, but the projects are having significant social, environmental, and human rights impacts."
-    },
-    {
-      "Title": "The 48 Best Shows on Netflix, WIRED\u0027s Picks (December 2025)",
-      "Link": "https://www.wired.com/story/netflix-best-shows-this-week/",
-      "Published": "2025-12-27T12:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "Stranger Things, City of Shadows, and Tomb Raider: The Legend of Lara Croft are just a few of the shows you need to watch on Netflix this month."
-    },
-    {
-      "Title": "Tuft \u0026 Needle Original Hybrid Mattress Review: A Soft Landing",
-      "Link": "https://www.wired.com/review/tuft-and-needle-original-hybrid/",
-      "Published": "2025-12-27T11:32:00+00:00",
-      "Source": "WIRED",
-      "Summary": "Choosing a mattress for your guest room, Airbnb, or VRBO rental is challenging. This hybrid is up for it."
-    },
-    {
-      "Title": "So Long, GPT-5. Hello, Qwen",
-      "Link": "https://www.wired.com/story/expired-tired-wired-gpt-5/",
-      "Published": "2025-12-27T11:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "In the AI boom, chatbots and GPTs come and go quickly. (Remember Llama?) GPT-5 had a big year, but 2026 will be all about Qwen."
-    },
-    {
-      "Title": "In Cryptoland, Memecoin Fever Gives Way to a Stablecoin Boom",
-      "Link": "https://www.wired.com/story/expired-tired-wired-memecoins/",
-      "Published": "2025-12-27T11:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "In a year that began with a memecoin trading frenzy, stablecoins have emerged as the respectable face of the crypto industry."
-    },
-    {
-      "Title": "The US Must Stop Underestimating Drone Warfare",
-      "Link": "https://www.wired.com/story/the-us-must-stop-underestimating-drone-warfare/",
-      "Published": "2025-12-27T10:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "The future of conflict is cheap, rapidly manufactured, and tough to defend against."
-    },
-    {
       "Title": "Claude wrote a functional NES emulator using my engine\u0027s API",
       "Link": "https://carimbo.games/games/nintendo/",
       "Published": "2025-12-31T13:07:22+00:00",
@@ -1939,13 +1827,6 @@
       "Published": "2025-12-29T22:30:42+00:00",
       "Source": "BBC News",
       "Summary": "Amy and Ryan Jackson, who set up the Lily Mae Foundation, are awarded British Empire Medals."
-    },
-    {
-      "Title": "The prehistoric shark found in a suburban town in Scotland",
-      "Link": "https://www.bbc.com/news/articles/c4g5jvel0pqo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2025-12-27T08:12:58+00:00",
-      "Source": "BBC News",
-      "Summary": "The fossil was so complete experts could see remains of the last meal it ate, 330 million years after it died."
     },
     {
       "Title": "Entertaining \u0026 frustrating, but will Brook \u0027evolve\u0027?",
@@ -2800,6 +2681,342 @@
       "Published": "2026-01-05T06:00:00+00:00",
       "Source": "BBC News",
       "Summary": "Historian Tom Holland answers your questions about President Trump, cricket and Spiderman"
+    },
+    {
+      "Title": "Learner drivers face longer wait for tests as lower drink-drive limit proposed",
+      "Link": "https://www.bbc.com/news/articles/clym5jvgdepo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T07:52:28+00:00",
+      "Source": "BBC News",
+      "Summary": "Proposed changes by the government may also include lower drink-driving limits for novice motorists."
+    },
+    {
+      "Title": "\u0027It hurts, it hurts a lot\u0027 - Skivington on pain of Gloucester slump",
+      "Link": "https://www.bbc.com/sport/rugby-union/articles/cn8jxzkmg1yo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T07:31:48+00:00",
+      "Source": "BBC News",
+      "Summary": "Under-pressure George Skivington says he is enduring the hardest spell of his decade-long coaching career after Gloucester\u0027s miserable form continued with defeat away to Newcastle Red Bulls on Friday."
+    },
+    {
+      "Title": "\u0027No idea what just happened\u0027 - GB\u0027s Jones battles injury in Auckland win",
+      "Link": "https://www.bbc.com/sport/tennis/articles/c4gr3w7qx17o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T07:27:39+00:00",
+      "Source": "BBC News",
+      "Summary": "Britain\u0027s Francesca Jones says she had \u0022no idea what just happened\u0022 after battling injury to reach the Auckland Classic quarter-finals."
+    },
+    {
+      "Title": "US discussing options to acquire Greenland, including use of military, White House says",
+      "Link": "https://www.bbc.com/news/articles/cwyg1jg8xkmo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T07:26:05+00:00",
+      "Source": "BBC News",
+      "Summary": "It came as European allies rallied behind Denmark, which is pushing back against Trump\u0027s ambitions for the Arctic island. "
+    },
+    {
+      "Title": "Bethell century gives England Ashes silver lining",
+      "Link": "https://www.bbc.com/sport/cricket/articles/ckgvyz4e1zwo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T07:14:10+00:00",
+      "Source": "BBC News",
+      "Summary": "Jacob Bethell\u0027s majestic maiden century gives England a lead of 119 after day four but Australia look on course to win the fifth Ashes Test."
+    },
+    {
+      "Title": "The two sides of Sombr, the singer sparkling through the sadness",
+      "Link": "https://www.bbc.com/news/articles/c87l8dg5pnro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T07:02:48+00:00",
+      "Source": "BBC News",
+      "Summary": "The alt-pop star comes third in the BBC Sound of 2026, which showcases the year\u0027s top rising stars."
+    },
+    {
+      "Title": "\u0027Born to play international cricket\u0027 - how Bethell came of age",
+      "Link": "https://www.bbc.com/sport/cricket/articles/cgez72yq2e2o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T06:50:17+00:00",
+      "Source": "BBC News",
+      "Summary": "Jacob Bethell looks \u0022born to play international cricket\u0022 and came of age with his maiden Test century in the fifth Ashes Test in Sydney."
+    },
+    {
+      "Title": "\u0027Nobody can get hold of him\u0027 - what happened to David Batty?",
+      "Link": "https://www.bbc.com/sport/football/articles/cp9jn090kv2o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T06:47:44+00:00",
+      "Source": "BBC News",
+      "Summary": "England midfielder David Batty vowed to have \u0022nothing to do with the football industry\u0022 after retirement. As his former clubs Newcastle and Leeds prepare to meet, BBC Sport asks: What happened to him?"
+    },
+    {
+      "Title": "Opposition leader Machado says she should be in charge of Venezuela ",
+      "Link": "https://www.bbc.com/news/articles/c0er4qd3115o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T06:34:38+00:00",
+      "Source": "BBC News",
+      "Summary": "President Trump has publicly dismissed the Nobel winner Machado saying she doesn\u0027t have local support and respect."
+    },
+    {
+      "Title": "\u0027Why Fletcher could be what Man Utd fans have been waiting for\u0027",
+      "Link": "https://www.bbc.com/sport/football/articles/czdqllp9639o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T06:28:49+00:00",
+      "Source": "BBC News",
+      "Summary": "In his BBC Sport column, ex-Premier League boss Tony Pulis explains why Manchester United\u0027s interim manager Darren Fletcher would be the perfect choice to take the job on a longer-term basis."
+    },
+    {
+      "Title": "Rare Iron Age war trumpet and boar standard found",
+      "Link": "https://www.bbc.com/news/articles/cr7jvj8d39eo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T06:02:51+00:00",
+      "Source": "BBC News",
+      "Summary": "The discoveries are \u0022extraordinarily rare\u0022, say the archaeologists who helped find them."
+    },
+    {
+      "Title": "Century-old tumours could reveal why more young people are getting bowel cancer",
+      "Link": "https://www.bbc.com/news/articles/cvgxpv9k822o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T06:00:10+00:00",
+      "Source": "BBC News",
+      "Summary": "Bowel cancer in people under the age of 50 is increasing worldwide and scientists are striving to find out why. "
+    },
+    {
+      "Title": "The Papers: \u0027Boots on the ground\u0027 and \u0027one for the road\u0027",
+      "Link": "https://www.bbc.com/news/articles/cwy17ndew89o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T05:29:50+00:00",
+      "Source": "BBC News",
+      "Summary": "Plans for British troops in Ukraine and a tightening of drink-driving laws lead Wednesday\u0027s papers."
+    },
+    {
+      "Title": "Russia sends navy ships to guard oil tanker being pursued by US forces",
+      "Link": "https://www.bbc.com/news/articles/c7v0deypjl4o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T04:13:08+00:00",
+      "Source": "BBC News",
+      "Summary": "US officials say that American forces plan to seize the Russian-flagged ship accused of breaking sanctions."
+    },
+    {
+      "Title": "Chris Mason: Greenland and Ukraine point to Trump\u0027s head-spinning unpredictability",
+      "Link": "https://www.bbc.com/news/articles/cpqyleye482o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T04:06:51+00:00",
+      "Source": "BBC News",
+      "Summary": "This week has seen two case studies in how Europe is trying to bind the US into its future, writes the BBC\u0027s political editor."
+    },
+    {
+      "Title": "Intel is planning a custom Panther Lake CPU for handheld PCs",
+      "Link": "https://www.theverge.com/tech/857252/intel-handheld-gaming-pc-panther-lake-custom-cpu",
+      "Published": "2026-01-07T03:16:58+00:00",
+      "Source": "The Verge",
+      "Summary": "Intel announced yesterday that it\u0027s developing an entire \u0022handheld gaming platform\u0022 powered by its new Panther Lake chips, and joining an increasingly competitive field. Qualcomm is hinting about potential Windows gaming handhelds showing up at the Game Developers Conference in March, and AMD\u0027s new Strix Halo chips could lead to more powerful handhelds. According to [\u0026#8230;]"
+    },
+    {
+      "Title": "Aldrich Ames, CIA agent who sold secrets to the Soviets, dies aged 84",
+      "Link": "https://www.bbc.com/news/articles/cj0n29395j3o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T02:54:47+00:00",
+      "Source": "BBC News",
+      "Summary": "The double agent compromised more than 100 operations and betrayed more than 30 agents spying for the West."
+    },
+    {
+      "Title": "Lenovo is building an AI assistant that \u2018can act on your behalf\u2019",
+      "Link": "https://www.theverge.com/column/857053/lenovo-ai-assistant-qira",
+      "Published": "2026-01-07T02:30:00+00:00",
+      "Source": "The Verge",
+      "Summary": "While most attention in the AI race is focused on model builders and cloud platforms, Lenovo sits closer to millions of users than most companies. As the world\u0027s top PC maker by volume, Lenovo ships tens of millions of devices every year. What it decides to ship, bundle, and integrate can directly shape how AI [\u0026#8230;]"
+    },
+    {
+      "Title": "Poor decisions in extending prison lease, MPs say",
+      "Link": "https://www.bbc.com/news/articles/cwyg172908vo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T01:48:55+00:00",
+      "Source": "BBC News",
+      "Summary": "A committee report says \u0022poor commercial decisions\u0022 were made when the lease was signed."
+    },
+    {
+      "Title": "An Indian state wants to tackle hate speech with a law - can it work?",
+      "Link": "https://www.bbc.com/news/articles/c62vzpdmxxjo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T01:18:29+00:00",
+      "Source": "BBC News",
+      "Summary": "Karnataka has passed a bill to prevent hate speech and hate crimes but critics say it could erode civil liberties."
+    },
+    {
+      "Title": "Samsung and Intel\u0026#8217;s OLED tech makes HDR easier on laptop battery life",
+      "Link": "https://www.theverge.com/news/857229/samsung-display-intel-oled-smartpower-hdr",
+      "Published": "2026-01-07T01:06:12+00:00",
+      "Source": "The Verge",
+      "Summary": "Samsung Display and Intel have teamed up on laptop technology called SmartPower HDR that they claim can minimize power usage while you\u0027re watching HDR content on an OLED screen. Intel showed off this technology last year, but Samsung Display is sharing details about how it works and the power savings you might expect. However, the [\u0026#8230;]"
+    },
+    {
+      "Title": "Motorola\u2019s latest smartwatch promises 13-day battery life and Polar-powered health tracking",
+      "Link": "https://www.theverge.com/gadgets/851643/moto-watch-android-smarwatch-ces-2026",
+      "Published": "2026-01-07T01:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "At CES, Motorola announced its latest smartwatch, the Moto Watch. According to Motorola, the Android watch offers up to 13 days of battery life, alongside Polar-powered health tracking, open-source software, and dual-frequency GPS - a combination that helps set it apart from Apple\u0027s and Google\u0027s flagship wearables. Battery life is easily its most notable feature. [\u0026#8230;]"
+    },
+    {
+      "Title": "Lenovo\u2019s Auto Twist laptop is going from concept to real product",
+      "Link": "https://www.theverge.com/news/852251/lenovos-auto-twist-laptop-is-going-from-concept-to-real-product",
+      "Published": "2026-01-07T01:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "At CES 2026, Lenovo is announcing a new ThinkBook Plus Gen 7 Auto Twist laptop. Once a concept, the 14-inch thin-and-light sports a motorized pivoting hinge, allowing it to twist and angle its screen toward you. It can be manually controlled, but the real trick is tracking your head and automatically adjusting to your position [\u0026#8230;]"
+    },
+    {
+      "Title": "The new Lenovo Yoga Pro 9i laptop has a super-bright tandem OLED and magnetic stylus",
+      "Link": "https://www.theverge.com/news/852276/the-new-lenovo-yoga-pro-9i-laptop-has-a-super-bright-tandem-oled-and-magnetic-stylus",
+      "Published": "2026-01-07T01:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "Lenovo\u0027s new pair of Yoga laptops for CES 2026 are its most powerful and most lightweight models. The flagship Yoga Pro 9i is a creator-focused laptop with a 16-inch 4K tandem OLED reaching 1,600 peak nits of brightness, Intel Panther Lake processor options, and up to an RTX 5070 for a discrete GPU. It also [\u0026#8230;]"
+    },
+    {
+      "Title": "Lenovo\u0026#8217;s new concept rollable could be the ideal gaming laptop",
+      "Link": "https://www.theverge.com/tech/852352/lenovo-legion-pro-rollable-gaming-laptop-concept-ces-2026",
+      "Published": "2026-01-07T01:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "Lenovo is at it again with wild laptop concepts for CES 2026, and the biggest one is the Legion Pro Rollable gaming laptop. It has a flexible OLED display that expands horizontally - as opposed to Lenovo\u0027s ThinkBook Plus Gen 6, which rolls up and down. The Legion Pro Rollable\u0027s screen goes from a conventional [\u0026#8230;]"
+    },
+    {
+      "Title": "This ThinkPad laptop concept has a rollable display that wraps around its lid",
+      "Link": "https://www.theverge.com/news/852482/lenovo-thinkpad-rollable-xd-concept-laptop-ces-2026",
+      "Published": "2026-01-07T01:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "At CES 2026, Lenovo is announcing yet another new concept laptop with a transforming screen: the ThinkPad Rollable XD Concept. It\u0027s a ThinkPad, complete with its iconic red TrackPoint nub, but it features a flexible OLED display that wraps around to the outer part of its lid. Slide your finger along the folded spin of [\u0026#8230;]"
+    },
+    {
+      "Title": "Lenovo\u2019s new All-in-One PC can sync its lighting to your notifications",
+      "Link": "https://www.theverge.com/news/852860/lenovo-yoga-aio-i-aura-edition-ces-2026",
+      "Published": "2026-01-07T01:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "If you prefer to have your notifications on silent but don\u0027t want to miss anything, Lenovo\u0027s new All-in-One (AIO) PC might have a solution. The Yoga AIO i Aura Edition unveiled today at CES features a major design overhaul with a transparent light bar at the bottom of the display. The customizable ambient lighting can [\u0026#8230;]"
+    },
+    {
+      "Title": "Lenovo\u2019s joining the bandwagon with concept AI glasses",
+      "Link": "https://www.theverge.com/tech/853434/ces-2026-lenovo-concept-ai-glasses-wearables",
+      "Published": "2026-01-07T01:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "Lenovo is the latest tech company to get bit by the smart glasses bug. The company just showed off a pair of concept AI glasses at CES 2026. While these weren\u0027t a working prototype, we have some idea of where Lenovo\u0027s head is at. The lightweight frames weigh about 45g and have a 2MP camera [\u0026#8230;]"
+    },
+    {
+      "Title": "Trump says Venezuela will be \u0027turning over\u0027 up to 50 million barrels of oil to US",
+      "Link": "https://www.bbc.com/news/articles/c4grxzxjjd8o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T00:24:38+00:00",
+      "Source": "BBC News",
+      "Summary": "Earlier the president said US oil firms could be \u0022up and running\u0022 in the country within 18 months."
+    },
+    {
+      "Title": "\u0027An impossible task?\u0027 Winless run leaves West Ham facing drop",
+      "Link": "https://www.bbc.com/sport/football/articles/cdx4enpg3pvo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T00:10:02+00:00",
+      "Source": "BBC News",
+      "Summary": "Booed off the pitch after conceding a late winner at home against their relegation rivals and on a 10-game winless run - these are desperate times for West Ham."
+    },
+    {
+      "Title": "Award-winning actor \u0027regains feeling in feet\u0027 with new MND drug",
+      "Link": "https://www.bbc.com/news/articles/cpqy9qpyx37o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-07T00:02:39+00:00",
+      "Source": "BBC News",
+      "Summary": "Belfast actor Michael Campbell, also known as Michael Patrick, was diagnosed with the terminal disease in February 2023."
+    },
+    {
+      "Title": "The painful questions for Nato and the EU as Trump threatens Greenland",
+      "Link": "https://www.bbc.com/news/articles/cpwn2wjzwndo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T23:59:30+00:00",
+      "Source": "BBC News",
+      "Summary": "The White House has said that \u0027utilising the \u200CUS military is \u200Dalways an option at the commander-in-chief\u0027s disposal\u0027"
+    },
+    {
+      "Title": "Assisted dying campaigners request extra time for peers to scrutinise bill",
+      "Link": "https://www.bbc.com/news/articles/crkrexrk0xzo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T23:29:03+00:00",
+      "Source": "BBC News",
+      "Summary": "Concern is growing among supporters the bill won\u0027t pass parliamentary hurdles in the allotted days."
+    },
+    {
+      "Title": "Trump\u0027s Venezuela raid has created chaos - and that is a risk for China",
+      "Link": "https://www.bbc.com/news/articles/cly92dkxqvko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T23:01:19+00:00",
+      "Source": "BBC News",
+      "Summary": "The US\u0027s seizure of Nicol\u00E1s Maduro carries uncertainty for China, which is is no fan of chaos."
+    },
+    {
+      "Title": "UK and France to send troops to Ukraine if peace deal agreed",
+      "Link": "https://www.bbc.com/news/articles/c17zee20qpzo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T22:30:55+00:00",
+      "Source": "BBC News",
+      "Summary": "The announcement was made by UK PM Sir Keir Starmer after a meeting of Ukraine\u0027s allies in Paris."
+    },
+    {
+      "Title": "New CCTV released in hunt for absconded murderer",
+      "Link": "https://www.bbc.com/news/articles/c4grxp52g5do?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T21:18:53+00:00",
+      "Source": "BBC News",
+      "Summary": "Two absconded prisoners are believed to have been spotted a number of times in recent days. "
+    },
+    {
+      "Title": "BBC looks into the relationship between Cuba and Venezuela",
+      "Link": "https://www.bbc.com/news/videos/cly5nn5w918o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T20:59:10+00:00",
+      "Source": "BBC News",
+      "Summary": "The BBC\u0027s Cuba correspondent, Will Grant, explains what\u0027s the nature of the relationship between Venezuela and Cuba."
+    },
+    {
+      "Title": "Elon Musk\u0027s X should deal with \u0027appalling\u0027 Grok AI deepfakes, government demands",
+      "Link": "https://www.bbc.com/news/articles/crrn054nxe7o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T17:01:46+00:00",
+      "Source": "BBC News",
+      "Summary": "Grok is being used to digitally remove women\u0027s clothing - something victims describe as \u0022dehumanising\u0022."
+    },
+    {
+      "Title": "Police told wrong family teen had died in crash",
+      "Link": "https://www.bbc.com/news/articles/cgm4yv4rlnpo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T17:00:36+00:00",
+      "Source": "BBC News",
+      "Summary": "South Yorkshire Police says it mixed up the identities of the teen with another male in the car."
+    },
+    {
+      "Title": "I want to tell Jesy Nelson, there\u0027s hope, says mum of child with SMA",
+      "Link": "https://www.bbc.com/news/articles/c1m7r840gl0o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T16:48:36+00:00",
+      "Source": "BBC News",
+      "Summary": "SMA is a progressive muscle-wasting disease that can cause death within two years if untreated."
+    },
+    {
+      "Title": "Lego unveils tech-filled Smart Bricks - to play experts\u0027 unease",
+      "Link": "https://www.bbc.com/news/articles/crmlnmnwzk2o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T16:20:15+00:00",
+      "Source": "BBC News",
+      "Summary": "Lego says its new tech-enabled products are its \u0022most revolutionary innovation\u0022 since it launched its mini-figurines in 1978."
+    },
+    {
+      "Title": "Trump supporters across US react to Venezuela operation",
+      "Link": "https://www.bbc.com/news/videos/c4gv7q1yl3yo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T15:29:28+00:00",
+      "Source": "BBC News",
+      "Summary": "Trump supporters react after US forces seized Venezuela\u2019s Nicolas Maduro with some welcoming the move and others expressing caution about what it means going forward."
+    },
+    {
+      "Title": "Man who tried to save mum and daughter from sea could get posthumous award",
+      "Link": "https://www.bbc.com/news/articles/ceqz95w0njyo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T15:11:08+00:00",
+      "Source": "BBC News",
+      "Summary": "Mark Ratcliffe died trying to save Sarah Keeling and her daughter, Grace, at Withernsea, say police."
+    },
+    {
+      "Title": "Venezuelan security forces detain journalists from foreign news organisations",
+      "Link": "https://www.bbc.com/news/articles/cd6w4y0eq70o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T13:24:44+00:00",
+      "Source": "BBC News",
+      "Summary": "Venezuelans describe their fear of speaking out as 14 media workers are detained and police check people\u0027s social media."
+    },
+    {
+      "Title": "Actress Ashley Tisdale says she left her \u0027toxic mom group\u0027",
+      "Link": "https://www.bbc.com/news/articles/c4g09l286e2o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T13:03:52+00:00",
+      "Source": "BBC News",
+      "Summary": "The High School Musical actress says she left the group of new mothers after being \u0022brought to tears\u0022."
+    },
+    {
+      "Title": "US action in Venezuela morally right, Badenoch says",
+      "Link": "https://www.bbc.com/news/articles/ckgnxdpv2p9o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T11:36:15+00:00",
+      "Source": "BBC News",
+      "Summary": "The Conservative leader tells the BBC the military operation raises \u0022serious questions about the rules-based order\u0022."
+    },
+    {
+      "Title": "Is AI taking the fun out of fantasy football?",
+      "Link": "https://www.bbc.com/news/articles/cewjqxxy2jxo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-06T10:21:01+00:00",
+      "Source": "BBC News",
+      "Summary": "Some fans of FPL and other leagues are turning to chatbots and apps to get a leg up over other players."
+    },
+    {
+      "Title": "De-icing your car and other tips for freezing temperatures",
+      "Link": "https://www.bbc.com/news/articles/crklgj3mej4o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-02T10:27:11+00:00",
+      "Source": "BBC News",
+      "Summary": "As temperatures fall across much of the UK, the best ways to keep people and pets warm and dry. "
     }
   ],
   "Prices": []
