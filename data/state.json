@@ -1,5 +1,5 @@
 {
-  "LastDigestUtc": "2026-01-08T08:09:13.5192372+00:00",
+  "LastDigestUtc": "2026-01-09T08:09:23.3756592+00:00",
   "CacheNews": [
     {
       "Title": "In pictures: New Year welcomed around the world",
@@ -807,209 +807,6 @@
       "Summary": "MIT and Stanford professor Alex \u201CSandy\u201D Pentland joins the show to explore the power of communities for shared knowledge and how AI could hurt or help the growth of these communities. "
     },
     {
-      "Title": "Meta just bought Manus, an AI startup everyone has been talking about",
-      "Link": "https://techcrunch.com/2025/12/29/meta-just-bought-manus-an-ai-startup-everyone-has-been-talking-about/",
-      "Published": "2025-12-30T05:39:08+00:00",
-      "Source": "TechCrunch",
-      "Summary": "Meta says it\u0027ll keep Manus running independently while weaving its agents into Facebook, Instagram, and WhatsApp, where Meta\u0027s own chatbot, Meta AI, is already available to users."
-    },
-    {
-      "Title": "Bugs that survive the heat of continuous fuzzing",
-      "Link": "https://github.blog/security/vulnerability-research/bugs-that-survive-the-heat-of-continuous-fuzzing/",
-      "Published": "2025-12-29T22:01:14+00:00",
-      "Source": "The GitHub Blog",
-      "Summary": "\u003Cp\u003ELearn why some long-enrolled OSS-Fuzz projects still contain vulnerabilities and how you can find them.\u003C/p\u003E\n\u003Cp\u003EThe post \u003Ca href=\u0022https://github.blog/security/vulnerability-research/bugs-that-survive-the-heat-of-continuous-fuzzing/\u0022\u003EBugs that survive the heat of continuous fuzzing\u003C/a\u003E appeared first on \u003Ca href=\u0022https://github.blog\u0022\u003EThe GitHub Blog\u003C/a\u003E.\u003C/p\u003E\n"
-    },
-    {
-      "Title": "US can\u2019t deport hate speech researcher for protected speech, lawsuit says",
-      "Link": "https://arstechnica.com/tech-policy/2025/12/us-cant-deport-hate-speech-researcher-for-protected-speech-lawsuit-says/",
-      "Published": "2025-12-29T21:30:29+00:00",
-      "Source": "Ars Technica - All content",
-      "Summary": "On Monday, US officials must explain what steps they took to enforce shocking visa bans."
-    },
-    {
-      "Title": "How to make your startup stand out in a crowded market, according to investors",
-      "Link": "https://techcrunch.com/2025/12/29/vcs-spill-what-they-really-want-to-hear-in-a-founder-pitch/",
-      "Published": "2025-12-29T21:00:00+00:00",
-      "Source": "TechCrunch",
-      "Summary": "At TechCrunch Disrupt, three investors took the stage to dissect what makes \u2014 and breaks \u2014 a pitch deck. Jyoti Bansal, a founder-turned-investor; Medha Agarwal of Defy; and Jennifer Neundorfer of January Ventures shared with the crowd their candid views on what works in a pitch deck \u2014 and what doesn\u0027t."
-    },
-    {
-      "Title": "Social media follower counts have never mattered less, creator economy execs say",
-      "Link": "https://techcrunch.com/2025/12/29/social-media-follower-counts-have-never-mattered-less-creator-economy-execs-say/",
-      "Published": "2025-12-29T20:00:00+00:00",
-      "Source": "TechCrunch",
-      "Summary": "\u201CI think that 2025 was the year where the algorithm completely took over, so followings stopped mattering entirely,\u201D LTK CEO Amber Venz Box said."
-    },
-    {
-      "Title": "Leonardo\u2019s wood charring method predates Japanese practice",
-      "Link": "https://arstechnica.com/science/2025/12/did-one-line-in-a-leonardo-codex-anticipate-yakisugi/",
-      "Published": "2025-12-29T19:30:47+00:00",
-      "Source": "Ars Technica - All content",
-      "Summary": "Yakisugi, a Japanese technique of burning wood surfaces, creates a protective carbonized layer"
-    },
-    {
-      "Title": "Your AI Workflow Is Missing a Composable Architecture",
-      "Link": "https://thenewstack.io/your-ai-workflow-is-missing-a-composable-architecture/",
-      "Published": "2025-12-29T19:04:40+00:00",
-      "Source": "The New Stack",
-      "Summary": "\u003Cimg width=\u00221024\u0022 height=\u0022683\u0022 src=\u0022https://cdn.thenewstack.io/media/2025/12/beb8a9bc-arnold-francisca-fbnxmwevpac-unsplash-1024x683.jpg\u0022 class=\u0022webfeedsFeaturedVisual wp-post-image wp-stateless-item\u0022 alt=\u0022\u0022 style=\u0022display: block; margin: auto; margin-bottom: 20px;max-width: 100%;\u0022 link_thumbnail=\u0022\u0022 decoding=\u0022async\u0022 loading=\u0022lazy\u0022 data-image-size=\u0022large\u0022 data-stateless-media-bucket=\u0022cdn.thenewstack.io\u0022 data-stateless-media-name=\u0022media/2025/12/beb8a9bc-arnold-francisca-fbnxmwevpac-unsplash-scaled.jpg\u0022 /\u003E\u003Cp\u003E\u0026#8220;Don\u0026#8217;t ask the model to build your whole app. Break your request into smaller parts and generate one function, hook,\u003C/p\u003E\n\u003Cp\u003EThe post \u003Ca href=\u0022https://thenewstack.io/your-ai-workflow-is-missing-a-composable-architecture/\u0022\u003EYour AI Workflow Is Missing a Composable Architecture\u003C/a\u003E appeared first on \u003Ca href=\u0022https://thenewstack.io\u0022\u003EThe New Stack\u003C/a\u003E.\u003C/p\u003E\n"
-    },
-    {
-      "Title": "Researchers make \u201Cneuromorphic\u201D artificial skin for robots",
-      "Link": "https://arstechnica.com/science/2025/12/researchers-make-neuromorphic-artificial-skin-for-robots/",
-      "Published": "2025-12-29T19:00:42+00:00",
-      "Source": "Ars Technica - All content",
-      "Summary": "Information from sensors is transmitted using neural-style activity spikes."
-    },
-    {
-      "Title": "2025 was the year AI got a vibe check",
-      "Link": "https://techcrunch.com/2025/12/29/2025-was-the-year-ai-got-a-vibe-check/",
-      "Published": "2025-12-29T19:00:00+00:00",
-      "Source": "TechCrunch",
-      "Summary": "AI\u2019s early-2025 spending spree featured massive raises and trillion-dollar infrastructure promises. By year\u2019s end, hype gave way to a vibe check, with growing scrutiny over sustainability, safety, and business models."
-    },
-    {
-      "Title": "Generative AI Apps Need an Ecosystem, Not Just a Prompt",
-      "Link": "https://thenewstack.io/generative-ai-apps-need-an-ecosystem-not-just-a-prompt/",
-      "Published": "2025-12-29T18:00:43+00:00",
-      "Source": "The New Stack",
-      "Summary": "\u003Cimg width=\u00221024\u0022 height=\u0022576\u0022 src=\u0022https://cdn.thenewstack.io/media/2025/12/bdb36f79-cherries-1024x576.jpg\u0022 class=\u0022webfeedsFeaturedVisual wp-post-image wp-stateless-item\u0022 alt=\u0022Two cherries\u0022 style=\u0022display: block; margin: auto; margin-bottom: 20px;max-width: 100%;\u0022 link_thumbnail=\u0022\u0022 decoding=\u0022async\u0022 loading=\u0022lazy\u0022 data-image-size=\u0022large\u0022 data-stateless-media-bucket=\u0022cdn.thenewstack.io\u0022 data-stateless-media-name=\u0022media/2025/12/bdb36f79-cherries.jpg\u0022 /\u003E\u003Cp\u003EEvery engineer has a moment early in their career when they realize the truth: You cannot learn everything. Much like\u003C/p\u003E\n\u003Cp\u003EThe post \u003Ca href=\u0022https://thenewstack.io/generative-ai-apps-need-an-ecosystem-not-just-a-prompt/\u0022\u003EGenerative AI Apps Need an Ecosystem, Not Just a Prompt\u003C/a\u003E appeared first on \u003Ca href=\u0022https://thenewstack.io\u0022\u003EThe New Stack\u003C/a\u003E.\u003C/p\u003E\n"
-    },
-    {
-      "Title": "Plaud Note Pro is an excellent AI-powered recorder that I carry everywhere",
-      "Link": "https://techcrunch.com/2025/12/29/plaud-note-pro-is-an-excellent-ai-powered-recorder-that-i-carry-everywhere/",
-      "Published": "2025-12-29T18:00:00+00:00",
-      "Source": "TechCrunch",
-      "Summary": "Plaud Note Pro is a $179 notetaker, which is an excellent recording device first"
-    },
-    {
-      "Title": "Why the electrical grid needs more software",
-      "Link": "https://techcrunch.com/2025/12/29/why-the-electrical-grid-needs-more-software/",
-      "Published": "2025-12-29T17:00:00+00:00",
-      "Source": "TechCrunch",
-      "Summary": "The electrical grid is facing unprecedented stress from the addition of new data centers. Software could offer a cost-effective way to boost reliability and capacity."
-    },
-    {
-      "Title": "China drafts world\u2019s strictest rules to end AI-encouraged suicide, violence",
-      "Link": "https://arstechnica.com/tech-policy/2025/12/china-drafts-worlds-strictest-rules-to-end-ai-encouraged-suicide-violence/",
-      "Published": "2025-12-29T16:30:45+00:00",
-      "Source": "Ars Technica - All content",
-      "Summary": "China wants a human to intervene and notify guardians if suicide is ever mentioned."
-    },
-    {
-      "Title": "Why Decoupling Control and Data Planes Is the Future of SaaS",
-      "Link": "https://thenewstack.io/why-decoupling-control-and-data-planes-is-the-future-of-saas/",
-      "Published": "2025-12-29T16:00:07+00:00",
-      "Source": "The New Stack",
-      "Summary": "\u003Cimg width=\u00221024\u0022 height=\u0022576\u0022 src=\u0022https://cdn.thenewstack.io/media/2025/12/a6df94e5-buildings-1024x576.jpg\u0022 class=\u0022webfeedsFeaturedVisual wp-post-image wp-stateless-item\u0022 alt=\u0022A low angle view of skyscrapers illuminated at night.\u0022 style=\u0022display: block; margin: auto; margin-bottom: 20px;max-width: 100%;\u0022 link_thumbnail=\u0022\u0022 decoding=\u0022async\u0022 loading=\u0022lazy\u0022 data-image-size=\u0022large\u0022 data-stateless-media-bucket=\u0022cdn.thenewstack.io\u0022 data-stateless-media-name=\u0022media/2025/12/a6df94e5-buildings.jpg\u0022 /\u003E\u003Cp\u003EOver the last decade, the industry accepted a simple truth: If you wanted a Software as a Service (SaaS) product,\u003C/p\u003E\n\u003Cp\u003EThe post \u003Ca href=\u0022https://thenewstack.io/why-decoupling-control-and-data-planes-is-the-future-of-saas/\u0022\u003EWhy Decoupling Control and Data Planes Is the Future of SaaS\u003C/a\u003E appeared first on \u003Ca href=\u0022https://thenewstack.io\u0022\u003EThe New Stack\u003C/a\u003E.\u003C/p\u003E\n"
-    },
-    {
-      "Title": "How to use the new ChatGPT app integrations, including DoorDash, Spotify, Uber, and others",
-      "Link": "https://techcrunch.com/2025/12/29/how-to-use-the-new-chatgpt-app-integrations-including-doordash-spotify-uber-and-others/",
-      "Published": "2025-12-29T15:51:40+00:00",
-      "Source": "TechCrunch",
-      "Summary": "Learn how to use Spotify, Canva, Figma, Expedia, and other apps directly in ChatGPT. "
-    },
-    {
-      "Title": "A quirky guide to myths and lore based in actual science",
-      "Link": "https://arstechnica.com/science/2025/12/a-quirky-guide-to-myths-and-lore-based-in-actual-science/",
-      "Published": "2025-12-29T15:30:52+00:00",
-      "Source": "Ars Technica - All content",
-      "Summary": "Folklorist/historian Adrienne Mayor on her new book \u003Cem\u003EMythopedia: A Brief Compendium of Natural History Lore\u003C/em\u003E"
-    },
-    {
-      "Title": "GPS is vulnerable to jamming\u2014here\u2019s how we might fix it",
-      "Link": "https://arstechnica.com/information-technology/2025/12/gps-is-vulnerable-to-jamming-heres-how-we-might-fix-it/",
-      "Published": "2025-12-29T15:10:16+00:00",
-      "Source": "Ars Technica - All content",
-      "Summary": "GPS jamming has gotten cheap and easy, but there are potential solutions."
-    },
-    {
-      "Title": "Developers remain willing but reluctant to use AI: The 2025 Developer Survey results are here",
-      "Link": "https://stackoverflow.blog/2025/12/29/developers-remain-willing-but-reluctant-to-use-ai-the-2025-developer-survey-results-are-here/",
-      "Published": "2025-12-29T15:04:49+00:00",
-      "Source": "Stack Overflow Blog",
-      "Summary": "No need to bury the lede: more developers are using AI tools, but their trust in those tools is falling. "
-    },
-    {
-      "Title": "Self-Driving DevOps? How Stakpak Tackles Infrastructure Complexity",
-      "Link": "https://thenewstack.io/self-driving-devops-how-stakpak-tackles-infrastructure-complexity/",
-      "Published": "2025-12-29T14:00:35+00:00",
-      "Source": "The New Stack",
-      "Summary": "\u003Cimg width=\u00221024\u0022 height=\u0022768\u0022 src=\u0022https://cdn.thenewstack.io/media/2025/12/8d29ee7f-stackpak-1024x768.png\u0022 class=\u0022webfeedsFeaturedVisual wp-post-image wp-stateless-item\u0022 alt=\u0022\u0022 style=\u0022display: block; margin: auto; margin-bottom: 20px;max-width: 100%;\u0022 link_thumbnail=\u0022\u0022 decoding=\u0022async\u0022 loading=\u0022lazy\u0022 data-image-size=\u0022large\u0022 data-stateless-media-bucket=\u0022cdn.thenewstack.io\u0022 data-stateless-media-name=\u0022media/2025/12/8d29ee7f-stackpak.png\u0022 /\u003E\u003Cp\u003EEverything in tech is always changing at what feels like a breakneck pace \u0026#8212; everything except DevOps infrastructure, that is.\u003C/p\u003E\n\u003Cp\u003EThe post \u003Ca href=\u0022https://thenewstack.io/self-driving-devops-how-stakpak-tackles-infrastructure-complexity/\u0022\u003ESelf-Driving DevOps? How Stakpak Tackles Infrastructure Complexity\u003C/a\u003E appeared first on \u003Ca href=\u0022https://thenewstack.io\u0022\u003EThe New Stack\u003C/a\u003E.\u003C/p\u003E\n"
-    },
-    {
-      "Title": "Remembering what Windows 10 did right\u2014and how it made modern Windows more annoying",
-      "Link": "https://arstechnica.com/gadgets/2025/12/remembering-the-best-and-worst-about-windows-10-on-the-year-it-technically-died/",
-      "Published": "2025-12-29T13:00:01+00:00",
-      "Source": "Ars Technica - All content",
-      "Summary": "Remembering Windows 10\u0027s rollout can help diagnose what ails Windows 11."
-    },
-    {
-      "Title": "iMP Tech Mini Arcade Pro Review: A Nintendo Switch Arcade Cabinet",
-      "Link": "https://www.wired.com/review/imp-mini-arcade-pro/",
-      "Published": "2025-12-29T13:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "A fun diversion for retro gaming on the Nintendo Switch 2\u2014if you can stand to look at it."
-    },
-    {
-      "Title": "I switched to eSIM in 2025, and I am full of regret",
-      "Link": "https://arstechnica.com/gadgets/2025/12/i-switched-to-esim-in-2025-and-i-am-full-of-regret/",
-      "Published": "2025-12-29T12:45:50+00:00",
-      "Source": "Ars Technica - All content",
-      "Summary": "Swapping SIM cards used to be easy, and then came eSIM. "
-    },
-    {
-      "Title": "The Best Vacuum for Pet Hair\u2014We Tested Many to Find Which Ones Work Best (2026)",
-      "Link": "https://www.wired.com/gallery/best-pet-hair-vacuums/",
-      "Published": "2025-12-29T12:02:00+00:00",
-      "Source": "WIRED",
-      "Summary": "Cordless, handheld, robot, and traditional\u2014we tested them all to find the vacuum that\u2019s fantastic for fur."
-    },
-    {
-      "Title": "The Worst Hacks of 2025",
-      "Link": "https://www.wired.com/story/worst-hacks-of-2025/",
-      "Published": "2025-12-29T12:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "From university breaches to cyberattacks that shut down whole supply chains, these were the worst cybersecurity incidents of the year."
-    },
-    {
-      "Title": "The Best Body Pillow, Tested and Reviewed (2025)",
-      "Link": "https://www.wired.com/gallery/best-body-pillows/",
-      "Published": "2025-12-29T12:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "From the classic body pillow to unique shapes for optimal limb support, we tested a wide range of body pillows designed for side sleepers."
-    },
-    {
-      "Title": "The New Surveillance State Is You",
-      "Link": "https://www.wired.com/story/expired-tired-wired-surveillance-state/",
-      "Published": "2025-12-29T11:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "Privacy may be dead, but civilians are turning conventional wisdom on its head by surveilling the cops as much as the cops surveil them."
-    },
-    {
-      "Title": "3 New Tricks to Try With Google Gemini Live After Its Latest Major Upgrade",
-      "Link": "https://www.wired.com/story/3-tricks-google-gemini-live-latest-major-upgrade/",
-      "Published": "2025-12-29T11:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "Google\u0027s AI is now even smarter, and more versatile."
-    },
-    {
-      "Title": "The Most Dangerous People on the Internet in 2025",
-      "Link": "https://www.wired.com/story/most-dangerous-people-on-the-internet-2025/",
-      "Published": "2025-12-29T10:30:00+00:00",
-      "Source": "WIRED",
-      "Summary": "From Donald Trump to DOGE to Chinese hackers, this year the internet\u0027s chaos caused outsized real-world harm."
-    },
-    {
-      "Title": "The Earth Is Nearing an Environmental Tipping Point",
-      "Link": "https://www.wired.com/story/the-earth-is-nearing-an-environmental-tipping-point/",
-      "Published": "2025-12-29T10:00:00+00:00",
-      "Source": "WIRED",
-      "Summary": "Today\u2019s global coral bleaching events are the worst kind of climate warning."
-    },
-    {
       "Title": "Claude wrote a functional NES emulator using my engine\u0027s API",
       "Link": "https://carimbo.games/games/nintendo/",
       "Published": "2025-12-31T13:07:22+00:00",
@@ -1715,27 +1512,6 @@
       "Published": "2026-01-01T06:00:00+00:00",
       "Source": "BBC News",
       "Summary": "Sir David Attenborough explores the surprising wildlife of his hometown \u2013 London."
-    },
-    {
-      "Title": "Teenage life was an ordeal, until she found her calm with a camera",
-      "Link": "https://www.bbc.com/news/articles/cn8e93973n5o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2025-12-30T06:02:29+00:00",
-      "Source": "BBC News",
-      "Summary": "Caitlyn McDonald has Autism and Auditory Processing Disorder - a condition that affects how the brain interprets sounds."
-    },
-    {
-      "Title": "How a chocolate bar wrapper solved an archaeological mystery ",
-      "Link": "https://www.bbc.com/news/articles/cvg17x9537xo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2025-12-30T06:01:38+00:00",
-      "Source": "BBC News",
-      "Summary": "A team from the University of Glasgow team worked with volunteers and students to excavate the former Kelvin Wheelies park."
-    },
-    {
-      "Title": "Baby loss couple recognised in New Year Honours",
-      "Link": "https://www.bbc.com/news/articles/cwyvzw199llo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2025-12-29T22:30:42+00:00",
-      "Source": "BBC News",
-      "Summary": "Amy and Ryan Jackson, who set up the Lily Mae Foundation, are awarded British Empire Medals."
     },
     {
       "Title": "Entertaining \u0026 frustrating, but will Brook \u0027evolve\u0027?",
@@ -3206,6 +2982,300 @@
       "Published": "2026-01-06T21:26:00+00:00",
       "Source": "BBC News",
       "Summary": "The US and Europe agree new security guarantees for Ukraine"
+    },
+    {
+      "Title": "Businesses call to be included in any pub rates backtrack",
+      "Link": "https://www.bbc.com/news/articles/cp80l2ndz5yo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T07:19:36+00:00",
+      "Source": "BBC News",
+      "Summary": "Shops, pharmacies and music venues want any climbdown on business rates for pubs to apply to them too."
+    },
+    {
+      "Title": "Brosnan, Prince Naseem and the embrace that never happened",
+      "Link": "https://www.bbc.com/sport/boxing/articles/cly1rgl29y5o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T06:36:44+00:00",
+      "Source": "BBC News",
+      "Summary": "When Prince Naseem Hamed met actor Pierce Brosnan in the lead-up to a new film, it brought back thoughts of a reconciliation with trainer Brendan Ingle that never happened."
+    },
+    {
+      "Title": "Saunas and winter swim plans for Hampstead Heath",
+      "Link": "https://www.bbc.com/news/articles/c5yx97w5vydo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T06:19:11+00:00",
+      "Source": "BBC News",
+      "Summary": "Hampstead Heath\u0027s Mixed Pond may soon welcome swimmers year-round as open water swimming gains popularity."
+    },
+    {
+      "Title": "There is a \u0027real threat\u0027 of US military action against Colombia, president tells BBC",
+      "Link": "https://www.bbc.com/news/articles/cwygjvkvpgro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T06:02:31+00:00",
+      "Source": "BBC News",
+      "Summary": "Gustavo Petro tells the BBC\u0027s Ione Wells that the United States is treating other nations as part of a US \u0022empire\u0022, after Trump threatened Colombia with military action."
+    },
+    {
+      "Title": "Ofcom urged to use \u0027banning\u0027 powers over X AI deepfakes",
+      "Link": "https://www.bbc.com/news/articles/ckgjzknepvzo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T06:00:44+00:00",
+      "Source": "BBC News",
+      "Summary": "It follows an ongoing backlash against the use of X\u0027s AI Grok to digitally remove clothing from images."
+    },
+    {
+      "Title": "The Papers: \u0027Pub tax U-turn\u0027 and \u0027caring Catherine\u0027",
+      "Link": "https://www.bbc.com/news/articles/cm24dznk16go?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T05:44:26+00:00",
+      "Source": "BBC News",
+      "Summary": "The climbdown on business rates for pubs and the Princess of Wales\u0027s praise for NHS workers top Friday\u0027s papers."
+    },
+    {
+      "Title": "Venezuelan government begins releasing political prisoners",
+      "Link": "https://www.bbc.com/news/articles/c0mkwl2g499o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T04:23:49+00:00",
+      "Source": "BBC News",
+      "Summary": "The US, which recently captured its President Nicol\u00E1s Maduro, has long demanded the detainees be freed."
+    },
+    {
+      "Title": "One dead, 38 missing after massive landfill collapses in Philippines",
+      "Link": "https://www.bbc.com/news/articles/c17zqz5pprwo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T04:22:38+00:00",
+      "Source": "BBC News",
+      "Summary": "Rescuers have pulled 12 injured sanitation workers from debris at the private landfill in Cebu City."
+    },
+    {
+      "Title": "Two wounded in shooting involving federal agents in Portland",
+      "Link": "https://www.bbc.com/news/articles/ckgn1y1zygxo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T02:51:30+00:00",
+      "Source": "BBC News",
+      "Summary": "The Department of Homeland Security says the incident began with the traffic stop of a Venezuelan gang member."
+    },
+    {
+      "Title": "Six whales die after mass stranding on remote NZ beach",
+      "Link": "https://www.bbc.com/news/articles/c24g1lgqrvpo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T01:25:33+00:00",
+      "Source": "BBC News",
+      "Summary": "Volunteers at Farewell Spit are racing against time to get 15 live whales back into sea."
+    },
+    {
+      "Title": "\u0027How do we look Indian?\u0027: Student\u0027s killing puts spotlight on racism in India",
+      "Link": "https://www.bbc.com/news/articles/c931qx3lepro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T01:20:32+00:00",
+      "Source": "BBC News",
+      "Summary": "The murder of Anjel Chakma has triggered protests in India and revived demands for an anti-racism law."
+    },
+    {
+      "Title": "Long waits for disability benefit claims unacceptable, MPs say",
+      "Link": "https://www.bbc.com/news/articles/c931klw03yko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T01:10:40+00:00",
+      "Source": "BBC News",
+      "Summary": "Some people are waiting more than a year to have their claims processed, the Public Accounts Committee says."
+    },
+    {
+      "Title": "Xbox\u2019s Towerborne is switching from a free-to-play game to a paid one",
+      "Link": "https://www.theverge.com/news/859176/towerborne-launch-release-date-paid-offline",
+      "Published": "2026-01-09T01:05:26+00:00",
+      "Source": "The Verge",
+      "Summary": "Towerborne, a side-scrolling action RPG published by Xbox Game Studios that has been available in early access, will officially launch on February 26th. But instead of launching as a free-to-play, always-on online game as originally planned, Towerborne is instead going to be a paid game that you can play offline. \u0022You will own the complete [\u0026#8230;]"
+    },
+    {
+      "Title": "I\u0027m caught in a trademark row with Cambridge University \u2013 it\u0027s terrifying",
+      "Link": "https://www.bbc.com/news/articles/cy84epwx099o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T01:03:53+00:00",
+      "Source": "BBC News",
+      "Summary": "The 800-year-old university is in a legal battle with the founder of a rowing company."
+    },
+    {
+      "Title": "Huge anti-government protests in Tehran and other Iranian cities, videos show",
+      "Link": "https://www.bbc.com/news/articles/cg7y0579lp8o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T00:51:43+00:00",
+      "Source": "BBC News",
+      "Summary": "Rallies on major roads in the capital and in Iran\u0027s second city were peaceful and not dispersed by security forces."
+    },
+    {
+      "Title": "\u0027Idiot\u0027 or \u0027understandable\u0027? Martinelli apologises for pushing Bradley",
+      "Link": "https://www.bbc.com/sport/football/articles/c5yv2j19q23o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T00:50:34+00:00",
+      "Source": "BBC News",
+      "Summary": "Arsenal\u0027s Gabriel Martinelli is criticised for pushing Conor Bradley while he was down injured - but Liverpool boss Arne Slot defends him."
+    },
+    {
+      "Title": "\u0027It\u0027s incredible, surreal\u0027: Skye Newman wins BBC Sound of 2026",
+      "Link": "https://www.bbc.com/news/articles/c4g3wd1p7nno?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T00:44:28+00:00",
+      "Source": "BBC News",
+      "Summary": "Coming from a \u0022broken background\u0022, Skye Newman\u0027s visceral, powerful pop has made her one to watch."
+    },
+    {
+      "Title": "Pupils left shivering during exams as PFI contract ends with school repairs unfinished",
+      "Link": "https://www.bbc.com/news/articles/cx2y009pr50o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-09T00:01:20+00:00",
+      "Source": "BBC News",
+      "Summary": "A BBC investigation finds building issues across city schools after a firm contracted to carry out repairs went into liquidation."
+    },
+    {
+      "Title": "The best Apple Watch to buy",
+      "Link": "https://www.theverge.com/23037217/best-apple-watch-series-se-ultra",
+      "Published": "2026-01-09T00:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "If you have an iPhone, the Apple Watch is the best smartwatch for you. But there was only one Apple Watch when the smartwatch launched in 2015. A decade later, you\u2019ve got three flavors to choose from: the entry-level Watch SE, the standard Series, and the rugged Ultra. Each appeals to a different demographic and [\u0026#8230;]"
+    },
+    {
+      "Title": "Liverpool stop \u0027bleeding\u0027 but miss their old cutting edge",
+      "Link": "https://www.bbc.com/sport/football/articles/cr4k2qgnlk2o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T23:54:30+00:00",
+      "Source": "BBC News",
+      "Summary": "Liverpool have stopped bleeding but must now find some cutting edge in front of goal, writes Aadam Patel."
+    },
+    {
+      "Title": "Who has made Troy\u0027s Premier League team of the week?",
+      "Link": "https://www.bbc.com/sport/football/articles/cg7y02y9g1eo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T23:41:45+00:00",
+      "Source": "BBC News",
+      "Summary": "After every round of Premier League matches this season, Troy Deeney gives us his team of the week. Do you agree with his choices?"
+    },
+    {
+      "Title": "Pioneer Sphera is bringing Dolby Atmos in cars to the people",
+      "Link": "https://www.theverge.com/tech/858858/pioneer-sphera-ces-2026",
+      "Published": "2026-01-08T23:38:17+00:00",
+      "Source": "The Verge",
+      "Summary": "I fully believe that once someone hears Dolby Atmos music in their car, they won\u0027t want anything else. The sonic envelopment turns your car cabin into an immersive, engaging experience. Every time I hear a demo - be it in a Rivian, Cadillac, or Mercedes - it leaves me energized and excited. But up to [\u0026#8230;]"
+    },
+    {
+      "Title": "UK Prime Minister says \u0026#8216;we will take action\u0026#8217; on Grok\u0026#8217;s disgusting deepfakes",
+      "Link": "https://www.theverge.com/news/859107/uk-prime-minister-x-ai-grok-deepfakes",
+      "Published": "2026-01-08T23:23:00+00:00",
+      "Source": "The Verge",
+      "Summary": "UK Prime Minister Keir Starmer says the country will take action against X following reports that the platform\u0027s Grok AI chatbot is generating sexualized deepfakes of adults and minors, as reported earlier by The Telegraph and Sky News. \u0022It\u0027s disgusting,\u0022 Starmer says during an interview with Greatest Hits Radio. \u0022X need[s] to get their act [\u0026#8230;]"
+    },
+    {
+      "Title": "Arsenal extend lead at top of table after draw with Liverpool",
+      "Link": "https://www.bbc.com/sport/football/videos/cx2wq1jdzqjo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T23:07:46+00:00",
+      "Source": "BBC News",
+      "Summary": "Arsenal miss the chance to move eight points clear at the top of the Premier League after they are held to a frustrating goalless draw by Liverpool."
+    },
+    {
+      "Title": "Minnesota officials say FBI blocked their access to ICE shooting probe",
+      "Link": "https://www.bbc.com/news/articles/c99knmrx71go?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T23:01:45+00:00",
+      "Source": "BBC News",
+      "Summary": "Hundreds of people have taken to the streets of Minneapolis to protest the killing of 37-year-old Renee Good."
+    },
+    {
+      "Title": "Homeless men refused entry to Manchester hotel in sub-zero temperatures",
+      "Link": "https://www.bbc.com/news/articles/cqxy09yl7d9o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T22:05:09+00:00",
+      "Source": "BBC News",
+      "Summary": "The men were told they could not stay in pre-booked rooms on a night when temperatures hit -6C (-21.2F)."
+    },
+    {
+      "Title": "The best earbuds we\u2019ve tested for 2026",
+      "Link": "https://www.theverge.com/21309820/best-wireless-earbuds",
+      "Published": "2026-01-08T22:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "It\u2019s hard to buy a bad pair of wireless earbuds these days, and with constant discounts and deals wherever you look, now is as good a time as any to splurge on the pair you\u2019ve been eyeing. The market has come a long way since the early era of true wireless earbuds, when we had [\u0026#8230;]"
+    },
+    {
+      "Title": "Peers back calls for extra time to debate assisted dying bill",
+      "Link": "https://www.bbc.com/news/articles/c4gr08x0erxo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T21:08:10+00:00",
+      "Source": "BBC News",
+      "Summary": "Supporters are increasingly concerned the bill could run out of time to become law."
+    },
+    {
+      "Title": "The coolest laptops we saw at CES 2026",
+      "Link": "https://www.theverge.com/tech/858897/ces-2026-best-laptops-asus-dell-acer-msi-hp-lenovo-concepts",
+      "Published": "2026-01-08T20:20:05+00:00",
+      "Source": "The Verge",
+      "Summary": "CES is always jam-packed with new laptop announcements, acting as a barometer for the year\u0027s upcoming releases. The proofs of concept at the show display what could potentially come further in the future. 2026 will soon bring us new chip options from Intel, AMD, and Qualcomm. While I\u0027m excited to see how the latest horse [\u0026#8230;]"
+    },
+    {
+      "Title": "Everything We Know About The Minneapolis ICE Shooting\u2026So Far",
+      "Link": "https://www.bbc.co.uk/sounds/play/p0msylv4?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T20:12:00+00:00",
+      "Source": "BBC News",
+      "Summary": "A US citizen has been fatally shot by an immigration agent in Minnestota."
+    },
+    {
+      "Title": "YouTube will now let you filter Shorts out of search results",
+      "Link": "https://www.theverge.com/news/858867/youtube-shorts-search-results-filter",
+      "Published": "2026-01-08T19:22:09+00:00",
+      "Source": "The Verge",
+      "Summary": "As part of a few changes to its search filters, YouTube is going to allow you to search specifically for Shorts or longform videos. Right now, a filter-less search shows a mix of longform and short form videos, which can be annoying if you just want to see videos in one format or the other. [\u0026#8230;]"
+    },
+    {
+      "Title": "Is it even worth mentioning that Elon Musk blew past his own Full Self-Driving goals again?",
+      "Link": "https://www.theverge.com/news/858782/elon-musk-tesla-fsd-unsupervised-missed-goals",
+      "Published": "2026-01-08T19:13:31+00:00",
+      "Source": "The Verge",
+      "Summary": "Last year, Tesla defied its critics by boldly launching a robotaxi service that, by the end of the year, required no human supervision and was available to over 50 percent of the US population. At least that\u0027s what Tesla CEO Elon Musk told us would happen by the end of 2025. The reality, of course, [\u0026#8230;]"
+    },
+    {
+      "Title": "Few pairs of budget earbuds deliver like Nothing\u2019s Ear (a), which are down to $59",
+      "Link": "https://www.theverge.com/gadgets/858740/nothing-ear-a-wireless-earbuds-cmf-headphone-pro-deal-sale",
+      "Published": "2026-01-08T19:05:02+00:00",
+      "Source": "The Verge",
+      "Summary": "The new year has brought a wave of deals on wireless earbuds and headphones, from the fitness-focused Beats Powerbeats Fit to the open-ear Shokz OpenRun Pro. Now, Nothing has joined in with a sale of its own, offering the Nothing Headphone (1), CMF Headphone Pro, and Nothing Ear (3) earbuds at their lowest prices to [\u0026#8230;]"
+    },
+    {
+      "Title": "Two starkly opposed Americas laid bare by deadly ICE shooting ",
+      "Link": "https://www.bbc.com/news/articles/c93vny222geo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T19:03:28+00:00",
+      "Source": "BBC News",
+      "Summary": "The incident is threatening to inflame a deeply contentious debate over immigration enforcement."
+    },
+    {
+      "Title": "The best deals on 4K TVs",
+      "Link": "https://www.theverge.com/22371561/best-4k-tv-deals-sale-lg-samsung-sony-tcl",
+      "Published": "2026-01-08T18:50:17+00:00",
+      "Source": "The Verge",
+      "Summary": "Things are looking bright for those who want to nab a great TV in 2026 at a substantial discount. Even though the year\u2019s biggest, brightest, and priciest TVs were announced at CES 2026, there\u2019s usually a great deal happening on a mid- or high-end TV from LG, Sony, Hisense, or Samsung. With the Super Bowl [\u0026#8230;]"
+    },
+    {
+      "Title": "Weekly quiz: Which sport helped Timoth\u00E9e Chalamet win a Best Actor award?",
+      "Link": "https://www.bbc.com/news/articles/c74w3qx4j5no?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T18:45:01+00:00",
+      "Source": "BBC News",
+      "Summary": "How much attention did you pay to what happened in the world over the past seven days?"
+    },
+    {
+      "Title": "Jeremy Bowen: Trump risks pushing world back to age of empires",
+      "Link": "https://www.bbc.com/news/articles/cx2wg7437dvo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T18:32:26+00:00",
+      "Source": "BBC News",
+      "Summary": "Donald Trump wants and needs quick victories. Taking Maduro is the decisive win he has craved, writes Jeremy Bowen."
+    },
+    {
+      "Title": "How to stay safe during a storm and what to do in a power cut",
+      "Link": "https://www.bbc.com/news/articles/cm2ezv1e680o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T17:28:42+00:00",
+      "Source": "BBC News",
+      "Summary": "The rain and high winds experienced during stormy weather can damage homes and cause power outages."
+    },
+    {
+      "Title": "\u0027Everyone hates Henry Pollock\u0027 - Northampton relish Bordeaux hostility",
+      "Link": "https://www.bbc.com/sport/rugby-union/articles/c0jvg7p77yqo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T17:20:17+00:00",
+      "Source": "BBC News",
+      "Summary": "Northampton will have to overcome an atmosphere fuelled by 34,000 people\u0027s hatred of Henry Pollock to win at Bordeaux Begles on Sunday, says coach Phil Dowson."
+    },
+    {
+      "Title": "Cat Burns celebrates \u0027start of new life\u0027 after breast reduction surgery",
+      "Link": "https://www.bbc.com/news/articles/c3veww3deddo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T16:59:42+00:00",
+      "Source": "BBC News",
+      "Summary": "The singer and recent Celebrity Traitor said her breasts had caused her problems since childhood."
+    },
+    {
+      "Title": "Tournament admits errors after wildcard\u0027s dire display goes viral",
+      "Link": "https://www.bbc.com/sport/tennis/articles/cx2gr00ndmyo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T16:28:22+00:00",
+      "Source": "BBC News",
+      "Summary": "The organisers of a professional women\u0027s tournament which has gone viral because of a wildcard player\u0027s poor performance acknowledge she should not have been allowed to play."
+    },
+    {
+      "Title": "Who was Renee Nicole Good, the woman killed by ICE?",
+      "Link": "https://www.bbc.com/news/articles/c1jepdjy256o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-08T15:48:37+00:00",
+      "Source": "BBC News",
+      "Summary": "A mother of three and award-winning poet, Good\u0027s sudden death sparks protests across the US."
     }
   ],
   "Prices": []
