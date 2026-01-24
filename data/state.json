@@ -1,307 +1,6 @@
 {
-  "LastDigestUtc": "2026-01-23T08:09:21.2509713+00:00",
+  "LastDigestUtc": "2026-01-24T08:07:53.0429777+00:00",
   "CacheNews": [
-    {
-      "Title": "Schools shut again as water supply issues continue",
-      "Link": "https://www.bbc.com/news/articles/czdqv5vvq1go?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T08:05:42+00:00",
-      "Source": "BBC News",
-      "Summary": "Several schools in Kent and Sussex say they will shut again because of the mass water supply problems."
-    },
-    {
-      "Title": "UK secures record supply of offshore wind projects",
-      "Link": "https://www.bbc.com/news/articles/cn9zyx150xdo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T08:04:24+00:00",
-      "Source": "BBC News",
-      "Summary": "The government needs to significantly boost its capacity of offshore wind projects if it is to meet its clean power targets."
-    },
-    {
-      "Title": "No power or water and -19C: Kyiv seeks relief from Russian strikes and cold",
-      "Link": "https://www.bbc.com/news/articles/cgm4w1g3dggo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T07:43:06+00:00",
-      "Source": "BBC News",
-      "Summary": "Residents of Ukraine\u0027s capital talk about their difficulties keeping warm and enduring power outages, as Russian attacks deepen the energy crisis."
-    },
-    {
-      "Title": "Ofner\u0027s Australian Open despair after celebrating too early",
-      "Link": "https://www.bbc.com/sport/tennis/articles/cpdy1yzyjvlo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T07:28:12+00:00",
-      "Source": "BBC News",
-      "Summary": "Sebastian Ofner is out of Australian Open qualifying after forgetting the rules and celebrating victory early - before going on to lose eight of the next nine points."
-    },
-    {
-      "Title": "More money and bigger say - are top-10 stars being reasonable?",
-      "Link": "https://www.bbc.com/sport/tennis/articles/c9w7rx0j82go?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T07:19:06+00:00",
-      "Source": "BBC News",
-      "Summary": "As another Grand Slam season dawns, many players still believe they are undervalued and denied a voice in key decisions made by the majors."
-    },
-    {
-      "Title": "New Liverpool to Manchester rail link as government revives Northern Powerhouse Rail",
-      "Link": "https://www.bbc.com/news/articles/c20dw4yrxnlo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T07:08:12+00:00",
-      "Source": "BBC News",
-      "Summary": "The scheme will be delivered in phases, starting with upgrades to lines between Leeds, York, Bradford and Sheffield.\n\n"
-    },
-    {
-      "Title": "A Dubai chocolate-inspired dessert has taken S Korea by storm",
-      "Link": "https://www.bbc.com/news/articles/c07xdv0mggzo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T06:41:03+00:00",
-      "Source": "BBC News",
-      "Summary": "Shops are selling hundreds of cookies within minutes as the frenzy sends prices of ingredients surging."
-    },
-    {
-      "Title": "Venezuela has freed some American citizens from prison, US official says",
-      "Link": "https://www.bbc.com/news/articles/cqj2qg70px9o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T06:36:23+00:00",
-      "Source": "BBC News",
-      "Summary": "A US state department official did not confirm the identities or number of prisoners released, but called the move \u0022an important step in the right direction\u0022."
-    },
-    {
-      "Title": "Chef \u0027not embarrassed\u0027 by one-star hygiene rating at Michelin-starred restaurant",
-      "Link": "https://www.bbc.com/news/articles/c3dm1vd2xz5o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T06:05:34+00:00",
-      "Source": "BBC News",
-      "Summary": "Chef patron Gareth Ward says his standards \u0022never drop below 100%\u0022 at two-Michelin-starred Ynyshir."
-    },
-    {
-      "Title": "Only Trump can stop Putin, Polish president tells BBC",
-      "Link": "https://www.bbc.com/news/articles/c041de5gn02o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T05:58:07+00:00",
-      "Source": "BBC News",
-      "Summary": "Europe should do everything it can to help the US president in his efforts to end the war in Ukraine, Karol Nawrocki said."
-    },
-    {
-      "Title": "First UK Town of Culture competition searches for \u0027unique stories\u0027",
-      "Link": "https://www.bbc.com/news/articles/c4gl85y6nxyo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T05:34:26+00:00",
-      "Source": "BBC News",
-      "Summary": "The event is part the government\u0027s effort to \u0022restore pride in communities\u0022 and showcase local communities."
-    },
-    {
-      "Title": "The Papers: Trump tells Iran \u0027help is on its way\u0027 and \u0027the rail deal\u0027",
-      "Link": "https://www.bbc.com/news/articles/cdre3305z33o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T05:33:09+00:00",
-      "Source": "BBC News",
-      "Summary": "Donald Trump\u0027s message to Iranians protesting against the regime dominates Wednesday\u0027s front pages."
-    },
-    {
-      "Title": "Greenlanders brace for summit that could shape the Arctic\u0027s future - and their own",
-      "Link": "https://www.bbc.com/news/articles/cpqyn58v0dxo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T05:11:22+00:00",
-      "Source": "BBC News",
-      "Summary": "US Vice President JD Vance will host Danish and Greenlandic foreign ministers for talks on Wednesday."
-    },
-    {
-      "Title": "US approves sale of Nvidia\u0027s advanced AI chips to China",
-      "Link": "https://www.bbc.com/news/articles/cg4erx1n04lo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T04:11:37+00:00",
-      "Source": "BBC News",
-      "Summary": "Nvidia has been caught in a tug-of-war between the US and China as the countries compete for AI dominance."
-    },
-    {
-      "Title": "Actor Kiefer Sutherland arrested over alleged assault of ride-share driver",
-      "Link": "https://www.bbc.com/news/articles/cql40ze5pkpo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T03:54:50+00:00",
-      "Source": "BBC News",
-      "Summary": "Investigators arrested the actor, star of 24 and Designated Survivor, in Hollywood early on Monday morning."
-    },
-    {
-      "Title": "Global temperatures dipped in 2025 but more heat records on way, scientists warn",
-      "Link": "https://www.bbc.com/news/articles/c5y5p9rzd4ko?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T03:44:07+00:00",
-      "Source": "BBC News",
-      "Summary": "The last three years were Earth\u0027s hottest on record, as humanity\u0027s carbon emissions continue to heat the planet."
-    },
-    {
-      "Title": "US Supreme Court appears likely to uphold restrictions on transgender athletes",
-      "Link": "https://www.bbc.com/news/articles/c89qednlg7wo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T03:40:58+00:00",
-      "Source": "BBC News",
-      "Summary": "Lawyers for trans athletes told the conservative-leaning court they were not asking for an \u201Cunfair biological advantage\u201D."
-    },
-    {
-      "Title": "Chris Mason: The climbdowns stack up for Starmer with digital ID U-turn",
-      "Link": "https://www.bbc.com/news/articles/c14regjvk6no?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T01:11:08+00:00",
-      "Source": "BBC News",
-      "Summary": "The government dropping the digital ID scheme\u0027s mandatory element is another climbdown for Downing Street, writes the BBC\u0027s political editor."
-    },
-    {
-      "Title": "Stranger Things documentary-maker shares reason for last-minute finale script",
-      "Link": "https://www.bbc.com/news/articles/c89qel5l5vno?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T00:43:26+00:00",
-      "Source": "BBC News",
-      "Summary": "The making-of documentary gives fans an insight into the production process of the hit sci-fi show."
-    },
-    {
-      "Title": "University application deadline is today: How much does a degree cost?",
-      "Link": "https://www.bbc.com/news/articles/cwyegp0dnq9o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T00:41:19+00:00",
-      "Source": "BBC News",
-      "Summary": "With rising tuition fees and living costs, do higher graduate earnings cover the cost of a degree?"
-    },
-    {
-      "Title": "Why you\u0027re more like the Traitors than you think and how it could harm you",
-      "Link": "https://www.bbc.com/news/articles/cd0yne4k7dxo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T00:36:32+00:00",
-      "Source": "BBC News",
-      "Summary": "We underestimate how often we bend the truth, but doing so can leave us isolated and anxious. "
-    },
-    {
-      "Title": "First leukaemia patient to receive pioneering treatment on NHS says it is \u0027very sci-fi\u0027",
-      "Link": "https://www.bbc.com/news/articles/c62r56zzzq4o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T00:12:21+00:00",
-      "Source": "BBC News",
-      "Summary": "Oscar Murphy has an aggressive form of the blood cancer and is the first to get CAR-T therapy in the UK."
-    },
-    {
-      "Title": "Semenyo scores again - who are winners and losers of his arrival?",
-      "Link": "https://www.bbc.com/sport/football/articles/c5y200qgp11o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T00:02:01+00:00",
-      "Source": "BBC News",
-      "Summary": "Antoine Semenyo has taken to life seamlessly at Manchester City by hitting the ground running and is already beginning to repay the \u00A362.5m fee Pep Guardiola handed to Bournemouth to sign him."
-    },
-    {
-      "Title": "\u0027The game has gone\u0027 - a bad night for VAR in semi-final",
-      "Link": "https://www.bbc.com/sport/football/articles/czdqvydez71o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T23:45:04+00:00",
-      "Source": "BBC News",
-      "Summary": "Manchester City\u0027s 2-0 win over Newcastle in the first leg of the Carabao Cup semi-final was overshadowed by a contentious decision to disallow a goal from Antoine Semenyo in the second half. \n\n"
-    },
-    {
-      "Title": "Inside the White House shitposting machine",
-      "Link": "https://www.theverge.com/column/861476/trump-memes-venezuela-ice-shooting",
-      "Published": "2026-01-13T23:27:00+00:00",
-      "Source": "The Verge",
-      "Summary": "Hello and welcome to Regulator, a newsletter for Verge subscribers about the technology, broligarchs and brainrot rapidly transforming politics and civic society. Not subscribed to The Verge yet? You should! It can materially improve your life. Last week was a grim reminder that no matter what sort of horror is being perpetrated or how many [\u0026#8230;]"
-    },
-    {
-      "Title": "WeatherTech founder might be the newest US consumer protection official",
-      "Link": "https://www.theverge.com/news/861560/weathertech-founder-david-macneil-federal-trade-commission",
-      "Published": "2026-01-13T22:28:00+00:00",
-      "Source": "The Verge",
-      "Summary": "President Donald Trump made an unconventional pick for his nomination to the Federal Trade Commission: WeatherTech founder and CEO David MacNeil. MacNeil founded the company, which makes weather-resistant car floor mats, in 1989, according to its website, and he owns 100 percent of the company. WeatherTech has made it a mission to keep its manufacturing [\u0026#8230;]"
-    },
-    {
-      "Title": "Kim \u0027good to go\u0027 for Winter Olympics despite dislocated shoulder",
-      "Link": "https://www.bbc.com/sport/articles/c5y2961j97mo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T21:58:54+00:00",
-      "Source": "BBC News",
-      "Summary": "Olympic champion snowboarder Chloe Kim says she will be fit to compete at the Winter Olympic Games next month despite dislocating her shoulder last week."
-    },
-    {
-      "Title": "I tested several cases for the Switch 2 and these are the best",
-      "Link": "https://www.theverge.com/reviews/691319/best-switch-2-cases",
-      "Published": "2026-01-13T21:25:05+00:00",
-      "Source": "The Verge",
-      "Summary": "You might find it kind of sad to put your hard-earned Switch 2 into a protective case. To me, it\u2019s freeing. Sure, it can take away from the slick design. But using a case relieves me of the worry that the console will accumulate tons of little scratches, or worse. I\u2019ve tested several types of [\u0026#8230;]"
-    },
-    {
-      "Title": "\u0027Now there\u0027s the threat of executions\u0027 in Iran",
-      "Link": "https://www.bbc.com/news/videos/c87r3122v02o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T21:11:02+00:00",
-      "Source": "BBC News",
-      "Summary": "An Iranian security official says 2,000 people have been killed so far after a crackdown on weeks of anti-government protests."
-    },
-    {
-      "Title": "The Bone Temple turns 28 Years Later into a terrifying crisis of faith",
-      "Link": "https://www.theverge.com/entertainment/859756/28-years-later-the-bone-temple-review",
-      "Published": "2026-01-13T21:00:00+00:00",
-      "Source": "The Verge",
-      "Summary": "Because there was such a long gap between the releases of 28 Weeks Later and 28 Years Later, it was surprising to hear that writer-director duo Alex Garland and Danny Boyle already had plans for their latest collaboration to be the first chapter of a new horror trilogy. Sony seemed keen on fast-tracking the pair\u0027s [\u0026#8230;]"
-    },
-    {
-      "Title": "Senate passes a bill that would let nonconsensual deepfake victims sue",
-      "Link": "https://www.theverge.com/news/861531/defiance-act-senate-passage-deepfakes-grok",
-      "Published": "2026-01-13T20:53:10+00:00",
-      "Source": "The Verge",
-      "Summary": "The Senate passed a bill that could give people who\u0027ve found their likeness deepfaked into sexually-explicit images without their consent a new way to fight back. The Disrupt Explicit Forged Images and Non-Consensual Edits Act (DEFIANCE Act), would let victims sue the individuals who created the images for civil damages. The bill passed with unanimous [\u0026#8230;]"
-    },
-    {
-      "Title": "The best phone to buy right now",
-      "Link": "https://www.theverge.com/22163811/best-phone",
-      "Published": "2026-01-13T20:51:53+00:00",
-      "Source": "The Verge",
-      "Summary": "Haven\u2019t you heard? Phones are boring now. And that\u2019s just fine! Most people buying a new phone just want something familiar that works better than the device they\u2019re replacing. If that\u2019s your MO, then you\u2019re sure to find something reliable in my recommendations below. But even if you\u2019re looking for something a little more extra, [\u0026#8230;]"
-    },
-    {
-      "Title": "Anthropic shakes up C-suite to expand its internal incubator",
-      "Link": "https://www.theverge.com/ai-artificial-intelligence/861475/anthropic-ai-c-suite-internal-incubator-labs-team-mike-krieger",
-      "Published": "2026-01-13T20:30:00+00:00",
-      "Source": "The Verge",
-      "Summary": "Mike Krieger, the Instagram co-founder who joined Anthropic two years ago as its chief product officer, is moving to a new focus at the AI startup: co-leading its internal incubator, dubbed the \u0022Labs\u0022 team. The Anthropic Labs team started in mid-2024 with just two members; now, the company has decided to expand it, with a [\u0026#8230;]"
-    },
-    {
-      "Title": "The best noise-canceling headphones to buy right now",
-      "Link": "https://www.theverge.com/21345733/best-noise-canceling-headphones",
-      "Published": "2026-01-13T20:25:49+00:00",
-      "Source": "The Verge",
-      "Summary": "Whether you\u2019re wearing them for the morning commute, while traveling, or if you\u2019re simply trying to find some peace and quiet while working at home, noise-canceling headphones are a more essential piece of kit nowadays than ever before. And you\u2019ve got a slew of great options to pick from; it\u2019s hard to make a bad [\u0026#8230;]"
-    },
-    {
-      "Title": "Ministers drop plans for mandatory digital ID to work in UK",
-      "Link": "https://www.bbc.com/news/articles/c3385zrrx73o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T20:22:51+00:00",
-      "Source": "BBC News",
-      "Summary": "There will still be digital checks on those starting a new job, but people will not need to hold a digital ID."
-    },
-    {
-      "Title": "RFK Jr.\u2019s new food pyramid could be a disaster for the environment \u2014 if Americans actually follow it",
-      "Link": "https://www.theverge.com/report/861326/meat-food-pyramid-protein-nutrition-guideline-climate-beef-whole-milk-tallow",
-      "Published": "2026-01-13T20:01:37+00:00",
-      "Source": "The Verge",
-      "Summary": "The Trump administration announced last week that it wants Americans to consume more protein, churning out a colorful illustration of an inverted food pyramid that prominently features a big, red steak, a wedge of cheese, and a carton of whole milk at the top and claiming it\u0027s \u0022ending the war on protein.\u0022 It may seem [\u0026#8230;]"
-    },
-    {
-      "Title": "Bulger killer Jon Venables set for parole hearing",
-      "Link": "https://www.bbc.com/news/articles/c89qeyzgp9lo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T19:28:41+00:00",
-      "Source": "BBC News",
-      "Summary": "Jon Venables, 10 when he killed James Bulger in 1993, failed in a previous bid for parole in 2023."
-    },
-    {
-      "Title": "Carrick confirmed as Man Utd caretaker head coach",
-      "Link": "https://www.bbc.com/sport/football/articles/c0erq5gdvwqo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T19:28:01+00:00",
-      "Source": "BBC News",
-      "Summary": "Manchester United appoint former player Michael Carrick as caretaker head coach until the end of the season."
-    },
-    {
-      "Title": "Meta is closing down three VR studios as part of its metaverse cuts",
-      "Link": "https://www.theverge.com/news/861420/meta-reality-labs-layoffs-vr-studios-twisted-pixel-sanzaru-armature",
-      "Published": "2026-01-13T18:51:34+00:00",
-      "Source": "The Verge",
-      "Summary": "Meta is laying off about 10 percent of its Reality Labs metaverse division, and the cuts include closing down some of its VR gaming studios. Twisted Pixel Games, the developer of Marvel\u0027s Deadpool VR, Sanzaru Games, the developer of the Asgard\u0027s Wrath franchise, and Armature Studio, which worked on the Resident Evil 4 VR port, [\u0026#8230;]"
-    },
-    {
-      "Title": "What does Trump\u0027s foreign policy mean for World Cup?",
-      "Link": "https://www.bbc.com/sport/football/articles/c2051p7ej1vo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T18:34:08+00:00",
-      "Source": "BBC News",
-      "Summary": "As a group of cross-party MPs calls on Fifa to consider expelling the USA from the World Cup, BBC Sport analyses what Donald Trump\u2019s foreign policy means for the tournament."
-    },
-    {
-      "Title": "Bowen: Authoritarian regimes die gradually then suddenly, but Iran is not there yet",
-      "Link": "https://www.bbc.com/news/articles/cedwgn4pqv4o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T16:47:26+00:00",
-      "Source": "BBC News",
-      "Summary": "The regime\u0027s opponents will hope for more pressure to accelerate the process, writes the BBC\u0027s international editor."
-    },
-    {
-      "Title": "Which countries do business with Iran  and what could US tariffs mean?",
-      "Link": "https://www.bbc.com/news/articles/cwynx4rerpzo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T13:30:12+00:00",
-      "Source": "BBC News",
-      "Summary": "Donald Trump has announced a 25% tariff on countries trading with Iran after its deadly crackdown on anti-government protests."
-    },
-    {
-      "Title": "Why are there protests in Iran and what has Trump said about US action?",
-      "Link": "https://www.bbc.com/news/articles/cgjw8wxl3d6o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T09:56:31+00:00",
-      "Source": "BBC News",
-      "Summary": "Hundreds of people are believed to have been killed, as days of large demonstrations threaten the regime. Here\u0027s what you need to know."
-    },
     {
       "Title": "UK economy grew by 0.3% in November, beating forecasts",
       "Link": "https://www.bbc.com/news/articles/c8d041pp85mo?at_medium=RSS\u0026at_campaign=rss",
@@ -1190,20 +889,6 @@
       "Published": "2026-01-15T06:15:35+00:00",
       "Source": "BBC News",
       "Summary": "Zac, 12, is commended for his actions in steering the car to safety after his mum fainted."
-    },
-    {
-      "Title": "Care home creates own live action Traitors game, but no-one will be banished",
-      "Link": "https://www.bbc.com/news/articles/cj9rv0keerxo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-14T06:17:01+00:00",
-      "Source": "BBC News",
-      "Summary": "Parkfield Grange residents will join in activities and games with a special afternoon tea as the prize."
-    },
-    {
-      "Title": "Amateur photographer\u0027s wildlife calendar raises \u00A313k for hospice",
-      "Link": "https://www.bbc.com/news/articles/c0ke78jd5yro?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-01-13T12:32:55+00:00",
-      "Source": "BBC News",
-      "Summary": "Phil Laybourne has raised raised money for Thames Hospice since his late wife Gail was cared there. "
     },
     {
       "Title": "Player helps ball girl after collapse at Australian Open",
@@ -2898,6 +2583,321 @@
       "Published": "2026-01-20T10:00:00+00:00",
       "Source": "BBC News",
       "Summary": "Trump responded, \u201Cno comment\u201D when asked if he\u0027d use force to seize Greenland."
+    },
+    {
+      "Title": "The Loch Capsule dishwasher is small, fast, and efficient \u2014 it even sanitizes gadgets",
+      "Link": "https://www.theverge.com/reviews/866476/loch-capsule-review-counter-dishwasher-vanlife-tiny-house",
+      "Published": "2026-01-24T08:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "A dishwasher is a luxury item some people can\u0027t live without. It\u0027s one of the first major kitchen devices I bought just as soon as I could afford one. And now that the kids are grown, it\u0027s the appliance I thought I\u0027d miss most in my nomadic vanlife pursuits. Loch sent me its $459.99 / [\u0026#8230;]"
+    },
+    {
+      "Title": "Pentagon to offer \u0027more limited\u0027 support to US allies in defence strategy shift",
+      "Link": "https://www.bbc.com/news/articles/cj9r8ezym3ro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T07:57:00+00:00",
+      "Source": "BBC News",
+      "Summary": "The Pentagon\u0027s new National Defense Strategy also says China is no longer the top security priority for the US."
+    },
+    {
+      "Title": "Surviving bombs and hunger to become a professional tennis player",
+      "Link": "https://www.bbc.com/sport/tennis/articles/cvgrrpp93y3o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T07:37:50+00:00",
+      "Source": "BBC News",
+      "Summary": "Tennis is seen as a rich sport. But many stars, including Novak Djokovic and Elina Svitolina, have forged successful careers from humble beginnings."
+    },
+    {
+      "Title": "Gaethje v Pimblett - predictions for UFC title fight",
+      "Link": "https://www.bbc.com/sport/mixed-martial-arts/articles/c9dvv90759wo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T06:50:30+00:00",
+      "Source": "BBC News",
+      "Summary": "The world of MMA deliver their predictions for Paddy Pimblett\u0027s UFC lightweight interim title fight against Justin Gaethje on Saturday."
+    },
+    {
+      "Title": "Tottenham, Bayern and a stand made of chairs - Palhinha\u0027s story",
+      "Link": "https://www.bbc.com/sport/football/articles/c62ww08l0n6o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T06:21:37+00:00",
+      "Source": "BBC News",
+      "Summary": "On-loan Tottenham midfielder Joao Palhinha chats to BBC Sport\u0027s Kelly Somers about his life and career."
+    },
+    {
+      "Title": "How \u0027lucky\u0027 Sinner became biggest winner in near 40C Melbourne heat",
+      "Link": "https://www.bbc.com/sport/tennis/articles/c1ev96w4xv6o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T06:14:57+00:00",
+      "Source": "BBC News",
+      "Summary": "Jannik Sinner\u0027s hopes of a third straight Australian Open title looked close to being over - then he benefitted from the heat creeping towards 40C."
+    },
+    {
+      "Title": "Brighton inflict Everton\u0027s sixth straight home defeat in WSL",
+      "Link": "https://www.bbc.com/sport/football/videos/cx2yjpy0v9qo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T06:08:13+00:00",
+      "Source": "BBC News",
+      "Summary": "Everton\u0027s wait for a first point at Goodison Park this season continues after Brighton hand them a sixth consecutive home defeat in the Women\u0027s Super League."
+    },
+    {
+      "Title": "Women filmed in secret for TikTok content - and then harassed online",
+      "Link": "https://www.bbc.com/news/articles/cr7jej2elyyo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T06:00:12+00:00",
+      "Source": "BBC News",
+      "Summary": "So-called manfluencers wearing smart glasses approach women and then post videos to TikTok."
+    },
+    {
+      "Title": "\u0027Anger at Nato troop insult\u0027 and \u0027Trump delays Chagos surrender\u0027",
+      "Link": "https://www.bbc.com/news/articles/cn408md7gdmo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T05:16:51+00:00",
+      "Source": "BBC News",
+      "Summary": "The US president\u0027s remarks about Nato troops in Afghanistan and his part in the Chagos Islands deal top the papers."
+    },
+    {
+      "Title": "Four attacks in 48 hours: How east Australia\u0027s beaches became a \u0027perfect storm\u0027 for sharks",
+      "Link": "https://www.bbc.com/news/articles/c0err023g5lo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T05:11:18+00:00",
+      "Source": "BBC News",
+      "Summary": "Human-shark encounters in Australia are rising - but experts are keen to point out it isn\u0027t the animals\u0027 fault."
+    },
+    {
+      "Title": "Boy, 12, dies from injuries after Sydney shark attack",
+      "Link": "https://www.bbc.com/news/articles/c2k98ql703no?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T05:10:24+00:00",
+      "Source": "BBC News",
+      "Summary": "Nico Antic was swimming in Sydney Harbour when he was attacked last Sunday."
+    },
+    {
+      "Title": "Hundreds of Minnesota businesses close to protest ICE presence",
+      "Link": "https://www.bbc.com/news/articles/c1dk67g4q91o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T03:55:30+00:00",
+      "Source": "BBC News",
+      "Summary": "Thousands of people have joined widespread protests against the weeks-long immigration crackdown in the state."
+    },
+    {
+      "Title": "Are things going to get better for your finances?",
+      "Link": "https://www.bbc.com/news/articles/cn42l3g3qvlo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T02:37:45+00:00",
+      "Source": "BBC News",
+      "Summary": "As Sir Keir Starmer makes the cost of living a government priority, we unpack the impact on family finances."
+    },
+    {
+      "Title": "Pok\u00E9mon cards: The \u0027liquid asset\u0027 increasingly attracting criminals",
+      "Link": "https://www.bbc.com/news/articles/c70lk3w9krxo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T02:26:57+00:00",
+      "Source": "BBC News",
+      "Summary": "Cards related to the popular Japanese animation franchise have soared in value over recent years."
+    },
+    {
+      "Title": "Chromebooks train schoolkids to be loyal customers, internal Google document suggests",
+      "Link": "https://www.theverge.com/news/867138/google-chromebook-education-expansion-court-filings",
+      "Published": "2026-01-24T01:21:41+00:00",
+      "Source": "The Verge",
+      "Summary": "Internal documents revealed as part of a child safety lawsuit hint at Google\u0027s plan to \u0022onboard kids\u0022 into its ecosystem by investing in schools. In this November 2020 presentation, Google writes that getting kids into its ecosystem \u0022leads to brand trust and loyalty over their lifetime,\u0022 as reported earlier by NBC News. The heavily-redacted documents, [\u0026#8230;]"
+    },
+    {
+      "Title": "Leak: Nvidia is about to challenge \u2018Intel Inside\u2019 with as many as eight Arm laptops",
+      "Link": "https://www.theverge.com/games/867056/leak-nvidia-n1-n1x-laptops-lenovo-dell",
+      "Published": "2026-01-24T01:09:10+00:00",
+      "Source": "The Verge",
+      "Summary": "Intel and AMD have split the Windows laptop market for years, but the x86 players may be getting outnumbered. It\u0027s not just Apple MacBooks and MediaTek-based Chromebooks using Arm chips anymore. There are finally competent Qualcomm Snapdragon laptops running Windows, and - as soon as this spring - Nvidia will finally power Windows consumer laptops [\u0026#8230;]"
+    },
+    {
+      "Title": "Explosive bust-ups, secret relationships and extreme reactions: The Traitors\u0027 best moments",
+      "Link": "https://www.bbc.com/news/articles/cq84dp4zvy1o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T00:12:54+00:00",
+      "Source": "BBC News",
+      "Summary": "As another series ends, we look back at the most memorable moments from Stephen\u0027s facial expressions to Matt\u0027s proposition."
+    },
+    {
+      "Title": "Stuck between the US and Russia, Canada must prove it can defend its Arctic territory",
+      "Link": "https://www.bbc.com/news/articles/c9vx0p77pn8o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T00:05:27+00:00",
+      "Source": "BBC News",
+      "Summary": "Canada has been boosting its forces in the Arctic in the face of new threats - and US concerns. "
+    },
+    {
+      "Title": "Tragic chapter on the trains sends rail superpower Spain into crisis",
+      "Link": "https://www.bbc.com/news/articles/c0keelnyrvro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T00:03:57+00:00",
+      "Source": "BBC News",
+      "Summary": "Spain\u0027s vaunted reputation for its high-speed network has been humbled by disaster on the railways."
+    },
+    {
+      "Title": "\u0027Half of my friends were killed\u0027 - the girls returning to a school caught up in war",
+      "Link": "https://www.bbc.com/news/articles/cd9eeyz933jo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-24T00:03:52+00:00",
+      "Source": "BBC News",
+      "Summary": "Twins whose classmates were killed by shelling say their deaths have made them determined to finish their studies."
+    },
+    {
+      "Title": "The Traitors stars serve up drama in nail-biting final",
+      "Link": "https://www.bbc.com/news/articles/c301jg2dlmdo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T23:08:35+00:00",
+      "Source": "BBC News",
+      "Summary": "After three weeks, the latest series of The Traitors came to its dramatic climax in Friday\u0027s finale."
+    },
+    {
+      "Title": "Police officers to be told they must get work licence or face dismissal",
+      "Link": "https://www.bbc.com/news/articles/cn0kelpx734o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T22:52:28+00:00",
+      "Source": "BBC News",
+      "Summary": "The plans are part of a raft of measures aimed at the reform of police forces in England and Wales. "
+    },
+    {
+      "Title": "Chagos Islands debate delayed as Tories call for halt to bill",
+      "Link": "https://www.bbc.com/news/articles/cp372wz0z2zo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T22:48:04+00:00",
+      "Source": "BBC News",
+      "Summary": "The legislation was due to be debated in Lords on Monday. "
+    },
+    {
+      "Title": "Alleged drug kingpin and ex-Olympian Ryan Wedding arrested after years on the run",
+      "Link": "https://www.bbc.com/news/articles/cj0nd8z1z59o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T22:24:59+00:00",
+      "Source": "BBC News",
+      "Summary": "Wedding, who had been on the FBI\u0027s Ten Most Wanted Fugitives list, is accused of running a transnational drug trafficking operation."
+    },
+    {
+      "Title": "\u0027Trump should apologise\u0027: Anger of veterans and relatives",
+      "Link": "https://www.bbc.com/news/articles/c20gzjnv9l5o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T22:10:03+00:00",
+      "Source": "BBC News",
+      "Summary": "A total of 457 British service personnel were killed fighting in Afghanistan. "
+    },
+    {
+      "Title": "Congress doesn\u2019t seem to know if the TikTok deal complies with its law",
+      "Link": "https://www.theverge.com/news/866977/tiktok-deal-congress-china",
+      "Published": "2026-01-23T22:08:43+00:00",
+      "Source": "The Verge",
+      "Summary": "TikTok finally closed a deal meant to bring it into compliance with the law that should have banned it a year ago, and the lawmakers who passed that law still don\u0027t seem to know what\u0027s going on. The company announced Tuesday that its US service is now part of the separate TikTok USDS Joint Venture [\u0026#8230;]"
+    },
+    {
+      "Title": "Chris Mason: Starmer\u0027s strongest rebuke yet for Trump",
+      "Link": "https://www.bbc.com/news/articles/c9dvnlvzjw7o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T22:04:12+00:00",
+      "Source": "BBC News",
+      "Summary": "This past week could mark a turning point in the relationship between the UK prime minister and the US president."
+    },
+    {
+      "Title": "Harry says sacrifices by Nato troops in Afghanistan deserve \u0027respect\u0027 after Trump comments",
+      "Link": "https://www.bbc.com/news/articles/clym2l7d75eo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T21:50:47+00:00",
+      "Source": "BBC News",
+      "Summary": "The US president\u0027s comments have been condemned by international allies, including UK veterans and politicians."
+    },
+    {
+      "Title": "England fans\u0027 World Cup arrest record shows Infantino joke inaccurate",
+      "Link": "https://www.bbc.com/sport/football/articles/cj0nn0nzvmro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T20:39:49+00:00",
+      "Source": "BBC News",
+      "Summary": "Did Fifa president Gianni Infantino lean into stereotypes about England fans being arrested at the World Cup?"
+    },
+    {
+      "Title": "Watch: Starmer condemns Trump\u0027s remarks",
+      "Link": "https://www.bbc.com/news/videos/c5y3jvrz3zko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T20:11:52+00:00",
+      "Source": "BBC News",
+      "Summary": "The UK was among several allies to join the US in Afghanistan from 2001, after it invoked Nato\u0027s collective security clause following the 9/11 terror attacks."
+    },
+    {
+      "Title": "Meta is stopping teens from chatting with its AI characters",
+      "Link": "https://www.theverge.com/news/866906/meta-teens-ai-characters-stop-block-new-version",
+      "Published": "2026-01-23T19:50:59+00:00",
+      "Source": "The Verge",
+      "Summary": "Meta is \u0022temporarily pausing\u0022 the ability for teens to chat with its AI characters as it develops a \u0022new version\u0022 of the characters that will offer a \u0022better experience.\u0022 The company made the announcement in an update to a blog post from October where the company had detailed more parental controls for teen AI use. [\u0026#8230;]"
+    },
+    {
+      "Title": "What TikTok\u2019s new owners mean for your feed",
+      "Link": "https://www.theverge.com/tech/866868/tiktok-usds-new-owners-algorithm-explained",
+      "Published": "2026-01-23T19:10:51+00:00",
+      "Source": "The Verge",
+      "Summary": "TikTok is officially under new ownership in the US, and that could spell big changes for the video-sharing app. On January 22nd, ByteDance - TikTok\u0027s Chinese parent company - and a group of investors closed a $14 billion deal to spin off the platform\u0027s US operations, introducing a new slate of American executives. The Silver [\u0026#8230;]"
+    },
+    {
+      "Title": "Frank Gardner: Not only Americans risked life and limb to serve in Afghanistan",
+      "Link": "https://www.bbc.com/news/articles/cj3v2mlvzdvo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T19:02:50+00:00",
+      "Source": "BBC News",
+      "Summary": "Brits, Canadians and Danes were among those who saw the toughest fighting, writes the BBC\u0027s security correspondent."
+    },
+    {
+      "Title": "Rayner to back calls for Burnham to be allowed to stand in by-election",
+      "Link": "https://www.bbc.com/news/articles/c77kexz6k5zo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T18:33:50+00:00",
+      "Source": "BBC News",
+      "Summary": "The Greater Manchester mayor has until Saturday afternoon to decide if he wants to enter the contest to be Labour\u0027s candidate."
+    },
+    {
+      "Title": "Former Tory councillor pleads guilty to drugging and raping wife over 13 years",
+      "Link": "https://www.bbc.com/news/articles/c4grr3368n3o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T18:18:11+00:00",
+      "Source": "BBC News",
+      "Summary": "Philip Young admitted committing a number of sexual offences against Joanne Young over 13 years."
+    },
+    {
+      "Title": "Casio teased a retro gaming-inspired sampler",
+      "Link": "https://www.theverge.com/news/866709/casio-sx-c1-retro-gaming-inspired-sampler-at-namm",
+      "Published": "2026-01-23T18:10:28+00:00",
+      "Source": "The Verge",
+      "Summary": "Casio showed up to NAMM (CES for music gear nerds) this year with a prototype sampler called the SX-C1 that looks every bit the lovechild of a Game Boy and an SP-404. The top has a directional pad and four buttons just like you\u0027d find on a game controller, flanking a 1.3-inch OLED screen. But [\u0026#8230;]"
+    },
+    {
+      "Title": "The best instant cameras you can buy right now",
+      "Link": "https://www.theverge.com/23133103/best-instant-cameras-fujifilm-polaroid-kodak",
+      "Published": "2026-01-23T18:01:09+00:00",
+      "Source": "The Verge",
+      "Summary": "Even with the ability to take excellent photos with our phones and instantly share them across the world, there\u2019s something magical about the old-school instant camera. With just a click of a button, you can capture a moment in a photo that you can see and touch almost immediately. Images captured by an instant camera [\u0026#8230;]"
+    },
+    {
+      "Title": "Hang on, there\u2019s a Trump Phone Ultra coming too?",
+      "Link": "https://www.theverge.com/news/866601/trump-mobile-t1-ultra-phone-don-hendrickson-interview",
+      "Published": "2026-01-23T17:27:22+00:00",
+      "Source": "The Verge",
+      "Summary": "Where\u0027s the Trump Phone? We\u0027re going to keep talking about it every week. We\u0027ve reached out, as usual, to ask about the Trump Phone\u0027s whereabouts. As usual, we\u0027re still waiting for a response. In the meantime, it turns out we might have two Trump Phones to worry about. The Trump Phone may be no more [\u0026#8230;]"
+    },
+    {
+      "Title": "Robbie Williams breaks The Beatles\u0027 chart record",
+      "Link": "https://www.bbc.com/news/articles/c93vv02wz3ko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T16:59:47+00:00",
+      "Source": "BBC News",
+      "Summary": "The star\u0027s latest album, Britpop, debuts at number one, giving Williams his 16th solo UK chart-topper."
+    },
+    {
+      "Title": "Marshall\u2019s new hub connects to multiple Bluetooth speakers without pairing",
+      "Link": "https://www.theverge.com/tech/866640/marshall-music-streaming-hub-heddon-bluetooth-auracast-speakers",
+      "Published": "2026-01-23T16:54:01+00:00",
+      "Source": "The Verge",
+      "Summary": "Marshall has announced a new music streaming hub called the Heddon that can broadcast to multiple speakers using the Bluetooth Auracast feature that\u0027s finally starting to catch on. Similar to Sennheiser\u0027s BTA1 TV Transmitter announced earlier this week, the Heddon doesn\u0027t require wireless audio devices to go through a pairing process to stream audio, as [\u0026#8230;]"
+    },
+    {
+      "Title": "Brooklyn Beckham\u0027s wedding DJ speaks about \u0027awkward\u0027 dance",
+      "Link": "https://www.bbc.com/news/articles/cp8220err46o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-23T13:10:09+00:00",
+      "Source": "BBC News",
+      "Summary": "The groom has said his mother Victoria \u0022danced very inappropriately on me in front of everyone\u0022."
+    },
+    {
+      "Title": "First all-female British team completes 8,000km Dakar Rally",
+      "Link": "https://www.bbc.com/news/articles/c0erx543ww5o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-20T16:43:36+00:00",
+      "Source": "BBC News",
+      "Summary": "Marcella Kirk and Helen Tait-Wright complete the 8,000km (4,970-mile) Dakar Rally in Saudi Arabia."
+    },
+    {
+      "Title": "The retired silversmith turning used candles into stoves for Ukraine",
+      "Link": "https://www.bbc.com/news/articles/ce9yvd290l4o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-20T06:29:56+00:00",
+      "Source": "BBC News",
+      "Summary": "Mark Stevens has supplied thousands of candles to war damaged areas of Ukraine."
+    },
+    {
+      "Title": "The 3,500-mile love story that started in an online horror game",
+      "Link": "https://www.bbc.com/news/articles/cn42lnl4yw9o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-20T06:13:20+00:00",
+      "Source": "BBC News",
+      "Summary": "Despite living in the same house, they are no longer able to video game together because of childcare."
+    },
+    {
+      "Title": "My home bakery helps me cope with inoperable brain condition",
+      "Link": "https://www.bbc.com/news/articles/c14r7z8mjezo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-01-19T06:00:54+00:00",
+      "Source": "BBC News",
+      "Summary": "Megan Jackson says baking is her \u0022coping mechanism\u0022 after an inoperable brain condition diagnosis."
     }
   ],
   "Prices": []
