@@ -1,272 +1,6 @@
 {
-  "LastDigestUtc": "2026-04-17T08:38:49.7445281+00:00",
+  "LastDigestUtc": "2026-04-18T08:18:08.1132872+00:00",
   "CacheNews": [
-    {
-      "Title": "Oil prices plunge on agreement to reopen Strait of Hormuz",
-      "Link": "https://www.bbc.com/news/articles/c8r40y3rv75o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T08:15:36+00:00",
-      "Source": "BBC News",
-      "Summary": "Crude prices tumbled by as much as 15% on the conditional pause but is higher than before the war."
-    },
-    {
-      "Title": "UK house prices fall as Iran war uncertainty dampens demand",
-      "Link": "https://www.bbc.com/news/articles/cj401ll8j5zo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T07:34:23+00:00",
-      "Source": "BBC News",
-      "Summary": "Mortgage rates have been rising and hundreds of the cheapest deals have disappeared over the last month."
-    },
-    {
-      "Title": "Starmer to visit Middle East after US and Iran reach deal",
-      "Link": "https://www.bbc.com/news/articles/cj0ve1006g9o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T07:09:22+00:00",
-      "Source": "BBC News",
-      "Summary": "The prime minister welcomes the deal, saying the UK will do \u0022all we can to support and sustain this ceasefire\u0022."
-    },
-    {
-      "Title": "Garcia is good for boxing but a liability - Benn",
-      "Link": "https://www.bbc.com/sport/boxing/articles/cvg0rx7x811o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T06:37:25+00:00",
-      "Source": "BBC News",
-      "Summary": "Conor Benn believes WBC welterweight champion Ryan Garcia is \u0022good for boxing\u0022 but says the American is a \u0022liability\u0022."
-    },
-    {
-      "Title": "Forecast for UK to peak at 26C before temperatures plunge",
-      "Link": "https://www.bbc.com/weather/articles/c9d46yx0ndwo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T06:17:11+00:00",
-      "Source": "BBC News",
-      "Summary": "Temperatures could nudge as high as 26C (79F) in some places on Wednesday. "
-    },
-    {
-      "Title": "Frank Gardner on why Iran-US ceasefire is \u0027not the whole story\u0027",
-      "Link": "https://www.bbc.co.uk/sounds/play/p0nc4jzp?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T06:01:33+00:00",
-      "Source": "BBC News",
-      "Summary": "Our security correspondent offers his analysis on the two-week ceasefire."
-    },
-    {
-      "Title": "I felt really alone after World Cup win - Kildunne",
-      "Link": "https://www.bbc.com/sport/rugby-union/articles/c1kr49lxmmvo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T06:01:26+00:00",
-      "Source": "BBC News",
-      "Summary": "England full-back Ellie Kildunne admits feeling \u0022really alone\u0022 after experiencing an emotional dip following their Rugby World Cup win."
-    },
-    {
-      "Title": "Books changed my life, says Queen\u0027s first reading hero",
-      "Link": "https://www.bbc.com/news/articles/c2lwkwnzk7vo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T05:54:41+00:00",
-      "Source": "BBC News",
-      "Summary": "Selina Brown, from Birmingham, says she is delighted to be the UK\u0027s first National Reading Hero."
-    },
-    {
-      "Title": "Seve\u0027s dance to Tiger\u0027s triumph - the art of a great golf photo",
-      "Link": "https://www.bbc.com/sport/golf/articles/c2ev3d7j0k3o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T05:28:56+00:00",
-      "Source": "BBC News",
-      "Summary": "Some of golf\u0027s iconic images - from Seve Ballesteros\u0027 celebration to Rory McIlroy\u0027s roar and Tiger Woods\u0027 exhilaration - and the stories behind them."
-    },
-    {
-      "Title": "Family of one-punch attack victim fear \u00A3500k compensation could run out",
-      "Link": "https://www.bbc.com/news/articles/cy91p4qzn24o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T05:12:37+00:00",
-      "Source": "BBC News",
-      "Summary": "Craig Lewis-Williams needs specialist care for the rest of his life following the November 2021 attack."
-    },
-    {
-      "Title": "Arrest as \u00A3200k stolen from scouts trip fund",
-      "Link": "https://www.bbc.com/news/articles/ce3dxyl97eqo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T05:11:46+00:00",
-      "Source": "BBC News",
-      "Summary": "The money had been raised towards a scouts trip to Canada, leaving 100 children in the lurch. "
-    },
-    {
-      "Title": "How Pakistan helped secure a fragile truce between the US and Iran",
-      "Link": "https://www.bbc.com/news/articles/cj401qvgg19o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T05:03:31+00:00",
-      "Source": "BBC News",
-      "Summary": "Pakistan has a historic relationship with Iran, but an agreement was far from certain, writes the BBC\u2019s Caroline Davies"
-    },
-    {
-      "Title": "Iran deal gives Trump a way out of war - but at a high cost",
-      "Link": "https://www.bbc.com/news/articles/cwyvp55xrlro?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T03:30:55+00:00",
-      "Source": "BBC News",
-      "Summary": "The path to the two-week ceasefire with Iran may have fundamentally altered the way the rest of the world views the US."
-    },
-    {
-      "Title": "What we know about the two-week ceasefire between the US and Iran ",
-      "Link": "https://www.bbc.com/news/articles/ce84z6y3ke4o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T02:58:55+00:00",
-      "Source": "BBC News",
-      "Summary": "The provisional truce comes more than a month after the US and Israel launched coordinated attacks on Iran."
-    },
-    {
-      "Title": "Trump-backed Republican Clay Fuller wins election to replace Marjorie Taylor Greene",
-      "Link": "https://www.bbc.com/news/articles/c8r40erdj6mo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T02:33:45+00:00",
-      "Source": "BBC News",
-      "Summary": "He will serve out the rest of Marjorie Taylor Greene\u0027s term, which ends in January 2027."
-    },
-    {
-      "Title": "Top Australian soldier charged with war crimes to remain in jail on remand",
-      "Link": "https://www.bbc.com/news/articles/c1l9qemvgppo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T02:24:33+00:00",
-      "Source": "BBC News",
-      "Summary": "Ben Roberts-Smith faces five charges of the war crime of murder, which has a penalty of life in prison."
-    },
-    {
-      "Title": "US journalist Shelly Kittleson released after kidnap in Iraq, officials say",
-      "Link": "https://www.bbc.com/news/articles/crm1xjp08k3o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T01:44:26+00:00",
-      "Source": "BBC News",
-      "Summary": " US officials say they are now \u0022working to support her safe departure from Iraq\u0022."
-    },
-    {
-      "Title": "Tributes after British teenager dies after road accident in Vietnam",
-      "Link": "https://www.bbc.com/news/articles/c5y9lg10595o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-08T01:15:21+00:00",
-      "Source": "BBC News",
-      "Summary": "Orla Wates is remembered by her mother as \u0022beautiful, independent and very funny\u0022."
-    },
-    {
-      "Title": "How \u0027world\u0027s best keeper\u0027 Raya helps Arsenal get back on track",
-      "Link": "https://www.bbc.com/sport/football/articles/cvgldp4gjqlo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-07T23:09:15+00:00",
-      "Source": "BBC News",
-      "Summary": "David Raya is the best goalkeeper in the world, according to his Arsenal team-mates - and the Spaniard played a key role in his side\u0027s 1-0 win at Sporting."
-    },
-    {
-      "Title": "Alexander-Arnold fails to ease Tuchel concerns as Kane stars",
-      "Link": "https://www.bbc.com/sport/football/articles/cp38dlkl7eko?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-07T23:04:06+00:00",
-      "Source": "BBC News",
-      "Summary": "Thomas Tuchel\u0027s doubts about Trent Alexander-Arnold and reliance on Harry Kane are confirmed on the England manager\u0027s Madrid mission. "
-    },
-    {
-      "Title": "He stalked me, but I was the one arrested",
-      "Link": "https://www.bbc.com/news/articles/c1kgz7pnwd8o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-07T23:03:27+00:00",
-      "Source": "BBC News",
-      "Summary": "Jodie Morrow went to the police after being harassed, but later found herself in custody."
-    },
-    {
-      "Title": "Newlywed wife of US soldier freed by ICE after detention at military base",
-      "Link": "https://www.bbc.com/news/articles/c98kn1k3nreo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-07T22:29:28+00:00",
-      "Source": "BBC News",
-      "Summary": "Annie Ramos, an undocumented immigrant who came to the US as a toddler, had gone to the base to complete paperwork so the couple could move in together."
-    },
-    {
-      "Title": "Nothing\u2019s noise-canceling CMF Buds 2A are down to $19.99 for the rest of today",
-      "Link": "https://www.theverge.com/gadgets/908409/nothing-cmf-buds-2a-earbuds-amazon-lightning-deal-sale",
-      "Published": "2026-04-07T22:16:21+00:00",
-      "Source": "The Verge",
-      "Summary": "It\u2019s not every day you find a decent pair of wireless earbuds with active noise cancellation, a transparency mode, and app support for less than $20, which is why the current lighting deal on the CMF Buds 2A stands out. Now through 11:15PM ET today, April 7th, Nothing\u2019s budget earbuds are available on Amazon in [\u0026#8230;]"
-    },
-    {
-      "Title": "Amazon is ending support for older Kindles and Kindle Fires",
-      "Link": "https://www.theverge.com/tech/908302/amazon-ending-support-kindle-fire-tablet-e-reader-pre-2012-older",
-      "Published": "2026-04-07T21:44:20+00:00",
-      "Source": "The Verge",
-      "Summary": "Amazon has announced that starting on May 20th, 2026, Kindle e-readers and Kindle Fire devices released in 2012 and earlier will \u0022no longer be able to purchase, borrow, or download new content via the Kindle Store,\u0022 Amazon spokesperson Jackie Burke wrote in an email to The Verge. Users will still be able to read books [\u0026#8230;]"
-    },
-    {
-      "Title": "McIlroy ready to enjoy the glorious freedom of being a Masters winner",
-      "Link": "https://www.bbc.com/sport/golf/articles/cn89zp1e38no?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-07T21:05:12+00:00",
-      "Source": "BBC News",
-      "Summary": "Twelve months after the greatest moment of his career, Rory McIlroy returns to the Masters looking for a rare back-to-back win."
-    },
-    {
-      "Title": "Legendary manager Lucescu dies days after resigning",
-      "Link": "https://www.bbc.com/sport/football/articles/cgj0d8dz5dgo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-07T20:39:19+00:00",
-      "Source": "BBC News",
-      "Summary": "Legendary manager Mircea Lucescu dies aged 80, five days after stepping down as Romania\u0027s head coach."
-    },
-    {
-      "Title": "Spotify\u0026#8217;s Prompted Playlists can help you find new podcasts to listen to",
-      "Link": "https://www.theverge.com/entertainment/908339/spotify-prompted-playlists-podcasts",
-      "Published": "2026-04-07T20:13:23+00:00",
-      "Source": "The Verge",
-      "Summary": "On Tuesday, Spotify expanded its Prompted Playlists feature to include podcasts, an update that could make it easier for Premium users to find new shows to listen to. Prompted Playlists were originally launched as a beta feature in December, but previously only worked for music. You can use the feature to effectively generate customized Discover [\u0026#8230;]"
-    },
-    {
-      "Title": "Wireless Festival cancelled after Kanye West blocked from coming to UK",
-      "Link": "https://www.bbc.com/news/articles/c4gxk3kxjr0o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-07T19:40:05+00:00",
-      "Source": "BBC News",
-      "Summary": "West was due to headline the festival in July but drew criticism over past antisemitic comments."
-    },
-    {
-      "Title": "You can now turn 2D apps into 3D while using the Galaxy XR headset",
-      "Link": "https://www.theverge.com/tech/908268/android-xr-samsung-galaxy-auto-spatialization-2d-3d",
-      "Published": "2026-04-07T19:07:12+00:00",
-      "Source": "The Verge",
-      "Summary": "Android XR is getting a new feature that turns 2D apps, websites, images, and videos into \u00223D experiences.\u0022 The feature, which Google calls \u0022auto-spatialization,\u0022 was initially announced last year, and it\u0027s launching on Tuesday as an experimental feature for Samsung Galaxy XR headsets. Here\u0027s a video from Google that gives you an idea about how [\u0026#8230;]"
-    },
-    {
-      "Title": "I wish this selfie phone case was better for selfies",
-      "Link": "https://www.theverge.com/tech/908251/dockcase-selfix-selfie-phone-case-hands-on",
-      "Published": "2026-04-07T19:05:00+00:00",
-      "Source": "The Verge",
-      "Summary": "The Selfix phone case is a classic example of a great idea in theory that falls apart in practice. It\u0027s a case for the iPhone 17 Pro with a circular screen on the back. It mirrors the middle of your main phone screen, making it easier to frame up selfies using your phone\u0027s higher-quality rear [\u0026#8230;]"
-    },
-    {
-      "Title": "Samsung\u2019s Galaxy S26 Ultra is $200 off for the first time",
-      "Link": "https://www.theverge.com/gadgets/908196/samsung-galaxy-s26-ultra-privacy-display-deal-sale-unlocked",
-      "Published": "2026-04-07T18:16:52+00:00",
-      "Source": "The Verge",
-      "Summary": "My colleague Allison Johnson loved the Privacy Display in her review of the Samsung Galaxy S26 Ultra. The display feature, which blocks onlookers from getting a peep at what\u2019s on the screen when viewed from the side, is worth getting the S26 Ultra for if you are serious about privacy during your commute or elsewhere. [\u0026#8230;]"
-    },
-    {
-      "Title": "A new Anthropic model found security problems \u0026#8216;in every major operating system and web browser\u0026#8217;",
-      "Link": "https://www.theverge.com/ai-artificial-intelligence/908114/anthropic-project-glasswing-cybersecurity",
-      "Published": "2026-04-07T18:00:00+00:00",
-      "Source": "The Verge",
-      "Summary": "Anthropic is debuting a new AI model as part of a cybersecurity partnership with Nvidia, Google, Amazon Web Services, Apple, Microsoft, and other companies. Project Glasswing, as it\u0027s called, is billed as a way for large companies, and potentially even the government, to flag vulnerabilities in their systems with virtually no human intervention. Anthropic is [\u0026#8230;]"
-    },
-    {
-      "Title": "Almost a third of ferry fleet out of action on Scotland\u0027s west coast",
-      "Link": "https://www.bbc.com/news/articles/cg54174pqjmo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-07T17:04:38+00:00",
-      "Source": "BBC News",
-      "Summary": "CalMac\u0027s chief executive says an \u0022unprecedented situation\u0022 has worsened, with 10 vessels currently unable to sail. "
-    },
-    {
-      "Title": "The rugged Bose Soundlink Flex is 25 percent off right now",
-      "Link": "https://www.theverge.com/gadgets/907744/bose-soundlink-flex-2nd-gen-google-nest-doorbell-deal-sale",
-      "Published": "2026-04-07T17:02:25+00:00",
-      "Source": "The Verge",
-      "Summary": "We saw a host of excellent Bose discounts during Amazon\u2019s so-called Big Spring Sale last month; however, none of them were quite as steep as the current price drop we\u2019re seeing on the latest Bose Soundlink Flex. Right now, the portable speaker is on sale at Amazon, Walmart, and Best Buy for $119 ($40 off), [\u0026#8230;]"
-    },
-    {
-      "Title": "Vertical browser tabs are better and you should use them",
-      "Link": "https://www.theverge.com/tech/907998/google-chrome-vertical-tabs",
-      "Published": "2026-04-07T17:00:00+00:00",
-      "Source": "The Verge",
-      "Summary": "Google\u0027s Chrome browser is getting a couple of new features, both of them extremely welcome and wildly overdue. The first is a reading mode, which does what it already does in most other browsers: strip out a lot of website cruft to make pages easier to read. Reading mode is good, you should use it, [\u0026#8230;]"
-    },
-    {
-      "Title": "Suno and major music labels reportedly clash over AI music sharing",
-      "Link": "https://www.theverge.com/ai-artificial-intelligence/908119/suno-sony-universal-music-ai-disagreement",
-      "Published": "2026-04-07T16:21:22+00:00",
-      "Source": "The Verge",
-      "Summary": "The AI-powered musicmaker Suno is struggling to reach licensing deals with Universal Music Group and Sony Music Entertainment. That\u0027s according to a report from the Financial Times, which says both sides can\u0027t agree on whether users should be able to share the AI-generated songs they create. \u0022Universal wants AI-generated tracks to stay inside apps such [\u0026#8230;]"
-    },
-    {
-      "Title": "Has Artemis II shown we can land on the Moon again?",
-      "Link": "https://www.bbc.com/news/articles/cj60nkd8nrko?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-07T15:23:05+00:00",
-      "Source": "BBC News",
-      "Summary": "The Artemis II mission has been near flawless to date, but has the test flight shown Nasa is ready to send humans to the lunar surface?"
-    },
-    {
-      "Title": "Kanye West controversies - how did we get here?",
-      "Link": "https://www.bbc.com/news/articles/c9vl1pn70ddo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-04-07T14:25:46+00:00",
-      "Source": "BBC News",
-      "Summary": "West has a history of making antisemitic remarks and other controversial comments."
-    },
     {
       "Title": "Farmers warn of higher food costs due to Iran war",
       "Link": "https://www.bbc.com/news/articles/c0q98w57k25o?at_medium=RSS\u0026at_campaign=rss",
@@ -3017,6 +2751,314 @@
       "Published": "2026-04-14T23:31:04+00:00",
       "Source": "BBC News",
       "Summary": "An unsuccessful singer-songwriter wakes up in a world where no-one remembers The Beatles."
+    },
+    {
+      "Title": "Senior official ousted over Mandelson security row to face MPs",
+      "Link": "https://www.bbc.com/news/articles/c0kryzd8l7no?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T08:14:00+00:00",
+      "Source": "BBC News",
+      "Summary": "Former Former Office chief Sir Olly Robbins is expected to be grilled by the Foreign Affairs Committee on Tuesday."
+    },
+    {
+      "Title": "Banana and herring, anyone? The home cooks reviving forgotten British dishes",
+      "Link": "https://www.bbc.com/news/articles/cje4pl85pxwo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T07:46:02+00:00",
+      "Source": "BBC News",
+      "Summary": "Carrageen pudding and Bedfordshire clangers might no longer be household staples, but some home chefs are bringing them back."
+    },
+    {
+      "Title": "From FA ban to double Euros winners -  Lionesses reach 500 games",
+      "Link": "https://www.bbc.com/sport/football/articles/ce844m5yzgvo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T06:43:43+00:00",
+      "Source": "BBC News",
+      "Summary": "BBC Sport takes a look at 11 defining moments in the history of England women before their milestone 500th official fixture on Saturday."
+    },
+    {
+      "Title": "Fitzpatrick\u0027s wild birdie and superb 63 puts him in Heritage lead",
+      "Link": "https://www.bbc.com/sport/golf/articles/c62k160k831o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T06:33:32+00:00",
+      "Source": "BBC News",
+      "Summary": "Former US Open champion Matt Fitzpatrick has a one-shot lead over Viktor Hovland at the RBC Heritage in South Carolina.\n\n"
+    },
+    {
+      "Title": "Fears over rogue parking by sunrise-chasers at national park after overnight ban",
+      "Link": "https://www.bbc.com/news/articles/cew77qq2r7lo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T06:26:14+00:00",
+      "Source": "BBC News",
+      "Summary": "Authorities in Eryri want to crackdown on anti-social behaviour, but there are concerns people would park on local roads."
+    },
+    {
+      "Title": "Oil prices plunge as Iran says Strait of Hormuz \u0027open\u0027 during ceasefire",
+      "Link": "https://www.bbc.com/news/articles/ckg045z73z1o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T06:06:38+00:00",
+      "Source": "BBC News",
+      "Summary": "Brent crude sinks by a tenth after Iran says the key waterway is open for commercial ships for the rest of the ceasefire."
+    },
+    {
+      "Title": "Swinney predicts SNP majority at Holyrood election",
+      "Link": "https://www.bbc.com/news/articles/c9wq2jvqqxvo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T05:00:24+00:00",
+      "Source": "BBC News",
+      "Summary": "The first minister has told BBC News that his party will return at least 65 seats at next month\u0027s vote."
+    },
+    {
+      "Title": "What people in power think the impact of the Iran war will be",
+      "Link": "https://www.bbc.com/news/articles/c9vl37eev7ko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T05:00:15+00:00",
+      "Source": "BBC News",
+      "Summary": "I have been chatting with some of the world\u0027s most powerful people about the conflict and the economy. Here\u0027s what they said."
+    },
+    {
+      "Title": "Orb\u00E1n\u0027s era was over in a flash and Hungary\u0027s next PM is a man in a hurry",
+      "Link": "https://www.bbc.com/news/articles/c4g40npz37lo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T04:46:34+00:00",
+      "Source": "BBC News",
+      "Summary": "P\u00E9ter Magyar and his Tisza party are wasting no time preparing for the transfer of power after their dramatic landslide victory."
+    },
+    {
+      "Title": "Starmer faces \u0027judgement day\u0027 and \u0027Breakthrough in the Strait\u0027 ",
+      "Link": "https://www.bbc.com/news/articles/ckg04x0lkv3o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T03:46:48+00:00",
+      "Source": "BBC News",
+      "Summary": "Pressure is building on Prime Minister Sir Keir Starmer as Lord Mandelson\u0027s vetting dominates Saturday\u0027s papers."
+    },
+    {
+      "Title": "British man pleads guilty to conspiring to steal $8m in virtual currency",
+      "Link": "https://www.bbc.com/news/articles/c145yxjrllko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-18T03:37:04+00:00",
+      "Source": "BBC News",
+      "Summary": "The Scottish 24-year-old admits defrauding at least a dozen companies and their employees across the US."
+    },
+    {
+      "Title": "Pregnancy vaccine reduces baby hospital admissions for RSV by 80%",
+      "Link": "https://www.bbc.com/news/articles/c4g84nxwz8wo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T23:35:23+00:00",
+      "Source": "BBC News",
+      "Summary": "A study confirms the vaccine gives excellent protection for babies against life-threatening chest infections."
+    },
+    {
+      "Title": "Mortgage rates show signs of falling after Iran war peak",
+      "Link": "https://www.bbc.com/news/articles/cwyx2q86lgpo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T23:33:10+00:00",
+      "Source": "BBC News",
+      "Summary": "Major lenders make rate reductions as markets take some heart from a possible truce in the Iran war."
+    },
+    {
+      "Title": "\u0027I\u0027m the lucky one\u0027 - more than one in three young men now live with their parents",
+      "Link": "https://www.bbc.com/news/articles/ce3578g32d0o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T23:16:33+00:00",
+      "Source": "BBC News",
+      "Summary": "Last year, the highest proportion of men aged 20-34 were still living at home since at least 2007 as the rising cost of living takes hold."
+    },
+    {
+      "Title": "My weekly juggling act - being a teacher to other children and a mum to my own",
+      "Link": "https://www.bbc.com/news/articles/c5yvvr5z2pro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T23:06:15+00:00",
+      "Source": "BBC News",
+      "Summary": "Many teachers say they struggle to balance the pressures of their job with the demands of being a parent."
+    },
+    {
+      "Title": "Coachella campers are turning tents fancy and not all Brits are happy",
+      "Link": "https://www.bbc.com/news/articles/c2032x399w1o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T23:05:09+00:00",
+      "Source": "BBC News",
+      "Summary": "Campers are being judged for over-the-top tent set ups at this year\u0027s festival in California."
+    },
+    {
+      "Title": "Chris Mason: Mandelson saga is a messy palaver - and the questions continue to swirl",
+      "Link": "https://www.bbc.com/news/articles/cwydex228vko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T21:17:43+00:00",
+      "Source": "BBC News",
+      "Summary": "Sir Keir and the top official at the Foreign Office at the time are expected to face questions from MPs next week."
+    },
+    {
+      "Title": "OpenAI\u2019s former Sora boss is leaving",
+      "Link": "https://www.theverge.com/ai-artificial-intelligence/914463/openai-sora-bill-peebles-kevin-weil-leaving-departing",
+      "Published": "2026-04-17T21:13:25+00:00",
+      "Source": "The Verge",
+      "Summary": "Last month, OpenAI gave up on its Sora video generation tool, and on Friday, the Sora team\u0027s leader, Bill Peebles, announced that he is leaving the company. OpenAI has been shifting its priorities as part of an effort to avoid \u0022side quests,\u0022 and Peebles\u0027 departure is just one of many recent changes as the company [\u0026#8230;]"
+    },
+    {
+      "Title": "How Coventry earned Premier League return after 25 years",
+      "Link": "https://www.bbc.com/sport/football/articles/cy814339170o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T21:08:52+00:00",
+      "Source": "BBC News",
+      "Summary": "After a quarter of a century out of the Premier League, groundshares and administration, Frank Lampard has led Coventry City back to the top flight."
+    },
+    {
+      "Title": "UK and France to lead defensive mission in Strait of Hormuz",
+      "Link": "https://www.bbc.com/news/articles/c5yjz819vmgo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T21:05:55+00:00",
+      "Source": "BBC News",
+      "Summary": "Sir Keir Starmer has said further details of the plan will come after a meeting in London next week."
+    },
+    {
+      "Title": "O\u0027Sullivan chasing eighth Crucible title aged 50",
+      "Link": "https://www.bbc.com/sport/snooker/articles/c4g5ywe38dno?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T20:55:03+00:00",
+      "Source": "BBC News",
+      "Summary": "In 2001, Ronnie O\u0027Sullivan won his first World Snooker Championship. Now, a quarter of a century later, the Rocket is aiming for a record-breaking eighth title."
+    },
+    {
+      "Title": "Should you stare into Sam Altman\u0026#8217;s orb before your next date?",
+      "Link": "https://www.theverge.com/ai-artificial-intelligence/914385/world-id-tinder-identity-verifying-orb",
+      "Published": "2026-04-17T20:42:47+00:00",
+      "Source": "The Verge",
+      "Summary": "Tinder users who prove they\u0027re a real person by visiting an identity-verifying orb will soon be able to get five free boosts in the app - and it\u0027s just the latest service to embrace the orb. World, which was co-founded by OpenAI CEO Sam Altman, initially tested Tinder verification using its facial scanning orbs through [\u0026#8230;]"
+    },
+    {
+      "Title": "Anthropic\u2019s new cybersecurity model could get it back in the government\u2019s good graces",
+      "Link": "https://www.theverge.com/ai-artificial-intelligence/914229/tides-turning-anthropic-trump-administration-cybersecurity-mythos-preview",
+      "Published": "2026-04-17T20:14:21+00:00",
+      "Source": "The Verge",
+      "Summary": "The Trump administration has spent nearly two months fighting with AI company Anthropic. It\u0027s dubbed the company a \u0022RADICAL LEFT, WOKE COMPANY\u0022 full of \u0022Leftwing nut jobs\u0022 and a menace to national security. But some of the ice may reportedly be melting between the two, thanks to Anthropic\u0027s buzzy new cybersecurity-focused model: Claude Mythos Preview. [\u0026#8230;]"
+    },
+    {
+      "Title": "A moment of risk and opportunity: How two ceasefires could boost US-Iran talks",
+      "Link": "https://www.bbc.com/news/articles/c0mjynzvw94o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T19:59:30+00:00",
+      "Source": "BBC News",
+      "Summary": "Some kind of diplomatic progress is now under way, but is it enough to prevent a return to war?"
+    },
+    {
+      "Title": "Japan comes up with new word for days hotter than 40C after blistering summer",
+      "Link": "https://www.bbc.com/news/articles/crr185nx0n9o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T18:19:43+00:00",
+      "Source": "BBC News",
+      "Summary": "The term - kokushobi - translates to \u0022cruelly hot\u0022, \u0022brutally hot\u0022 or \u0022severely hot\u0022, and comes after Japan\u0027s hottest summer on record."
+    },
+    {
+      "Title": "Betting on the news raises ethical questions for journalists",
+      "Link": "https://www.theverge.com/report/914157/prediction-markets-news-outlet-ethics-policy-propublica-kalshi-polymarket",
+      "Published": "2026-04-17T18:07:43+00:00",
+      "Source": "The Verge",
+      "Summary": "Prediction market exchanges have created an environment where just about any piece of information is potentially monetizable: How well will BTS\u0027s new song perform this week? How hot will Los Angeles get? Will Donald Trump be impeached? Users can wager on all of that and, on some platforms, more gruesome and violent outcomes in the [\u0026#8230;]"
+    },
+    {
+      "Title": "Irish fugitive and alleged crime boss Daniel Kinahan arrested in Dubai",
+      "Link": "https://www.bbc.com/news/articles/c4g4yl5dd4do?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T17:48:13+00:00",
+      "Source": "BBC News",
+      "Summary": "Kinahan, in his 40s, was arrested in Dubai on foot of an arrest warrant issued by the Irish courts."
+    },
+    {
+      "Title": "This charming gadget writes bad AI poetry",
+      "Link": "https://www.theverge.com/gadgets/913981/poetry-camera-ai-hands-on",
+      "Published": "2026-04-17T17:30:00+00:00",
+      "Source": "The Verge",
+      "Summary": "I\u0027ve never been as charmed and frustrated by one gadget as I have with the Poetry Camera. It\u0027s a delightful object. White and cherry red with a color-matched woven strap, it looks playful and adorably lo-fi. If I saw it on a store shelf, I\u0027d absolutely pick it up. But aside from obviously appealing, I\u0027m [\u0026#8230;]"
+    },
+    {
+      "Title": "Bournemouth close to appointing Rose ",
+      "Link": "https://www.bbc.com/sport/football/articles/c5ywz3x4r2eo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T17:11:56+00:00",
+      "Source": "BBC News",
+      "Summary": "Bournemouth are close to appointing Marco Rose as Andoni Iraola\u0027s replacement as head coach."
+    },
+    {
+      "Title": "\u0027Mums thank me for changing the narrative\u0027: How motherhood in rugby has evolved",
+      "Link": "https://www.bbc.com/sport/rugby-union/articles/czx995g44wvo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T17:01:13+00:00",
+      "Source": "BBC News",
+      "Summary": "Lark Atkin-Davies and Abbie Ward - two of four pregnant England Women\u0027s Rugby World Cup winners - discuss how motherhood in rugby is changing."
+    },
+    {
+      "Title": "A man wrongfully served 17 years for rape. Now another man has been convicted ",
+      "Link": "https://www.bbc.com/news/articles/cq6jq12dmmro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T16:39:42+00:00",
+      "Source": "BBC News",
+      "Summary": "Malkinson had his rape conviction quashed in 2023 after fresh DNA analysis linked a new suspect to the offence."
+    },
+    {
+      "Title": "Our new favorite budget phones",
+      "Link": "https://www.theverge.com/tech/912286/our-new-favorite-budget-phones",
+      "Published": "2026-04-17T15:58:07+00:00",
+      "Source": "The Verge",
+      "Summary": "Over the last few months, every phone maker under the sun has refreshed its lineups, especially at the affordable end, with no major budget phone launches now expected until next year. That made it the perfect time to go back and reassess The Verge\u0027s recommendations for the best budget phones you can buy right now. [\u0026#8230;]"
+    },
+    {
+      "Title": "The best budget smartphones you can buy",
+      "Link": "https://www.theverge.com/gadgets/912271/best-budget-smartphones-cheap-iphone-android-phones",
+      "Published": "2026-04-17T15:55:00+00:00",
+      "Source": "The Verge",
+      "Summary": "Some of us take a kind of \u201Ceat to live\u201D rather than a \u201Clive to eat\u201D approach to gadgets. They\u2019re tools that help you get things done, not something you want to invest a lot of time or money in. If that\u2019s you \u2014 and there\u2019s no judgment here from a certifiable gadget nerd \u2014 [\u0026#8230;]"
+    },
+    {
+      "Title": "Dairy Queen is putting an AI chatbot in its drive-thrus",
+      "Link": "https://www.theverge.com/ai-artificial-intelligence/913928/dairy-queen-ai-drive-thru-presto",
+      "Published": "2026-04-17T15:46:37+00:00",
+      "Source": "The Verge",
+      "Summary": "Dairy Queen is becoming the latest fast food chain to get in on AI, as it\u0027s bringing a chatbot to dozens of its drive-thrus across the US and Canada. It aims to help speed up drive-thru service and \u0022encourage customers to add more food to their orders,\u0022 according to The Wall Street Journal. Following a [\u0026#8230;]"
+    },
+    {
+      "Title": "Mandelson Failed Security Vetting...The Prime Minister Speaks Out",
+      "Link": "https://www.bbc.co.uk/sounds/play/p0nd41s3?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T15:33:00+00:00",
+      "Source": "BBC News",
+      "Summary": "Keir Starmer says it\u0027s \u0027staggering\u0027 he wasn\u2019t told Mandelson failed security vetting."
+    },
+    {
+      "Title": "The AirPods Pro 3 are $50 off right now, nearly matching their best-ever price",
+      "Link": "https://www.theverge.com/gadgets/913857/apple-airpods-pro-3-blink-video-doorbell-deal-sale",
+      "Published": "2026-04-17T15:07:50+00:00",
+      "Source": "The Verge",
+      "Summary": "From OLED TVs to smartphones, Best Buy\u2019s Upgrade Sale has slashed prices on all kinds of tech, including a wide range of Apple devices. We\u2019ve rounded up the best deals from the sale here, but one of the most notable is the AirPods Pro 3, which are down to $199.99 ($50 off) at Best Buy, [\u0026#8230;]"
+    },
+    {
+      "Title": "Russell \u0027would understand\u0027 if Verstappen leaves F1",
+      "Link": "https://www.bbc.com/sport/formula1/articles/cj37p3k1nx8o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T14:29:54+00:00",
+      "Source": "BBC News",
+      "Summary": "George Russell says Formula 1 \u0022would not want to lose\u0022 Max Verstappen - but would \u0022understand\u0022 if the four-time world champion decided to leave the sport."
+    },
+    {
+      "Title": "Ghost orchid in the machine",
+      "Link": "https://www.theverge.com/tech/909806/kinetic-sculpture-fake-flowers-mechanical-artwork-rachel-youn",
+      "Published": "2026-04-17T14:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "Vacuum cleaners, personal massagers, electronic baby rockers, and walking pads: These are the secondhand machines Rachel Youn sources to create their kinetic sculptures. Made with artificial flowers, metal hardware, and these used electronic components, each one possesses a humanlike presence. Slow Burn is made from an artificial orchid, a neck massager, bits of metal that [\u0026#8230;]"
+    },
+    {
+      "Title": "Have the Democrats found a new strategy to scare Trump?",
+      "Link": "https://www.bbc.co.uk/sounds/play/w3ct8lyy?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T10:55:00+00:00",
+      "Source": "BBC News",
+      "Summary": "Why an oyster fisherman with a controversial past is splitting the Democrats"
+    },
+    {
+      "Title": "Sinatra fan Jimmy does it his way to keep promise to late wife",
+      "Link": "https://www.bbc.com/news/articles/cly7pnpp27wo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-17T05:16:41+00:00",
+      "Source": "BBC News",
+      "Summary": "Jimmy Moir went to L.A. to see where his idol made his music - and ended up with a few surprises."
+    },
+    {
+      "Title": "\u0027My sister loved to party and turned her life around\u0027 - the nun on the way to sainthood",
+      "Link": "https://www.bbc.com/news/articles/c5yjjzjgvm6o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-16T09:10:32+00:00",
+      "Source": "BBC News",
+      "Summary": "Thousands attend a retreat in Derry named after Sister Clare, 10 years after her death in an earthquake in Ecuador."
+    },
+    {
+      "Title": "Boy donates lockdown locks to children\u0027s charity",
+      "Link": "https://www.bbc.com/news/articles/c3r3zxvy89xo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-14T13:24:04+00:00",
+      "Source": "BBC News",
+      "Summary": "Noah braves the scissors and gets a short do after growing out his hair for six years."
+    },
+    {
+      "Title": "People assume I can\u0027t speak Welsh because I\u0027m not white",
+      "Link": "https://www.bbc.com/news/articles/cr71911795go?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-04-13T05:10:03+00:00",
+      "Source": "BBC News",
+      "Summary": "Seren Jones says some Welsh speakers have switched to English when talking to her. "
+    },
+    {
+      "Title": "Puss in Boots, voiced by Antonio Banderas, is on an exciting quest",
+      "Link": "https://www.bbc.co.uk/iplayer/episode/b01p6y1c/puss-in-boots?at_mid=gfHsptej6G\u0026at_campaign=Film_Puss_in_Boots\u0026at_medium=display_ad\u0026at_campaign_type=owned\u0026at_nation=NET\u0026at_audience_id=SS\u0026at_product=iplayer\u0026at_brand=b01p6y1c\u0026at_ptr_name=bbc\u0026at_ptr_type=media\u0026at_format=image\u0026at_objective=consumption\u0026at_link_title=Film_Puss_in_Boots\u0026at_bbc_team=BBC",
+      "Published": "2026-04-12T10:35:00+00:00",
+      "Source": "BBC News",
+      "Summary": "Puss teams up with a fellow thieving feline and Humpty Dumpty to go on an exciting quest."
     }
   ],
   "Prices": []
