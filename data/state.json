@@ -1,300 +1,6 @@
 {
-  "LastDigestUtc": "2026-05-24T08:55:47.8497686+00:00",
+  "LastDigestUtc": "2026-05-25T09:26:06.617601+00:00",
   "CacheNews": [
-    {
-      "Title": "Search for new James Bond officially kicks off as auditions begin",
-      "Link": "https://www.bbc.com/news/articles/cn5pq7d9p39o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T08:55:35+00:00",
-      "Source": "BBC News",
-      "Summary": "Callum Turner, Jacob Elordi and Harris Dickinson are among the frontrunners to replace Daniel Craig."
-    },
-    {
-      "Title": "New outbreak of Ebola kills 65 in eastern DR Congo",
-      "Link": "https://www.bbc.com/news/articles/cze2wpk7y76o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T08:27:42+00:00",
-      "Source": "BBC News",
-      "Summary": "Africa\u0027s top health agency says around 246 cases have been reported."
-    },
-    {
-      "Title": "One dead and two ill after meningitis cases",
-      "Link": "https://www.bbc.com/news/articles/cn4p750q857o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T08:20:57+00:00",
-      "Source": "BBC News",
-      "Summary": "Agencies said the risk to pupils and the wider public following the cases of meningitis remains low."
-    },
-    {
-      "Title": "British Gas pays \u00A320m over prepayment meter force-fitting scandal",
-      "Link": "https://www.bbc.com/news/articles/cq8p7l1y59lo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T08:19:31+00:00",
-      "Source": "BBC News",
-      "Summary": "The regulator say the energy supplier breached licence conditions aimed at protecting customers in vulnerable situations."
-    },
-    {
-      "Title": "Has last-gasp Celtic penalty undermined Hearts\u0027 hopes?",
-      "Link": "https://www.bbc.com/sport/football/articles/cp8pzd3d655o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T07:52:29+00:00",
-      "Source": "BBC News",
-      "Summary": "As the curtain falls on an incredible Scottish Premiership season, Celtic and Hearts go head-to-head on Saturday with the title on the line."
-    },
-    {
-      "Title": "Five Italians die during cave scuba dive in Maldives",
-      "Link": "https://www.bbc.com/news/articles/c62e0p7rd2ro?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T07:38:17+00:00",
-      "Source": "BBC News",
-      "Summary": "Four of the Italians were part of a team from the University of Genoa."
-    },
-    {
-      "Title": "The Papers: \u0027Starmer\u0027s battle begins\u0027 and \u0027Rivals\u0027",
-      "Link": "https://www.bbc.com/news/articles/c4g56g3wezgo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T05:21:53+00:00",
-      "Source": "BBC News",
-      "Summary": "The papers are dominated by Sir Keir Starmer\u0027s fight to stay on as prime minister."
-    },
-    {
-      "Title": "Parlour? Villa? Gerrard? Ranking best FA Cup final goals",
-      "Link": "https://www.bbc.com/sport/football/articles/c23205xj91no?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T05:12:56+00:00",
-      "Source": "BBC News",
-      "Summary": "From Ricky Villa to Steven Gerrard, Ray Parlour to Roberto di Matteo - here are 10 of the best FA Cup final goals of all time."
-    },
-    {
-      "Title": "Silicon Valley\u0027s seedy side exposed - and four other things we learned in the Musk-Altman trial",
-      "Link": "https://www.bbc.com/news/articles/cg7pj8p5mv4o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T05:03:31+00:00",
-      "Source": "BBC News",
-      "Summary": "As the jury deliberates, this is what we found out during the weeks-long trial with two tech titans at its heart."
-    },
-    {
-      "Title": "US hotel owners expected a World Cup boom - so far it hasn\u0027t happened",
-      "Link": "https://www.bbc.com/news/articles/cn0p2532xn4o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T05:01:55+00:00",
-      "Source": "BBC News",
-      "Summary": "An industry body survey found hotels in World Cup host cities see the tournament as a \u0022non-event\u0022."
-    },
-    {
-      "Title": "Overseas fakers using AI videos to push a narrative of UK decline, BBC finds",
-      "Link": "https://www.bbc.com/news/articles/ckgpyn30dp3o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T05:01:37+00:00",
-      "Source": "BBC News",
-      "Summary": "\u0022Patriotic\u0022 UK anti-immigration social media accounts have been traced to Sri Lanka and Vietnam."
-    },
-    {
-      "Title": "\u0027Don\u0027t swim\u0027 warnings in place at nearly all of England\u0027s official river bathing sites",
-      "Link": "https://www.bbc.com/news/articles/cvgzvqq9345o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T04:13:45+00:00",
-      "Source": "BBC News",
-      "Summary": "Too much bacteria linked to faeces found at almost all England\u0027s designated river bathing sites"
-    },
-    {
-      "Title": "Carano bout to \u0027smash\u0027 women\u0027s fight pay record - Rousey",
-      "Link": "https://www.bbc.com/sport/mixed-martial-arts/articles/clypl0g3j44o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T03:43:06+00:00",
-      "Source": "BBC News",
-      "Summary": "Ronda Rousey says she is \u0022smashing the record\u0022 alongside Gina Carano for the \u0022most women have been paid in combat sports\u0022 and she could become the most powerful figure in MMA since UFC president Dana White."
-    },
-    {
-      "Title": "New Zealand\u0027s M\u0101ori Queen meets King Charles at Buckingham Palace",
-      "Link": "https://www.bbc.com/news/articles/ckgp2vpp70yo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T02:43:58+00:00",
-      "Source": "BBC News",
-      "Summary": "The meeting with the British monarch was Te Arikinui\u0027s first since she became Maori Queen in 2024."
-    },
-    {
-      "Title": "Analysis: Andy Burnham\u0027s route back to Commons is clearer - but can he win in Makerfield?",
-      "Link": "https://www.bbc.com/news/articles/cx21x2rpm12o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T00:17:31+00:00",
-      "Source": "BBC News",
-      "Summary": "The Greater Manchester mayor faces a messy and bitter by-election battle with Reform UK. "
-    },
-    {
-      "Title": "Scheffler shares US PGA lead as McIlroy struggles",
-      "Link": "https://www.bbc.com/sport/golf/articles/cdjp21k8ry2o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T00:17:20+00:00",
-      "Source": "BBC News",
-      "Summary": "As many of the world\u0027s best struggle at the US PGA Championship, Scottie Scheffler - the world\u0027s very best - is among a select few to get change out of Aronimink."
-    },
-    {
-      "Title": "Brutal raid on woman\u0027s birthday party highlights rise of Russian vigilante group",
-      "Link": "https://www.bbc.com/news/articles/cq5p306l7weo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-15T00:04:45+00:00",
-      "Source": "BBC News",
-      "Summary": "The Russkaya Obshina group stages raids to look for activities contravening\n\u0022traditional Russian values\u0022. \n"
-    },
-    {
-      "Title": "UK Eurovision act: The BBC gave me a stress test to check I could cope under pressure",
-      "Link": "https://www.bbc.com/news/articles/clyp6w9ejyko?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T23:44:30+00:00",
-      "Source": "BBC News",
-      "Summary": "\u0022It could go well or completely wrong, I\u0027m just here for the ride,\u0022 says song contest hopeful Sam Battle."
-    },
-    {
-      "Title": "Hundreds of comedians unpaid by one of UK\u0027s biggest comedy festivals",
-      "Link": "https://www.bbc.com/news/articles/czx2ypgwxx7o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T23:35:12+00:00",
-      "Source": "BBC News",
-      "Summary": "Leicester Comedy Festival says it is committed to paying comedians but waiting on money themselves."
-    },
-    {
-      "Title": "Royal finances face a cut. But will much really change?",
-      "Link": "https://www.bbc.com/news/articles/c4g0e92dp6ko?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T23:11:07+00:00",
-      "Source": "BBC News",
-      "Summary": "The monarchy\u2019s finances have long been protected by tradition. Now experts say the public are demanding for more transparency "
-    },
-    {
-      "Title": "AI could put people off tech jobs and hurt the economy, warns Raspberry Pi boss",
-      "Link": "https://www.bbc.com/news/articles/clypr8p2lewo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T23:01:20+00:00",
-      "Source": "BBC News",
-      "Summary": "Eben Upton warns against claims that Artificial Intelligence will destroy vast numbers of computing roles over the coming years."
-    },
-    {
-      "Title": "Australia soars into Eurovision final as UK song debuts",
-      "Link": "https://www.bbc.com/news/articles/c9weyz8nk4ro?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T22:54:09+00:00",
-      "Source": "BBC News",
-      "Summary": "Delta Goodrem is now a favourite to win Eurovision, following a spectacular semi-final performance."
-    },
-    {
-      "Title": "Honda\u0026#8217;s hybrid future starts with new Accord and RDX prototypes",
-      "Link": "https://www.theverge.com/transportation/931044/honda-hybrid-prototypes-accord-acura-rdx",
-      "Published": "2026-05-14T22:46:55+00:00",
-      "Source": "The Verge",
-      "Summary": "Honda revealed prototypes of two new hybrid models, an Accord sedan and the Acura RDX SUV, during its annual business briefing this week, built on a platform that it says will begin launching next year. The RDX was announced earlier this year as Honda\u0027s first SUV to feature the next-gen version of its two-motor hybrid [\u0026#8230;]"
-    },
-    {
-      "Title": "Closing time",
-      "Link": "https://www.theverge.com/ai-artificial-intelligence/931006/musk-v-altman-closing-arguments-analysis",
-      "Published": "2026-05-14T22:21:46+00:00",
-      "Source": "The Verge",
-      "Summary": "Today was closing arguments in the Musk v. Altman trial, and I almost feel bad writing about the unbelievable demolition derby I just witnessed. Steven Molo, Musk\u0027s lawyer, stumbled over his words. He at one point called Greg Brockman - a co-defendant - Greg Altman. He erroneously claimed that Musk wasn\u0027t asking for money and [\u0026#8230;]"
-    },
-    {
-      "Title": "Zack Polanski did not vote in local elections, Green Party says",
-      "Link": "https://www.bbc.com/news/articles/c8e8133xp5eo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T21:55:21+00:00",
-      "Source": "BBC News",
-      "Summary": "The Green Party leader previously told Hackney mayoral candidate Zo\u00EB Garbett \u0022you have my vote\u0022."
-    },
-    {
-      "Title": "Metroid Prime 4: Beyond got its first big discount",
-      "Link": "https://www.theverge.com/gadgets/930875/metroid-prime-4-beyond-nintendo-switch-deal-sale",
-      "Published": "2026-05-14T21:38:45+00:00",
-      "Source": "The Verge",
-      "Summary": "The most graphically-impressive first-person shooter made for the Nintendo Switch is $20 off at Best Buy. Right now, you can buy the physical version of Metroid Prime 4: Beyond for $39.99 ($20 off). The game looks surprisingly good on the 2017 hardware, but runs way better on the Switch 2 with the additional $10 upgrade [\u0026#8230;]"
-    },
-    {
-      "Title": "Meta brings virtual writing to everyone with Meta Ray-Ban Display glasses",
-      "Link": "https://www.theverge.com/tech/930941/meta-ray-ban-display-virtual-neural-handwriting-apps-developer",
-      "Published": "2026-05-14T21:08:46+00:00",
-      "Source": "The Verge",
-      "Summary": "Meta is rolling out new features to its Meta Ray-Ban Display smart glasses, including bringing the ability to write messages just with hand gestures to all users. You\u0027ll be able to use the feature in WhatsApp, Messenger, Instagram and with \u0022native Android and iOS messaging,\u0022 Meta says. The feature, which relies on the Meta Ray-Ban [\u0026#8230;]"
-    },
-    {
-      "Title": "Behold, the Elon Musk jackass trophy",
-      "Link": "https://www.theverge.com/ai-artificial-intelligence/930893/elon-musk-sam-altman-trial-ai-safety-jackass-statue",
-      "Published": "2026-05-14T20:59:23+00:00",
-      "Source": "The Verge",
-      "Summary": "Yesterday, in Musk v. Altman, before the jurors came in, Sam Altman\u0027s team passed up what looked - from a distance - like a little league trophy. It was not. Yvonne Gonzalez Rogers had the lawyers read the inscription aloud for the press: \u0022Never stop being a jackass.\u0022 It\u0027s a commemoration OpenAI employees bought for [\u0026#8230;]"
-    },
-    {
-      "Title": "Leaked images reveal Xbox Elite 3 controller with mysterious new buttons",
-      "Link": "https://www.theverge.com/news/930902/microsoft-xbox-elite-3-controller-leak-images",
-      "Published": "2026-05-14T20:52:19+00:00",
-      "Source": "The Verge",
-      "Summary": "Hours after a smaller Xbox Cloud Gaming controller appeared online, Brazil\u0027s Anatel regulator has also accidentally published images of what appears to be Microsoft\u0027s upcoming Xbox Elite 3 controller. Tecnoblog has posted images that show the successor to the Elite 2 controller, with an interchangeable D-Pad, paddles, and two new mysterious buttons. The Elite 3 [\u0026#8230;]"
-    },
-    {
-      "Title": "Watch: The day Labour\u0027s potential leadership race began to heat up",
-      "Link": "https://www.bbc.com/news/videos/c3w2ngny1v6o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T20:41:36+00:00",
-      "Source": "BBC News",
-      "Summary": "Political turmoil continued in Westminster on Thursday after Health Secretary Wes Streeting resigned Starmer\u0027s government saying he had \u0022lost confidence\u0022 in his leadership."
-    },
-    {
-      "Title": "Sutton\u0027s predictions v Blossoms \u0026 Songer",
-      "Link": "https://www.bbc.com/sport/football/articles/cd6p2n4ydjqo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T20:15:01+00:00",
-      "Source": "BBC News",
-      "Summary": "Chris Sutton takes on indie band Blossoms and rapper Songer plus the BBC readers and AI with his predictions for the FA Cup final and this weekend\u0027s Premier League fixtures."
-    },
-    {
-      "Title": "OpenAI\u2019s Codex is now in the ChatGPT mobile app",
-      "Link": "https://www.theverge.com/ai-artificial-intelligence/930763/openai-codex-chatgpt-ios-android-app-preview",
-      "Published": "2026-05-14T20:00:00+00:00",
-      "Source": "The Verge",
-      "Summary": "OpenAI is going to let users access Codex, its desktop AI tool that can write code and use apps on your computer, from the ChatGPT app on your phone. Following the surge in popularity for Anthropic\u0027s Claude Code, OpenAI has been working quickly to try and catch up, including by cutting back on \u0022side quests,\u0022 [\u0026#8230;]"
-    },
-    {
-      "Title": "Meta\u2019s summer sale drops Ray-Ban\u2019s new smart glasses to record-low prices",
-      "Link": "https://www.theverge.com/gadgets/930785/meta-smart-glasses-gen-1-2-deal-sale",
-      "Published": "2026-05-14T19:44:17+00:00",
-      "Source": "The Verge",
-      "Summary": "If you\u2019ve been curious about Ray-Ban\u2019s Meta smart glasses, right now they\u2019re on sale in Meta\u2019s biggest deal event outside Black Friday. As part of the company\u2019s Summer Sale event, which runs through May 26th, the original model is on sale starting at $224.25 ($74 off) at Amazon, Best Buy, and directly from Meta, matching [\u0026#8230;]"
-    },
-    {
-      "Title": "Andy Burnham makes his move",
-      "Link": "https://www.bbc.co.uk/sounds/play/p0nkrkk0?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T19:28:00+00:00",
-      "Source": "BBC News",
-      "Summary": "Andy Burnham targets Westminster return \u0026 Wes Streeting resigns"
-    },
-    {
-      "Title": "Microsoft starts canceling Claude Code licenses",
-      "Link": "https://www.theverge.com/tech/930447/microsoft-claude-code-discontinued-notepad",
-      "Published": "2026-05-14T19:00:00+00:00",
-      "Source": "The Verge",
-      "Summary": "Microsoft first started opening up access to Claude Code in December, inviting thousands of its own developers to use Anthropic\u0027s AI coding tool daily. It was part of an effort to get project managers, designers, and other employees to experiment with coding for the first time, and sources tell me that Claude Code has proved [\u0026#8230;]"
-    },
-    {
-      "Title": "Linux devs are fighting the new age-gated internet",
-      "Link": "https://www.theverge.com/tech/930573/age-verification-bills-linux-open-source",
-      "Published": "2026-05-14T18:58:00+00:00",
-      "Source": "The Verge",
-      "Summary": "In January, Colorado lawmakers introduced a proposal to make operating systems collect users\u0027 ages and pass them to app developers. The bill, SB26-051, had clearly been designed for commercial platforms like iOS and Android - one of numerous plans to age-gate the internet through users\u0027 devices. It was intended to provide information that would let [\u0026#8230;]"
-    },
-    {
-      "Title": "\u0027She is strong and kind\u0027: How Italians have reacted to Catherine on her trip",
-      "Link": "https://www.bbc.com/news/articles/cd0pd8592ego?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T18:29:05+00:00",
-      "Source": "BBC News",
-      "Summary": "The Princess of Wales shone in front of large crowds in Reggio Emilia on the final day of her tour."
-    },
-    {
-      "Title": "Farage says \u00A35m gift a reward for Brexit campaigning",
-      "Link": "https://www.bbc.com/news/articles/c072prlxlddo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T18:12:49+00:00",
-      "Source": "BBC News",
-      "Summary": "The Reform UK leader, who is facing a Commons standards probe, said he \u0022cannot be bought by anybody\u0022."
-    },
-    {
-      "Title": "Andy Burnham: \u0027King of the North\u0027 with eyes on the top job",
-      "Link": "https://www.bbc.com/news/articles/cp8pml5z8p6o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T17:59:15+00:00",
-      "Source": "BBC News",
-      "Summary": "The Greater Manchester mayor is lining up a third attempt to be Labour leader - but must get back to Westminster first."
-    },
-    {
-      "Title": "Weekly quiz: Which animal delivered the King\u0027s birthday card to Sir David Attenborough?",
-      "Link": "https://www.bbc.com/news/articles/cwy2pzpgerzo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T17:25:07+00:00",
-      "Source": "BBC News",
-      "Summary": "How much attention did you pay to what happened in the world over the past seven days?"
-    },
-    {
-      "Title": "Key excerpts from Streeting\u0027s resignation letter as he quits as health secretary",
-      "Link": "https://www.bbc.com/news/articles/c626wvqy1yzo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T17:08:26+00:00",
-      "Source": "BBC News",
-      "Summary": "He quits as health secretary after days of speculation that he is preparing to launch a leadership challenge against Sir Keir Starmer."
-    },
-    {
-      "Title": "Play-off final may be delayed by Spygate hearing",
-      "Link": "https://www.bbc.com/sport/football/articles/cyv2nl9vl72o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T16:35:02+00:00",
-      "Source": "BBC News",
-      "Summary": "The Championship play-off final may not go ahead on Saturday, 23 May as the EFL investigates the Spygate scandal surrounding finalists Southampton. "
-    },
     {
       "Title": "Senior IS leader killed by US and Nigerian forces",
       "Link": "https://www.bbc.com/news/articles/cy72p2kpd03o?at_medium=RSS\u0026at_campaign=rss",
@@ -583,20 +289,6 @@
       "Summary": "Are you the ultimate Eurovision superfan? Take our quiz to find out"
     },
     {
-      "Title": "Giant new dinosaur identified from fossils in Thailand",
-      "Link": "https://www.bbc.com/news/articles/cx21pk5g20ro?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T17:28:56+00:00",
-      "Source": "BBC News",
-      "Summary": "The nagatitan is the largest dinosaur found in South-East Asia and weighs as much as nine elephants."
-    },
-    {
-      "Title": "New bypass named Pork Pie Way in \u2018defining moment for Melton Mowbray\u2019",
-      "Link": "https://www.bbc.com/news/articles/c8e81wrp04go?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T15:51:44+00:00",
-      "Source": "BBC News",
-      "Summary": "Animal rights charity Peta says the name for the new road was \u0022pig-demeaning\u0022."
-    },
-    {
       "Title": "Riot police deal with \u0027serious disorder\u0027 as Celtic fans celebrate Premiership title win",
       "Link": "https://www.bbc.com/news/articles/c5yegmxv883o?at_medium=RSS\u0026at_campaign=rss",
       "Published": "2026-05-17T08:45:30+00:00",
@@ -833,13 +525,6 @@
       "Published": "2026-05-15T15:06:00+00:00",
       "Source": "BBC News",
       "Summary": "Has America\u2019s largest state become ungovernable?"
-    },
-    {
-      "Title": "Painting by Dame Judi Dench raises thousands for charity",
-      "Link": "https://www.bbc.com/news/articles/cwy20j5599lo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-05-14T10:19:21+00:00",
-      "Source": "BBC News",
-      "Summary": "The painting by Dame Judi Dench, patron of the Yvonne Arnaud Theatre sells for almost \u00A37,000. "
     },
     {
       "Title": "HS2 failings blamed on high-speed focus and political pressure ",
@@ -2723,6 +2408,216 @@
       "Published": "2026-05-18T16:58:49+00:00",
       "Source": "BBC News",
       "Summary": "The presenter says the loss of a pet can be as significant as human loss."
+    },
+    {
+      "Title": "Premier League predictions - how accurate were BBC Sport pundits?",
+      "Link": "https://www.bbc.com/sport/football/articles/c1j27y7leelo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T08:55:21+00:00",
+      "Source": "BBC News",
+      "Summary": "Last summer, 33 BBC pundits - plus AI and Opta\u0027s \u0027supercomputer\u0027 were asked to pick which teams would finish in the Premier League\u0027s top four, and in which order. How did they get on?"
+    },
+    {
+      "Title": "Oil prices slide on hopes of US-Iran peace deal",
+      "Link": "https://www.bbc.com/news/articles/c809m7g29r7o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T08:38:44+00:00",
+      "Source": "BBC News",
+      "Summary": "Trump said on Saturday that an agreement would include the reopening of the Strait of Hormuz, without giving further details."
+    },
+    {
+      "Title": "Rubio says \u0027solid\u0027 Iran deal may come on Monday",
+      "Link": "https://www.bbc.com/news/articles/cglpp2yk336o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T08:28:12+00:00",
+      "Source": "BBC News",
+      "Summary": "The deal under discussion would involve a 60-day ceasefire extension during which the Strait of Hormuz would be reopened, US media reports."
+    },
+    {
+      "Title": "Education secretary to ask competition watchdog to review hidden childcare costs",
+      "Link": "https://www.bbc.com/news/articles/c4g7d6ngjldo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T08:13:07+00:00",
+      "Source": "BBC News",
+      "Summary": "Bridget Phillipson will ask the competition watchdog to examine costs that families are still facing in government-funded childcare."
+    },
+    {
+      "Title": "Goodbye Salah and Pep, hello new champions - the Premier League in review",
+      "Link": "https://www.bbc.com/sport/football/articles/cx2136mx2m2o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T08:10:33+00:00",
+      "Source": "BBC News",
+      "Summary": "BBC Sport chief football writer Phil McNulty reviews every team\u0027s Premier League - and looks back at his pre-season predictions."
+    },
+    {
+      "Title": "Former SNP chief executive Peter Murrell at court to face embezzlement charge",
+      "Link": "https://www.bbc.com/news/articles/c4g4q7yl3kno?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T08:05:52+00:00",
+      "Source": "BBC News",
+      "Summary": "It emerged earlier this year that he has been accused of embezzling \u00A3459,000 from the party over more than 12 years."
+    },
+    {
+      "Title": "Anger grows after China\u0027s deadliest coal mining disaster in years",
+      "Link": "https://www.bbc.com/news/articles/c893543gn20o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T08:00:35+00:00",
+      "Source": "BBC News",
+      "Summary": "On China\u0027s tightly-controlled internet, people are calling for justice and questioning how this happened.  "
+    },
+    {
+      "Title": "First Hong Kong astronaut launches into space onboard Chinese mission",
+      "Link": "https://www.bbc.com/news/articles/cn7p87r56mgo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T06:52:59+00:00",
+      "Source": "BBC News",
+      "Summary": " The 43-year-old police officer and mother of three serves as the team\u0027s payload scientist."
+    },
+    {
+      "Title": "Body found after boy, 15, went missing in lake",
+      "Link": "https://www.bbc.com/news/articles/cp8pdd4833po?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T06:42:18+00:00",
+      "Source": "BBC News",
+      "Summary": "The boy was seen getting into difficulty at Swanholme Lakes in Lincoln earlier, police say."
+    },
+    {
+      "Title": "Americast",
+      "Link": "https://www.bbc.co.uk/sounds/play/p0nmv22y?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T06:00:00+00:00",
+      "Source": "BBC News",
+      "Summary": "An interview with author and professor, Scott Galloway"
+    },
+    {
+      "Title": "The Papers: \u0027I don\u0027t make bad deals\u0027 and \u0027Now you\u0027re Gunner believe us\u0027",
+      "Link": "https://www.bbc.com/news/articles/c0j26l1e5ljo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T04:09:58+00:00",
+      "Source": "BBC News",
+      "Summary": "US-Iran negotiations and Arsenal\u0027s win of the Premier League lead Monday\u0027s front pages."
+    },
+    {
+      "Title": "Starmer \u0027appalled\u0027 by case of boys spared jail after raping teenage girls",
+      "Link": "https://www.bbc.com/news/articles/c332ljdkd81o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T02:15:36+00:00",
+      "Source": "BBC News",
+      "Summary": "The prime minister said it was \u0022right\u0022 that the sentences were being urgently reviewed."
+    },
+    {
+      "Title": "How Saudi Arabia\u0027s spending spree reached the end of the line",
+      "Link": "https://www.bbc.com/news/articles/cx21g0828reo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T01:08:39+00:00",
+      "Source": "BBC News",
+      "Summary": "MBS\u0027s Vison 2030 project seemed the stuff of science fiction. Now reality has bitten"
+    },
+    {
+      "Title": "The title battle finally came alive - then Antonelli took control",
+      "Link": "https://www.bbc.com/sport/formula1/articles/czr2ed3zrr5o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T00:59:57+00:00",
+      "Source": "BBC News",
+      "Summary": "The Formula 1 title battle caught light in Canada - but then took a potentially decisive turn, writes Andrew Benson."
+    },
+    {
+      "Title": "The rise of the multi-job workforce",
+      "Link": "https://www.bbc.com/news/articles/c70vwr8z7pyo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T00:26:38+00:00",
+      "Source": "BBC News",
+      "Summary": "More people are taking second jobs as rising costs and insecure work reshape how we earn a living. "
+    },
+    {
+      "Title": "Beer boom goes flat as breweries call last orders",
+      "Link": "https://www.bbc.com/news/articles/c9werp5keqlo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-25T00:21:24+00:00",
+      "Source": "BBC News",
+      "Summary": "The UK\u0027s brewery scene is shrinking as pubs close, costs rise and drinking habits change."
+    },
+    {
+      "Title": "Morocco wants tourists to visit Western Sahara. Some say it\u0027s tightening its control",
+      "Link": "https://www.bbc.com/news/articles/cvgldqk4w95o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-24T23:13:50+00:00",
+      "Source": "BBC News",
+      "Summary": "The Moroccan government wants more Western holidaymakers to visit the territory it claims to own."
+    },
+    {
+      "Title": "Olivia Dean brings the curtain down on Radio 1\u0027s Big Weekend with \u0027magic\u0027 set",
+      "Link": "https://www.bbc.com/news/articles/c5yex3j7v72o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-24T22:24:29+00:00",
+      "Source": "BBC News",
+      "Summary": "The British pop star has closed out a star-studded line-up at Big Weekend, which also included Fatboy Slim and Zara Larsson."
+    },
+    {
+      "Title": "\u0027A big ask\u0027 in Paris - will a stronger Raducanu emerge at Wimbledon?",
+      "Link": "https://www.bbc.com/sport/tennis/articles/c202q242lnyo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-24T22:07:45+00:00",
+      "Source": "BBC News",
+      "Summary": "Emma Raducanu\u0027s French Open first-round defeat was not unexpected, but the nature of it may have left her wishing she had stayed at home."
+    },
+    {
+      "Title": "RAF jet carrying defence secretary has signal jammed near Russian border",
+      "Link": "https://www.bbc.com/news/articles/clyp0jrxv7ro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-24T21:30:13+00:00",
+      "Source": "BBC News",
+      "Summary": "Pilots on board had to use a different navigation system while the plane\u0027s GPS was disabled."
+    },
+    {
+      "Title": "She was told to marry in a country which bans girls\u0027 education. So she got in a taxi and fled",
+      "Link": "https://www.bbc.com/news/articles/ce3pgn48wnqo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-24T21:02:08+00:00",
+      "Source": "BBC News",
+      "Summary": "Nearly five years on from Afghanistan\u0027s school ban, young women say they have waved goodbye to their dreams."
+    },
+    {
+      "Title": "Girls Aloud star Nicola Roberts announces birth of baby girl",
+      "Link": "https://www.bbc.com/news/articles/cvgz35e8xm3o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-24T19:53:56+00:00",
+      "Source": "BBC News",
+      "Summary": "The Girls Aloud singer said in an Instagram post that becoming a mother was \u0022heaven on earth\u0022."
+    },
+    {
+      "Title": "What happens now at relegated West Ham?",
+      "Link": "https://www.bbc.com/sport/football/articles/cvgz1zl14k3o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-24T19:19:40+00:00",
+      "Source": "BBC News",
+      "Summary": "West Ham\u0027s 14-year stay in the Premier League is over - but what changes lie ahead as they prepare for life in the Championship?"
+    },
+    {
+      "Title": "\u0027Spurs avoid humiliation but elation of fans will soon turn to anger\u0027",
+      "Link": "https://www.bbc.com/sport/football/articles/c5y7j7752ppo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-24T19:19:39+00:00",
+      "Source": "BBC News",
+      "Summary": "Tottenham Hotspur\u0027s celebrations in survival cannot cover up their embarrassment of a season that almost ended in the unthinkable, says chief football writer Phil McNulty."
+    },
+    {
+      "Title": "EasyJet flight diverts to Rome over power bank in luggage",
+      "Link": "https://www.bbc.com/news/articles/cg7p3pdl8m7o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-24T19:10:32+00:00",
+      "Source": "BBC News",
+      "Summary": "Many airlines have toughened their rules on power banks, often requiring that they be stored in hand luggage not checked luggage."
+    },
+    {
+      "Title": "The Louise Casey Interview (Live at Hay Festival)",
+      "Link": "https://www.bbc.co.uk/sounds/play/p0nmrhlr?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-05-24T15:54:00+00:00",
+      "Source": "BBC News",
+      "Summary": "Baroness Casey on violence against girls and whether governments take reviews seriously."
+    },
+    {
+      "Title": "On Trails is a wandering tale that blends hiking, science, and history",
+      "Link": "https://www.theverge.com/entertainment/936860/robert-moor-on-trails-book-review",
+      "Published": "2026-05-24T15:15:00+00:00",
+      "Source": "The Verge",
+      "Summary": "Hiking is one of life\u0027s great joys. Turning off the screens and stepping out into nature for an extended period of time, perhaps even several days, is rejuvenating. Unfortunately, as someone with two young kids and a bad back, I\u0027m not really able to go backpacking anymore. So I often find myself trying to live [\u0026#8230;]"
+    },
+    {
+      "Title": "Apple\u2019s latest MacBook Air is $200 off in both sizes for Memorial Day",
+      "Link": "https://www.theverge.com/gadgets/936610/apple-macbook-air-m5-memorial-day-2026-deal-sale",
+      "Published": "2026-05-24T15:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "If you\u2019re looking for a laptop that\u2019ll still perform well several years from now, Apple\u2019s latest MacBook Air is hard to beat. Now, in particular, is a good time to pick one up, as you can currently buy the 13-inch MacBook Air at Amazon in the run-up to Memorial Day with an M5 chip, 16GB [\u0026#8230;]"
+    },
+    {
+      "Title": "Hackers are learning to exploit chatbot \u0026#8216;personalities\u0026#8217;",
+      "Link": "https://www.theverge.com/column/935545/hackers-ai-chatbots",
+      "Published": "2026-05-24T12:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "This is The Stepback, a weekly newsletter breaking down one essential story from the tech world. For more on AI mischief, follow Robert Hart. The Stepback arrives in our subscribers\u0027 inboxes at 8AM ET. Opt in for The Stepback here. How it started Hacking the first generation of AI chatbots was a laughably simple affair. [\u0026#8230;]"
+    },
+    {
+      "Title": "Why Nuro thinks being a robotaxi \u2018second mover\u2019 gives it an advantage",
+      "Link": "https://www.theverge.com/transportation/936126/nuro-robotaxi-dave-ferguson-interview-uber-lucid-waymo",
+      "Published": "2026-05-24T11:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "Waymo is the undisputed leader in the robotaxi space, operating a fleet of over 3,000 driverless cars in at least 10 cities across the US. A number of companies, including Tesla, Zoox, Avride, and Motional, are racing to catch up with the Alphabet-owned firm. But what if being No. 2 was actually better? Nuro, the [\u0026#8230;]"
     }
   ],
   "Prices": []
