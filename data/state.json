@@ -1,69 +1,6 @@
 {
-  "LastDigestUtc": "2026-08-07T08:58:24.890356+00:00",
+  "LastDigestUtc": "2026-08-08T08:40:37.1783197+00:00",
   "CacheNews": [
-    {
-      "Title": "Schools to offer technical subjects from age 14 in England, Burnham says",
-      "Link": "https://www.bbc.co.uk/news/articles/cj4k2djd5qpo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T10:25:52+00:00",
-      "Source": "BBC News",
-      "Summary": "The government wants pupils to take courses like AI and manufacturing which are linked to local jobs."
-    },
-    {
-      "Title": "Reform UK reports Zack Polanski to police over guillotine T-shirt post",
-      "Link": "https://www.bbc.co.uk/news/articles/c5y063yqlleo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T10:23:46+00:00",
-      "Source": "BBC News",
-      "Summary": "The post included a photo of a man wearing a top featuring the name \u0022Nigel\u0022 alongside an image of a guillotine."
-    },
-    {
-      "Title": "Naga Munchetty to leave BBC Breakfast after 17 years",
-      "Link": "https://www.bbc.co.uk/news/articles/cn0ngrpp2p5o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T10:16:37+00:00",
-      "Source": "BBC News",
-      "Summary": "The BBC One show\u0027s co-host will swap the TV sofa for the presenter\u0027s chair on Radio 5 Live Breakfast."
-    },
-    {
-      "Title": "Badenoch calls for emergency legislation to stop early release scheme",
-      "Link": "https://www.bbc.co.uk/news/articles/cjwxvw5ppw0o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T10:01:59+00:00",
-      "Source": "BBC News",
-      "Summary": "Last week Andy Burnham announced he was pausing early release plans for September after backlash from survivors and victims."
-    },
-    {
-      "Title": "Odyssey translator writes scathing review of Nolan film adaptation",
-      "Link": "https://www.bbc.co.uk/news/articles/cd692n215ndo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T09:45:10+00:00",
-      "Source": "BBC News",
-      "Summary": "The film has won rave reviews from film critics but a translator of Homer\u0027s work was less than impressed."
-    },
-    {
-      "Title": "US walks out of UN Security Council meeting during France\u0027s remarks",
-      "Link": "https://www.bbc.co.uk/news/articles/c87nj3w9gxjo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T09:32:25+00:00",
-      "Source": "BBC News",
-      "Summary": "The row sparked after the US joined North Korea and Russia in voting against extending the term of the UN high commissioner for human rights. "
-    },
-    {
-      "Title": "Local match goes viral over \u0027finger-clicking\u0027 cheating claim",
-      "Link": "https://www.bbc.co.uk/sport/cricket/articles/c86n10548yeo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T09:11:45+00:00",
-      "Source": "BBC News",
-      "Summary": "A viral video appears to show a fielder in a local match clicking his fingers as the ball passes the bat, before the batter is given out caught behind."
-    },
-    {
-      "Title": "Hugging Face is being used to easily undress women and children",
-      "Link": "https://www.theverge.com/ai-artificial-intelligence/971723/hugging-face-nudify-deepfake-undress-women-children",
-      "Published": "2026-07-28T09:07:14+00:00",
-      "Source": "The Verge",
-      "Summary": "Hugging Face is being used to make nonconsensual deepfakes, and the popular open-source AI model repository is doing very little to prevent it. That\u0027s according to a new report published by the European nonprofit AI Forensics, which found that seven out of the top nine image editing models hosted by Hugging Face readily complied with [\u0026#8230;]"
-    },
-    {
-      "Title": "Zinedine Zidane confirmed as new France manager",
-      "Link": "https://www.bbc.co.uk/sport/football/articles/cpd741qn2y9o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T09:03:49+00:00",
-      "Source": "BBC News",
-      "Summary": "Former Real Madrid manager Zinedine Zidane has been confirmed as the head coach of the France national team."
-    },
     {
       "Title": "Russia charges Telegram founder Durov with facilitating terrorism",
       "Link": "https://www.bbc.co.uk/news/articles/cj4kexqkpzno?at_medium=RSS\u0026at_campaign=rss",
@@ -105,237 +42,6 @@
       "Published": "2026-07-29T08:49:27+00:00",
       "Source": "BBC News",
       "Summary": "The out-of-control AI found four logins which allowed it to access multiple unnamed online services."
-    },
-    {
-      "Title": "Ticket prices set to rise by 15p as Heathrow able to recover runway project money",
-      "Link": "https://www.bbc.co.uk/news/articles/cdx8ke9gpnko?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T08:22:53+00:00",
-      "Source": "BBC News",
-      "Summary": "UK airport gets green light to charge airlines more to use the hub, which is expected to mean higher fares for flyers."
-    },
-    {
-      "Title": "BTS withdraw from Grammys, a month after Asian pop prize introduced",
-      "Link": "https://www.bbc.co.uk/news/articles/clyjgyd0225o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T08:16:15+00:00",
-      "Source": "BBC News",
-      "Summary": "All seven members of the band post a statement online, saying they will boycott the 2027 ceremony."
-    },
-    {
-      "Title": "Five things we\u0027ve learned from first half of F1 season",
-      "Link": "https://www.bbc.co.uk/sport/formula1/articles/clyj898j2p0o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T07:29:19+00:00",
-      "Source": "BBC News",
-      "Summary": "BBC F1 correspondent Andrew Benson analyses the five key things we\u0027ve learned from the 2026 season so far."
-    },
-    {
-      "Title": "Grealish misses Man City tour despite training return",
-      "Link": "https://www.bbc.co.uk/sport/football/articles/cdx8kx5941no?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T07:26:32+00:00",
-      "Source": "BBC News",
-      "Summary": "Jack Grealish will not make his return in a Manchester City shirt after being left out of the club\u0027s pre-season tour of Asia as he continues to recover from a foot injury."
-    },
-    {
-      "Title": "Diomande\u0027s rapid and remarkable rise to Real Madrid",
-      "Link": "https://www.bbc.co.uk/sport/football/articles/cm2g3dd2jxko?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T06:28:17+00:00",
-      "Source": "BBC News",
-      "Summary": "Yan Diomande has quickly gone from being a relatively unknown winger to the brink of becoming Real Madrid\u0027s record signing."
-    },
-    {
-      "Title": "\u0027I thought I would die\u0027: Survivors describe shock and horror of powerful Japan earthquake",
-      "Link": "https://www.bbc.co.uk/news/articles/cvgw52l5kyyo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T06:07:26+00:00",
-      "Source": "BBC News",
-      "Summary": "Rescue operations are ongoing following the 6.8-magnitude quake, as survivors wrestle with the shock."
-    },
-    {
-      "Title": "Unauthorised airport car park grows  despite stop notice",
-      "Link": "https://www.bbc.co.uk/news/articles/cn8ngxw5195o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T05:12:15+00:00",
-      "Source": "BBC News",
-      "Summary": "Customers says they returned from their holidays to find their cars damaged and dirty. "
-    },
-    {
-      "Title": "Amelia Dimoldenberg: I wouldn\u0027t invite Andy Burnham on Chicken Shop Date - but I\u0027d love a chat",
-      "Link": "https://www.bbc.co.uk/news/articles/c8rng7pm212o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T05:02:05+00:00",
-      "Source": "BBC News",
-      "Summary": "The YouTube star on helping young creatives, and who she wants (and doesn\u2019t want) on her show."
-    },
-    {
-      "Title": "Thousands sheltering in key Sudan city under threat again as fighting escalates",
-      "Link": "https://www.bbc.co.uk/news/articles/c4gx399l0wyo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T05:01:46+00:00",
-      "Source": "BBC News",
-      "Summary": "International leaders have issued warnings the RSF may be preparing to attack the city, raising fears of further atrocities being committed. "
-    },
-    {
-      "Title": "\u0027Israeli settlers laid siege to our home\u0027: Inside a Palestinian village under weekly attack",
-      "Link": "https://www.bbc.co.uk/news/articles/clyxgn37lg5o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T05:01:12+00:00",
-      "Source": "BBC News",
-      "Summary": "A home on the edge of al-Mughayyir has become a weekly frontline in the battle for the occupied West Bank."
-    },
-    {
-      "Title": "Night terrors, flashbacks and panic attacks - former police reveal trauma",
-      "Link": "https://www.bbc.co.uk/news/articles/c4gjqy7lrx5o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T05:01:04+00:00",
-      "Source": "BBC News",
-      "Summary": "The Home Office says it will expand support for officers exposed to trauma from policing."
-    },
-    {
-      "Title": "Four women accuse Jared Leto of criminal sexual conduct when they were teenagers",
-      "Link": "https://www.bbc.co.uk/news/articles/cd7lg2nz2x2o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T05:00:07+00:00",
-      "Source": "BBC News",
-      "Summary": "The actor and musician faces allegations from 10 women in total who say he mistreated them as teenagers."
-    },
-    {
-      "Title": "Wildfires in south-west France flare up as region braces for new 40C heatwave",
-      "Link": "https://www.bbc.co.uk/news/articles/c5yd8gly1ydo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T04:43:36+00:00",
-      "Source": "BBC News",
-      "Summary": "Firefighters are braced for a sharp rise in temperatures on Wednesday, which could complicate the containment of wildfires in Gironde."
-    },
-    {
-      "Title": "Trump administration bans new Chinese humanoid robots",
-      "Link": "https://www.bbc.co.uk/news/articles/cp9e2ex3ekyo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T02:30:50+00:00",
-      "Source": "BBC News",
-      "Summary": "The US and China are locked in a race to the lead the world in robotics and artificial intelligence."
-    },
-    {
-      "Title": "Polanski says guillotine re-post was mistake but refuses to apologise ",
-      "Link": "https://www.bbc.co.uk/news/articles/c89np278qwvo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T00:49:40+00:00",
-      "Source": "BBC News",
-      "Summary": "The Green leader re-posted a photo of a man wearing a guillotine t-shirt and the name Nigel."
-    },
-    {
-      "Title": "The evidence that shows today\u0027s 20-somethings really do have it worse than previous generations",
-      "Link": "https://www.bbc.co.uk/news/articles/cy8mnvk4r48o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T23:52:23+00:00",
-      "Source": "BBC News",
-      "Summary": "People in their 20s are facing a tougher start to adulthood than any generation in almost half a century, according to analysis for the BBC."
-    },
-    {
-      "Title": "Amber heat health alerts to come into force as heatwave reaches 35C peak",
-      "Link": "https://www.bbc.co.uk/weather/articles/cgq534n0w85o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T23:50:34+00:00",
-      "Source": "BBC News",
-      "Summary": "Wednesday is set to be the hottest day of the week for many as a widespread fourth heatwave grips the UK."
-    },
-    {
-      "Title": "How Mexican drug cartels have outsourced meth labs to Nigeria",
-      "Link": "https://www.bbc.co.uk/news/articles/crmrnxp4nllo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T23:25:53+00:00",
-      "Source": "BBC News",
-      "Summary": "West Africa is becoming increasingly attractive to those who want to make and export illicit drugs."
-    },
-    {
-      "Title": "Brits urged to avoid dangerous plug adaptors this summer - what to watch out for",
-      "Link": "https://www.bbc.co.uk/news/articles/c5yeg1wegpno?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T23:00:15+00:00",
-      "Source": "BBC News",
-      "Summary": "Campaign group Electrical Safety First has urged those \u0022heading abroad this summer to think before they buy\u0022."
-    },
-    {
-      "Title": "\u0027Don\u0027t wait until you want revenge\u0027 - why prenups are on the rise",
-      "Link": "https://www.bbc.co.uk/news/articles/cgmkgvy3lv4o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T23:00:07+00:00",
-      "Source": "BBC News",
-      "Summary": "More young couples are now signing prenups to set out who gets what in the event of divorce."
-    },
-    {
-      "Title": "The US is banning foreign robots",
-      "Link": "https://www.theverge.com/tech/972259/us-foreign-robots-power-inverter-ban",
-      "Published": "2026-07-28T22:37:53+00:00",
-      "Source": "The Verge",
-      "Summary": "The US government is targeting China with a new import ban on \u0022advanced robotic devices\u0022 and power inverters made in foreign countries, as reported earlier by Reuters. In an announcement on Tuesday, the Federal Communications Commission says the ban will include \u0022mobile\u0022 robots, such as humanoid and quadruped models - but it is not limited [\u0026#8230;]"
-    },
-    {
-      "Title": "I turned down Love Island and won silver at the Commonwealth Games",
-      "Link": "https://www.bbc.co.uk/news/articles/cg4dve90w90o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T22:10:02+00:00",
-      "Source": "BBC News",
-      "Summary": "Katie Shanahan was offered the chance to appear on the dating show last year - but decided she wanted to inspire a new generation of young swimmers."
-    },
-    {
-      "Title": "Ariana Grande is suing the hackers who\u0026#8217;ve been leaking her songs and videos for years",
-      "Link": "https://www.theverge.com/entertainment/972233/ariana-grande-hacking-lawsuit",
-      "Published": "2026-07-28T21:48:50+00:00",
-      "Source": "The Verge",
-      "Summary": "Ariana Grande filed a lawsuit on Monday in the Los Angeles County Superior Court against the currently unidentified hackers who allegedly stole and leaked private content. It aims to \u0022uncover the identities of these currently unknown and unscrupulous individuals,\u0022 referred to as \u0022John Doe 1 and John Does 2 through 100.\u0022 The lawsuit also says [\u0026#8230;]"
-    },
-    {
-      "Title": "The union drive at the Wikimedia Foundation is expanding",
-      "Link": "https://www.theverge.com/news/972182/wikipedia-wikimedia-foundation-union-editor-strike",
-      "Published": "2026-07-28T21:11:11+00:00",
-      "Source": "The Verge",
-      "Summary": "In June, UK staff at the nonprofit that runs Wikipedia became the first to announce their intention to form a union. Now, US-based employees at the Wikimedia Foundation are joining the union drive, but management at the nonprofit has declined to voluntarily recognize their union. \u0022While the Wikimedia Foundation touts to the public that they [\u0026#8230;]"
-    },
-    {
-      "Title": "eBay\u0026#8217;s bizarre cyberstalking saga ends with a $56 million settlement",
-      "Link": "https://www.theverge.com/tech/972209/ebay-cyberstalking-harassment-settlement",
-      "Published": "2026-07-28T21:11:11+00:00",
-      "Source": "The Verge",
-      "Summary": "eBay and three former executives will pay $55.7 million as part of a settlement with a Massachusetts couple targeted with a bizarre harassment and cyberstalking campaign in 2019, as reported earlier by CNBC. The settlement will resolve a lengthy legal saga that revealed how eBay\u0027s former executives sent live insects, a bloody pig mask, a [\u0026#8230;]"
-    },
-    {
-      "Title": "Villa offer glimpse into future despite friendly loss",
-      "Link": "https://www.bbc.co.uk/sport/football/articles/cg4dv0qyvzvo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T20:47:11+00:00",
-      "Source": "BBC News",
-      "Summary": "Youngsters Brian Madjo and George Hemmings scored in Aston Villa\u0027s defeat to Real Sociedad."
-    },
-    {
-      "Title": "AI leaders sign a statement asking the government to do something about automated AI",
-      "Link": "https://www.theverge.com/ai-artificial-intelligence/972161/ai-leaders-us-government-openai-anthropic-google-meta",
-      "Published": "2026-07-28T19:46:43+00:00",
-      "Source": "The Verge",
-      "Summary": "Employees of OpenAI and Anthropic, as well as Google, Meta, Thinking Machines, Microsoft, Mistral, and other leading AI labs, have written a statement to the US government supporting a potential slowdown of sorts for frontier AI development - or at least a speed-up of global coordinated governance efforts. \u0022Al could help create a dramatically better [\u0026#8230;]"
-    },
-    {
-      "Title": "Is it illegal to trick the US government into wiping your phone during a questionably legal search?",
-      "Link": "https://www.theverge.com/report/972146/cbp-phone-search-airport-duress-password",
-      "Published": "2026-07-28T19:35:00+00:00",
-      "Source": "The Verge",
-      "Summary": "A Georgia man was charged with a felony for allegedly wiping his phone while being questioned by Customs and Border Protection. Samuel Tunick had something in common with others who have had their devices searched at airports: He was an activist. Unlike others who have had their phones seized with no explanation, Tunick was told [\u0026#8230;]"
-    },
-    {
-      "Title": "AI\u2019s finally expensive enough to make Wall Street nervous",
-      "Link": "https://www.theverge.com/ai-artificial-intelligence/972119/ai-stock-fall-google-capex",
-      "Published": "2026-07-28T19:33:03+00:00",
-      "Source": "The Verge",
-      "Summary": "It\u0027s earnings season, and investors got an unpleasant surprise from Google: an increase on its spending estimate, to as much as $205 billion - from the last quarter\u0027s projection of up to $190 billion. Even the lower end of Google\u0027s new projected range - $195 billion - is much more than the company had previously [\u0026#8230;]"
-    },
-    {
-      "Title": "This comfy gaming headset that can play audio from two sources is $25",
-      "Link": "https://www.theverge.com/gadgets/972021/epos-h3-hybrid-wired-gaming-headset-deal-sale",
-      "Published": "2026-07-28T19:18:15+00:00",
-      "Source": "The Verge",
-      "Summary": "While most gaming headsets have moved towards low-latency wireless connections, there\u2019s something to be said for a budget-friendly, capable wired headset. The EPOS H3 Hybrid is on sale for just $24.99 at Woot, a whopping 75 percent off its original price of $99.99. It has an unorthodox batch of features: USB-A and 3.5mm options for [\u0026#8230;]"
-    },
-    {
-      "Title": "Logitech will pull a Nintendo \u2014 only European mice will come with replaceable batteries",
-      "Link": "https://www.theverge.com/tech/971963/logitech-user-replacable-batteries-europe",
-      "Published": "2026-07-28T19:12:48+00:00",
-      "Source": "The Verge",
-      "Summary": "In June, Nintendo announced a new version of the Switch 2 that should let you easily replace its battery pack - but only for Europe. Logitech will do much the same. User-replaceable batteries will be the law in Europe in February 2027, but instead of bringing them to the rest of the world, Logitech plans [\u0026#8230;]"
-    },
-    {
-      "Title": "Apple won\u2019t turn on any \u2018restricted mode\u2019 for missed lease payments",
-      "Link": "https://www.theverge.com/tech/972063/apple-upgrade-program-no-restricted-mode",
-      "Published": "2026-07-28T18:43:57+00:00",
-      "Source": "The Verge",
-      "Summary": "Apple says it won\u0027t limit the capabilities of devices leased through its new Upgrade program if you miss a payment. In an emailed statement to The Verge, Apple spokesperson Brian Bumbery says, \u0022There will be no restricted mode and/or there will be no limitations put on device functionality due to missed payments or default with [\u0026#8230;]"
-    },
-    {
-      "Title": "Are Apprenticeships The Answer To Youth Unemployment?",
-      "Link": "https://www.bbc.co.uk/sounds/play/p0p13746?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T16:11:00+00:00",
-      "Source": "BBC News",
-      "Summary": "Burnham outlines education reforms with technical subjects available from age 14."
     },
     {
       "Title": "Joe Root returns as England Test cricket captain with Stephen Fleming named head coach",
@@ -870,13 +576,6 @@
       "Summary": "Fast moving Suffolk wildfire \u0022is not yet under control\u0022 as major incident declared."
     },
     {
-      "Title": "New documentary uncovers sexual misconduct claims against Leto",
-      "Link": "https://www.bbc.co.uk/iplayer/episode/m002zl1y?at_mid=2PvRUD6ZAG\u0026at_campaign=Jared_Leto_Hollywoods_Dark_Secret\u0026at_medium=display_ad\u0026at_campaign_type=owned\u0026at_nation=NET\u0026at_audience_id=SS\u0026at_product=iplayer\u0026at_brand=m002zl1y\u0026at_ptr_name=bbc\u0026at_ptr_type=media\u0026at_format=image\u0026at_objective=consumption\u0026at_link_title=Jared_Leto_Hollywoods_Dark_Secret\u0026at_bbc_team=BBC",
-      "Published": "2026-07-29T05:00:00+00:00",
-      "Source": "BBC News",
-      "Summary": "Multiple women accuse Oscar-winning Hollywood actor Jared Leto of sexual misconduct."
-    },
-    {
       "Title": "Uefa has \u0027lost confidence\u0027 in Fifa leadership",
       "Link": "https://www.bbc.co.uk/sport/football/articles/c04kr2nv3v3o?at_medium=RSS\u0026at_campaign=rss",
       "Published": "2026-08-01T09:51:05+00:00",
@@ -1108,27 +807,6 @@
       "Summary": "A centrist and a left wing candidate go head to head in Michigan."
     },
     {
-      "Title": "Highland glen sees first wild-born beavers in 400 years",
-      "Link": "https://www.bbc.co.uk/news/articles/c4g6k44yk2yo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-29T05:16:22+00:00",
-      "Source": "BBC News",
-      "Summary": "Conservationists believe there are at least two kits in Glen Affric following a release of 11 beavers. "
-    },
-    {
-      "Title": "\u0027I\u0027m Mandy Burnham\u0027 - Quaker chaplain is lookalike for new prime minister",
-      "Link": "https://www.bbc.co.uk/news/articles/cd7lg29gvjyo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T11:52:52+00:00",
-      "Source": "BBC News",
-      "Summary": "Emma Roberts is is \u0022leaning into\u0022 the comparisons and has changed her name to \u0022Mandy Burnham\u0022 on TikTok."
-    },
-    {
-      "Title": "Roman port dug up behind woman\u0027s home",
-      "Link": "https://www.bbc.co.uk/news/articles/c3r085dwv8vo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T11:33:49+00:00",
-      "Source": "BBC News",
-      "Summary": "The remains have been discovered beneath a paddock close to the Humber estuary in Brough."
-    },
-    {
       "Title": "England beaten by Australia to netball bronze",
       "Link": "https://www.bbc.co.uk/sport/netball/articles/cm2gzyxv6vyo?at_medium=RSS\u0026at_campaign=rss",
       "Published": "2026-08-02T09:41:45+00:00",
@@ -1358,13 +1036,6 @@
       "Published": "2026-07-29T14:02:38+00:00",
       "Source": "BBC News",
       "Summary": "Ann Lush made a promise to herself when she was nine to \u201Chelp any child I could\u201D."
-    },
-    {
-      "Title": "The 10 most overcrowded commuter trains revealed",
-      "Link": "https://www.bbc.co.uk/news/articles/c20dxevjlvxo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-07-28T14:17:57+00:00",
-      "Source": "BBC News",
-      "Summary": "Overall, overcrowding in England and Wales fell slightly last year due to increased capacity, the government says."
     },
     {
       "Title": "Washington state wildfires force 60,000 people to evacuate homes",
@@ -2765,6 +2436,300 @@
       "Published": "2026-08-06T14:30:00+00:00",
       "Source": "The Verge",
       "Summary": "SoftBank contributed $50 million to the Trump Presidential Library in January, just months before announcing that it\u0027s leasing land from the federal government to build a sprawling data center in Ohio. The Japanese company revealed the timing in response to a June letter from Sen. Elizabeth Warren (D-MA), Sen. Richard Blumenthal (D-CT), and Rep. Melanie [\u0026#8230;]"
+    },
+    {
+      "Title": "Hundreds stranded on second day of disruption at Bristol Airport",
+      "Link": "https://www.bbc.co.uk/news/articles/c1k1lyg94w9o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T07:30:16+00:00",
+      "Source": "BBC News",
+      "Summary": "Flights are restarting with delays and diversions after 14 hours of cancellations. "
+    },
+    {
+      "Title": "Nitecore\u2019s latest power bank is the lightest and most compact yet",
+      "Link": "https://www.theverge.com/tech/976506/nitecore-nb10000-gen4-review-adventure-battery",
+      "Published": "2026-08-08T07:00:00+00:00",
+      "Source": "The Verge",
+      "Summary": "There\u0027s two things you should know about me, your intrepid reviewer: I hate the feature creep associated with modern power banks, and I love shaving grams off the gear I carry when backpacking, bikepacking, and trail running. So imagine my delight when Nitecore released a new generation of its ultralight NB10000 battery. After a few [\u0026#8230;]"
+    },
+    {
+      "Title": "Farage and Tice sue NCA over alleged leaks of financial information",
+      "Link": "https://www.bbc.co.uk/news/articles/cpvw7xyjz8eo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T06:48:42+00:00",
+      "Source": "BBC News",
+      "Summary": "The Reform leaders claim the National Crime Agency supplied details about party donations to the media."
+    },
+    {
+      "Title": "Goals galore - the wildest scores in EFL Cup history",
+      "Link": "https://www.bbc.co.uk/sport/football/articles/c5y02m99evro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T06:37:37+00:00",
+      "Source": "BBC News",
+      "Summary": "BBC Sport looks at some of the wildest games - and scorelines - the EFL Cup has produced as the competition returns for a new season."
+    },
+    {
+      "Title": "Widdecombe police reopen investigation into incident at Farage\u0027s home, BBC understands",
+      "Link": "https://www.bbc.co.uk/news/articles/c62qrvd9303o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T06:16:44+00:00",
+      "Source": "BBC News",
+      "Summary": "Counter-terror police investigating the ex-MP\u0027s death say they are looking into an \u0022attempted burglary\u0022 last year."
+    },
+    {
+      "Title": "Child among three killed in Russian missile attacks near Kyiv",
+      "Link": "https://www.bbc.co.uk/news/articles/cz7dy8gq99eo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T06:12:56+00:00",
+      "Source": "BBC News",
+      "Summary": "Russia continued its overnight attacks after President Volodymyr Zelensky warned of Ukraine\u0027s dwindling supplies of missile interceptors."
+    },
+    {
+      "Title": "Inside Newcastle 2.0 - how the project is changing",
+      "Link": "https://www.bbc.co.uk/sport/football/articles/cd7lzdpjlg2o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T05:50:20+00:00",
+      "Source": "BBC News",
+      "Summary": "Matthias Jaissle will take charge of his first friendly as Newcastle United head coach against Valencia as a new era begins."
+    },
+    {
+      "Title": "Life as a Wag in the transfer window",
+      "Link": "https://www.bbc.co.uk/sport/football/articles/cx2jpgj24vlo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T05:15:34+00:00",
+      "Source": "BBC News",
+      "Summary": "What is life like for footballers\u0027 families during the transfer window where a last-minute deal means you need to uproot your life and move hundreds of miles?"
+    },
+    {
+      "Title": "The papers: \u0027Sex predator let out to kill\u0027 and \u0027net zero plans rolled back\u0027",
+      "Link": "https://www.bbc.co.uk/news/articles/c5y3ddgjjzeo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T04:17:43+00:00",
+      "Source": "BBC News",
+      "Summary": "Several papers are leading on a serial sex offender who has been found guilty of murdering two women and raping a third in London."
+    },
+    {
+      "Title": "Digital cameras and wired earphones are back and \u0027a bit more real\u0027",
+      "Link": "https://www.bbc.co.uk/news/articles/cly599xlllyo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T01:40:21+00:00",
+      "Source": "BBC News",
+      "Summary": "We\u0027re surrounded by more advanced tech in 2026, so why are young people going back to basics?"
+    },
+    {
+      "Title": "How a former GB Olympian curbed his porn problem - and the signs and steps to recovery",
+      "Link": "https://www.bbc.co.uk/news/articles/c89n8j5e32do?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T01:34:07+00:00",
+      "Source": "BBC News",
+      "Summary": "Experts share the signs to look out for if you are worried about your porn use, and how to seek help."
+    },
+    {
+      "Title": "I went for a full body MOT and the results came as a shock",
+      "Link": "https://www.bbc.co.uk/news/articles/cx2dj82v1rko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T00:49:48+00:00",
+      "Source": "BBC News",
+      "Summary": "The private body scan industry is booming, but is it doing more harm than good? "
+    },
+    {
+      "Title": "Fifth heatwave of the year likely next week as temperatures could hit 35C",
+      "Link": "https://www.bbc.co.uk/weather/articles/cgr7d28vvpno?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T00:37:42+00:00",
+      "Source": "BBC News",
+      "Summary": "As temperatures start to rise again over the weekend, many parts of England and Wales will enter into the fifth heatwave of the year, as Simon King explains"
+    },
+    {
+      "Title": "He\u0027s been frozen on Everest for 30 years, now \u0027Green Boots\u0027 may finally be coming home",
+      "Link": "https://www.bbc.co.uk/news/articles/cz05xn35xj7o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T00:29:27+00:00",
+      "Source": "BBC News",
+      "Summary": "For decades, an Indian man\u0027s lime shoes have been a grim trail marker for many climbing the world\u0027s highest peak."
+    },
+    {
+      "Title": "\u0027I ran because I knew I would die\u0027: Russian drones target medics in Ukraine",
+      "Link": "https://www.bbc.co.uk/news/articles/c3r073eqvrjo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-08T00:02:49+00:00",
+      "Source": "BBC News",
+      "Summary": "Ukrainian emergency workers warn of growing Russian attacks on hospitals and ambulances."
+    },
+    {
+      "Title": "The phone book that led us to Assad\u0027s spy chief in hiding",
+      "Link": "https://www.bbc.co.uk/news/articles/c4gyrzn8p94o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T23:23:12+00:00",
+      "Source": "BBC News",
+      "Summary": "How we tracked down \u0022The Spider\u0022 who was once one of the most-feared men in Syria.\n"
+    },
+    {
+      "Title": "Liverpool close to signing Barcelona\u0027s Araujo on loan",
+      "Link": "https://www.bbc.co.uk/sport/football/articles/c4gxvvxldewo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T22:54:13+00:00",
+      "Source": "BBC News",
+      "Summary": "Liverpool are close to signing Uruguay defender Ronald Araujo on a season-long loan from Barcelona, with an option to purchase."
+    },
+    {
+      "Title": "Infantino denies claims Uefa paid off alleged \u0027lover\u0027 when he was general secretary",
+      "Link": "https://www.bbc.co.uk/sport/football/articles/cx2vw5z0q7no?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T22:50:58+00:00",
+      "Source": "BBC News",
+      "Summary": "Gianni Infantino\u0027s alleged lover was given a severance payment over the affair by Uefa while he was its general secretary, according to a Daily Telegraph investigation."
+    },
+    {
+      "Title": "Spain imposes border controls against Italy as row over Ceuta migrant influx intensifies",
+      "Link": "https://www.bbc.co.uk/news/articles/c5yv5l6yr5ko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T22:13:55+00:00",
+      "Source": "BBC News",
+      "Summary": "Italy introduced border controls following an influx of about 78,000 migrants from  Morocco into the neighbouring Spanish exclave of Ceuta."
+    },
+    {
+      "Title": "Hunter Biden tells BBC his pardon was \u0027not good\u0027 for America or his father\u0027s legacy",
+      "Link": "https://www.bbc.co.uk/news/articles/cy8ey458pv5o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T22:07:00+00:00",
+      "Source": "BBC News",
+      "Summary": "In a wide-ranging BBC interview, the former president\u0027s son denied having any interest in running for office and said his father\u0027s cancer has spread."
+    },
+    {
+      "Title": "The gaming site sponsored by Walmart lays off its editorial staff",
+      "Link": "https://www.theverge.com/games/977056/restart-gaming-site-walmart-moonrock-layoffs",
+      "Published": "2026-08-07T22:05:08+00:00",
+      "Source": "The Verge",
+      "Summary": "Restart, a games media website launched in late 2024 that was sponsored by Walmart, has laid off its \u0022entire editorial team,\u0022 according to a Friday post from Brandy Berthelson, the site\u0027s former editor-in-chief. Other staffers have also posted about being laid off. Restart is operated by Moonrock, a content marketing agency, though its editorial mission [\u0026#8230;]"
+    },
+    {
+      "Title": "England\u0027s Hull closes in on Huang after historic 62",
+      "Link": "https://www.bbc.co.uk/sport/golf/articles/cn9nz8n7yrno?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T22:03:31+00:00",
+      "Source": "BBC News",
+      "Summary": "Charley Hull\u0027s 62 equals the lowest round in Ladies European Tour history and also breaks the course record at the Centurion Club to move within one stroke of the lead at the PIF London Championship."
+    },
+    {
+      "Title": "Watch: BBC asks Infantino if he will resign as Fifa president",
+      "Link": "https://www.bbc.co.uk/news/videos/c0ejrdzx98wo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T21:24:17+00:00",
+      "Source": "BBC News",
+      "Summary": "The head of the football governing body has faced multiple calls to quit after his aborted attempt to sell private stakes in the World Cup."
+    },
+    {
+      "Title": "Police failings revealed as sex offender left free to murder and attack women",
+      "Link": "https://www.bbc.co.uk/news/articles/c8jnrk4xlvdo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T21:10:48+00:00",
+      "Source": "BBC News",
+      "Summary": "Simon Levy\u2019s second murder victim, Sheryl Wilkins, could have been saved, senior Met officer admits."
+    },
+    {
+      "Title": "Sophia Laforteza steps away from Katseye, the second member to depart this year",
+      "Link": "https://www.bbc.co.uk/news/articles/c4g305dz0y9o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T21:05:45+00:00",
+      "Source": "BBC News",
+      "Summary": "The announcement came comes after fellow bandmate Manon Bannerman went on a hiatus from the ensemble."
+    },
+    {
+      "Title": "Fenix Flexin isn\u2019t even denying using AI to make \u2018Rubberz\u2019 anymore",
+      "Link": "https://www.theverge.com/ai-artificial-intelligence/976801/fenix-flexin-rubberz-ai-song-treblo",
+      "Published": "2026-08-07T20:01:51+00:00",
+      "Source": "The Verge",
+      "Summary": "It took long enough, but now LA rapper Fenix Flexin appears to have admitted using AI for the 80s synth pop-themed song \u0022Rubberz.\u0022 His comments follow the producer Medasin\u0027s videos claiming that an AI tool called Treblo (formerly Sonauto) was used to make the song, and the company releasing an AI detector that identifies it [\u0026#8230;]"
+    },
+    {
+      "Title": "Watching Roku\u2019s AI channel is like eating from a trough",
+      "Link": "https://www.theverge.com/entertainment/976939/roku-fairground-ai-fast-channel",
+      "Published": "2026-08-07T18:59:46+00:00",
+      "Source": "The Verge",
+      "Summary": "The appeal of free ad-supported streaming television (FAST) channels has always been the way they make it easier to (re)discover classic films and series. But Roku\u0027s latest experiment in the FAST space has less to do with traditionally produced entertainment and is entirely focused on giving viewers access to a constant source of AI-generated content. [\u0026#8230;]"
+    },
+    {
+      "Title": "OpenAI puts the brakes on a new model because it\u0026#8217;s supposedly too powerful",
+      "Link": "https://www.theverge.com/ai-artificial-intelligence/976948/openai-astra-model-pause-critical-cyber-capabilities",
+      "Published": "2026-08-07T18:40:34+00:00",
+      "Source": "The Verge",
+      "Summary": "OpenAI says it is pausing \u0022internal activities\u0022 around an in-development AI model, Astra, because it doesn\u0027t yet meet new security standards the company is putting in place. The announcement follows its recent disclosure that OpenAI models accidentally hacked Hugging Face. Anthropic and Meta have also since admitted that they had AI models that went rogue [\u0026#8230;]"
+    },
+    {
+      "Title": "Obesity rates have doubled in England since 1993 - what\u0027s going on?",
+      "Link": "https://www.bbc.co.uk/news/articles/cd0xyl3yp2jo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T18:38:46+00:00",
+      "Source": "BBC News",
+      "Summary": "Around seven million more adults are living with obesity than would have been if obesity rates had stayed the same as 1993."
+    },
+    {
+      "Title": "Flintoff leaves England Lions head coach role",
+      "Link": "https://www.bbc.co.uk/sport/cricket/articles/cpw9nvzkxexo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T18:06:59+00:00",
+      "Source": "BBC News",
+      "Summary": "Former England all-rounder Andrew Flintoff steps down as head coach of England Lions."
+    },
+    {
+      "Title": "Book hidden in fireplace returned to Australian library 150 years overdue",
+      "Link": "https://www.bbc.co.uk/news/articles/c39eprxln0go?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T18:06:58+00:00",
+      "Source": "BBC News",
+      "Summary": "It is thought an apprentice stonemason who worked on the Houses of Parliament in London borrowed it."
+    },
+    {
+      "Title": "The only instant cameras worth your money",
+      "Link": "https://www.theverge.com/23133103/best-instant-cameras-fujifilm-polaroid-kodak",
+      "Published": "2026-08-07T18:04:08+00:00",
+      "Source": "The Verge",
+      "Summary": "There\u2019s something magical about using instant cameras that smartphones can\u2019t match. You can capture a moment, print it out, and then give the photo as a gift or hold onto it. Image quality won\u2019t be all that good, but imperfections are part of the allure. We tested instant camera models from popular brands and landed [\u0026#8230;]"
+    },
+    {
+      "Title": "Disney Plus tries a new AI-powered search",
+      "Link": "https://www.theverge.com/streaming/976881/disney-plus-ai-recommendation-espn-search",
+      "Published": "2026-08-07T17:53:44+00:00",
+      "Source": "The Verge",
+      "Summary": "Disney is testing a new AI-powered tool for Disney Plus that uses a natural language search, a voice query, or a suggested prompt to create a customized row of show and movie recommendations. Disney Plus, like other streaming services, can recommend shows to watch based on your viewing history. But the company says this new [\u0026#8230;]"
+    },
+    {
+      "Title": "Microsoft Edge is about to lock out older ad blockers, just like Chrome did",
+      "Link": "https://www.theverge.com/tech/976880/microsoft-edge-extensions-ad-blockers-mv2-mv3",
+      "Published": "2026-08-07T17:43:34+00:00",
+      "Source": "The Verge",
+      "Summary": "Microsoft Edge is ending support for the Manifest V2 extensions platform, which will cut off the uBlock Origin adblocker and others like it, just like Google Chrome did earlier this year. According to Microsoft, there are only 58 extensions on the Edge Add-On Store \u0022with any meaningful usage\u0022 that still use MV2, and only three [\u0026#8230;]"
+    },
+    {
+      "Title": "US appeals court halts Trump ballroom project paving way for Supreme Court showdown",
+      "Link": "https://www.bbc.co.uk/news/articles/cwyq80jqqleo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T17:41:30+00:00",
+      "Source": "BBC News",
+      "Summary": "\u0022Whether or not a \u2060massive ballroom should be constructed is for Congress to decide,\u0022 the appeals panel\u0027s \u200Bmajority said."
+    },
+    {
+      "Title": "Cambridge to review process for hiring senior academics after Jason Arday resignation",
+      "Link": "https://www.bbc.co.uk/news/articles/c05q0nznq24o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T17:09:32+00:00",
+      "Source": "BBC News",
+      "Summary": "Prof Priyamvada Gopal, who is part of the group, says Cambridge should not be \u0022marking its own homework\u0022."
+    },
+    {
+      "Title": "Grab the entire Lord of the Rings trilogy on 4K Blu-ray for $50",
+      "Link": "https://www.theverge.com/gadgets/976792/lord-of-the-rings-trilogy-4k-uhd-blu-ray-deal-sale",
+      "Published": "2026-08-07T16:58:18+00:00",
+      "Source": "The Verge",
+      "Summary": "Looking to spend a weekend inside with a good binge? Gruv has The Lord of the Rings trilogy on 4K Blu-ray marked down to $49.99, just below Amazon\u2019s price and only a little bit higher than the all-time low we usually see around Black Friday. This version includes both the original theatrical releases of all [\u0026#8230;]"
+    },
+    {
+      "Title": "What\u0026#8217;s behind the Google AI shake-up",
+      "Link": "https://www.theverge.com/podcast/976784/google-deepmind-ai-race-vergecast",
+      "Published": "2026-08-07T16:45:14+00:00",
+      "Source": "The Verge",
+      "Summary": "Some of the biggest names on Google\u0027s AI team got new jobs this week. In some cases, including for legendary Googler Jeff Dean, those jobs are no longer at Google. Given that Google\u0027s models seem to be behind the best of what\u0027s coming out of anthropic and OpenAI, is this a sign of Google in [\u0026#8230;]"
+    },
+    {
+      "Title": "Is The Ukraine War Entering A New Phase Of Aggression?",
+      "Link": "https://www.bbc.co.uk/sounds/play/p0p2fwd1?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-07T14:34:00+00:00",
+      "Source": "BBC News",
+      "Summary": "Factories and warehouses targeted in weeks of aggression in Ukraine War."
+    },
+    {
+      "Title": "Betty, 97, breaks record for oldest wingwalker",
+      "Link": "https://www.bbc.co.uk/news/articles/c4g6pdem336o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-04T17:02:00+00:00",
+      "Source": "BBC News",
+      "Summary": "She has carried out six charity wing walks over the past decade."
+    },
+    {
+      "Title": "Poo, parking and poor pitching - the Lake District\u0027s summer battles",
+      "Link": "https://www.bbc.co.uk/news/articles/c0m7l70283go?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-02T11:01:10+00:00",
+      "Source": "BBC News",
+      "Summary": "Protection orders are being used to try and control the issue, but funding is limited, councils say."
+    },
+    {
+      "Title": "Chernobyl disaster evacuee \u0027forever grateful\u0027 to Welsh family who took him in",
+      "Link": "https://www.bbc.co.uk/news/articles/c36dxp822k4o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-02T06:04:55+00:00",
+      "Source": "BBC News",
+      "Summary": "Anton Honchanka was one of thousands of people affected by the 1986 nuclear disaster who came to the UK."
     }
   ],
   "Prices": []
