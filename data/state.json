@@ -1,237 +1,6 @@
 {
-  "LastDigestUtc": "2026-08-25T08:41:09.3866522+00:00",
+  "LastDigestUtc": "2026-08-26T08:42:02.5677348+00:00",
   "CacheNews": [
-    {
-      "Title": "Thousands displaced by deadly Indonesia earthquake as rescue efforts continue",
-      "Link": "https://www.bbc.co.uk/news/articles/c3v00w5ylw9o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T08:23:38+00:00",
-      "Source": "BBC News",
-      "Summary": "Hundreds of homes and public buildings have been severely damaged with at least 51 people killed."
-    },
-    {
-      "Title": "Makhachev beats Machado Garry to break UFC win record",
-      "Link": "https://www.bbc.co.uk/sport/mixed-martial-arts/articles/c8dnn7d01p5o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T08:16:25+00:00",
-      "Source": "BBC News",
-      "Summary": "Islam Makhachev cements his status as the best pound-for-pound fighter in the world with a commanding victory over Ian Machado Garry."
-    },
-    {
-      "Title": "Hurricane Lala lashes Hawaii with strong winds and torrential rain",
-      "Link": "https://www.bbc.co.uk/news/articles/crmrr7kjy9vo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T07:58:02+00:00",
-      "Source": "BBC News",
-      "Summary": "If the storm makes landfall, it will be Hawaii\u0027s first direct hit by a hurricane in 34 years."
-    },
-    {
-      "Title": "Athletics medal ceremonies postponed after fraud arrest",
-      "Link": "https://www.bbc.co.uk/news/articles/cy8ee5e8w9do?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T07:09:12+00:00",
-      "Source": "BBC News",
-      "Summary": "Transport was also delayed because of the arrest, leading to crowds building up outside the venue."
-    },
-    {
-      "Title": "Twelve killed as Polish bus veers off Hungarian motorway",
-      "Link": "https://www.bbc.co.uk/news/articles/ckg4424zd7go?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T07:04:17+00:00",
-      "Source": "BBC News",
-      "Summary": "Dozens more are seriously injured after the tourist bus overturned in the early hours of Sunday morning."
-    },
-    {
-      "Title": "Bangladesh thrash Australia for historic win",
-      "Link": "https://www.bbc.co.uk/sport/cricket/articles/cn8nn37v22lo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T06:57:29+00:00",
-      "Source": "BBC News",
-      "Summary": "Bangladesh thrash Australia by nine wickets on the fourth day of the series-opener in Darwin to complete one of Test cricket\u0027s greatest upsets."
-    },
-    {
-      "Title": "How important is Community Shield to a team\u0027s season?",
-      "Link": "https://www.bbc.co.uk/sport/football/articles/c1e1v64q256o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T05:29:55+00:00",
-      "Source": "BBC News",
-      "Summary": "Premier League champions Arsenal take on FA Cup winners Manchester City in Sunday\u0027s Community Shield - but would winning suggest a successful season ahead?"
-    },
-    {
-      "Title": "The Papers: UK-made drones \u0027strike Russia\u0027 and \u0027phone theft Britain\u0027",
-      "Link": "https://www.bbc.co.uk/news/articles/c4gvv07ww42o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T05:10:55+00:00",
-      "Source": "BBC News",
-      "Summary": "Ukraine uses UK British-made drones to strike Russia and 230 phones a day stolen in the UK lead the Sunday papers."
-    },
-    {
-      "Title": "Polaroid\u2019s tiny instant camera is $72 and includes a free pack of film",
-      "Link": "https://www.theverge.com/gadgets/980448/polaroid-go-second-generation-film-pack-bundle-deal-sale",
-      "Published": "2026-08-16T03:00:00+00:00",
-      "Source": "The Verge",
-      "Summary": "Smartphone cameras are convenient, but they lack the charm of analog instant cameras. If you\u2019re trying to relive the nostalgia of waiting for an instant photo to develop, Amazon is selling the second-generation Polaroid Go instant camera with a 16-photo film pack for $71.99 (usually $109.99). That\u2019s the lowest price we\u2019ve seen for the bundle, [\u0026#8230;]"
-    },
-    {
-      "Title": "Ariana Grande leaves problems at home as her tour hits the UK",
-      "Link": "https://www.bbc.co.uk/news/articles/cn0n7rln2rno?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T02:01:42+00:00",
-      "Source": "BBC News",
-      "Summary": "The star plays the first of 10 dates in London, after which she will \u0022step back\u0022 from public life."
-    },
-    {
-      "Title": "Reform proposes \u00A350bn welfare bill cut with changes to disability payments for millions",
-      "Link": "https://www.bbc.co.uk/news/articles/cz977nxww1jo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T00:39:22+00:00",
-      "Source": "BBC News",
-      "Summary": "The party\u0027s proposed changes were they to come to power include a replacement for the disability payments system Pip."
-    },
-    {
-      "Title": "Britain\u0027s youngest Formula E driver says talent isn\u0027t enough anymore",
-      "Link": "https://www.bbc.co.uk/news/articles/ckg40e24wnpo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T23:46:52+00:00",
-      "Source": "BBC News",
-      "Summary": "Taylor Barnard, 22, says talented young drivers often get shut out because of financial issues."
-    },
-    {
-      "Title": "Unauthorised sites are growing but travellers say they are forced to break the law",
-      "Link": "https://www.bbc.co.uk/news/articles/cpq3w8q0j9go?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T23:46:03+00:00",
-      "Source": "BBC News",
-      "Summary": "The government says such developments are unacceptable \u2013 so why do they keep springing up?"
-    },
-    {
-      "Title": "I survived two years as prime minister in a hit new game - then my cabinet deserted me",
-      "Link": "https://www.bbc.co.uk/news/articles/cq56pzqy6jvo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T23:45:44+00:00",
-      "Source": "BBC News",
-      "Summary": "Mobile game No 10: Full Confidence recently ranked above Minecraft on the UK App Store paid games chart"
-    },
-    {
-      "Title": "From making friends to managing money: Students\u0027 advice for this year\u0027s freshers",
-      "Link": "https://www.bbc.co.uk/news/articles/cx2kw0yek2yo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T23:45:15+00:00",
-      "Source": "BBC News",
-      "Summary": "BC News asked current students about the worries they had before arriving at university how they overcame them."
-    },
-    {
-      "Title": "What\u0027s driving men to get penis fillers, despite the risks?",
-      "Link": "https://www.bbc.co.uk/news/articles/c626d3xqd83o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T23:42:33+00:00",
-      "Source": "BBC News",
-      "Summary": "Men who have had the procedure can expect 10-20% more girth for the next six to nine months - but it can go wrong."
-    },
-    {
-      "Title": "The influencers getting bitten while chasing the perfect shark shot",
-      "Link": "https://www.bbc.co.uk/news/articles/c5yvrn7rpqpo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T23:04:29+00:00",
-      "Source": "BBC News",
-      "Summary": "Tayane Dalazen was on a shark-diving trip in Brazil when she was attacked."
-    },
-    {
-      "Title": "US women in politics spark conversation about balancing family and career",
-      "Link": "https://www.bbc.co.uk/news/articles/cjwxgz95jvgo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T23:01:50+00:00",
-      "Source": "BBC News",
-      "Summary": "The BBC spoke to working mothers about the challenges of a high-pressure career and making time for family. "
-    },
-    {
-      "Title": "Fery wins on return as Djokovic struggles in heat",
-      "Link": "https://www.bbc.co.uk/sport/tennis/articles/cj033qggmv3o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T22:07:10+00:00",
-      "Source": "BBC News",
-      "Summary": "Britain\u0027s Arthur Fery beats Australia\u0027s Jack Duckworth at the Cincinnati Open but Novak Djokovic falls to a shock defeat by Argentina\u0027s Thiago Tirante."
-    },
-    {
-      "Title": "Matt Groening lets slip that Simpsons: Hit \u0026#038; Run might be making a comeback",
-      "Link": "https://www.theverge.com/entertainment/980720/matt-groening-simpsons-hit-run-d23",
-      "Published": "2026-08-15T21:56:13+00:00",
-      "Source": "The Verge",
-      "Summary": "At D23, when asked about the potential for a sequel to the cult classic The Simpsons: Hit \u0026#38; Run game, Matt Groening replied, \u0022I think the original game is coming back in some form,\u0022 before current showrunner Matt Selman added, \u0022or not.\u0022 The tone in both of their voices and the body language suggests that [\u0026#8230;]"
-    },
-    {
-      "Title": "Major incidents across UK putting firefighters under \u0027incredible pressure\u0027, fire chief says",
-      "Link": "https://www.bbc.co.uk/news/articles/cwyjjvd4g0qo?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T21:28:54+00:00",
-      "Source": "BBC News",
-      "Summary": "Major incidents declared across England and Wales with blazes in Stourbridge, Sandwell and Pershore."
-    },
-    {
-      "Title": "Hunt wins third gold as Asher-Smith makes history",
-      "Link": "https://www.bbc.co.uk/sport/athletics/articles/cqjxxd0j844o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T21:13:17+00:00",
-      "Source": "BBC News",
-      "Summary": "Amy Hunt claims the third gold medal of her bid for a historic quadruple and Dina Asher-Smith makes history as Great Britain win two relay golds at the European Athletics Championships."
-    },
-    {
-      "Title": "Morocco detains dozens of migrants trying to cross into Ceuta, reports say",
-      "Link": "https://www.bbc.co.uk/news/articles/ckg44x2ey1ro?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T20:58:31+00:00",
-      "Source": "BBC News",
-      "Summary": "Security had been stepped up amid suggestions on social media of a second mass crossing on Saturday."
-    },
-    {
-      "Title": "Have a laugh at AI\u2019s expense by roleplaying as a chatbot",
-      "Link": "https://www.theverge.com/entertainment/980502/roleplay-as-an-ai-chatbot",
-      "Published": "2026-08-15T20:45:00+00:00",
-      "Source": "The Verge",
-      "Summary": "Your AI Slop Bores Me is brilliant in its simplicity. There are two tabs: human and LARP as an AI. On one side you enter a request. On the other, you submit an answer. But the important thing is that there\u0027s a human on both sides of the equation. Prompts can request a response as [\u0026#8230;]"
-    },
-    {
-      "Title": "Rashford returns as AC Milan highlight issues facing Carrick",
-      "Link": "https://www.bbc.co.uk/sport/football/articles/cg5ll71pqv1o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T19:25:09+00:00",
-      "Source": "BBC News",
-      "Summary": "Manchester United finish their pre-season campaign with a 4-2 defeat by Ruben Amorim\u0027s AC Milan in Poland, as Marcus Rashford returns to Red Devils action."
-    },
-    {
-      "Title": "Why is Australia\u0027s mushroom killer back in court this week?",
-      "Link": "https://www.bbc.co.uk/news/videos/c62e1v8p07go?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-15T18:02:30+00:00",
-      "Source": "BBC News",
-      "Summary": "The BBC\u2019s Katy Watson explains why triple-murder Erin Patterson is back in court this week trying to overturn her conviction."
-    },
-    {
-      "Title": "Don\u0026#8217;t overlook Elektron\u0026#8217;s budget electronic music instruments",
-      "Link": "https://www.theverge.com/gadgets/980275/elektron-model-cycles-model-samples-groovebox-electronic-music-instruments-review",
-      "Published": "2026-08-15T17:00:00+00:00",
-      "Source": "The Verge",
-      "Summary": "When I\u0027m asked what to buy if you want to get into making electronic music, I often recommend Elektron\u0027s budget-minded Model:Samples and Model:Cycles grooveboxes. They don\u0027t grab headlines the way Teenage Engineering\u0027s gear or the Telepathic Instruments Orchid do, and even compared to the company\u0027s higher-end and more niche musical offerings like the Digitakt, Octatrack, [\u0026#8230;]"
-    },
-    {
-      "Title": "Switched on Pop\u2019s Nate Sloan and Charlie Harding love fresh vegetables and guitar pedals",
-      "Link": "https://www.theverge.com/report/980288/switched-on-pop-nate-sloan-charlie-harding-podcast-netflix-interview",
-      "Published": "2026-08-15T15:00:00+00:00",
-      "Source": "The Verge",
-      "Summary": "As if you needed more reason to love Carly Rae Jepsen\u0027s \u0022Call Me Maybe\u0022 beyond its pop perfection, it is also, according to lore, the genesis for Switched on Pop, one of the best music podcasts out there. Cohosts Nate Sloan and Charlie Harding obsessively dissect pop songs, from the theory behind their musical choices [\u0026#8230;]"
-    },
-    {
-      "Title": "Star Wars: Ahsoka season 2 and Starfighter get teased at D23",
-      "Link": "https://www.theverge.com/entertainment/980666/star-wars-ahsoka-season-2-and-starfighter-get-teased-at-d23",
-      "Published": "2026-08-15T14:58:27+00:00",
-      "Source": "The Verge",
-      "Summary": "Season two of Star Wars: Ahsoka is still months away, but Lucasfilm still took the opportunity to tease it a bit at D23. The company dropped the first trailer for the new season ahead of its January 20th, 2027 debut. The clip shows a darker, witchcraft-filled take on the Star Wars universe, with Grand Admiral [\u0026#8230;]"
-    },
-    {
-      "Title": "Disney D23 2026: Everything announced for Star Wars, Marvel, and more",
-      "Link": "https://www.theverge.com/streaming/980633/x-men-marvel-star-wars-pixar-disney-d23",
-      "Published": "2026-08-15T14:20:33+00:00",
-      "Source": "The Verge",
-      "Summary": "The annual Disney fan event showed off the cast of Marvel\u0026#8217;s X-Men movie, plus a new trailer for Avengers: Doomsday, and our first look at the VisionQuest TV show for Disney Plus. For Star Wars fans, there was a teaser trailer for season two of Ahsoka, plus a special look at Star Wars: Starfighter with [\u0026#8230;]"
-    },
-    {
-      "Title": "I finally found a magnetic phone grip I never want to remove",
-      "Link": "https://www.theverge.com/tech/979850/ohsnap-snap-grip-stand-review",
-      "Published": "2026-08-15T14:10:16+00:00",
-      "Source": "The Verge",
-      "Summary": "I told myself I wouldn\u0027t buy an OhSnap accessory for my phone. Every one I\u0027d tested was nice, but felt overpriced and slightly flawed. After I weighed in on the $40 Snap Grip 5 last year, I wound up sticking with my $25 Syncwire instead. But OhSnap\u0027s $50 Snap Grip Stand finally got me. To [\u0026#8230;]"
-    },
-    {
-      "Title": "Marvel reveals the new X-Men cast, including Inde Navarrette and Adam Driver",
-      "Link": "https://www.theverge.com/entertainment/980635/marvel-new-x-men-movie-cast",
-      "Published": "2026-08-15T14:03:14+00:00",
-      "Source": "The Verge",
-      "Summary": "With Spider-Man: Brand New Day behind us, and its reveal of Sadie Sink as Jean Grey, Marvel is finally ready to officially welcome the X-Men into the MCU. At the D23 event in Anaheim yesterday, the company revealed the cast for its upcoming, untitled X-Men film, which is scheduled to hit theaters on May 5th [\u0026#8230;]"
-    },
-    {
-      "Title": "Xteink\u2019s tiny e-readers are getting access to free books through Libby",
-      "Link": "https://www.theverge.com/tech/976390/xteink-x3-x4-x4-pro-e-reader-libby-plug-ins-drm-crosspoint-reader",
-      "Published": "2026-08-15T13:00:00+00:00",
-      "Source": "The Verge",
-      "Summary": "One of the big tradeoffs with Xteink\u0027s pocket-friendly e-readers is a lack of easy access to ebooks. On a Kindle or Kobo you can download tens of thousands of titles through each device\u0027s respective online bookstores, but with Xteink\u0027s devices you have to source DRM-free ebooks on your own. That\u0027s about to change, as the [\u0026#8230;]"
-    },
     {
       "Title": "Burnham exchanged messages with White House imposter",
       "Link": "https://www.bbc.co.uk/news/articles/clyvj5zdjj2o?at_medium=RSS\u0026at_campaign=rss",
@@ -2109,13 +1878,6 @@
       "Summary": "\u0022It\u0027s very unusual... barn owls shouldn\u0027t be 70 miles off Newcastle,\u0022 a wildlife rescuer says."
     },
     {
-      "Title": "The rapper turning council jargon into poetry",
-      "Link": "https://www.bbc.co.uk/news/articles/c7vg9pz5ll9o?at_medium=RSS\u0026at_campaign=rss",
-      "Published": "2026-08-16T07:15:32+00:00",
-      "Source": "BBC News",
-      "Summary": "A former council worker is using poetry and spoken word to explain council policy to young people."
-    },
-    {
       "Title": "Nearly 90,000 told to evacuate as wildfire approaches Reno, Nevada",
       "Link": "https://www.bbc.co.uk/news/articles/c4gqlp0yzyjo?at_medium=RSS\u0026at_campaign=rss",
       "Published": "2026-08-24T08:34:26+00:00",
@@ -2618,6 +2380,293 @@
       "Published": "2026-08-20T00:19:47+00:00",
       "Source": "BBC News",
       "Summary": "One small ember can burn down everything. Dev Patel\u2019s thriller steeped in mythology"
+    },
+    {
+      "Title": "Heavy casualties feared as flash flood sweeps across parts of northern Nepal",
+      "Link": "https://www.bbc.co.uk/news/articles/cx2zyerv2lmo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T08:19:40+00:00",
+      "Source": "BBC News",
+      "Summary": "The flood in Rasuwa - an area north of Kathmandu bordering Tibet - is feared to have swept away villages."
+    },
+    {
+      "Title": "Tottenham agree loan for Man City\u0027s Marmoush ",
+      "Link": "https://www.bbc.co.uk/sport/football/articles/cx2z5ewlrwko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T08:18:41+00:00",
+      "Source": "BBC News",
+      "Summary": "Tottenham agree a loan deal to sign Manchester City forward Omar Marmoush, with an obligation to make the deal permanent for \u00A360m next summer."
+    },
+    {
+      "Title": "Dolly Parton was the one thing most Americans could agree on",
+      "Link": "https://www.bbc.co.uk/news/articles/c790n1vj27no?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T08:11:14+00:00",
+      "Source": "BBC News",
+      "Summary": "The cultural icon was one of the rare celebrities adored by Americans of all ages, races and political persuasions."
+    },
+    {
+      "Title": "Libyan who was cleared after Lockerbie bombing trial dies aged 70",
+      "Link": "https://www.bbc.co.uk/news/articles/cy0zgx6wlz3o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T08:01:56+00:00",
+      "Source": "BBC News",
+      "Summary": "A Facebook post by Libyan Airlines announced the death of Al Amin Khalifah Fhimah and expressed the company\u0027s condolences to his family."
+    },
+    {
+      "Title": "Man City\u0027s Gonzalez set for \u00A352m Newcastle move",
+      "Link": "https://www.bbc.co.uk/sport/football/articles/cx2zlnpnk4zo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T07:59:50+00:00",
+      "Source": "BBC News",
+      "Summary": "Newcastle United agree a deal worth up to \u00A352m for Manchester City midfielder Nico Gonzalez."
+    },
+    {
+      "Title": "Household energy bills to hit three-year high as Ofgem announces 4% rise from October",
+      "Link": "https://www.bbc.co.uk/news/articles/cqjkl1xvgw5o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T07:48:50+00:00",
+      "Source": "BBC News",
+      "Summary": "A household using a typical amount of gas and electricity will pay \u00A360 a year more, regulator Ofgem says."
+    },
+    {
+      "Title": "Ex-England footballer Sterling charged with dangerous driving after crashing Lamborghini",
+      "Link": "https://www.bbc.co.uk/sport/football/articles/c23xkk1vkkpo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T07:42:51+00:00",
+      "Source": "BBC News",
+      "Summary": "Raheem Sterling will appear in court next month to face charges of dangerous driving after crashing his car into motorway barriers in May."
+    },
+    {
+      "Title": "Major gangland figure Steven Daniel arrested in organised crime raid",
+      "Link": "https://www.bbc.co.uk/news/articles/c17jl59zg2ko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T07:00:53+00:00",
+      "Source": "BBC News",
+      "Summary": "Steven \u0027Bonzo\u0027 Daniel was arrested on Wednesday at his home in the north of Glasgow."
+    },
+    {
+      "Title": "Celtic deficiencies laid bare on another night of Champions League pain",
+      "Link": "https://www.bbc.co.uk/sport/football/articles/cjdv5xvgv9lo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T06:52:56+00:00",
+      "Source": "BBC News",
+      "Summary": "When Callum McGregor eviscerated his own team-mates in the wake of Celtic\u0027s stupefying Champions League collapse against LASK, he delivered their one coherent moment of a spineless night, writes Tom English."
+    },
+    {
+      "Title": "Liverpool\u0027s midfield is fragile - will they act in the window?",
+      "Link": "https://www.bbc.co.uk/sport/football/articles/cx2zgzydd16o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T06:04:34+00:00",
+      "Source": "BBC News",
+      "Summary": "Liverpool\u0027s draw at Newcastle emphasised once again their midfield fragility but will they act in the market and bring in a defensive-minded player?"
+    },
+    {
+      "Title": "Toxic waste sites exposed in Michael Sheen documentary are \u0027tip of the iceberg\u0027",
+      "Link": "https://www.bbc.co.uk/news/articles/c07r2l7rjpko?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T05:14:36+00:00",
+      "Source": "BBC News",
+      "Summary": "One scientist says there are thousands of sites across the UK that need investigating."
+    },
+    {
+      "Title": "Dad of woman who took her own life says Treasury failed in its duty of care",
+      "Link": "https://www.bbc.co.uk/news/articles/c0rewr790jyo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T05:14:12+00:00",
+      "Source": "BBC News",
+      "Summary": "Chloe Moffat died last year, after she was told of allegations she had shared sensitive confidential information about colleagues, which she denied."
+    },
+    {
+      "Title": "The Papers: \u0027We will always love you, Dolly\u0027",
+      "Link": "https://www.bbc.co.uk/news/articles/c1wxnn50yero?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T04:26:08+00:00",
+      "Source": "BBC News",
+      "Summary": "The death of country music legend and philanthropist Dolly Parton at aged 80 dominates Wednesday\u0027s papers."
+    },
+    {
+      "Title": "NHS failing child sexual abuse victims in adulthood, say psychiatrists",
+      "Link": "https://www.bbc.co.uk/news/articles/c0kl40d3011o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-26T04:07:48+00:00",
+      "Source": "BBC News",
+      "Summary": "There have been decades of mistreatment and mismanagement of those who seek help later in life, say experts in a new, damning report."
+    },
+    {
+      "Title": "As Ukraine hits Russia\u0027s refineries, Russia targets Ukraine\u0027s petrol pumps",
+      "Link": "https://www.bbc.co.uk/news/articles/c5y6x777gk4o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T23:50:53+00:00",
+      "Source": "BBC News",
+      "Summary": "Fuel companies are urging customers not to linger at the pumps after a wave of deadly attacks."
+    },
+    {
+      "Title": "How country music star told her life story through six iconic songs",
+      "Link": "https://www.bbc.co.uk/news/articles/cpqpjv0j0eeo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T23:43:13+00:00",
+      "Source": "BBC News",
+      "Summary": "A legendary singer-songwriter, her music covered themes around love, loss, female empowerment and spirituality."
+    },
+    {
+      "Title": "A nosy polar bear and a lucky squirrel: Wildlife Photographer of the Year 2026 shortlist",
+      "Link": "https://www.bbc.co.uk/news/articles/cg7m5e3mylpo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T23:41:13+00:00",
+      "Source": "BBC News",
+      "Summary": "The polar bear image taken by Audun Rikardsen was among the \u0027highly commended\u0027 entries in this year\u0027s competition."
+    },
+    {
+      "Title": "Nicotine vapes better for quitting smoking than gum or patches, major review finds",
+      "Link": "https://www.bbc.co.uk/news/articles/c1e5p51n2p2o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T23:40:38+00:00",
+      "Source": "BBC News",
+      "Summary": "They work better than patches, gum or pills, the most up-to-date evidence suggests."
+    },
+    {
+      "Title": "Alcaraz and Williams thrill in brief but bright US Open mixed doubles showing",
+      "Link": "https://www.bbc.co.uk/sport/tennis/articles/cn5drv06w2ro?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T23:25:29+00:00",
+      "Source": "BBC News",
+      "Summary": "Serena Williams and Carlos Alcaraz were among the star double-acts in New York as the US Open mixed doubles competition got under way on Tuesday."
+    },
+    {
+      "Title": "Why Pride is facing a backlash - from inside and outside the LGBT community",
+      "Link": "https://www.bbc.co.uk/news/articles/cj63jyl09jxo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T23:13:34+00:00",
+      "Source": "BBC News",
+      "Summary": "Big companies used to go out of their way to support Pride. Now, there\u0027s a nervousness in the air, Darren Milby writes"
+    },
+    {
+      "Title": "Yellow warnings in force as rain and thunderstorms hit parts of UK",
+      "Link": "https://www.bbc.co.uk/weather/articles/c62krylw57xo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T23:11:15+00:00",
+      "Source": "BBC News",
+      "Summary": "Torrential downpours will affect parts of England and Wales, delivering some of the wettest weather in several weeks"
+    },
+    {
+      "Title": "Watch on iPlayer: Dolly Parton documentary Here I Am",
+      "Link": "https://www.bbc.co.uk/iplayer/episode/m000crhq?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T23:10:00+00:00",
+      "Source": "BBC News",
+      "Summary": "Creating an icon. How a girl from the Smoky Mountains conquered Nashville \u2013 and the world"
+    },
+    {
+      "Title": "How parents can save on costs as the new school year starts",
+      "Link": "https://www.bbc.co.uk/news/articles/cedjqx6zdl0o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T23:08:31+00:00",
+      "Source": "BBC News",
+      "Summary": "From baby banks to supermarket deals, there are many ways parents can ease the back-to-school burden."
+    },
+    {
+      "Title": "Chinese teens are turning to mind-numbing drugs to \u0027run away from reality\u0027",
+      "Link": "https://www.bbc.co.uk/news/articles/c99d08j3kz1o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T22:37:50+00:00",
+      "Source": "BBC News",
+      "Summary": "Students are seeking prescription drugs because they fear failure, a teen tells the BBC."
+    },
+    {
+      "Title": "Garmin\u2019s new Fenix 9 adds brighter screens and smoother map panning",
+      "Link": "https://www.theverge.com/gadgets/984753/garmin-fenix-9-smartwatch-launch",
+      "Published": "2026-08-25T22:20:17+00:00",
+      "Source": "The Verge",
+      "Summary": "Garmin just took the wraps off its new line of rugged Fenix 9 smartwatches, with the base model featuring an OLED display with a brightness of up to 3,000 nits, making it twice as bright as its predecessor. Starting at $999.99 for the 43mm case option, the Fenix 9 has 50 percent more RAM and [\u0026#8230;]"
+    },
+    {
+      "Title": "Trump is upping the price of Big Tech\u2019s favorite visa",
+      "Link": "https://www.theverge.com/policy/984723/trump-h1b-fee-asylum-legal-immigration",
+      "Published": "2026-08-25T21:45:00+00:00",
+      "Source": "The Verge",
+      "Summary": "In the span of a few hours on Monday, the Department of Homeland Security announced that it would be implementing a fee of over $103,000 on H-1B visas, and news broke that the State Department plans on revoking the visas of up to 200,000 asylum seekers - which, according to The Associated Press, would be [\u0026#8230;]"
+    },
+    {
+      "Title": "At just $8, you owe it to yourself to grab Inscryption",
+      "Link": "https://www.theverge.com/gadgets/984677/inscryption-humble-daniel-mullins-pony-island-deal-sale",
+      "Published": "2026-08-25T20:38:37+00:00",
+      "Source": "The Verge",
+      "Summary": "If you watched the Gamescom 2026 announcements, you might have caught a trailer for the bizarre, frenetic Pony Island 2: Panda Circus, a game from Daniel Mullins. In case you haven\u2019t heard of him, get a crash course with a fantastic discount on Inscryption. Humble is currently selling Steam versions of the secret-packed deckbuilder for [\u0026#8230;]"
+    },
+    {
+      "Title": "The Witcher 3 is getting a remaster",
+      "Link": "https://www.theverge.com/games/984680/the-witcher-3-wild-hunt-remastered-launch-date-trailer",
+      "Published": "2026-08-25T20:24:24+00:00",
+      "Source": "The Verge",
+      "Summary": "CD Projekt Red is remastering The Witcher 3: Wild Hunt, the hit RPG that first launched in 2015, and the updated game will be available starting September 29th. The Witcher 3: Wild Hunt - Remastered will bring improvements to visuals and combat, a \u0022reimagined\u0022 skill tree, and more, and it also includes the first two [\u0026#8230;]"
+    },
+    {
+      "Title": "Canada announces \u0027dollar-for-dollar\u0027 retaliatory tariffs on US as high as 50%",
+      "Link": "https://www.bbc.co.uk/news/articles/c3v4xg5klx7o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T19:50:57+00:00",
+      "Source": "BBC News",
+      "Summary": "The latest escalation in an ongoing trade war between the US and Canada will see new levies on goods from steel to furniture, fresh tuna and makeup."
+    },
+    {
+      "Title": "CIA chief travels to Moscow for unannounced talks, US media reports",
+      "Link": "https://www.bbc.co.uk/news/articles/c87vg9x5d7do?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T19:48:14+00:00",
+      "Source": "BBC News",
+      "Summary": "Flight tracking data confirms an American military aircraft travelled to Russia from the US via Latvia on Tuesday."
+    },
+    {
+      "Title": "Dreame\u2019s dream of a rocket-powered car is dead",
+      "Link": "https://www.theverge.com/transportation/984485/dreame-rocket-car-shut-down",
+      "Published": "2026-08-25T18:52:53+00:00",
+      "Source": "The Verge",
+      "Summary": "Dreame, the Chinese vacuum company that aspires to be a global technology giant, is reportedly shutting down its automotive project after funding from the government dried up. According to CarNewsChina, the company\u0027s automotive division called \u0022Project Starry Sky\u0022 once employed over 1,000 people, but now only a handful legal and HR staffers remain, charged with [\u0026#8230;]"
+    },
+    {
+      "Title": "A life in pictures",
+      "Link": "https://www.bbc.co.uk/news/articles/czx2k07g6ldo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T18:34:05+00:00",
+      "Source": "BBC News",
+      "Summary": "The singer rose from humble beginnings to become one of the most beloved entertainers in the world. "
+    },
+    {
+      "Title": "The life of an iconic country singer",
+      "Link": "https://www.bbc.co.uk/news/videos/c7831ld8e73o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T18:27:22+00:00",
+      "Source": "BBC News",
+      "Summary": "Iconic country musician Dolly Parton has died at the age of 80, the singer\u0027s team announced on social media."
+    },
+    {
+      "Title": "Take a look at Microsoft\u0026#8217;s new 25th anniversary Halo accessories",
+      "Link": "https://www.theverge.com/games/984530/microsoft-xbox-25th-anniversary-accessories",
+      "Published": "2026-08-25T18:16:29+00:00",
+      "Source": "The Verge",
+      "Summary": "The new Designed for Xbox 25th Anniversary collection features a handful of limited edition gadgets available for pre-order today. Paying homage to the Halo special edition of the original Xbox, almost everything in the collection is translucent \u0022OG Green,\u0022 matching the Xbox Series X25 limited edition console it announced in June at E3. That includes [\u0026#8230;]"
+    },
+    {
+      "Title": "Life of the music legend whose songs touched millions",
+      "Link": "https://www.bbc.co.uk/news/articles/cz9xdl4g25zo?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T18:14:13+00:00",
+      "Source": "BBC News",
+      "Summary": "The singer, songwriter and actress is known for timeless hits including Jolene and I Will Always Love You."
+    },
+    {
+      "Title": "Bose\u2019s smallest Bluetooth speaker is a great deal at 35 percent off",
+      "Link": "https://www.theverge.com/gadgets/984414/bose-soundlink-micro-seagate-game-drive-deal-sale",
+      "Published": "2026-08-25T17:39:20+00:00",
+      "Source": "The Verge",
+      "Summary": "Bose may be best known for its QuietComfort headphones, but the brand\u2019s Bluetooth speakers have earned a great reputation for featuring great sound and build quality. The compact Bose SoundLink Micro \u2014 its most compact Bluetooth speaker \u2014 is currently discounted to $79.99 at Amazon, a pretty great discount from its usual $129 price tag. [\u0026#8230;]"
+    },
+    {
+      "Title": "Father\u0027s house rammed before son died in A66 crash",
+      "Link": "https://www.bbc.co.uk/news/articles/cevwjww8p08o?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T17:30:40+00:00",
+      "Source": "BBC News",
+      "Summary": "The house belonging to Cole Worthy\u0027s father is significantly damaged and its windows are smashed."
+    },
+    {
+      "Title": "Gamescom Opening Night Live 2026: The biggest announcements and trailers",
+      "Link": "https://www.theverge.com/games/983891/gamescom-opening-night-live-2026-geoff-keighley",
+      "Published": "2026-08-25T17:20:00+00:00",
+      "Source": "The Verge",
+      "Summary": "The Geoff Keighley-hosted Opening Night Live event at Gamescom just wrapped up. Arguably the biggest announcement was the closer: a remastered version of The Witcher 3: Wild Hunt from CD Projekt Red that\u2019s launching in September. But the show also featured a bunch of trailers for others games, including Gears of War: E-Day, Capcom\u2019s upcoming [\u0026#8230;]"
+    },
+    {
+      "Title": "Instagram\u2019s \u2018First Draft\u2019 trims your Reels clips for you",
+      "Link": "https://www.theverge.com/tech/984463/instagram-first-draft-edit-reels",
+      "Published": "2026-08-25T17:12:31+00:00",
+      "Source": "The Verge",
+      "Summary": "Instagram is launching a new Reels-editing feature that automatically trims your video clips to focus on the highlights. The feature, called First Draft, is rolling out to Instagram\u0027s iPhone app and provides a \u0022starting point\u0022 that you can build upon with other edits, according to an announcement on Tuesday. An example shared by Instagram shows [\u0026#8230;]"
+    },
+    {
+      "Title": "Nothing OS 5.0 brings a new Glyph Interface app and a more customizable homescreen",
+      "Link": "https://www.theverge.com/gadgets/984430/nothing-os-5-launch-android-17",
+      "Published": "2026-08-25T16:58:53+00:00",
+      "Source": "The Verge",
+      "Summary": "With the new design of Nothing OS 5.0, app icons and widgets can use adaptive color to get color tints pulled from your wallpaper, which update whenever your wallpaper changes. Alongside Android\u0027s built-in Dynamic Colors, the company says it allows you to have specific elements change to match your wallpaper \u0022while Nothing\u0027s predominantly monochrome character [\u0026#8230;]"
+    },
+    {
+      "Title": "Is China Replacing Workers With Robots?",
+      "Link": "https://www.bbc.co.uk/sounds/play/p0p64vd3?at_medium=RSS\u0026at_campaign=rss",
+      "Published": "2026-08-25T15:39:00+00:00",
+      "Source": "BBC News",
+      "Summary": "And, is Prime Minister Andy Burnham fulfilling his council house building target?"
     }
   ],
   "Prices": []
