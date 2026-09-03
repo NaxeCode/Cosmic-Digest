@@ -40,27 +40,42 @@ public static class NewsAi
         var briefing = JsonSerializer.Deserialize<BriefingDocument>(json, JsonOptions)
             ?? throw new InvalidOperationException("The model returned an empty briefing.");
 
-        briefing.Items = briefing.Items
-            .Where(item => item.ArticleIndex >= 1 && item.ArticleIndex <= candidates.Count)
-            .Where(item => !string.IsNullOrWhiteSpace(item.WhatChanged))
-            .Where(item => !string.IsNullOrWhiteSpace(item.WhyItMatters))
-            .GroupBy(item => item.ArticleIndex)
-            .Select(group => group.First())
-            .Take(profile.MaxItems)
-            .ToList();
+        return ValidateBriefing(profile, candidates, briefing);
+    }
+
+    public static BriefingDocument ValidateBriefing(
+        BriefingProfile profile,
+        IReadOnlyList<ScoredArticle> candidates,
+        BriefingDocument briefing)
+    {
+        if (string.IsNullOrWhiteSpace(briefing.BottomLine))
+            throw new InvalidOperationException("The model returned an empty bottom line.");
+        if (briefing.Items is null)
+            throw new InvalidOperationException("The model returned a null item list.");
+        if (briefing.Items.Count > profile.MaxItems)
+            throw new InvalidOperationException("The model returned more items than the profile permits.");
+
+        var seenIndices = new HashSet<int>();
 
         foreach (var item in briefing.Items)
         {
+            if (item.ArticleIndex < 1 || item.ArticleIndex > candidates.Count)
+                throw new InvalidOperationException($"The model referenced invalid article index {item.ArticleIndex}.");
+            if (!seenIndices.Add(item.ArticleIndex))
+                throw new InvalidOperationException($"The model selected article {item.ArticleIndex} more than once.");
+            if (string.IsNullOrWhiteSpace(item.WhatChanged) || string.IsNullOrWhiteSpace(item.WhyItMatters))
+                throw new InvalidOperationException($"The model returned incomplete analysis for article {item.ArticleIndex}.");
+
             item.WhatChanged = CompactOutput(item.WhatChanged, 700);
             item.WhyItMatters = CompactOutput(item.WhyItMatters, 700);
             item.NextStep = CompactOutput(item.NextStep, 500);
-            item.Decision = NormalizeDecision(item.Decision);
-            item.Confidence = NormalizeConfidence(item.Confidence);
+            item.Decision = ValidateDecision(item.Decision);
+            item.Confidence = ValidateConfidence(item.Confidence);
+            if (item.Decision == "act" && string.IsNullOrWhiteSpace(item.NextStep))
+                throw new InvalidOperationException($"The model returned an action without a next step for article {item.ArticleIndex}.");
         }
 
-        briefing.BottomLine = string.IsNullOrWhiteSpace(briefing.BottomLine)
-            ? $"{briefing.Items.Count} material update{(briefing.Items.Count == 1 ? "" : "s")} cleared the decision gate."
-            : CompactOutput(briefing.BottomLine, 500);
+        briefing.BottomLine = CompactOutput(briefing.BottomLine, 500);
 
         return briefing;
     }
@@ -176,17 +191,19 @@ public static class NewsAi
             _ => ChatReasoningEffortLevel.Medium
         };
 
-    private static string NormalizeDecision(string decision) => decision.ToLowerInvariant() switch
+    private static string ValidateDecision(string? decision) => decision?.Trim().ToLowerInvariant() switch
     {
         "act" => "act",
-        _ => "watch"
+        "watch" => "watch",
+        _ => throw new InvalidOperationException($"The model returned invalid decision '{decision}'.")
     };
 
-    private static string NormalizeConfidence(string confidence) => confidence.ToLowerInvariant() switch
+    private static string ValidateConfidence(string? confidence) => confidence?.Trim().ToLowerInvariant() switch
     {
         "high" => "high",
+        "medium" => "medium",
         "low" => "low",
-        _ => "medium"
+        _ => throw new InvalidOperationException($"The model returned invalid confidence '{confidence}'.")
     };
 
     private static string PlainText(string? value)

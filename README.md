@@ -134,7 +134,7 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 
 `data/state.json` stores a short article cache and 45 days of reviewed-link history.
 
-- The first run after upgrading uses the prior `LastDigestUtc` as a migration boundary.
+- Upgrades use the prior `LastDigestUtc` as a migration boundary and persist it until it ages outside the active lookback window.
 - URL tracking parameters are removed before deduplication.
 - AI-rejected candidates are marked reviewed so they do not consume tokens every day.
 - If AI synthesis fails, the email falls back to deterministic ranked headlines.

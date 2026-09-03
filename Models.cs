@@ -48,6 +48,7 @@ public sealed class StateOfWorld
 {
     public DateTimeOffset? LastRunUtc { get; set; }
     public DateTimeOffset? LastDigestUtc { get; set; }
+    public DateTimeOffset? LegacyMigrationNotBeforeUtc { get; set; }
     public List<NewsItem> CacheNews { get; set; } = new();
     public List<ReviewedArticle> ReviewedArticles { get; set; } = new();
 }
