@@ -9,6 +9,7 @@ Env.Load(".env");
 var now = DateTimeOffset.UtcNow;
 var profile = BriefingProfileLoader.Load();
 var state = StateStore.Load();
+StateStore.PruneReviewed(state, now);
 
 Console.WriteLine($"Profile: {profile.Version}; priorities: {profile.Priorities.Count}; feeds: {profile.Feeds.Count}");
 
@@ -16,18 +17,13 @@ var freshNews = await RssIngestor.FetchAsync(profile.Feeds);
 var keepDays = Math.Max(4, (int)Math.Ceiling(profile.LookbackHours / 24d) + 1);
 StateStore.AppendNews(state, freshNews, keepDays);
 
-var lookbackCutoff = now.AddHours(-profile.LookbackHours);
-var migrationCutoff = state.ReviewedArticles.Count == 0 && state.LastDigestUtc is not null
-    ? (state.LastDigestUtc.Value.AddHours(-3) > lookbackCutoff
-        ? state.LastDigestUtc.Value.AddHours(-3)
-        : lookbackCutoff)
-    : lookbackCutoff;
+var candidateCutoff = StateStore.ResolveCandidateCutoff(state, now, profile.LookbackHours);
 var candidates = ArticleSelector.Rank(
     state.CacheNews,
     profile,
     state.ReviewedArticles.Select(item => item.Link),
     now,
-    migrationCutoff);
+    candidateCutoff);
 
 Console.WriteLine($"Candidates above threshold: {candidates.Count}");
 

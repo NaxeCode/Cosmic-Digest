@@ -53,12 +53,39 @@ public static class StateStore
             return new ReviewedArticle(link, reviewedAtUtc, includedLinks.Contains(link));
         }));
 
-        var cutoff = reviewedAtUtc.AddDays(-45);
+        PruneReviewed(state, reviewedAtUtc);
+    }
+
+    public static void PruneReviewed(StateOfWorld state, DateTimeOffset now, int keepDays = 45)
+    {
+        var cutoff = now.AddDays(-keepDays);
         state.ReviewedArticles = state.ReviewedArticles
             .Where(item => item.ReviewedAtUtc >= cutoff)
             .GroupBy(item => item.Link, StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(item => item.ReviewedAtUtc).First())
             .OrderByDescending(item => item.ReviewedAtUtc)
             .ToList();
+    }
+
+    public static DateTimeOffset ResolveCandidateCutoff(
+        StateOfWorld state,
+        DateTimeOffset now,
+        int lookbackHours)
+    {
+        var lookbackCutoff = now.AddHours(-lookbackHours);
+        if (state.LegacyMigrationNotBeforeUtc is null
+            && state.ReviewedArticles.Count == 0
+            && state.LastDigestUtc is not null)
+        {
+            state.LegacyMigrationNotBeforeUtc = state.LastDigestUtc.Value.AddHours(-3);
+        }
+
+        if (state.LegacyMigrationNotBeforeUtc <= lookbackCutoff)
+            state.LegacyMigrationNotBeforeUtc = null;
+
+        return state.LegacyMigrationNotBeforeUtc is { } migrationCutoff
+            && migrationCutoff > lookbackCutoff
+                ? migrationCutoff
+                : lookbackCutoff;
     }
 }
