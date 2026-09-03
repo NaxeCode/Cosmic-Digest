@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="ai-newsletter.csproj" />
+  <Project Path="feedback/CosmicDigest.Feedback.Api/CosmicDigest.Feedback.Api.csproj" />
   <Project Path="tests/CosmicDigest.Tests/CosmicDigest.Tests.csproj" />
 </Solution>

@@ -10,12 +10,12 @@ public sealed class ReviewPolicyTests
                 10 - index,
                 new[] { "Backend" }))
             .ToList();
-        var displayed = candidates.Take(5).Select(candidate => candidate.Article).ToList();
+        var displayed = candidates.Take(5).ToList();
 
         var reviewed = ReviewPolicy.CandidatesToMarkReviewed(candidates, displayed, allCandidatesEvaluated: false);
 
         Assert.Equal(displayed, reviewed);
-        Assert.DoesNotContain(candidates[5].Article, reviewed);
+        Assert.DoesNotContain(candidates[5], reviewed);
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class ReviewPolicyTests
                 10 - index,
                 new[] { "Backend" }))
             .ToList();
-        var displayed = candidates.Take(2).Select(candidate => candidate.Article).ToList();
+        var displayed = candidates.Take(2).ToList();
 
         var reviewed = ReviewPolicy.CandidatesToMarkReviewed(candidates, displayed, allCandidatesEvaluated: true);
 

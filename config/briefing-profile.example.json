@@ -30,13 +30,48 @@
     "rumors without credible evidence",
     "content with no plausible decision or capability impact"
   ],
-  "feeds": [
-    "https://openai.com/news/rss.xml",
-    "https://github.blog/changelog/feed/",
-    "https://devblogs.microsoft.com/dotnet/feed/"
+  "sources": [
+    {
+      "name": "OpenAI News",
+      "url": "https://openai.com/news/rss.xml",
+      "official": true,
+      "trust": 5,
+      "tags": ["ai", "models", "agents"]
+    },
+    {
+      "name": "GitHub Changelog",
+      "url": "https://github.blog/changelog/feed/",
+      "official": true,
+      "trust": 5,
+      "tags": ["developer-tooling", "security"]
+    },
+    {
+      "name": ".NET Blog",
+      "url": "https://devblogs.microsoft.com/dotnet/feed/",
+      "official": true,
+      "trust": 5,
+      "tags": ["dotnet", "backend"]
+    },
+    {
+      "name": "PostgreSQL News",
+      "url": "https://www.postgresql.org/news.rss",
+      "official": true,
+      "trust": 5,
+      "tags": ["postgresql", "backend"]
+    },
+    {
+      "name": "GitHub Security",
+      "url": "https://github.blog/security/feed/",
+      "official": true,
+      "trust": 5,
+      "tags": ["security", "dependabot"]
+    }
   ],
   "lookbackHours": 36,
   "candidateLimit": 18,
   "maxItems": 5,
-  "minimumScore": 1.5
+  "minimumScore": 1.5,
+  "eventSimilarityThreshold": 0.56,
+  "feedCircuitFailureThreshold": 3,
+  "feedCircuitHours": 6
 }

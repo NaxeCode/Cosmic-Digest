@@ -12,22 +12,31 @@ public static class ArticleSelector
         BriefingProfile profile,
         IEnumerable<string> previouslySentLinks,
         DateTimeOffset now,
-        DateTimeOffset? notBefore = null)
+        DateTimeOffset? notBefore = null,
+        IEnumerable<string>? previouslyReviewedEventKeys = null)
     {
         var sent = previouslySentLinks
             .Select(CanonicalizeLink)
             .Where(link => !string.IsNullOrWhiteSpace(link))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var reviewedEvents = (previouslyReviewedEventKeys ?? Array.Empty<string>())
+            .Where(key => !string.IsNullOrWhiteSpace(key))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var cutoff = notBefore ?? now.AddHours(-profile.LookbackHours);
-
-        return articles
+        var eligible = articles
             .Where(article => article.Published >= cutoff && article.Published <= now.AddHours(2))
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
             .Where(article => !sent.Contains(CanonicalizeLink(article.Link)))
             .GroupBy(article => CanonicalizeLink(article.Link), StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(article => article.Published).First())
-            .Select(article => Score(article, profile, now))
+            .ToList();
+
+        return EventIdentity.Cluster(eligible, profile.EventSimilarityThreshold)
+            .Where(cluster => !reviewedEvents.Contains(cluster.EventKey))
+            .Select(cluster => Score(cluster, profile, now))
+            .Where(result => result is not null)
+            .Select(result => result!)
             .Where(result => result.Score >= profile.MinimumScore && result.MatchedPriorities.Count > 0)
             .OrderByDescending(result => result.Score)
             .ThenByDescending(result => result.Article.Published)
@@ -61,7 +70,37 @@ public static class ArticleSelector
         return builder.Uri.AbsoluteUri.TrimEnd('/');
     }
 
-    private static ScoredArticle Score(NewsItem article, BriefingProfile profile, DateTimeOffset now)
+    private static ScoredArticle? Score(
+        NewsEventCluster cluster,
+        BriefingProfile profile,
+        DateTimeOffset now)
+    {
+        var scoredMembers = cluster.Articles
+            .Select(article => ScoreArticle(article, profile, now))
+            .Where(result => result.MatchedPriorities.Count > 0)
+            .OrderByDescending(result => result.Score)
+            .ThenByDescending(result => result.Article.Published)
+            .ToList();
+        if (scoredMembers.Count == 0)
+            return null;
+
+        var representative = scoredMembers[0];
+        var matchedPriorities = scoredMembers
+            .SelectMany(result => result.MatchedPriorities)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+        var corroborationBoost = Math.Min(1.2, Math.Max(0, cluster.Sources.Count - 1) * 0.4);
+
+        return new ScoredArticle(
+            representative.Article,
+            Math.Round(representative.Score + corroborationBoost, 3),
+            matchedPriorities,
+            cluster.EventKey,
+            cluster.Sources.Count,
+            cluster.Sources);
+    }
+
+    private static ScoredArticle ScoreArticle(NewsItem article, BriefingProfile profile, DateTimeOffset now)
     {
         var title = Normalize(article.Title);
         var summary = Normalize(article.Summary ?? "");
@@ -91,6 +130,16 @@ public static class ArticleSelector
                 || uri.Host.EndsWith($".{domain}", StringComparison.OrdinalIgnoreCase)))
         {
             score += 0.75;
+        }
+
+        var configuredSource = profile.Sources.FirstOrDefault(source =>
+            !string.IsNullOrWhiteSpace(article.FeedUrl)
+            && source.Url.Equals(article.FeedUrl, StringComparison.OrdinalIgnoreCase));
+        if (configuredSource is not null)
+        {
+            score += (configuredSource.Trust - 3) * 0.15;
+            if (configuredSource.Official)
+                score += 0.2;
         }
 
         var ageHours = Math.Max(0, (now - article.Published).TotalHours);

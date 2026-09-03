@@ -8,11 +8,16 @@ public sealed class StateStoreTests
         var filtered = new NewsItem("Filtered", "https://example.com/b", now, "Example");
         var state = new StateOfWorld();
 
-        StateStore.MarkReviewed(state, new[] { included, filtered }, new[] { included }, now);
+        var includedCandidate = new ScoredArticle(included, 5, new[] { "Backend" }, "event-a");
+        var filteredCandidate = new ScoredArticle(filtered, 4, new[] { "Backend" }, "event-b");
+
+        StateStore.MarkReviewed(state, new[] { includedCandidate, filteredCandidate }, new[] { includedCandidate }, now);
 
         Assert.Equal(2, state.ReviewedArticles.Count);
         Assert.True(state.ReviewedArticles.Single(item => item.Link.EndsWith("/a")).Included);
         Assert.False(state.ReviewedArticles.Single(item => item.Link.EndsWith("/b")).Included);
+        Assert.True(state.ReviewedEvents.Single(item => item.EventKey == "event-a").Included);
+        Assert.False(state.ReviewedEvents.Single(item => item.EventKey == "event-b").Included);
     }
 
     [Fact]
@@ -25,6 +30,11 @@ public sealed class StateStoreTests
             {
                 new("https://example.com/expired", now.AddDays(-46), true),
                 new("https://example.com/current", now.AddDays(-44), true)
+            },
+            ReviewedEvents = new List<ReviewedEvent>
+            {
+                new("expired", now.AddDays(-46), true, "Expired"),
+                new("current", now.AddDays(-44), true, "Current")
             }
         };
 
@@ -32,6 +42,7 @@ public sealed class StateStoreTests
 
         var remaining = Assert.Single(state.ReviewedArticles);
         Assert.Equal("https://example.com/current", remaining.Link);
+        Assert.Equal("current", Assert.Single(state.ReviewedEvents).EventKey);
     }
 
     [Fact]
@@ -49,5 +60,34 @@ public sealed class StateStoreTests
         Assert.Equal(lastDigest.AddHours(-3), nextCutoff);
         Assert.Equal(lastDigest.AddHours(4), expiredCutoff);
         Assert.Null(state.LegacyMigrationNotBeforeUtc);
+    }
+
+    [Fact]
+    public void Feed_health_resets_on_success_and_accumulates_real_failures()
+    {
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
+        var source = new BriefingSource { Name = "Example", Url = "https://example.com/feed" };
+        var state = new StateOfWorld();
+
+        StateStore.UpdateFeedHealth(state, new[]
+        {
+            new FeedFetchResult(source, "failed", Array.Empty<NewsItem>(), Error: "timeout")
+        }, now);
+        StateStore.UpdateFeedHealth(state, new[]
+        {
+            new FeedFetchResult(source, "failed", Array.Empty<NewsItem>(), Error: "timeout")
+        }, now.AddMinutes(1));
+
+        Assert.Equal(2, Assert.Single(state.FeedHealth).ConsecutiveFailures);
+
+        StateStore.UpdateFeedHealth(state, new[]
+        {
+            new FeedFetchResult(source, "not_modified", Array.Empty<NewsItem>(), ETag: "\"v1\"")
+        }, now.AddMinutes(2));
+
+        var health = Assert.Single(state.FeedHealth);
+        Assert.Equal(0, health.ConsecutiveFailures);
+        Assert.Null(health.LastError);
+        Assert.Equal("\"v1\"", health.ETag);
     }
 }

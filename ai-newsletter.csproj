@@ -17,6 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="tests/**/*.cs" />
+    <Compile Remove="feedback/**/*.cs" />
   </ItemGroup>
 
 </Project>

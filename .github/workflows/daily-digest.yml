@@ -46,6 +46,11 @@ jobs:
         RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         MAIL_TO: ${{ secrets.MAIL_TO }}
         MAIL_FROM: ${{ secrets.MAIL_FROM }}
+        RESEND_VERIFY_DELIVERY: ${{ vars.RESEND_VERIFY_DELIVERY || 'true' }}
+        BRAND_NAME: ${{ vars.BRAND_NAME || 'Stella · Cosmic Digest' }}
+        BRAND_AVATAR_URL: ${{ vars.BRAND_AVATAR_URL || 'https://raw.githubusercontent.com/NaxeCode/Cosmic-Digest/main/assets/brand/stella-avatar-128.png' }}
+        FEEDBACK_BASE_URL: ${{ secrets.FEEDBACK_BASE_URL }}
+        FEEDBACK_SIGNING_KEY: ${{ secrets.FEEDBACK_SIGNING_KEY }}
         TIMEZONE: ${{ secrets.TIMEZONE }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.6-terra' }}

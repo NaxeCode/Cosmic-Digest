@@ -37,6 +37,34 @@ public sealed class NewsAiTests
         Assert.Contains("action without a next step", error.Message);
     }
 
+    [Fact]
+    public void ValidateBriefing_caps_learn_items_at_one()
+    {
+        var profile = Profile();
+        var candidates = new[]
+        {
+            Candidates()[0],
+            new ScoredArticle(new NewsItem("Second", "https://example.com/second", DateTimeOffset.UtcNow, "Example"), 4, new[] { "Backend" })
+        };
+        var briefing = ValidBriefing();
+        briefing.Items[0].Decision = "learn";
+        briefing.Items[0].NextStep = "Try the small example.";
+        briefing.Items.Add(new BriefingItem
+        {
+            ArticleIndex = 2,
+            WhatChanged = "Another mechanism changed.",
+            WhyItMatters = "It affects implementation.",
+            Decision = "learn",
+            NextStep = "Try another example.",
+            Confidence = "medium"
+        });
+
+        var error = Assert.Throws<InvalidOperationException>(() =>
+            NewsAi.ValidateBriefing(profile, candidates, briefing));
+
+        Assert.Contains("more than one learn item", error.Message);
+    }
+
     private static BriefingProfile Profile() => new() { MaxItems = 5 };
 
     private static IReadOnlyList<ScoredArticle> Candidates() => new[]

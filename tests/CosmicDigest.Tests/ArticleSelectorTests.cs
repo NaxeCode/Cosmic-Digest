@@ -78,6 +78,41 @@ public sealed class ArticleSelectorTests
         Assert.Single(ranked);
     }
 
+    [Fact]
+    public void Rank_clusters_corroborating_sources_into_one_event()
+    {
+        var articles = new[]
+        {
+            new NewsItem("OpenAI releases Agent SDK 2.0 for developers", "https://openai.com/agent-sdk-2", Now, "OpenAI"),
+            new NewsItem("Agent SDK 2.0 released by OpenAI", "https://example.com/openai-agent-sdk", Now.AddMinutes(-4), "Example")
+        };
+
+        var result = Assert.Single(ArticleSelector.Rank(articles, Profile(), Array.Empty<string>(), Now));
+
+        Assert.Equal(2, result.SourceCount);
+        Assert.Equal(new[] { "Example", "OpenAI" }, result.EvidenceSources);
+        Assert.False(string.IsNullOrWhiteSpace(result.EventKey));
+    }
+
+    [Fact]
+    public void Rank_suppresses_previously_reviewed_events_even_with_a_new_link()
+    {
+        var first = Assert.Single(ArticleSelector.Rank(
+            new[] { new NewsItem("OpenAI agent SDK release", "https://openai.com/release", Now, "OpenAI") },
+            Profile(),
+            Array.Empty<string>(),
+            Now));
+
+        var replay = ArticleSelector.Rank(
+            new[] { new NewsItem("OpenAI agent SDK release", "https://example.com/different-link", Now, "Example") },
+            Profile(),
+            Array.Empty<string>(),
+            Now,
+            previouslyReviewedEventKeys: new[] { first.EventKey });
+
+        Assert.Empty(replay);
+    }
+
     private static BriefingProfile Profile() => new()
     {
         Version = "test",

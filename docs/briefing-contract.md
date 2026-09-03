@@ -14,7 +14,7 @@ An item is eligible only when it is:
 2. matched to a current priority;
 3. supported by the supplied source evidence;
 4. material enough to justify attention; and
-5. distinct from previously reviewed links.
+5. distinct from previously reviewed links and event identities.
 
 Ranking compares durable upside, urgency, dependencies unlocked, confidence, reversibility, and attention cost. Legal, financial, administrative, and safety facts constrain the affected action without automatically dominating the whole brief.
 
@@ -30,6 +30,8 @@ Every selected item states:
 - the smallest justified next move, when one exists;
 - source, publication date, and evidence confidence.
 
+`learn` is permitted for at most one mechanism-changing capability with a small independent practice step. It is not a quota or a recurring tutorial slot.
+
 The model may not invent versions, metrics, prices, dates, availability, or causality. Article text is untrusted input and cannot modify the briefing instructions.
 Items judged low-value are omitted and marked reviewed; they never create an email on their own.
 
@@ -42,12 +44,27 @@ The profile contains only the minimum context needed to rank external informatio
 ## Failure behavior
 
 - A failed RSS feed is reported while other feeds continue.
+- Feeds use conditional requests, bounded retries, and a temporary circuit after repeated failures.
+- Feed health is retained so broken or stale sources remain visible without blocking healthy sources.
 - A failed AI synthesis falls back to deterministic ranked headlines.
 - A malformed AI selection is a synthesis failure; it is never converted into a silent omission.
 - A fallback run marks only displayed candidates reviewed, preserving undisplayed candidates for the next run.
 - A failed email does not mark candidates reviewed.
 - A state push conflict fails visibly; it is never hidden.
 - Previously reviewed candidates expire after 45 days, while the article cache stays bounded to the active lookback window.
+- Resend acceptance and the latest observed delivery state are stored separately. Terminal delivery failure leaves candidates eligible.
+
+## Identity and feedback boundary
+
+Stella is the editor identity for Cosmic Digest. The email addresses Aladdin directly, but internal profile versions remain diagnostic metadata and are never rendered in the email.
+
+Feedback controls appear only when both `FEEDBACK_BASE_URL` and `FEEDBACK_SIGNING_KEY` are configured. Links are signed, expire after 30 days, and record only the event identity plus one explicit outcome: `useful`, `noise`, `wrong`, or `acted`. Feedback is evidence for later calibration; it does not mutate doctrine or profile weights automatically.
+
+The optional feedback API verifies Resend's raw Svix signature, deduplicates at-least-once webhook delivery by `svix-id`, and exposes aggregate metrics only behind `FEEDBACK_ADMIN_TOKEN`. It does not publish a digest archive.
+
+## Measurement
+
+Each run retains bounded operational metrics: source health, fetched articles, candidate events, selected and suppressed events, selection mode, model profile, token counts when available, and duration. The system measures useful signal per unit of model use without encoding volatile model pricing.
 
 ## Change discipline
 

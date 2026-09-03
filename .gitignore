@@ -58,3 +58,7 @@ docker-compose.override.yml
 # Data directory - ignore everything except state.json
 data/*
 !data/state.json
+
+# Local feedback and preview output
+feedback-data/
+artifacts/

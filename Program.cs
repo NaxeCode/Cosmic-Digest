@@ -1,21 +1,33 @@
-using System.Net.Http.Headers;
+using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Text;
-using System.Text.Json;
 using DotNetEnv;
-using Markdig;
 
 Env.Load(".env");
 
+if (args.Contains("--preview", StringComparer.OrdinalIgnoreCase))
+    return EmailPreviewWriter.Write();
+
+var runTimer = Stopwatch.StartNew();
 var now = DateTimeOffset.UtcNow;
 var profile = BriefingProfileLoader.Load();
 var state = StateStore.Load();
 StateStore.PruneReviewed(state, now);
 
-Console.WriteLine($"Profile: {profile.Version}; priorities: {profile.Priorities.Count}; feeds: {profile.Feeds.Count}");
+Console.WriteLine($"Profile: {profile.Version}; priorities: {profile.Priorities.Count}; sources: {profile.Sources.Count}");
 
-var freshNews = await RssIngestor.FetchAsync(profile.Feeds);
+var ingestion = await RssIngestor.FetchAsync(
+    profile.Sources,
+    state.FeedHealth,
+    now,
+    profile.FeedCircuitFailureThreshold,
+    profile.FeedCircuitHours);
+StateStore.UpdateFeedHealth(state, ingestion.Feeds, now);
+var healthyFeeds = ingestion.Feeds.Count(feed => feed.IsHealthy);
+Console.WriteLine($"Sources healthy: {healthyFeeds}/{ingestion.Feeds.Count}; fetched articles: {ingestion.Articles.Count}");
+
 var keepDays = Math.Max(4, (int)Math.Ceiling(profile.LookbackHours / 24d) + 1);
-StateStore.AppendNews(state, freshNews, keepDays);
+StateStore.AppendNews(state, ingestion.Articles, keepDays);
 
 var candidateCutoff = StateStore.ResolveCandidateCutoff(state, now, profile.LookbackHours);
 var candidates = ArticleSelector.Rank(
@@ -23,12 +35,24 @@ var candidates = ArticleSelector.Rank(
     profile,
     state.ReviewedArticles.Select(item => item.Link),
     now,
-    candidateCutoff);
+    candidateCutoff,
+    state.ReviewedEvents.Select(item => item.EventKey));
 
-Console.WriteLine($"Candidates above threshold: {candidates.Count}");
+Console.WriteLine($"Candidate events above threshold: {candidates.Count}");
+var metrics = new RunMetrics
+{
+    RunAtUtc = now,
+    FeedCount = ingestion.Feeds.Count,
+    HealthyFeedCount = healthyFeeds,
+    FetchedArticleCount = ingestion.Articles.Count,
+    CandidateEventCount = candidates.Count
+};
 
 if (candidates.Count == 0)
 {
+    runTimer.Stop();
+    metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
+    StateStore.RecordRun(state, metrics);
     state.LastRunUtc = now;
     StateStore.Save(state);
     Console.WriteLine("No material new developments; email suppressed.");
@@ -42,14 +66,21 @@ if (enableAi)
 {
     try
     {
-        briefing = await NewsAi.BuildBriefingAsync(profile, candidates);
+        var aiResult = await NewsAi.BuildBriefingAsync(profile, candidates);
+        briefing = aiResult.Briefing;
         allCandidatesEvaluated = true;
-        Console.WriteLine($"AI selected {briefing.Items.Count} material item(s).");
+        metrics.SelectionMode = "ai";
+        metrics.Model = aiResult.Model;
+        metrics.ReasoningEffort = aiResult.ReasoningEffort;
+        metrics.InputTokens = aiResult.InputTokens;
+        metrics.OutputTokens = aiResult.OutputTokens;
+        Console.WriteLine($"AI selected {briefing.Items.Count} material item(s); tokens: {aiResult.InputTokens ?? 0} in/{aiResult.OutputTokens ?? 0} out.");
     }
     catch (Exception ex)
     {
         Console.Error.WriteLine($"AI briefing failed; using deterministic fallback: {ex.Message}");
         briefing = NewsAi.BuildDeterministicFallback(profile, candidates);
+        metrics.SelectionMode = "deterministic_fallback";
     }
 }
 else
@@ -57,11 +88,16 @@ else
     briefing = NewsAi.BuildDeterministicFallback(profile, candidates);
 }
 
-var displayed = DigestComposer.DisplayedArticles(candidates, briefing);
+var displayed = DigestComposer.DisplayedCandidates(candidates, briefing);
 var reviewedThisRun = ReviewPolicy.CandidatesToMarkReviewed(candidates, displayed, allCandidatesEvaluated);
+metrics.SelectedEventCount = displayed.Count;
+metrics.SuppressedEventCount = Math.Max(0, candidates.Count - displayed.Count);
 if (displayed.Count == 0)
 {
     StateStore.MarkReviewed(state, reviewedThisRun, displayed, now);
+    runTimer.Stop();
+    metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
+    StateStore.RecordRun(state, metrics);
     state.LastRunUtc = now;
     StateStore.Save(state);
     Console.WriteLine("No candidate cleared the AI decision gate; email suppressed.");
@@ -70,65 +106,90 @@ if (displayed.Count == 0)
 
 var apiKey = Environment.GetEnvironmentVariable("RESEND_API_KEY");
 var recipient = Environment.GetEnvironmentVariable("MAIL_TO");
-var sender = Environment.GetEnvironmentVariable("MAIL_FROM") ?? "digest@resend.dev";
+var sender = Environment.GetEnvironmentVariable("MAIL_FROM") ?? "Stella · Cosmic Digest <digest@resend.dev>";
 if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(recipient))
 {
     Console.Error.WriteLine("Missing RESEND_API_KEY or MAIL_TO.");
     return 1;
 }
 
-var markdown = DigestComposer.BuildMarkdown(profile, candidates, briefing, now);
-var pipeline = new MarkdownPipelineBuilder().DisableHtml().Build();
-var rendered = Markdown.ToHtml(markdown, pipeline);
-var html = BuildHtml(rendered);
+var subject = DigestComposer.BuildSubject(profile, briefing);
+var text = DigestComposer.BuildMarkdown(profile, candidates, briefing, now);
+var html = DigestComposer.BuildHtml(profile, candidates, briefing, now);
+var idempotencyKey = BuildIdempotencyKey(now, displayed);
 
-using var http = new HttpClient { Timeout = TimeSpan.FromSeconds(45) };
-http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-
-var payload = JsonSerializer.Serialize(new
+using var resend = new ResendEmailClient();
+ResendSendResult sendResult;
+try
 {
-    from = sender,
-    to = new[] { recipient },
-    subject = DigestComposer.BuildSubject(profile, briefing),
-    text = markdown,
-    html
-});
-
-var response = await http.PostAsync(
-    "https://api.resend.com/emails",
-    new StringContent(payload, Encoding.UTF8, "application/json"));
-var responseBody = await response.Content.ReadAsStringAsync();
-if (!response.IsSuccessStatusCode)
+    sendResult = await resend.SendAsync(
+        apiKey,
+        sender,
+        recipient,
+        subject,
+        text,
+        html,
+        idempotencyKey);
+}
+catch (Exception ex)
 {
-    Console.Error.WriteLine($"Email failed: {response.StatusCode} - {responseBody}");
+    Console.Error.WriteLine($"Email failed: {ex.Message}");
+    return 1;
+}
+
+var deliveryStatus = sendResult.Status;
+var verifyDelivery = !string.Equals(
+    Environment.GetEnvironmentVariable("RESEND_VERIFY_DELIVERY"),
+    "false",
+    StringComparison.OrdinalIgnoreCase);
+if (verifyDelivery)
+{
+    try
+    {
+        deliveryStatus = await resend.WaitForLatestStatusAsync(apiKey, sendResult.EmailId);
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine($"Delivery verification unavailable; preserving accepted status: {ex.Message}");
+    }
+}
+
+StateStore.RecordDelivery(state, new DeliveryAttempt(
+    sendResult.EmailId,
+    now,
+    subject,
+    deliveryStatus,
+    DateTimeOffset.UtcNow));
+
+if (deliveryStatus is "bounced" or "complained" or "suppressed" or "failed" or "canceled")
+{
+    runTimer.Stop();
+    metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
+    StateStore.RecordRun(state, metrics);
+    state.LastRunUtc = now;
+    StateStore.Save(state);
+    Console.Error.WriteLine($"Email was accepted but entered terminal delivery state '{deliveryStatus}'. Candidates remain eligible.");
     return 1;
 }
 
 StateStore.MarkReviewed(state, reviewedThisRun, displayed, now);
 state.LastRunUtc = now;
 state.LastDigestUtc = now;
+runTimer.Stop();
+metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
+StateStore.RecordRun(state, metrics);
 StateStore.Save(state);
-Console.WriteLine($"Email sent with {displayed.Count} material item(s).");
+Console.WriteLine($"Email {deliveryStatus} with {displayed.Count} material item(s); Resend id: {sendResult.EmailId}.");
 return 0;
 
-static string BuildHtml(string renderedMarkdown) => $$"""
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <style>
-        body { margin: 0; background: #f5f7fb; color: #172033; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
-        main { max-width: 720px; margin: 0 auto; padding: 32px 22px 48px; background: #ffffff; }
-        h1 { margin: 0 0 8px; font-size: 28px; color: #111827; }
-        h2 { margin-top: 34px; padding-top: 18px; border-top: 1px solid #e5e7eb; color: #1d4ed8; }
-        h3 { margin: 24px 0 10px; font-size: 18px; }
-        a { color: #1d4ed8; text-decoration: none; }
-        blockquote { margin: 20px 0; padding: 14px 18px; background: #eff6ff; border-left: 4px solid #2563eb; color: #1e3a8a; }
-        code { padding: 2px 5px; border-radius: 4px; background: #f3f4f6; }
-        hr { border: 0; border-top: 1px solid #e5e7eb; margin-top: 34px; }
-      </style>
-    </head>
-    <body><main>{{renderedMarkdown}}</main></body>
-    </html>
-    """;
+static string BuildIdempotencyKey(DateTimeOffset sentAtUtc, IReadOnlyList<ScoredArticle> displayed)
+{
+    var eventKeys = displayed
+        .Select(item => string.IsNullOrWhiteSpace(item.EventKey)
+            ? EventIdentity.KeyFor(item.Article)
+            : item.EventKey)
+        .Order(StringComparer.Ordinal);
+    var digest = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(string.Join('|', eventKeys))))[..16]
+        .ToLowerInvariant();
+    return $"cosmic-digest-{sentAtUtc:yyyyMMdd}-{digest}";
+}

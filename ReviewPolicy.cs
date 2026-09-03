@@ -1,10 +1,10 @@
 public static class ReviewPolicy
 {
-    public static IReadOnlyList<NewsItem> CandidatesToMarkReviewed(
+    public static IReadOnlyList<ScoredArticle> CandidatesToMarkReviewed(
         IReadOnlyList<ScoredArticle> candidates,
-        IReadOnlyList<NewsItem> displayed,
+        IReadOnlyList<ScoredArticle> displayed,
         bool allCandidatesEvaluated) =>
         allCandidatesEvaluated
-            ? candidates.Select(candidate => candidate.Article).ToList()
+            ? candidates.ToList()
             : displayed;
 }

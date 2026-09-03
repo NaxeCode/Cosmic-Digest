@@ -14,7 +14,14 @@ public static class StateStore
     public static StateOfWorld Load()
     {
         if (!File.Exists(PathFile)) return new StateOfWorld();
-        return JsonSerializer.Deserialize<StateOfWorld>(File.ReadAllText(PathFile), J) ?? new StateOfWorld();
+        var state = JsonSerializer.Deserialize<StateOfWorld>(File.ReadAllText(PathFile), J) ?? new StateOfWorld();
+        state.CacheNews ??= new();
+        state.ReviewedArticles ??= new();
+        state.ReviewedEvents ??= new();
+        state.FeedHealth ??= new();
+        state.Deliveries ??= new();
+        state.RecentRuns ??= new();
+        return state;
     }
 
     public static void Save(StateOfWorld s)
@@ -40,17 +47,32 @@ public static class StateStore
 
     public static void MarkReviewed(
         StateOfWorld state,
-        IEnumerable<NewsItem> candidates,
-        IEnumerable<NewsItem> included,
+        IEnumerable<ScoredArticle> candidates,
+        IEnumerable<ScoredArticle> included,
         DateTimeOffset reviewedAtUtc)
     {
         var includedLinks = included
-            .Select(article => ArticleSelector.CanonicalizeLink(article.Link))
+            .Select(candidate => ArticleSelector.CanonicalizeLink(candidate.Article.Link))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
-        state.ReviewedArticles.AddRange(candidates.Select(article =>
+        var includedEvents = included
+            .Select(ResolveEventKey)
+            .Where(key => !string.IsNullOrWhiteSpace(key))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var candidateList = candidates.ToList();
+
+        state.ReviewedArticles.AddRange(candidateList.Select(candidate =>
         {
-            var link = ArticleSelector.CanonicalizeLink(article.Link);
+            var link = ArticleSelector.CanonicalizeLink(candidate.Article.Link);
             return new ReviewedArticle(link, reviewedAtUtc, includedLinks.Contains(link));
+        }));
+        state.ReviewedEvents.AddRange(candidateList.Select(candidate =>
+        {
+            var eventKey = ResolveEventKey(candidate);
+            return new ReviewedEvent(
+                eventKey,
+                reviewedAtUtc,
+                includedEvents.Contains(eventKey),
+                candidate.Article.Title);
         }));
 
         PruneReviewed(state, reviewedAtUtc);
@@ -64,6 +86,73 @@ public static class StateStore
             .GroupBy(item => item.Link, StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(item => item.ReviewedAtUtc).First())
             .OrderByDescending(item => item.ReviewedAtUtc)
+            .ToList();
+        state.ReviewedEvents = state.ReviewedEvents
+            .Where(item => item.ReviewedAtUtc >= cutoff)
+            .Where(item => !string.IsNullOrWhiteSpace(item.EventKey))
+            .GroupBy(item => item.EventKey, StringComparer.OrdinalIgnoreCase)
+            .Select(group => group.OrderByDescending(item => item.ReviewedAtUtc).First())
+            .OrderByDescending(item => item.ReviewedAtUtc)
+            .ToList();
+    }
+
+    public static void UpdateFeedHealth(
+        StateOfWorld state,
+        IEnumerable<FeedFetchResult> results,
+        DateTimeOffset attemptedAtUtc)
+    {
+        var existing = state.FeedHealth
+            .GroupBy(item => item.Url, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
+
+        foreach (var result in results)
+        {
+            var health = existing.GetValueOrDefault(result.Source.Url) ?? new FeedHealthState();
+            health.Name = result.Source.Name;
+            health.Url = result.Source.Url;
+            health.LastAttemptUtc = attemptedAtUtc;
+            health.ETag = result.ETag ?? health.ETag;
+            health.LastModifiedUtc = result.LastModifiedUtc ?? health.LastModifiedUtc;
+            if (result.IsHealthy)
+            {
+                health.LastSuccessUtc = attemptedAtUtc;
+                health.ConsecutiveFailures = 0;
+                health.LastError = null;
+                health.LastItemCount = result.Items.Count;
+            }
+            else if (result.Status == "failed")
+            {
+                health.LastFailureUtc = attemptedAtUtc;
+                health.ConsecutiveFailures++;
+                health.LastError = result.Error;
+                health.LastItemCount = 0;
+            }
+
+            existing[result.Source.Url] = health;
+        }
+
+        state.FeedHealth = existing.Values
+            .OrderBy(item => item.Name, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+    }
+
+    public static void RecordDelivery(StateOfWorld state, DeliveryAttempt delivery)
+    {
+        state.Deliveries.Add(delivery);
+        state.Deliveries = state.Deliveries
+            .GroupBy(item => item.EmailId, StringComparer.OrdinalIgnoreCase)
+            .Select(group => group.OrderByDescending(item => item.StatusAtUtc).First())
+            .OrderByDescending(item => item.SentAtUtc)
+            .Take(45)
+            .ToList();
+    }
+
+    public static void RecordRun(StateOfWorld state, RunMetrics metrics)
+    {
+        state.RecentRuns.Add(metrics);
+        state.RecentRuns = state.RecentRuns
+            .OrderByDescending(item => item.RunAtUtc)
+            .Take(45)
             .ToList();
     }
 
@@ -88,4 +177,9 @@ public static class StateStore
                 ? migrationCutoff
                 : lookbackCutoff;
     }
+
+    private static string ResolveEventKey(ScoredArticle candidate) =>
+        string.IsNullOrWhiteSpace(candidate.EventKey)
+            ? EventIdentity.KeyFor(candidate.Article)
+            : candidate.EventKey;
 }
