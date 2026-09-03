@@ -14,19 +14,35 @@ public sealed record ScoredArticle(
     IReadOnlyList<string> MatchedPriorities,
     string EventKey = "",
     int SourceCount = 1,
-    IReadOnlyList<string>? Sources = null)
+    IReadOnlyList<string>? Sources = null,
+    IReadOnlyList<string>? IdentityKeys = null)
 {
     public IReadOnlyList<string> EvidenceSources =>
         Sources is { Count: > 0 } ? Sources : new[] { Article.Source };
+
+    public IReadOnlyList<string> ReviewEventKeys =>
+        IdentityKeys is { Count: > 0 }
+            ? IdentityKeys
+            : new[]
+            {
+                string.IsNullOrWhiteSpace(EventKey)
+                    ? EventIdentity.KeyFor(Article)
+                    : EventKey
+            };
 }
 
-public sealed record ReviewedArticle(string Link, DateTimeOffset ReviewedAtUtc, bool Included);
+public sealed record ReviewedArticle(
+    string Link,
+    DateTimeOffset ReviewedAtUtc,
+    bool Included,
+    string? DeliveryEmailId = null);
 
 public sealed record ReviewedEvent(
     string EventKey,
     DateTimeOffset ReviewedAtUtc,
     bool Included,
-    string Title);
+    string Title,
+    string? DeliveryEmailId = null);
 
 public sealed class FeedHealthState
 {

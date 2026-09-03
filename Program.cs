@@ -12,6 +12,10 @@ var runTimer = Stopwatch.StartNew();
 var now = DateTimeOffset.UtcNow;
 var profile = BriefingProfileLoader.Load();
 var state = StateStore.Load();
+var apiKey = Environment.GetEnvironmentVariable("RESEND_API_KEY");
+using var resend = new ResendEmailClient();
+if (await ReconcilePendingDeliveriesAsync(state, apiKey, resend))
+    StateStore.Save(state);
 StateStore.PruneReviewed(state, now);
 
 Console.WriteLine($"Profile: {profile.Version}; priorities: {profile.Priorities.Count}; sources: {profile.Sources.Count}");
@@ -104,7 +108,6 @@ if (displayed.Count == 0)
     return 0;
 }
 
-var apiKey = Environment.GetEnvironmentVariable("RESEND_API_KEY");
 var recipient = Environment.GetEnvironmentVariable("MAIL_TO");
 var sender = Environment.GetEnvironmentVariable("MAIL_FROM") ?? "Stella · Cosmic Digest <digest@resend.dev>";
 if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(recipient))
@@ -118,7 +121,6 @@ var text = DigestComposer.BuildMarkdown(profile, candidates, briefing, now);
 var html = DigestComposer.BuildHtml(profile, candidates, briefing, now);
 var idempotencyKey = BuildIdempotencyKey(now, displayed);
 
-using var resend = new ResendEmailClient();
 ResendSendResult sendResult;
 try
 {
@@ -161,7 +163,7 @@ StateStore.RecordDelivery(state, new DeliveryAttempt(
     deliveryStatus,
     DateTimeOffset.UtcNow));
 
-if (deliveryStatus is "bounced" or "complained" or "suppressed" or "failed" or "canceled")
+if (ResendDeliveryStatus.IsFailure(deliveryStatus))
 {
     runTimer.Stop();
     metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
@@ -172,7 +174,7 @@ if (deliveryStatus is "bounced" or "complained" or "suppressed" or "failed" or "
     return 1;
 }
 
-StateStore.MarkReviewed(state, reviewedThisRun, displayed, now);
+StateStore.MarkReviewed(state, reviewedThisRun, displayed, now, sendResult.EmailId);
 state.LastRunUtc = now;
 state.LastDigestUtc = now;
 runTimer.Stop();
@@ -192,4 +194,53 @@ static string BuildIdempotencyKey(DateTimeOffset sentAtUtc, IReadOnlyList<Scored
     var digest = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(string.Join('|', eventKeys))))[..16]
         .ToLowerInvariant();
     return $"cosmic-digest-{sentAtUtc:yyyyMMdd}-{digest}";
+}
+
+static async Task<bool> ReconcilePendingDeliveriesAsync(
+    StateOfWorld state,
+    string? apiKey,
+    ResendEmailClient resend,
+    CancellationToken cancellationToken = default)
+{
+    if (string.IsNullOrWhiteSpace(apiKey))
+        return false;
+
+    var changed = false;
+    foreach (var delivery in state.Deliveries
+        .Where(item => ResendDeliveryStatus.IsPending(item.Status))
+        .ToList())
+    {
+        try
+        {
+            var latest = await resend.GetStatusAsync(
+                apiKey,
+                delivery.EmailId,
+                cancellationToken);
+            if (string.IsNullOrWhiteSpace(latest)
+                || string.Equals(latest, delivery.Status, StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            StateStore.RecordDelivery(state, delivery with
+            {
+                Status = latest,
+                StatusAtUtc = DateTimeOffset.UtcNow
+            });
+            changed = true;
+            if (ResendDeliveryStatus.IsFailure(latest)
+                && StateStore.RestoreEligibilityForFailedDelivery(state, delivery.EmailId))
+            {
+                Console.Error.WriteLine(
+                    $"Delivery {delivery.EmailId} later entered '{latest}'; its included events are eligible again.");
+            }
+        }
+        catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
+        {
+            Console.Error.WriteLine(
+                $"Pending delivery reconciliation failed for {delivery.EmailId}: {ex.Message}");
+        }
+    }
+
+    return changed;
 }

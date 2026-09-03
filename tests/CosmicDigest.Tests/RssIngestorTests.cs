@@ -62,6 +62,52 @@ public sealed class RssIngestorTests
         Assert.Empty(handler.Requests);
     }
 
+    [Fact]
+    public async Task Fetch_enforces_the_byte_limit_for_chunked_content()
+    {
+        var oversized = new byte[(5 * 1024 * 1024) + 1];
+        var handler = new RecordingHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StreamContent(new NonSeekableStream(new MemoryStream(oversized)))
+        });
+        using var http = new HttpClient(handler);
+        var source = new BriefingSource { Name = "Example", Url = "https://example.com/feed" };
+
+        var result = await RssIngestor.FetchAsync(new[] { source }, null, Now, httpClient: http);
+
+        var feed = Assert.Single(result.Feeds);
+        Assert.Equal("failed", feed.Status);
+        Assert.Contains("5 MB", feed.Error);
+        Assert.Empty(feed.Items);
+    }
+
+    [Fact]
+    public async Task Fetch_retries_httpclient_timeouts()
+    {
+        var attempt = 0;
+        var handler = new RecordingHandler(_ =>
+        {
+            attempt++;
+            if (attempt < 3)
+                throw new TaskCanceledException("request timeout");
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("""
+                    <rss version="2.0"><channel><title>Example</title>
+                    <item><title>Agent release</title><link>https://example.com/release</link></item>
+                    </channel></rss>
+                    """)
+            };
+        });
+        using var http = new HttpClient(handler);
+        var source = new BriefingSource { Name = "Example", Url = "https://example.com/feed" };
+
+        var result = await RssIngestor.FetchAsync(new[] { source }, null, Now, httpClient: http);
+
+        Assert.Equal("ok", Assert.Single(result.Feeds).Status);
+        Assert.Equal(3, handler.Requests.Count);
+    }
+
     private sealed class RecordingHandler(Func<HttpRequestMessage, HttpResponseMessage> respond) : HttpMessageHandler
     {
         public List<HttpRequestMessage> Requests { get; } = new();
@@ -73,6 +119,34 @@ public sealed class RssIngestorTests
                 copy.Headers.TryAddWithoutValidation(header.Key, header.Value);
             Requests.Add(copy);
             return Task.FromResult(respond(request));
+        }
+    }
+
+    private sealed class NonSeekableStream(Stream inner) : Stream
+    {
+        public override bool CanRead => inner.CanRead;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush() => inner.Flush();
+        public override int Read(byte[] buffer, int offset, int count) => inner.Read(buffer, offset, count);
+        public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default) =>
+            inner.ReadAsync(buffer, cancellationToken);
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                inner.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

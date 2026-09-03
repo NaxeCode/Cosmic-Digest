@@ -169,8 +169,8 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 - Similar titles from independent sources are clustered into one event and receive a bounded corroboration boost.
 - AI-rejected candidates are marked reviewed so they do not consume tokens every day.
 - If AI synthesis fails, the email falls back to deterministic ranked headlines.
-- If delivery fails, candidates are not marked reviewed.
-- Resend is polled briefly for `last_event`; webhook deployment can extend this beyond the Actions process.
+- If delivery fails, candidates are not marked reviewed. A nonterminal delivery keeps an email-id association, and the next run restores its included events if Resend later reports a terminal failure.
+- Resend is polled briefly for `last_event`; pending delivery ids are reconciled again before every later selection run.
 - If the state commit conflicts, the workflow fails instead of silently losing state.
 
 This remains intentionally small. JSON is still the correct store for one daily writer. The optional feedback service uses an append-only journal and can be moved to managed storage only when observed volume or multiple writers justify it.
@@ -179,10 +179,12 @@ This remains intentionally small. JSON is still the correct store for one daily 
 
 `feedback/CosmicDigest.Feedback.Api` is an optional minimal ASP.NET service with:
 
-- `GET /feedback` for signed, expiring `Useful`, `Noise`, `Wrong`, and `I acted` responses;
+- `GET /feedback` for a scanner-safe confirmation page and `POST /feedback` for the signed, expiring `Useful`, `Noise`, `Wrong`, and `I acted` response;
 - `POST /webhooks/resend` for raw-body Svix-verified delivery events with `svix-id` deduplication;
 - `GET /metrics` for aggregate outcomes behind a bearer token; and
 - `GET /health` for hosting checks.
+
+Feedback and webhook entries are deduplicated from the same atomically replaced journal record, so an interrupted write cannot separate an event from its uniqueness marker.
 
 It is deliberately dormant until its URL and secrets are configured. Build its container from the repository root:
 

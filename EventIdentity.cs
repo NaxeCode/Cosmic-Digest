@@ -5,7 +5,8 @@ using System.Text.RegularExpressions;
 public sealed record NewsEventCluster(
     string EventKey,
     IReadOnlyList<NewsItem> Articles,
-    IReadOnlyList<string> Sources);
+    IReadOnlyList<string> Sources,
+    IReadOnlyList<string> IdentityKeys);
 
 public static partial class EventIdentity
 {
@@ -30,7 +31,9 @@ public static partial class EventIdentity
             for (var i = 0; i < clusters.Count; i++)
             {
                 var similarity = clusters[i]
-                    .Select(member => Similarity(articleTokens, Tokens(member.Title)))
+                    .Select(member => CanCluster(article.Title, member.Title)
+                        ? Similarity(articleTokens, Tokens(member.Title))
+                        : 0)
                     .DefaultIfEmpty(0)
                     .Max();
                 if (similarity > bestSimilarity)
@@ -48,34 +51,51 @@ public static partial class EventIdentity
 
         return clusters.Select(cluster =>
         {
-            var signatures = cluster
-                .Select(article => Signature(article.Title))
-                .Where(signature => signature.Length > 0)
+            var identityKeys = cluster
+                .Select(KeyFor)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
                 .Order(StringComparer.Ordinal)
                 .ToList();
-            var seed = signatures.FirstOrDefault()
-                ?? ArticleSelector.CanonicalizeLink(cluster[0].Link);
-            var eventKey = Convert.ToHexString(
-                    SHA256.HashData(Encoding.UTF8.GetBytes(seed)))[..24]
-                .ToLowerInvariant();
+            var eventKey = identityKeys.First();
             var sources = cluster
                 .Select(article => article.Source)
                 .Where(source => !string.IsNullOrWhiteSpace(source))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .Order(StringComparer.OrdinalIgnoreCase)
                 .ToList();
-            return new NewsEventCluster(eventKey, cluster, sources);
+            return new NewsEventCluster(eventKey, cluster, sources, identityKeys);
         }).ToList();
     }
 
-    public static string KeyFor(NewsItem article) =>
-        Cluster(new[] { article }, 1).Single().EventKey;
+    public static string KeyFor(NewsItem article)
+    {
+        var seed = Signature(article.Title);
+        if (seed.Length == 0)
+            seed = ArticleSelector.CanonicalizeLink(article.Link);
+        return Convert.ToHexString(
+                SHA256.HashData(Encoding.UTF8.GetBytes(seed)))[..24]
+            .ToLowerInvariant();
+    }
 
     public static string Signature(string title) =>
         string.Join(' ', Tokens(title).Order(StringComparer.Ordinal));
 
     public static double TitleSimilarity(string left, string right) =>
-        Similarity(Tokens(left), Tokens(right));
+        CanCluster(left, right) ? Similarity(Tokens(left), Tokens(right)) : 0;
+
+    private static bool CanCluster(string left, string right)
+    {
+        var leftNumeric = NumericIdentityTokens(left);
+        var rightNumeric = NumericIdentityTokens(right);
+        return leftNumeric.Count == 0
+            || rightNumeric.Count == 0
+            || leftNumeric.SetEquals(rightNumeric);
+    }
+
+    private static HashSet<string> NumericIdentityTokens(string value) =>
+        Tokens(value)
+            .Where(token => token.Any(char.IsDigit))
+            .ToHashSet(StringComparer.Ordinal);
 
     private static HashSet<string> Tokens(string value) =>
         TokenPattern().Matches(value.ToLowerInvariant()).Cast<Match>()

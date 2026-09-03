@@ -4,6 +4,18 @@ using System.Text.Json;
 
 public sealed record ResendSendResult(string EmailId, string Status);
 
+public static class ResendDeliveryStatus
+{
+    public static bool IsFailure(string? status) =>
+        status is "bounced" or "complained" or "suppressed" or "failed" or "canceled";
+
+    public static bool IsTerminal(string? status) =>
+        status == "delivered" || IsFailure(status);
+
+    public static bool IsPending(string? status) =>
+        status is "accepted" or "queued" or "scheduled" or "sent" or "delayed";
+}
+
 public sealed class ResendEmailClient : IDisposable
 {
     private readonly HttpClient _http;
@@ -66,7 +78,7 @@ public sealed class ResendEmailClient : IDisposable
         {
             await Task.Delay(delay, cancellationToken);
             latest = await GetStatusAsync(apiKey, emailId, cancellationToken) ?? latest;
-            if (latest is "delivered" or "bounced" or "complained" or "suppressed" or "failed" or "canceled")
+            if (ResendDeliveryStatus.IsTerminal(latest))
                 break;
         }
         return latest;

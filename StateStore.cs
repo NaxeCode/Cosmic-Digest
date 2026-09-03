@@ -49,13 +49,14 @@ public static class StateStore
         StateOfWorld state,
         IEnumerable<ScoredArticle> candidates,
         IEnumerable<ScoredArticle> included,
-        DateTimeOffset reviewedAtUtc)
+        DateTimeOffset reviewedAtUtc,
+        string? deliveryEmailId = null)
     {
         var includedLinks = included
             .Select(candidate => ArticleSelector.CanonicalizeLink(candidate.Article.Link))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         var includedEvents = included
-            .Select(ResolveEventKey)
+            .SelectMany(candidate => candidate.ReviewEventKeys)
             .Where(key => !string.IsNullOrWhiteSpace(key))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         var candidateList = candidates.ToList();
@@ -63,17 +64,21 @@ public static class StateStore
         state.ReviewedArticles.AddRange(candidateList.Select(candidate =>
         {
             var link = ArticleSelector.CanonicalizeLink(candidate.Article.Link);
-            return new ReviewedArticle(link, reviewedAtUtc, includedLinks.Contains(link));
-        }));
-        state.ReviewedEvents.AddRange(candidateList.Select(candidate =>
-        {
-            var eventKey = ResolveEventKey(candidate);
-            return new ReviewedEvent(
-                eventKey,
+            return new ReviewedArticle(
+                link,
                 reviewedAtUtc,
-                includedEvents.Contains(eventKey),
-                candidate.Article.Title);
+                includedLinks.Contains(link),
+                deliveryEmailId);
         }));
+        state.ReviewedEvents.AddRange(candidateList.SelectMany(candidate =>
+            candidate.ReviewEventKeys
+                .Where(key => !string.IsNullOrWhiteSpace(key))
+                .Select(eventKey => new ReviewedEvent(
+                    eventKey,
+                    reviewedAtUtc,
+                    includedEvents.Contains(eventKey),
+                    candidate.Article.Title,
+                    deliveryEmailId))));
 
         PruneReviewed(state, reviewedAtUtc);
     }
@@ -147,6 +152,18 @@ public static class StateStore
             .ToList();
     }
 
+    public static bool RestoreEligibilityForFailedDelivery(StateOfWorld state, string emailId)
+    {
+        if (string.IsNullOrWhiteSpace(emailId))
+            return false;
+
+        var removedArticles = state.ReviewedArticles.RemoveAll(item =>
+            string.Equals(item.DeliveryEmailId, emailId, StringComparison.OrdinalIgnoreCase));
+        var removedEvents = state.ReviewedEvents.RemoveAll(item =>
+            string.Equals(item.DeliveryEmailId, emailId, StringComparison.OrdinalIgnoreCase));
+        return removedArticles > 0 || removedEvents > 0;
+    }
+
     public static void RecordRun(StateOfWorld state, RunMetrics metrics)
     {
         state.RecentRuns.Add(metrics);
@@ -178,8 +195,4 @@ public static class StateStore
                 : lookbackCutoff;
     }
 
-    private static string ResolveEventKey(ScoredArticle candidate) =>
-        string.IsNullOrWhiteSpace(candidate.EventKey)
-            ? EventIdentity.KeyFor(candidate.Article)
-            : candidate.EventKey;
 }

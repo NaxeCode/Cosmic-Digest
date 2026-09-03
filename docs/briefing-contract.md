@@ -52,15 +52,15 @@ The profile contains only the minimum context needed to rank external informatio
 - A failed email does not mark candidates reviewed.
 - A state push conflict fails visibly; it is never hidden.
 - Previously reviewed candidates expire after 45 days, while the article cache stays bounded to the active lookback window.
-- Resend acceptance and the latest observed delivery state are stored separately. Terminal delivery failure leaves candidates eligible.
+- Resend acceptance and the latest observed delivery state are stored separately. Nonterminal deliveries retain an email-id association; each later run polls them again and removes that delivery's review markers if it eventually fails.
 
 ## Identity and feedback boundary
 
 Stella is the editor identity for Cosmic Digest. The email addresses Aladdin directly, but internal profile versions remain diagnostic metadata and are never rendered in the email.
 
-Feedback controls appear only when both `FEEDBACK_BASE_URL` and `FEEDBACK_SIGNING_KEY` are configured. Links are signed, expire after 30 days, and record only the event identity plus one explicit outcome: `useful`, `noise`, `wrong`, or `acted`. Feedback is evidence for later calibration; it does not mutate doctrine or profile weights automatically.
+Feedback controls appear only when both `FEEDBACK_BASE_URL` and `FEEDBACK_SIGNING_KEY` are configured. Links are signed, expire after 30 days, and open an idempotent confirmation page; only the subsequent explicit POST records the event identity plus one outcome: `useful`, `noise`, `wrong`, or `acted`. Feedback is evidence for later calibration; it does not mutate doctrine or profile weights automatically.
 
-The optional feedback API verifies Resend's raw Svix signature, deduplicates at-least-once webhook delivery by `svix-id`, and exposes aggregate metrics only behind `FEEDBACK_ADMIN_TOKEN`. It does not publish a digest archive.
+The optional feedback API verifies Resend's raw Svix signature, deduplicates at-least-once webhook delivery by `svix-id` in one atomically replaced record, and exposes aggregate metrics only behind `FEEDBACK_ADMIN_TOKEN`. It does not publish a digest archive.
 
 ## Measurement
 

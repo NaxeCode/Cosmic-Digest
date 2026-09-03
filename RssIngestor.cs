@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text;
 using CodeHollow.FeedReader;
 
 public sealed record FeedFetchResult(
@@ -129,9 +130,7 @@ public static class RssIngestor
                 if (mediaType?.Contains("html", StringComparison.OrdinalIgnoreCase) == true)
                     throw new InvalidDataException($"Expected RSS or Atom XML but received {mediaType}.");
 
-                var body = await response.Content.ReadAsStringAsync(cancellationToken);
-                if (body.Length > MaximumFeedBytes)
-                    throw new InvalidDataException("Feed exceeded the 5 MB safety limit.");
+                var body = await ReadBoundedAsync(response.Content, cancellationToken);
                 var items = Parse(source, body, now);
                 return new FeedFetchResult(
                     source,
@@ -198,7 +197,44 @@ public static class RssIngestor
         || (int)statusCode >= 500;
 
     private static bool IsTransient(Exception ex) =>
-        ex is HttpRequestException or IOException or TimeoutException;
+        ex is HttpRequestException or IOException or TimeoutException or OperationCanceledException;
+
+    private static async Task<string> ReadBoundedAsync(
+        HttpContent content,
+        CancellationToken cancellationToken)
+    {
+        await using var input = await content.ReadAsStreamAsync(cancellationToken);
+        var initialCapacity = (int)Math.Min(
+            content.Headers.ContentLength ?? 64 * 1024,
+            MaximumFeedBytes);
+        using var bounded = new MemoryStream(capacity: initialCapacity);
+        var buffer = new byte[81920];
+        while (true)
+        {
+            var remaining = MaximumFeedBytes - checked((int)bounded.Length);
+            var read = await input.ReadAsync(
+                buffer.AsMemory(0, Math.Min(buffer.Length, remaining + 1)),
+                cancellationToken);
+            if (read == 0)
+                break;
+            if (read > remaining)
+                throw new InvalidDataException("Feed exceeded the 5 MB safety limit.");
+            await bounded.WriteAsync(buffer.AsMemory(0, read), cancellationToken);
+        }
+
+        bounded.Position = 0;
+        var charset = content.Headers.ContentType?.CharSet?.Trim('"');
+        var encoding = string.IsNullOrWhiteSpace(charset)
+            ? Encoding.UTF8
+            : Encoding.GetEncoding(charset);
+        using var reader = new StreamReader(
+            bounded,
+            encoding,
+            detectEncodingFromByteOrderMarks: true,
+            bufferSize: 1024,
+            leaveOpen: false);
+        return await reader.ReadToEndAsync(cancellationToken);
+    }
 
     private static Task DelayBeforeRetry(int attempt, CancellationToken cancellationToken) =>
         Task.Delay(TimeSpan.FromMilliseconds(attempt == 1 ? 350 : 900), cancellationToken);

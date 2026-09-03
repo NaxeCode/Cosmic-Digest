@@ -90,4 +90,31 @@ public sealed class StateStoreTests
         Assert.Null(health.LastError);
         Assert.Equal("\"v1\"", health.ETag);
     }
+
+    [Fact]
+    public void Failed_pending_delivery_restores_only_its_reviewed_items()
+    {
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
+        var state = new StateOfWorld();
+        var failed = new ScoredArticle(
+            new NewsItem("OpenAI agent release", "https://example.com/failed", now, "Example"),
+            5,
+            new[] { "AI" },
+            "event-failed");
+        var delivered = new ScoredArticle(
+            new NewsItem("Cloud platform release", "https://example.com/delivered", now, "Example"),
+            5,
+            new[] { "Cloud" },
+            "event-delivered");
+        StateStore.MarkReviewed(state, new[] { failed }, new[] { failed }, now, "email-failed");
+        StateStore.MarkReviewed(state, new[] { delivered }, new[] { delivered }, now.AddMinutes(1), "email-delivered");
+
+        var changed = StateStore.RestoreEligibilityForFailedDelivery(state, "email-failed");
+
+        Assert.True(changed);
+        Assert.DoesNotContain(state.ReviewedEvents, item => item.EventKey == "event-failed");
+        Assert.DoesNotContain(state.ReviewedArticles, item => item.Link.EndsWith("/failed"));
+        Assert.Contains(state.ReviewedEvents, item => item.EventKey == "event-delivered");
+        Assert.Contains(state.ReviewedArticles, item => item.Link.EndsWith("/delivered"));
+    }
 }

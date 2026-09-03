@@ -10,9 +10,27 @@ var journal = new JsonLineJournal(dataDirectory);
 
 app.MapGet("/health", () => Results.Json(new { status = "ok" }));
 
-app.MapGet("/feedback", async (HttpRequest request) =>
+app.MapGet("/feedback", (HttpRequest request) =>
 {
     var token = request.Query["token"].ToString();
+    var signingKey = Environment.GetEnvironmentVariable("FEEDBACK_SIGNING_KEY");
+    if (!FeedbackTokenService.TryValidate(token, signingKey, DateTimeOffset.UtcNow, out var payload))
+        return Results.Content(ResponsePage("That feedback link is invalid or expired."), "text/html", Encoding.UTF8, 400);
+
+    return Results.Content(
+        ConfirmationPage(payload!.Signal, token),
+        "text/html",
+        Encoding.UTF8,
+        200);
+});
+
+app.MapPost("/feedback", async (HttpRequest request) =>
+{
+    if (!request.HasFormContentType)
+        return Results.Content(ResponsePage("That feedback request is invalid."), "text/html", Encoding.UTF8, 400);
+
+    var form = await request.ReadFormAsync(request.HttpContext.RequestAborted);
+    var token = form["token"].ToString();
     var signingKey = Environment.GetEnvironmentVariable("FEEDBACK_SIGNING_KEY");
     if (!FeedbackTokenService.TryValidate(token, signingKey, DateTimeOffset.UtcNow, out var payload))
         return Results.Content(ResponsePage("That feedback link is invalid or expired."), "text/html", Encoding.UTF8, 400);
@@ -135,60 +153,32 @@ static string ResponsePage(string message) => $$"""
     </body></html>
     """;
 
-public sealed class JsonLineJournal
+static string ConfirmationPage(string signal, string token)
 {
-    private static readonly SemaphoreSlim Gate = new(1, 1);
-    private readonly string _directory;
-
-    public JsonLineJournal(string directory) => _directory = directory;
-
-    public async Task<bool> AppendUniqueAsync(
-        string stream,
-        string id,
-        object value,
-        CancellationToken cancellationToken)
+    var label = signal switch
     {
-        await Gate.WaitAsync(cancellationToken);
-        try
-        {
-            Directory.CreateDirectory(_directory);
-            var idsPath = Path.Combine(_directory, $"{stream}-ids.txt");
-            var knownIds = File.Exists(idsPath)
-                ? new HashSet<string>(await File.ReadAllLinesAsync(idsPath, cancellationToken), StringComparer.Ordinal)
-                : new HashSet<string>(StringComparer.Ordinal);
-            if (!knownIds.Add(id))
-                return false;
-
-            await File.AppendAllTextAsync(
-                Path.Combine(_directory, $"{stream}-events.jsonl"),
-                JsonSerializer.Serialize(value) + Environment.NewLine,
-                cancellationToken);
-            await File.AppendAllTextAsync(idsPath, id + Environment.NewLine, cancellationToken);
-            return true;
-        }
-        finally
-        {
-            Gate.Release();
-        }
-    }
-
-    public async Task<IReadOnlyList<JsonElement>> ReadAsync(string stream, CancellationToken cancellationToken)
-    {
-        await Gate.WaitAsync(cancellationToken);
-        try
-        {
-            var path = Path.Combine(_directory, $"{stream}-events.jsonl");
-            if (!File.Exists(path))
-                return Array.Empty<JsonElement>();
-            var lines = await File.ReadAllLinesAsync(path, cancellationToken);
-            return lines
-                .Where(line => !string.IsNullOrWhiteSpace(line))
-                .Select(line => JsonSerializer.Deserialize<JsonElement>(line))
-                .ToList();
-        }
-        finally
-        {
-            Gate.Release();
-        }
-    }
+        "useful" => "Useful",
+        "noise" => "Noise",
+        "wrong" => "Wrong",
+        "acted" => "I acted",
+        _ => "Feedback"
+    };
+    var encodedLabel = System.Net.WebUtility.HtmlEncode(label);
+    var encodedToken = System.Net.WebUtility.HtmlEncode(token);
+    return $$"""
+        <!doctype html>
+        <html lang="en">
+        <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stella · Cosmic Digest</title></head>
+        <body style="margin:0;background:#0b1020;color:#eef1ff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;display:grid;min-height:100vh;place-items:center;">
+          <main style="max-width:520px;padding:40px;text-align:center;">
+            <img src="https://raw.githubusercontent.com/NaxeCode/Cosmic-Digest/main/assets/brand/stella-avatar-128.png" width="72" height="72" alt="Stella" style="border-radius:50%;">
+            <h1 style="font-size:25px;margin:18px 0 8px;">Confirm {{encodedLabel}}</h1>
+            <p style="color:#b9c2dc;line-height:1.6;margin:0 0 24px;">Email scanners may open links automatically. Stella records this signal only after you confirm it.</p>
+            <form method="post" action="">
+              <input type="hidden" name="token" value="{{encodedToken}}">
+              <button type="submit" style="border:0;border-radius:10px;background:#8b7cff;color:#fff;font:600 16px inherit;padding:12px 20px;cursor:pointer;">Record {{encodedLabel}}</button>
+            </form>
+          </main>
+        </body></html>
+        """;
 }

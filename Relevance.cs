@@ -33,7 +33,7 @@ public static class ArticleSelector
             .ToList();
 
         return EventIdentity.Cluster(eligible, profile.EventSimilarityThreshold)
-            .Where(cluster => !reviewedEvents.Contains(cluster.EventKey))
+            .Where(cluster => !cluster.IdentityKeys.Any(reviewedEvents.Contains))
             .Select(cluster => Score(cluster, profile, now))
             .Where(result => result is not null)
             .Select(result => result!)
@@ -97,7 +97,8 @@ public static class ArticleSelector
             matchedPriorities,
             cluster.EventKey,
             cluster.Sources.Count,
-            cluster.Sources);
+            cluster.Sources,
+            cluster.IdentityKeys);
     }
 
     private static ScoredArticle ScoreArticle(NewsItem article, BriefingProfile profile, DateTimeOffset now)

@@ -45,7 +45,7 @@ The Student Pack's Azure credit is appropriate for this small reversible service
 5. Register the HTTPS `/webhooks/resend` route in Resend for delivered, bounced, complained, failed, delayed, and suppressed email events.
 6. Copy the returned signing secret into `RESEND_WEBHOOK_SECRET` on the feedback service.
 
-The endpoint verifies the raw Svix signature and deduplicates `svix-id`. Do not place the API behind middleware that rewrites the request body before verification.
+The endpoint verifies the raw Svix signature and deduplicates `svix-id`. Feedback GET requests only show a confirmation page, which prevents email-link scanners from recording false signals; the user-initiated POST performs the write. Do not place the API behind middleware that rewrites the webhook request body before verification.
 
 - Webhook verification: https://resend.com/docs/webhooks/verify-webhooks-requests
 - Webhook delivery semantics: https://resend.com/docs/webhooks/introduction

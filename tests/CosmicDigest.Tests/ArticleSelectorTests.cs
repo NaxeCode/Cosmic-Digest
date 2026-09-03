@@ -113,6 +113,49 @@ public sealed class ArticleSelectorTests
         Assert.Empty(replay);
     }
 
+    [Fact]
+    public void Rank_suppresses_remaining_cluster_members_after_the_representative_link_is_removed()
+    {
+        var articles = new[]
+        {
+            new NewsItem("OpenAI releases Agent SDK 2.0 for developers", "https://openai.com/agent-sdk-2", Now, "OpenAI"),
+            new NewsItem("Agent SDK 2.0 released by OpenAI", "https://example.com/openai-agent-sdk", Now.AddMinutes(-4), "Example")
+        };
+        var first = Assert.Single(ArticleSelector.Rank(
+            articles,
+            Profile(),
+            Array.Empty<string>(),
+            Now));
+        var state = new StateOfWorld();
+        StateStore.MarkReviewed(state, new[] { first }, new[] { first }, Now);
+
+        var replay = ArticleSelector.Rank(
+            articles.Where(item => item.Source == "Example"),
+            Profile(),
+            state.ReviewedArticles.Select(item => item.Link),
+            Now.AddMinutes(1),
+            previouslyReviewedEventKeys: state.ReviewedEvents.Select(item => item.EventKey));
+
+        Assert.Empty(replay);
+        Assert.Equal(2, state.ReviewedEvents.Count);
+    }
+
+    [Fact]
+    public void Rank_keeps_conflicting_versioned_releases_in_separate_events()
+    {
+        var articles = new[]
+        {
+            new NewsItem("OpenAI releases Agent SDK 2.0 for developers", "https://openai.com/agent-sdk-2", Now, "OpenAI"),
+            new NewsItem("OpenAI releases Agent SDK 3.0 for developers", "https://openai.com/agent-sdk-3", Now.AddMinutes(-1), "OpenAI")
+        };
+
+        var ranked = ArticleSelector.Rank(articles, Profile(), Array.Empty<string>(), Now);
+
+        Assert.Equal(2, ranked.Count);
+        Assert.All(ranked, result => Assert.Equal(1, result.SourceCount));
+        Assert.NotEqual(ranked[0].EventKey, ranked[1].EventKey);
+    }
+
     private static BriefingProfile Profile() => new()
     {
         Version = "test",
