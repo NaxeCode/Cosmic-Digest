@@ -1,6 +1,9 @@
 name: Daily Digest
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     # Avoid the top-of-hour queue and preserve local time across DST.
     - cron: '17 8 * * *'
@@ -13,7 +16,7 @@ concurrency:
 
 jobs:
   send-digest:
-    if: github.event_name == 'schedule' || github.ref == 'refs/heads/main'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[send digest once]'))
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
