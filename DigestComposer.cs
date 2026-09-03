@@ -113,8 +113,9 @@ public static class DigestComposer
 
     private static string EscapeText(string? value)
     {
+        var compact = string.Join(' ', (value ?? "").Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
         var escapedMarkdown = Regex.Replace(
-            value ?? "",
+            compact,
             @"[\\`*_\[\]()]",
             match => "\\" + match.Value);
         return System.Net.WebUtility.HtmlEncode(escapedMarkdown).Trim();
