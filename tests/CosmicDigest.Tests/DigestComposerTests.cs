@@ -32,7 +32,7 @@ public sealed class DigestComposerTests
                 new()
                 {
                     ArticleIndex = 1,
-                    WhatChanged = "A <script> tag changed. ![track](https://attacker.example/pixel)",
+                    WhatChanged = "A <script> tag changed.\n# deceptive ![track](https://attacker.example/pixel)",
                     WhyItMatters = "See [fake evidence](https://attacker.example/deceptive).",
                     Decision = "watch",
                     Confidence = "high"
@@ -50,6 +50,7 @@ public sealed class DigestComposerTests
         var rendered = Markdown.ToHtml(markdown, new MarkdownPipelineBuilder().DisableHtml().Build());
         Assert.DoesNotContain("<img", rendered, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("href=\"https://attacker.example", rendered, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("\n# deceptive", markdown, StringComparison.Ordinal);
         Assert.Contains("One &lt;b&gt;real&lt;/b&gt; update.", markdown);
         Assert.Contains("Reader's Intelligence Brief", markdown);
         Assert.Single(DigestComposer.DisplayedArticles(candidates, briefing));
