@@ -6,7 +6,8 @@ public sealed record NewsEventCluster(
     string EventKey,
     IReadOnlyList<NewsItem> Articles,
     IReadOnlyList<string> Sources,
-    IReadOnlyList<string> IdentityKeys);
+    IReadOnlyList<string> IdentityKeys,
+    IReadOnlyList<string> IdentityTitles);
 
 public static partial class EventIdentity
 {
@@ -30,10 +31,11 @@ public static partial class EventIdentity
 
             for (var i = 0; i < clusters.Count; i++)
             {
+                if (!clusters[i].All(member => CanCluster(article.Title, member.Title)))
+                    continue;
+
                 var similarity = clusters[i]
-                    .Select(member => CanCluster(article.Title, member.Title)
-                        ? Similarity(articleTokens, Tokens(member.Title))
-                        : 0)
+                    .Select(member => Similarity(articleTokens, Tokens(member.Title)))
                     .DefaultIfEmpty(0)
                     .Max();
                 if (similarity > bestSimilarity)
@@ -51,11 +53,14 @@ public static partial class EventIdentity
 
         return clusters.Select(cluster =>
         {
-            var identityKeys = cluster
-                .Select(KeyFor)
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .Order(StringComparer.Ordinal)
+            var identities = cluster
+                .Select(article => new { Key = KeyFor(article), article.Title })
+                .GroupBy(identity => identity.Key, StringComparer.OrdinalIgnoreCase)
+                .Select(group => group.First())
+                .OrderBy(identity => identity.Key, StringComparer.Ordinal)
                 .ToList();
+            var identityKeys = identities.Select(identity => identity.Key).ToList();
+            var identityTitles = identities.Select(identity => identity.Title).ToList();
             var eventKey = identityKeys.First();
             var sources = cluster
                 .Select(article => article.Source)
@@ -63,7 +68,7 @@ public static partial class EventIdentity
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .Order(StringComparer.OrdinalIgnoreCase)
                 .ToList();
-            return new NewsEventCluster(eventKey, cluster, sources, identityKeys);
+            return new NewsEventCluster(eventKey, cluster, sources, identityKeys, identityTitles);
         }).ToList();
     }
 

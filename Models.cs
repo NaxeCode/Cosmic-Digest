@@ -15,7 +15,8 @@ public sealed record ScoredArticle(
     string EventKey = "",
     int SourceCount = 1,
     IReadOnlyList<string>? Sources = null,
-    IReadOnlyList<string>? IdentityKeys = null)
+    IReadOnlyList<string>? IdentityKeys = null,
+    IReadOnlyList<string>? IdentityTitles = null)
 {
     public IReadOnlyList<string> EvidenceSources =>
         Sources is { Count: > 0 } ? Sources : new[] { Article.Source };

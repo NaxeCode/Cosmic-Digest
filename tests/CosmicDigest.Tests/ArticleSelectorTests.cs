@@ -138,6 +138,36 @@ public sealed class ArticleSelectorTests
 
         Assert.Empty(replay);
         Assert.Equal(2, state.ReviewedEvents.Count);
+        Assert.Contains(state.ReviewedEvents, item => item.Title == articles[0].Title);
+        Assert.Contains(state.ReviewedEvents, item => item.Title == articles[1].Title);
+    }
+
+    [Fact]
+    public void Rank_suppresses_a_corroborating_retitle_that_arrives_on_a_later_run()
+    {
+        var original = Assert.Single(ArticleSelector.Rank(
+            new[]
+            {
+                new NewsItem("OpenAI releases Agent SDK 2.0 for developers", "https://openai.com/agent-sdk-2", Now, "OpenAI")
+            },
+            Profile(),
+            Array.Empty<string>(),
+            Now));
+        var state = new StateOfWorld();
+        StateStore.MarkReviewed(state, new[] { original }, new[] { original }, Now);
+
+        var replay = ArticleSelector.Rank(
+            new[]
+            {
+                new NewsItem("Agent SDK 2.0 released by OpenAI", "https://example.com/late-report", Now.AddMinutes(1), "Example")
+            },
+            Profile(),
+            state.ReviewedArticles.Select(item => item.Link),
+            Now.AddMinutes(2),
+            previouslyReviewedEventKeys: state.ReviewedEvents.Select(item => item.EventKey),
+            previouslyReviewedEventTitles: state.ReviewedEvents.Select(item => item.Title));
+
+        Assert.Empty(replay);
     }
 
     [Fact]
@@ -171,6 +201,22 @@ public sealed class ArticleSelectorTests
 
         Assert.Equal(2, ranked.Count);
         Assert.NotEqual(ranked[0].EventKey, ranked[1].EventKey);
+    }
+
+    [Fact]
+    public void Clustering_does_not_bridge_conflicting_versions_through_an_unversioned_title()
+    {
+        var articles = new[]
+        {
+            new NewsItem("OpenAI releases Agent SDK 2.0", "https://example.com/sdk-2", Now, "Example"),
+            new NewsItem("OpenAI releases Agent SDK", "https://example.com/sdk", Now.AddMinutes(-1), "Example"),
+            new NewsItem("OpenAI releases Agent SDK 3.0", "https://example.com/sdk-3", Now.AddMinutes(-2), "Example")
+        };
+
+        var clusters = EventIdentity.Cluster(articles, Profile().EventSimilarityThreshold);
+
+        Assert.Equal(2, clusters.Count);
+        Assert.Equal(new[] { 1, 2 }, clusters.Select(cluster => cluster.Articles.Count).Order().ToArray());
     }
 
     private static BriefingProfile Profile() => new()

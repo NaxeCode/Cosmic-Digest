@@ -4,7 +4,6 @@ using System.Text;
 public static class DigestIdempotency
 {
     public static string BuildKey(
-        DateTimeOffset sentAtUtc,
         IReadOnlyList<ScoredArticle> displayed,
         IEnumerable<DeliveryAttempt>? priorDeliveries = null)
     {
@@ -15,7 +14,7 @@ public static class DigestIdempotency
         var digest = Convert.ToHexString(
                 SHA256.HashData(Encoding.UTF8.GetBytes(string.Join('|', eventKeys))))[..16]
             .ToLowerInvariant();
-        var baseKey = $"cosmic-digest-{sentAtUtc:yyyyMMdd}-{digest}";
+        var baseKey = $"cosmic-digest-{digest}";
 
         var nextRetry = 0;
         foreach (var delivery in priorDeliveries ?? Array.Empty<DeliveryAttempt>())

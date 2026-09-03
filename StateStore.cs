@@ -71,13 +71,13 @@ public static class StateStore
                 deliveryEmailId);
         }));
         state.ReviewedEvents.AddRange(candidateList.SelectMany(candidate =>
-            candidate.ReviewEventKeys
-                .Where(key => !string.IsNullOrWhiteSpace(key))
-                .Select(eventKey => new ReviewedEvent(
-                    eventKey,
+            ResolveEventIdentities(candidate)
+                .Where(identity => !string.IsNullOrWhiteSpace(identity.EventKey))
+                .Select(identity => new ReviewedEvent(
+                    identity.EventKey,
                     reviewedAtUtc,
-                    includedEvents.Contains(eventKey),
-                    candidate.Article.Title,
+                    includedEvents.Contains(identity.EventKey),
+                    identity.Title,
                     deliveryEmailId))));
 
         PruneReviewed(state, reviewedAtUtc);
@@ -123,7 +123,8 @@ public static class StateStore
                 health.LastSuccessUtc = attemptedAtUtc;
                 health.ConsecutiveFailures = 0;
                 health.LastError = null;
-                health.LastItemCount = result.Items.Count;
+                if (result.Status == "ok")
+                    health.LastItemCount = result.Items.Count;
             }
             else if (result.Status == "failed")
             {
@@ -193,6 +194,19 @@ public static class StateStore
             && migrationCutoff > lookbackCutoff
                 ? migrationCutoff
                 : lookbackCutoff;
+    }
+
+    private static IEnumerable<(string EventKey, string Title)> ResolveEventIdentities(
+        ScoredArticle candidate)
+    {
+        if (candidate.IdentityKeys is { Count: > 0 } keys
+            && candidate.IdentityTitles is { Count: > 0 } titles
+            && keys.Count == titles.Count)
+        {
+            return keys.Zip(titles, (key, title) => (key, title));
+        }
+
+        return candidate.ReviewEventKeys.Select(key => (key, candidate.Article.Title));
     }
 
 }

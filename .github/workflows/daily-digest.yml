@@ -42,6 +42,7 @@ jobs:
       run: dotnet test --no-build --configuration Release
 
     - name: Run digest
+      id: run-digest
       env:
         RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         MAIL_TO: ${{ secrets.MAIL_TO }}
@@ -64,6 +65,7 @@ jobs:
       run: dotnet run --no-build --configuration Release
 
     - name: Commit state changes
+      if: ${{ always() && steps.run-digest.outcome != 'skipped' }}
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"

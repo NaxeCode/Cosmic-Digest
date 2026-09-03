@@ -7,6 +7,7 @@ var app = builder.Build();
 
 var dataDirectory = Environment.GetEnvironmentVariable("FEEDBACK_DATA_DIR") ?? "./feedback-data";
 var journal = new JsonLineJournal(dataDirectory);
+const int MaximumWebhookBytes = 256 * 1024;
 
 app.MapGet("/health", () => Results.Json(new { status = "ok" }));
 
@@ -57,8 +58,22 @@ app.MapPost("/feedback", async (HttpRequest request) =>
 
 app.MapPost("/webhooks/resend", async (HttpRequest request) =>
 {
-    using var reader = new StreamReader(request.Body, Encoding.UTF8);
-    var rawPayload = await reader.ReadToEndAsync(request.HttpContext.RequestAborted);
+    if (request.ContentLength is > MaximumWebhookBytes)
+        return Results.StatusCode(StatusCodes.Status413PayloadTooLarge);
+
+    string rawPayload;
+    try
+    {
+        rawPayload = await BoundedBodyReader.ReadUtf8Async(
+            request.Body,
+            MaximumWebhookBytes,
+            request.HttpContext.RequestAborted);
+    }
+    catch (InvalidDataException)
+    {
+        return Results.StatusCode(StatusCodes.Status413PayloadTooLarge);
+    }
+
     var messageId = request.Headers["svix-id"].ToString();
     var valid = ResendWebhookVerifier.Verify(
         rawPayload,

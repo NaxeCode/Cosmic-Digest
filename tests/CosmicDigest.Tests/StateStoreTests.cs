@@ -117,4 +117,27 @@ public sealed class StateStoreTests
         Assert.Contains(state.ReviewedEvents, item => item.EventKey == "event-delivered");
         Assert.Contains(state.ReviewedArticles, item => item.Link.EndsWith("/delivered"));
     }
+
+    [Fact]
+    public void Not_modified_feed_preserves_the_last_observed_item_count()
+    {
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
+        var source = new BriefingSource { Name = "Example", Url = "https://example.com/feed" };
+        var state = new StateOfWorld
+        {
+            FeedHealth = new List<FeedHealthState>
+            {
+                new() { Name = source.Name, Url = source.Url, LastItemCount = 7 }
+            }
+        };
+
+        StateStore.UpdateFeedHealth(state, new[]
+        {
+            new FeedFetchResult(source, "not_modified", Array.Empty<NewsItem>(), ETag: "\"v2\"")
+        }, now);
+
+        var health = Assert.Single(state.FeedHealth);
+        Assert.Equal(7, health.LastItemCount);
+        Assert.Equal("\"v2\"", health.ETag);
+    }
 }

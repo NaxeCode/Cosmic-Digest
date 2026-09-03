@@ -38,7 +38,8 @@ var candidates = ArticleSelector.Rank(
     state.ReviewedArticles.Select(item => item.Link),
     now,
     candidateCutoff,
-    state.ReviewedEvents.Select(item => item.EventKey));
+    state.ReviewedEvents.Select(item => item.EventKey),
+    state.ReviewedEvents.Select(item => item.Title));
 
 Console.WriteLine($"Candidate events above threshold: {candidates.Count}");
 var metrics = new RunMetrics
@@ -117,7 +118,7 @@ if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(recipient))
 var subject = DigestComposer.BuildSubject(profile, briefing);
 var text = DigestComposer.BuildMarkdown(profile, candidates, briefing, now);
 var html = DigestComposer.BuildHtml(profile, candidates, briefing, now);
-var idempotencyKey = DigestIdempotency.BuildKey(now, displayed, state.Deliveries);
+var idempotencyKey = DigestIdempotency.BuildKey(displayed, state.Deliveries);
 
 ResendSendResult sendResult;
 try

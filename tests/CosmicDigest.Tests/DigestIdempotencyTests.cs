@@ -12,7 +12,7 @@ public sealed class DigestIdempotencyTests
                 new[] { "AI" },
                 "event-1")
         };
-        var baseKey = DigestIdempotency.BuildKey(now, displayed);
+        var baseKey = DigestIdempotency.BuildKey(displayed);
         var pending = new DeliveryAttempt(
             "email-pending",
             now,
@@ -21,15 +21,16 @@ public sealed class DigestIdempotencyTests
             now,
             baseKey);
 
-        Assert.Equal(baseKey, DigestIdempotency.BuildKey(now, displayed, new[] { pending }));
+        Assert.DoesNotContain("20260903", baseKey);
+        Assert.Equal(baseKey, DigestIdempotency.BuildKey(displayed, new[] { pending }));
 
         var failed = pending with { EmailId = "email-failed", Status = "bounced" };
-        var retryOne = DigestIdempotency.BuildKey(now, displayed, new[] { failed });
+        var retryOne = DigestIdempotency.BuildKey(displayed, new[] { failed });
         Assert.Equal(baseKey + "-retry-1", retryOne);
 
         var failedRetry = failed with { EmailId = "email-failed-retry", IdempotencyKey = retryOne };
         Assert.Equal(
             baseKey + "-retry-2",
-            DigestIdempotency.BuildKey(now, displayed, new[] { failed, failedRetry }));
+            DigestIdempotency.BuildKey(displayed, new[] { failed, failedRetry }));
     }
 }

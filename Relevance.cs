@@ -13,7 +13,8 @@ public static class ArticleSelector
         IEnumerable<string> previouslySentLinks,
         DateTimeOffset now,
         DateTimeOffset? notBefore = null,
-        IEnumerable<string>? previouslyReviewedEventKeys = null)
+        IEnumerable<string>? previouslyReviewedEventKeys = null,
+        IEnumerable<string>? previouslyReviewedEventTitles = null)
     {
         var sent = previouslySentLinks
             .Select(CanonicalizeLink)
@@ -22,6 +23,10 @@ public static class ArticleSelector
         var reviewedEvents = (previouslyReviewedEventKeys ?? Array.Empty<string>())
             .Where(key => !string.IsNullOrWhiteSpace(key))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var reviewedTitles = (previouslyReviewedEventTitles ?? Array.Empty<string>())
+            .Where(title => !string.IsNullOrWhiteSpace(title))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
 
         var cutoff = notBefore ?? now.AddHours(-profile.LookbackHours);
         var eligible = articles
@@ -34,6 +39,8 @@ public static class ArticleSelector
 
         return EventIdentity.Cluster(eligible, profile.EventSimilarityThreshold)
             .Where(cluster => !cluster.IdentityKeys.Any(reviewedEvents.Contains))
+            .Where(cluster => !cluster.Articles.Any(article => reviewedTitles.Any(title =>
+                EventIdentity.TitleSimilarity(article.Title, title) >= profile.EventSimilarityThreshold)))
             .Select(cluster => Score(cluster, profile, now))
             .Where(result => result is not null)
             .Select(result => result!)
@@ -98,7 +105,8 @@ public static class ArticleSelector
             cluster.EventKey,
             cluster.Sources.Count,
             cluster.Sources,
-            cluster.IdentityKeys);
+            cluster.IdentityKeys,
+            cluster.IdentityTitles);
     }
 
     private static ScoredArticle ScoreArticle(NewsItem article, BriefingProfile profile, DateTimeOffset now)
