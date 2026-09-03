@@ -106,7 +106,12 @@ public sealed class StateStoreTests
             5,
             new[] { "Cloud" },
             "event-delivered");
-        StateStore.MarkReviewed(state, new[] { failed }, new[] { failed }, now, "email-failed");
+        var rejected = new ScoredArticle(
+            new NewsItem("Rejected candidate", "https://example.com/rejected", now, "Example"),
+            4,
+            new[] { "AI" },
+            "event-rejected");
+        StateStore.MarkReviewed(state, new[] { failed, rejected }, new[] { failed }, now, "email-failed");
         StateStore.MarkReviewed(state, new[] { delivered }, new[] { delivered }, now.AddMinutes(1), "email-delivered");
 
         var changed = StateStore.RestoreEligibilityForFailedDelivery(state, "email-failed");
@@ -114,6 +119,8 @@ public sealed class StateStoreTests
         Assert.True(changed);
         Assert.DoesNotContain(state.ReviewedEvents, item => item.EventKey == "event-failed");
         Assert.DoesNotContain(state.ReviewedArticles, item => item.Link.EndsWith("/failed"));
+        Assert.Contains(state.ReviewedEvents, item => item.EventKey == "event-rejected" && !item.Included);
+        Assert.Contains(state.ReviewedArticles, item => item.Link.EndsWith("/rejected") && !item.Included);
         Assert.Contains(state.ReviewedEvents, item => item.EventKey == "event-delivered");
         Assert.Contains(state.ReviewedArticles, item => item.Link.EndsWith("/delivered"));
     }

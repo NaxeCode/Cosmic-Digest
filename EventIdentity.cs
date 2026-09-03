@@ -88,6 +88,20 @@ public static partial class EventIdentity
     public static double TitleSimilarity(string left, string right) =>
         CanCluster(left, right) ? Similarity(Tokens(left), Tokens(right)) : 0;
 
+    public static bool ReviewedVersionCanSuppress(
+        string reviewedTitle,
+        IEnumerable<string> incomingTitles)
+    {
+        var reviewedNumeric = NumericIdentityTokens(reviewedTitle);
+        var incomingNumeric = incomingTitles
+            .Select(NumericIdentityTokens)
+            .Where(tokens => tokens.Count > 0)
+            .ToList();
+        return incomingNumeric.Count == 0
+            || (reviewedNumeric.Count > 0
+                && incomingNumeric.All(tokens => tokens.SetEquals(reviewedNumeric)));
+    }
+
     private static bool CanCluster(string left, string right)
     {
         var leftNumeric = NumericIdentityTokens(left);

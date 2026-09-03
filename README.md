@@ -172,7 +172,9 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 - If AI synthesis fails, the email falls back to deterministic ranked headlines.
 - If delivery fails, candidates are not marked reviewed. A nonterminal delivery keeps an email-id association, and the next run restores its included events if Resend later reports a terminal failure.
 - Resend is polled briefly for `last_event`; pending delivery ids are reconciled again before every later selection run.
-- Content-derived idempotency keys stay stable across clock and date boundaries while a send outcome is ambiguous, then advance only after a recorded terminal failure.
+- Content-derived idempotency keys stay stable across clock and date boundaries while a send outcome is ambiguous, then advance only after a recorded retryable terminal failure.
+- A prepared-send outbox is saved before the Resend call, pinning the exact ambiguity key even if later corroboration changes cluster membership.
+- Recipient complaints remain terminal and reviewed; they are never treated as retryable delivery failures.
 - If the state commit conflicts, the workflow fails instead of silently losing state.
 - The workflow commits a state file produced by the digest even when delivery exits nonzero, while preserving the failed job result.
 

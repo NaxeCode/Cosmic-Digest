@@ -54,6 +54,14 @@ public sealed class ResendEmailClientTests
         Assert.False(ResendDeliveryStatus.IsTerminal(status));
     }
 
+    [Fact]
+    public void Complaint_is_terminal_but_never_retryable()
+    {
+        Assert.True(ResendDeliveryStatus.IsComplaint("complained"));
+        Assert.True(ResendDeliveryStatus.IsTerminal("complained"));
+        Assert.False(ResendDeliveryStatus.IsRetryableFailure("complained"));
+    }
+
     private sealed class StubHandler(Func<HttpRequestMessage, HttpResponseMessage> response) : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) =>

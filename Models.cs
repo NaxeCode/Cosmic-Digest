@@ -67,6 +67,14 @@ public sealed record DeliveryAttempt(
     DateTimeOffset StatusAtUtc,
     string? IdempotencyKey = null);
 
+public sealed class PendingDigestSend
+{
+    public string IdempotencyKey { get; set; } = "";
+    public DateTimeOffset PreparedAtUtc { get; set; }
+    public List<string> EventKeys { get; set; } = new();
+    public List<string> EventTitles { get; set; } = new();
+}
+
 public sealed class RunMetrics
 {
     public DateTimeOffset RunAtUtc { get; set; }
@@ -124,5 +132,6 @@ public sealed class StateOfWorld
     public List<ReviewedEvent> ReviewedEvents { get; set; } = new();
     public List<FeedHealthState> FeedHealth { get; set; } = new();
     public List<DeliveryAttempt> Deliveries { get; set; } = new();
+    public List<PendingDigestSend> PendingDigestSends { get; set; } = new();
     public List<RunMetrics> RecentRuns { get; set; } = new();
 }

@@ -39,8 +39,13 @@ public static class ArticleSelector
 
         return EventIdentity.Cluster(eligible, profile.EventSimilarityThreshold)
             .Where(cluster => !cluster.IdentityKeys.Any(reviewedEvents.Contains))
-            .Where(cluster => !cluster.Articles.Any(article => reviewedTitles.Any(title =>
-                EventIdentity.TitleSimilarity(article.Title, title) >= profile.EventSimilarityThreshold)))
+            .Where(cluster => !reviewedTitles.Any(reviewedTitle =>
+                EventIdentity.ReviewedVersionCanSuppress(
+                    reviewedTitle,
+                    cluster.Articles.Select(article => article.Title))
+                && cluster.Articles.Any(article =>
+                    EventIdentity.TitleSimilarity(article.Title, reviewedTitle)
+                        >= profile.EventSimilarityThreshold)))
             .Select(cluster => Score(cluster, profile, now))
             .Where(result => result is not null)
             .Select(result => result!)

@@ -118,7 +118,9 @@ if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(recipient))
 var subject = DigestComposer.BuildSubject(profile, briefing);
 var text = DigestComposer.BuildMarkdown(profile, candidates, briefing, now);
 var html = DigestComposer.BuildHtml(profile, candidates, briefing, now);
-var idempotencyKey = DigestIdempotency.BuildKey(displayed, state.Deliveries);
+var pendingSend = DigestIdempotency.Prepare(state, displayed, now);
+StateStore.Save(state);
+var idempotencyKey = pendingSend.IdempotencyKey;
 
 ResendSendResult sendResult;
 try
@@ -155,6 +157,7 @@ if (verifyDelivery)
     }
 }
 
+DigestIdempotency.Complete(state, idempotencyKey);
 StateStore.RecordDelivery(state, new DeliveryAttempt(
     sendResult.EmailId,
     now,
@@ -163,7 +166,7 @@ StateStore.RecordDelivery(state, new DeliveryAttempt(
     DateTimeOffset.UtcNow,
     idempotencyKey));
 
-if (ResendDeliveryStatus.IsFailure(deliveryStatus))
+if (ResendDeliveryStatus.IsRetryableFailure(deliveryStatus))
 {
     runTimer.Stop();
     metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
@@ -171,6 +174,19 @@ if (ResendDeliveryStatus.IsFailure(deliveryStatus))
     state.LastRunUtc = now;
     StateStore.Save(state);
     Console.Error.WriteLine($"Email was accepted but entered terminal delivery state '{deliveryStatus}'. Candidates remain eligible.");
+    return 1;
+}
+
+if (ResendDeliveryStatus.IsComplaint(deliveryStatus))
+{
+    StateStore.MarkReviewed(state, reviewedThisRun, displayed, now, sendResult.EmailId);
+    state.LastRunUtc = now;
+    state.LastDigestUtc = now;
+    runTimer.Stop();
+    metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
+    StateStore.RecordRun(state, metrics);
+    StateStore.Save(state);
+    Console.Error.WriteLine("Email received a complaint; its events remain reviewed and will not be retried.");
     return 1;
 }
 
@@ -216,7 +232,7 @@ static async Task<bool> ReconcilePendingDeliveriesAsync(
                 StatusAtUtc = DateTimeOffset.UtcNow
             });
             changed = true;
-            if (ResendDeliveryStatus.IsFailure(latest)
+            if (ResendDeliveryStatus.IsRetryableFailure(latest)
                 && StateStore.RestoreEligibilityForFailedDelivery(state, delivery.EmailId))
             {
                 Console.Error.WriteLine(

@@ -219,6 +219,37 @@ public sealed class ArticleSelectorTests
         Assert.Equal(new[] { 1, 2 }, clusters.Select(cluster => cluster.Articles.Count).Order().ToArray());
     }
 
+    [Fact]
+    public void Reviewed_older_version_does_not_hide_a_new_version_clustered_with_unversioned_evidence()
+    {
+        var reviewed = Assert.Single(ArticleSelector.Rank(
+            new[]
+            {
+                new NewsItem("OpenAI releases Agent SDK 2.0", "https://example.com/sdk-2", Now, "Example")
+            },
+            Profile(),
+            Array.Empty<string>(),
+            Now));
+        var state = new StateOfWorld();
+        StateStore.MarkReviewed(state, new[] { reviewed }, new[] { reviewed }, Now);
+        var newArticles = new[]
+        {
+            new NewsItem("OpenAI releases Agent SDK", "https://example.com/sdk", Now.AddMinutes(2), "Example"),
+            new NewsItem("OpenAI releases Agent SDK 3.0", "https://example.com/sdk-3", Now.AddMinutes(1), "Example")
+        };
+
+        var ranked = ArticleSelector.Rank(
+            newArticles,
+            Profile(),
+            state.ReviewedArticles.Select(item => item.Link),
+            Now.AddMinutes(3),
+            previouslyReviewedEventKeys: state.ReviewedEvents.Select(item => item.EventKey),
+            previouslyReviewedEventTitles: state.ReviewedEvents.Select(item => item.Title));
+
+        var result = Assert.Single(ranked);
+        Assert.Contains(result.IdentityTitles!, title => title.Contains("3.0", StringComparison.Ordinal));
+    }
+
     private static BriefingProfile Profile() => new()
     {
         Version = "test",

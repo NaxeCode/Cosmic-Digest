@@ -20,6 +20,12 @@ public static class StateStore
         state.ReviewedEvents ??= new();
         state.FeedHealth ??= new();
         state.Deliveries ??= new();
+        state.PendingDigestSends ??= new();
+        foreach (var pending in state.PendingDigestSends)
+        {
+            pending.EventKeys ??= new();
+            pending.EventTitles ??= new();
+        }
         state.RecentRuns ??= new();
         return state;
     }
@@ -159,9 +165,11 @@ public static class StateStore
             return false;
 
         var removedArticles = state.ReviewedArticles.RemoveAll(item =>
-            string.Equals(item.DeliveryEmailId, emailId, StringComparison.OrdinalIgnoreCase));
+            item.Included
+            && string.Equals(item.DeliveryEmailId, emailId, StringComparison.OrdinalIgnoreCase));
         var removedEvents = state.ReviewedEvents.RemoveAll(item =>
-            string.Equals(item.DeliveryEmailId, emailId, StringComparison.OrdinalIgnoreCase));
+            item.Included
+            && string.Equals(item.DeliveryEmailId, emailId, StringComparison.OrdinalIgnoreCase));
         return removedArticles > 0 || removedEvents > 0;
     }
 
