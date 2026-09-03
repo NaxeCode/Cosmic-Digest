@@ -91,7 +91,7 @@ public sealed class DigestIdempotencyTests
     }
 
     [Fact]
-    public void Prepared_outbox_cannot_be_replayed_with_a_different_delivery_key()
+    public void Prepared_outbox_cannot_be_replayed_with_a_different_encryption_key()
     {
         var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
         var displayed = new[]

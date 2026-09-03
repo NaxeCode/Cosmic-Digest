@@ -54,13 +54,27 @@ public static class ArticleSelector
                 && cluster.Articles.Any(article =>
                     EventIdentity.TitleSimilarity(article.Title, reviewedTitle)
                         >= profile.EventSimilarityThreshold)))
-            .Select(cluster => Score(cluster, profile, now))
-            .Where(result => result is not null)
-            .Select(result => result!)
-            .Where(result => result.Score >= profile.MinimumScore && result.MatchedPriorities.Count > 0)
-            .OrderByDescending(result => result.Score)
-            .ThenByDescending(result => result.Article.Published)
+            .Select(cluster => new
+            {
+                Result = Score(
+                    cluster,
+                    profile,
+                    now,
+                    cluster.Articles.Any(article =>
+                        forcedRetries.Contains(CanonicalizeLink(article.Link)))),
+                IsForcedRetry = cluster.Articles.Any(article =>
+                    forcedRetries.Contains(CanonicalizeLink(article.Link)))
+            })
+            .Where(item => item.Result is not null)
+            .Select(item => new { Result = item.Result!, item.IsForcedRetry })
+            .Where(item => item.IsForcedRetry
+                || (item.Result.Score >= profile.MinimumScore
+                    && item.Result.MatchedPriorities.Count > 0))
+            .OrderByDescending(item => item.IsForcedRetry)
+            .ThenByDescending(item => item.Result.Score)
+            .ThenByDescending(item => item.Result.Article.Published)
             .Take(profile.CandidateLimit)
+            .Select(item => item.Result)
             .ToList();
     }
 
@@ -93,11 +107,12 @@ public static class ArticleSelector
     private static ScoredArticle? Score(
         NewsEventCluster cluster,
         BriefingProfile profile,
-        DateTimeOffset now)
+        DateTimeOffset now,
+        bool forcedRetry)
     {
         var scoredMembers = cluster.Articles
             .Select(article => ScoreArticle(article, profile, now))
-            .Where(result => result.MatchedPriorities.Count > 0)
+            .Where(result => forcedRetry || result.MatchedPriorities.Count > 0)
             .OrderByDescending(result => result.Score)
             .ThenByDescending(result => result.Article.Published)
             .ToList();

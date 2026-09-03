@@ -3,8 +3,8 @@ using System.Text.Json;
 
 public sealed class JsonLineJournal
 {
-    private static readonly SemaphoreSlim Gate = new(1, 1);
     private static readonly Encoding Utf8WithoutBom = new UTF8Encoding(false);
+    private readonly SemaphoreSlim _gate = new(1, 1);
     private readonly string _directory;
 
     public JsonLineJournal(string directory) => _directory = directory;
@@ -15,10 +15,11 @@ public sealed class JsonLineJournal
         object value,
         CancellationToken cancellationToken)
     {
-        await Gate.WaitAsync(cancellationToken);
+        await _gate.WaitAsync(cancellationToken);
         try
         {
             Directory.CreateDirectory(_directory);
+            await using var processLock = await AcquireProcessLockAsync(stream, cancellationToken);
             var path = Path.Combine(_directory, $"{stream}-events.jsonl");
             var existing = await ReadValidLinesAsync(path, cancellationToken);
             if (existing.Any(line => TryReadId(line, out var knownId)
@@ -51,7 +52,7 @@ public sealed class JsonLineJournal
         }
         finally
         {
-            Gate.Release();
+            _gate.Release();
         }
     }
 
@@ -59,9 +60,11 @@ public sealed class JsonLineJournal
         string stream,
         CancellationToken cancellationToken)
     {
-        await Gate.WaitAsync(cancellationToken);
+        await _gate.WaitAsync(cancellationToken);
         try
         {
+            Directory.CreateDirectory(_directory);
+            await using var processLock = await AcquireProcessLockAsync(stream, cancellationToken);
             var path = Path.Combine(_directory, $"{stream}-events.jsonl");
             var lines = await ReadValidLinesAsync(path, cancellationToken);
             return lines
@@ -70,7 +73,32 @@ public sealed class JsonLineJournal
         }
         finally
         {
-            Gate.Release();
+            _gate.Release();
+        }
+    }
+
+    private async Task<FileStream> AcquireProcessLockAsync(
+        string stream,
+        CancellationToken cancellationToken)
+    {
+        var lockPath = Path.Combine(_directory, $".{stream}.lock");
+        while (true)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                return new FileStream(
+                    lockPath,
+                    FileMode.OpenOrCreate,
+                    FileAccess.ReadWrite,
+                    FileShare.None,
+                    bufferSize: 1,
+                    FileOptions.Asynchronous);
+            }
+            catch (IOException)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(25), cancellationToken);
+            }
         }
     }
 

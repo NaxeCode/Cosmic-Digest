@@ -34,4 +34,29 @@ public sealed class ReviewPolicyTests
 
         Assert.Equal(7, reviewed.Count);
     }
+
+    [Fact]
+    public void Successful_ai_review_does_not_suppress_an_omitted_delivery_retry()
+    {
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
+        var displayed = new ScoredArticle(
+            new NewsItem("Displayed", "https://example.com/displayed", now, "Example"),
+            5,
+            new[] { "AI" },
+            "event-displayed");
+        var queuedRetry = new ScoredArticle(
+            new NewsItem("Queued retry", "https://example.com/retry", now.AddDays(-3), "Example"),
+            1,
+            new[] { "AI" },
+            "event-retry");
+
+        var reviewed = ReviewPolicy.CandidatesToMarkReviewed(
+            new[] { displayed, queuedRetry },
+            new[] { displayed },
+            allCandidatesEvaluated: true,
+            deliveryRetryEventKeys: new[] { "event-retry" });
+
+        Assert.Equal(displayed, Assert.Single(reviewed));
+        Assert.DoesNotContain(queuedRetry, reviewed);
+    }
 }

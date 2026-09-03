@@ -13,7 +13,7 @@ public static class DigestIdempotency
         IReadOnlyList<ScoredArticle> reviewed,
         IReadOnlyList<ScoredArticle> displayed,
         DateTimeOffset preparedAtUtc,
-        string apiKey,
+        string encryptionKey,
         PendingEmailPayload payload)
     {
         var eventKeys = displayed
@@ -30,7 +30,7 @@ public static class DigestIdempotency
         {
             return new PreparedDigestSend(
                 existing,
-                DecryptPayload(existing, apiKey),
+                DecryptPayload(existing, encryptionKey),
                 true);
         }
 
@@ -48,19 +48,19 @@ public static class DigestIdempotency
             EventTitles = eventTitles,
             ReviewedItems = BuildReviewedItems(reviewed, displayed)
         };
-        EncryptPayload(pending, apiKey, payload);
+        EncryptPayload(pending, encryptionKey, payload);
         state.PendingDigestSends.Add(pending);
         return new PreparedDigestSend(pending, payload, false);
     }
 
-    public static PreparedDigestSend? ResumeOldest(StateOfWorld state, string apiKey)
+    public static PreparedDigestSend? ResumeOldest(StateOfWorld state, string encryptionKey)
     {
         var pending = state.PendingDigestSends
             .OrderBy(item => item.PreparedAtUtc)
             .FirstOrDefault();
         return pending is null
             ? null
-            : new PreparedDigestSend(pending, DecryptPayload(pending, apiKey), true);
+            : new PreparedDigestSend(pending, DecryptPayload(pending, encryptionKey), true);
     }
 
     public static List<ScoredArticle> ReviewedCandidates(
@@ -170,14 +170,14 @@ public static class DigestIdempotency
 
     private static void EncryptPayload(
         PendingDigestSend pending,
-        string apiKey,
+        string encryptionKey,
         PendingEmailPayload payload)
     {
         var nonce = RandomNumberGenerator.GetBytes(NonceSize);
         var plaintext = JsonSerializer.SerializeToUtf8Bytes(payload, Json);
         var ciphertext = new byte[plaintext.Length];
         var tag = new byte[TagSize];
-        var key = DeriveKey(apiKey);
+        var key = DeriveKey(encryptionKey);
         try
         {
             using var aes = new AesGcm(key, TagSize);
@@ -198,7 +198,7 @@ public static class DigestIdempotency
         }
     }
 
-    private static PendingEmailPayload DecryptPayload(PendingDigestSend pending, string apiKey)
+    private static PendingEmailPayload DecryptPayload(PendingDigestSend pending, string encryptionKey)
     {
         if (string.IsNullOrWhiteSpace(pending.PayloadNonce)
             || string.IsNullOrWhiteSpace(pending.PayloadCiphertext)
@@ -207,7 +207,7 @@ public static class DigestIdempotency
             throw new InvalidOperationException("The pending digest outbox is missing its encrypted payload.");
         }
 
-        var key = DeriveKey(apiKey);
+        var key = DeriveKey(encryptionKey);
         try
         {
             var nonce = Convert.FromBase64String(pending.PayloadNonce);
@@ -243,12 +243,14 @@ public static class DigestIdempotency
         }
     }
 
-    private static byte[] DeriveKey(string apiKey)
+    private static byte[] DeriveKey(string encryptionKey)
     {
-        if (string.IsNullOrWhiteSpace(apiKey))
-            throw new ArgumentException("A delivery key is required for the pending outbox.", nameof(apiKey));
+        if (string.IsNullOrWhiteSpace(encryptionKey))
+            throw new ArgumentException(
+                "A dedicated encryption key is required for the pending outbox.",
+                nameof(encryptionKey));
 
         return SHA256.HashData(
-            Encoding.UTF8.GetBytes("cosmic-digest-outbox-v1\0" + apiKey));
+            Encoding.UTF8.GetBytes("cosmic-digest-outbox-v1\0" + encryptionKey));
     }
 }

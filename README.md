@@ -110,6 +110,7 @@ Keep the profile minimal. It should contain only context needed to rank external
 ```dotenv
 # Required delivery settings
 RESEND_API_KEY=re_xxxxx
+OUTBOX_ENCRYPTION_KEY=replace-with-an-independent-random-secret
 MAIL_TO=you@example.com
 MAIL_FROM=Stella · Cosmic Digest <stella@digest.yourdomain.com>
 TIMEZONE=America/New_York
@@ -148,6 +149,7 @@ The daily workflow runs at 8:17 AM in `America/New_York`. The off-hour minute re
 Configure these repository secrets:
 
 - `RESEND_API_KEY`
+- `OUTBOX_ENCRYPTION_KEY`
 - `MAIL_TO`
 - `MAIL_FROM`
 - `OPENAI_API_KEY`
@@ -174,12 +176,12 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 - Explicit delivery retries remain eligible beyond the normal freshness lookback until they succeed or become terminal nonretryable outcomes.
 - Resend is polled briefly for `last_event`; pending delivery ids are reconciled again before every later selection run.
 - Content-derived idempotency keys stay stable across clock and date boundaries while a send outcome is ambiguous, then advance only after a recorded retryable terminal failure.
-- A prepared-send outbox is saved before the Resend call. It encrypts the exact sender, recipient, subject, and bodies with authenticated encryption derived from the delivery key, then replays that payload directly before any new selection work if the outcome was ambiguous.
+- A prepared-send outbox is committed before the Resend process begins. It encrypts the exact sender, recipient, subject, and bodies with a stable dedicated key, then replays that payload directly before any new selection work if the outcome was ambiguous.
 - Recipient complaints remain terminal and reviewed; they are never treated as retryable delivery failures.
 - If the state commit conflicts, the workflow fails instead of silently losing state.
 - The workflow commits a state file produced by the digest even when delivery exits nonzero, while preserving the failed job result.
 
-This remains intentionally small. JSON is still the correct store for one daily writer. The optional feedback service uses an append-only journal and can be moved to managed storage only when observed volume or multiple writers justify it.
+This remains intentionally small. JSON is still the correct store for one daily writer. The optional feedback service is explicitly a single-replica, append-only journal and can be moved to managed storage only when observed volume or multiple replicas justify it.
 
 ## Feedback and delivery service
 
@@ -190,8 +192,9 @@ This remains intentionally small. JSON is still the correct store for one daily 
 - `GET /metrics` for aggregate outcomes behind a bearer token; and
 - `GET /health` for hosting checks.
 
-Feedback and webhook entries are deduplicated from the same atomically replaced journal record, so an interrupted write cannot separate an event from its uniqueness marker.
+Feedback and webhook entries are deduplicated from the same atomically replaced journal record, and a shared lock file coordinates overlapping processes on the mounted volume, so an interrupted or concurrent write cannot separate an event from its uniqueness marker.
 Unsigned webhook bodies are rejected above 256 KB before the service constructs the payload string.
+Feedback confirmation bodies accept only URL-encoded forms and are rejected above 8 KB before parsing.
 
 It is deliberately dormant until its URL and secrets are configured. Build its container from the repository root:
 

@@ -2,7 +2,17 @@
 
 The repository ships safely without these integrations. Complete them only when the corresponding account is available.
 
-## 1. Activate the private briefing profile
+## 1. Add the stable outbox encryption key
+
+Generate an independent random key once and keep it stable across Resend credential rotations:
+
+```bash
+openssl rand -base64 32 | gh secret set OUTBOX_ENCRYPTION_KEY
+```
+
+The workflow commits only authenticated ciphertext before delivery begins. Rotating `RESEND_API_KEY` must not rotate this key while a prepared send may be pending.
+
+## 2. Activate the private briefing profile
 
 The repository is public. Keep the real profile in the existing gitignored `config/briefing-profile.local.json` and publish only its base64 encoding as an Actions secret:
 
@@ -12,7 +22,7 @@ gh secret set DIGEST_PROFILE_B64 --body "$(base64 -w0 config/briefing-profile.lo
 
 Confirm the next run logs the expected profile version instead of `legacy-env`. The version remains in diagnostics but is intentionally absent from the email.
 
-## 2. Use the existing domain before claiming another
+## 3. Use the existing domain before claiming another
 
 `naxe.dev` already exists, so the smallest durable route is a sending subdomain such as `digest.naxe.dev`. Add that subdomain in Resend and copy the exact SPF and DKIM records Resend supplies into the DNS provider. After verification, set:
 
@@ -25,7 +35,7 @@ The GitHub Student Developer Pack currently offers additional domain benefits, b
 - Student Pack: https://education.github.com/pack
 - Resend domain setup: https://resend.com/docs/dashboard/domains/introduction
 
-## 3. Set the Gmail sender avatar
+## 4. Set the Gmail sender avatar
 
 Create or use a Google Account whose email exactly matches the verified sender address, then upload `assets/brand/stella-avatar-256.png` as its profile picture. This is the pragmatic Gmail-specific route for the inbox avatar.
 
@@ -34,12 +44,12 @@ Do not buy BIMI certification for this personal sender. Reconsider BIMI only aft
 - Gmail avatar behavior: https://resend.com/docs/knowledge-base/how-do-i-send-with-an-avatar
 - BIMI requirements: https://resend.com/docs/dashboard/domains/bimi
 
-## 4. Deploy the optional feedback API
+## 5. Deploy the optional feedback API
 
 The Student Pack's Azure credit is appropriate for this small reversible service, not for replacing the working GitHub Actions scheduler.
 
 1. Build `feedback/CosmicDigest.Feedback.Api/Dockerfile` from the repository root.
-2. Deploy it to a small managed container service with persistent storage mounted at `FEEDBACK_DATA_DIR`.
+2. Deploy exactly one service replica with persistent storage mounted at `FEEDBACK_DATA_DIR`. The journal also takes a cross-process file lock, but the service intentionally remains a single-writer design.
 3. Configure independent random values for `FEEDBACK_SIGNING_KEY` and `FEEDBACK_ADMIN_TOKEN`.
 4. Set `FEEDBACK_BASE_URL` in the digest workflow to the public HTTPS `/feedback` route.
 5. Register the HTTPS `/webhooks/resend` route in Resend for delivered, bounced, complained, failed, delayed, and suppressed email events.
@@ -50,7 +60,7 @@ The endpoint verifies the raw Svix signature and deduplicates `svix-id`. Feedbac
 - Webhook verification: https://resend.com/docs/webhooks/verify-webhooks-requests
 - Webhook delivery semantics: https://resend.com/docs/webhooks/introduction
 
-## 5. Enable the Testmail contract workflow
+## 6. Enable the Testmail contract workflow
 
 Claim the Testmail Student Pack benefit, then add these repository secrets:
 
@@ -63,7 +73,7 @@ The workflow uses a unique Testmail tag per run and a `timestamp_from` boundary 
 
 - Testmail API: https://testmail.app/docs/
 
-## 6. Acceptance gate
+## 7. Acceptance gate
 
 After the private profile and domain are active, inspect three substantive briefs. Keep the release only if:
 

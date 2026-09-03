@@ -1,6 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.WebUtilities;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -8,6 +9,7 @@ var app = builder.Build();
 var dataDirectory = Environment.GetEnvironmentVariable("FEEDBACK_DATA_DIR") ?? "./feedback-data";
 var journal = new JsonLineJournal(dataDirectory);
 const int MaximumWebhookBytes = 256 * 1024;
+const int MaximumFeedbackBytes = 8 * 1024;
 
 app.MapGet("/health", () => Results.Json(new { status = "ok" }));
 
@@ -27,10 +29,28 @@ app.MapGet("/feedback", (HttpRequest request) =>
 
 app.MapPost("/feedback", async (HttpRequest request) =>
 {
-    if (!request.HasFormContentType)
+    if (request.ContentType?.StartsWith(
+            "application/x-www-form-urlencoded",
+            StringComparison.OrdinalIgnoreCase) != true)
         return Results.Content(ResponsePage("That feedback request is invalid."), "text/html", Encoding.UTF8, 400);
 
-    var form = await request.ReadFormAsync(request.HttpContext.RequestAborted);
+    if (request.ContentLength is > MaximumFeedbackBytes)
+        return Results.StatusCode(StatusCodes.Status413PayloadTooLarge);
+
+    string rawForm;
+    try
+    {
+        rawForm = await BoundedBodyReader.ReadUtf8Async(
+            request.Body,
+            MaximumFeedbackBytes,
+            request.HttpContext.RequestAborted);
+    }
+    catch (InvalidDataException)
+    {
+        return Results.StatusCode(StatusCodes.Status413PayloadTooLarge);
+    }
+
+    var form = QueryHelpers.ParseQuery(rawForm);
     var token = form["token"].ToString();
     var signingKey = Environment.GetEnvironmentVariable("FEEDBACK_SIGNING_KEY");
     if (!FeedbackTokenService.TryValidate(token, signingKey, DateTimeOffset.UtcNow, out var payload))

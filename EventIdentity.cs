@@ -116,12 +116,16 @@ public static partial class EventIdentity
             .Where(token => token.Any(char.IsDigit))
             .ToHashSet(StringComparer.Ordinal);
 
-    private static HashSet<string> Tokens(string value) =>
-        TokenPattern().Matches(value.ToLowerInvariant()).Cast<Match>()
+    private static HashSet<string> Tokens(string value)
+    {
+        var normalized = LetterVersionSeparatorPattern().Replace(value.ToLowerInvariant(), " ");
+        normalized = ConventionalVersionPrefixPattern().Replace(normalized, "");
+        return TokenPattern().Matches(normalized).Cast<Match>()
             .Select(match => match.Value.Trim('.', '-', '_'))
             .Where(token => token.Length >= 2 || token.Any(char.IsDigit))
             .Where(token => !StopWords.Contains(token))
             .ToHashSet(StringComparer.Ordinal);
+    }
 
     private static double Similarity(IReadOnlySet<string> left, IReadOnlySet<string> right)
     {
@@ -135,4 +139,10 @@ public static partial class EventIdentity
 
     [GeneratedRegex(@"[\p{L}\p{N}][\p{L}\p{N}+#._-]*", RegexOptions.CultureInvariant)]
     private static partial Regex TokenPattern();
+
+    [GeneratedRegex(@"(?<=[\p{L}])[-_](?=\d)", RegexOptions.CultureInvariant)]
+    private static partial Regex LetterVersionSeparatorPattern();
+
+    [GeneratedRegex(@"(?<![\p{L}\p{N}])v(?=\d)", RegexOptions.CultureInvariant)]
+    private static partial Regex ConventionalVersionPrefixPattern();
 }

@@ -36,6 +36,7 @@ jobs:
     - name: Send contract email
       env:
         RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        OUTBOX_ENCRYPTION_KEY: contract-${{ github.run_id }}-${{ github.run_attempt }}
         MAIL_FROM: ${{ secrets.MAIL_FROM }}
         MAIL_TO: ${{ secrets.TESTMAIL_NAMESPACE }}.cosmic-${{ github.run_id }}-${{ github.run_attempt }}@inbox.testmail.app
         DIGEST_PROFILE_PATH: config/briefing-profile.testmail.json

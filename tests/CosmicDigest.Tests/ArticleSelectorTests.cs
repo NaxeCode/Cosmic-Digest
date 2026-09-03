@@ -220,6 +220,28 @@ public sealed class ArticleSelectorTests
     }
 
     [Fact]
+    public void Clustering_normalizes_hyphenated_and_spaced_product_versions()
+    {
+        var articles = new[]
+        {
+            new NewsItem("OpenAI releases GPT-5 model", "https://example.com/hyphen", Now, "Example"),
+            new NewsItem("OpenAI releases GPT 5 model", "https://example.com/space", Now.AddMinutes(-1), "Other")
+        };
+
+        var cluster = Assert.Single(EventIdentity.Cluster(articles, Profile().EventSimilarityThreshold));
+
+        Assert.Equal(2, cluster.Articles.Count);
+    }
+
+    [Fact]
+    public void Version_compatibility_normalizes_conventional_v_prefixes()
+    {
+        Assert.True(EventIdentity.ReviewedVersionCanSuppress(
+            "Agent SDK v9 release",
+            new[] { "Agent SDK 9 release" }));
+    }
+
+    [Fact]
     public void Reviewed_older_version_does_not_hide_a_new_version_clustered_with_unversioned_evidence()
     {
         var reviewed = Assert.Single(ArticleSelector.Rank(
@@ -253,6 +275,9 @@ public sealed class ArticleSelectorTests
     [Fact]
     public void Rank_allows_an_explicit_delivery_retry_beyond_the_normal_lookback()
     {
+        var profile = Profile();
+        profile.Priorities[0].Weight = 2;
+        profile.Priorities[0].Signals = new List<string> { "OpenAI" };
         var article = new NewsItem(
             "OpenAI agent SDK release",
             "https://example.com/old-retry",
@@ -260,19 +285,19 @@ public sealed class ArticleSelectorTests
             "Example");
         var withoutRetry = ArticleSelector.Rank(
             new[] { article },
-            Profile(),
+            profile,
             Array.Empty<string>(),
             Now);
 
         var withRetry = ArticleSelector.Rank(
             new[] { article },
-            Profile(),
+            profile,
             Array.Empty<string>(),
             Now,
             forcedRetryLinks: new[] { article.Link });
 
         Assert.Empty(withoutRetry);
-        Assert.Single(withRetry);
+        Assert.True(Assert.Single(withRetry).Score < profile.MinimumScore);
     }
 
     private static BriefingProfile Profile() => new()

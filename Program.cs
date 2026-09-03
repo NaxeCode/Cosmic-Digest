@@ -5,21 +5,49 @@ Env.Load(".env");
 
 if (args.Contains("--preview", StringComparer.OrdinalIgnoreCase))
     return EmailPreviewWriter.Write();
+var prepareOnly = args.Contains("--prepare-only", StringComparer.OrdinalIgnoreCase);
+var deliverPendingOnly = args.Contains("--deliver-pending", StringComparer.OrdinalIgnoreCase);
+if (prepareOnly && deliverPendingOnly)
+    throw new ArgumentException("Choose either --prepare-only or --deliver-pending, not both.");
 
 var runTimer = Stopwatch.StartNew();
 var now = DateTimeOffset.UtcNow;
-var profile = BriefingProfileLoader.Load();
 var state = StateStore.Load();
 var apiKey = Environment.GetEnvironmentVariable("RESEND_API_KEY");
+var outboxEncryptionKey = Environment.GetEnvironmentVariable("OUTBOX_ENCRYPTION_KEY");
 using var resend = new ResendEmailClient();
 if (await ReconcilePendingDeliveriesAsync(state, apiKey, resend))
     StateStore.Save(state);
-if (!string.IsNullOrWhiteSpace(apiKey))
+if (state.PendingDigestSends.Count > 0
+    && (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(outboxEncryptionKey)))
 {
-    var replayExitCode = await ReplayPendingDigestAsync(state, apiKey, resend);
+    Console.Error.WriteLine(
+        "A pending digest requires RESEND_API_KEY and the stable OUTBOX_ENCRYPTION_KEY.");
+    return 1;
+}
+if (prepareOnly && state.PendingDigestSends.Count > 0)
+{
+    Console.WriteLine("A durable pending digest is already prepared; delivery remains a separate step.");
+    return 0;
+}
+if (!prepareOnly
+    && !string.IsNullOrWhiteSpace(apiKey)
+    && !string.IsNullOrWhiteSpace(outboxEncryptionKey))
+{
+    var replayExitCode = await ReplayPendingDigestAsync(
+        state,
+        apiKey,
+        outboxEncryptionKey,
+        resend);
     if (replayExitCode is not null)
         return replayExitCode.Value;
 }
+if (deliverPendingOnly)
+{
+    Console.WriteLine("No pending digest is waiting for delivery.");
+    return 0;
+}
+var profile = BriefingProfileLoader.Load();
 StateStore.PruneReviewed(state, now);
 
 Console.WriteLine($"Profile: {profile.Version}; priorities: {profile.Priorities.Count}; sources: {profile.Sources.Count}");
@@ -100,7 +128,14 @@ else
 }
 
 var displayed = DigestComposer.DisplayedCandidates(candidates, briefing);
-var reviewedThisRun = ReviewPolicy.CandidatesToMarkReviewed(candidates, displayed, allCandidatesEvaluated);
+var retryEventKeys = retryArticles
+    .Select(EventIdentity.KeyFor)
+    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+var reviewedThisRun = ReviewPolicy.CandidatesToMarkReviewed(
+    candidates,
+    displayed,
+    allCandidatesEvaluated,
+    retryEventKeys);
 metrics.SelectedEventCount = displayed.Count;
 metrics.SuppressedEventCount = Math.Max(0, candidates.Count - displayed.Count);
 if (displayed.Count == 0)
@@ -117,9 +152,11 @@ if (displayed.Count == 0)
 
 var recipient = Environment.GetEnvironmentVariable("MAIL_TO");
 var sender = Environment.GetEnvironmentVariable("MAIL_FROM") ?? "Stella · Cosmic Digest <digest@resend.dev>";
-if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(recipient))
+if (string.IsNullOrWhiteSpace(apiKey)
+    || string.IsNullOrWhiteSpace(recipient)
+    || string.IsNullOrWhiteSpace(outboxEncryptionKey))
 {
-    Console.Error.WriteLine("Missing RESEND_API_KEY or MAIL_TO.");
+    Console.Error.WriteLine("Missing RESEND_API_KEY, MAIL_TO, or OUTBOX_ENCRYPTION_KEY.");
     return 1;
 }
 
@@ -131,7 +168,7 @@ var preparedSend = DigestIdempotency.Prepare(
     reviewedThisRun,
     displayed,
     now,
-    apiKey,
+    outboxEncryptionKey,
     new PendingEmailPayload(sender, recipient, subject, text, html));
 StateStore.Save(state);
 var pendingSend = preparedSend.Outbox;
@@ -139,6 +176,12 @@ var payload = preparedSend.Payload;
 var reviewedForDelivery = DigestIdempotency.ReviewedCandidates(pendingSend);
 var displayedForDelivery = DigestIdempotency.ReviewedCandidates(pendingSend, included: true);
 var idempotencyKey = pendingSend.IdempotencyKey;
+if (prepareOnly)
+{
+    Console.WriteLine(
+        $"Prepared {displayedForDelivery.Count} material item(s) in the durable outbox; no delivery attempted.");
+    return 0;
+}
 
 ResendSendResult sendResult;
 try
@@ -284,10 +327,11 @@ static async Task<bool> ReconcilePendingDeliveriesAsync(
 static async Task<int?> ReplayPendingDigestAsync(
     StateOfWorld state,
     string apiKey,
+    string outboxEncryptionKey,
     ResendEmailClient resend,
     CancellationToken cancellationToken = default)
 {
-    var prepared = DigestIdempotency.ResumeOldest(state, apiKey);
+    var prepared = DigestIdempotency.ResumeOldest(state, outboxEncryptionKey);
     if (prepared is null)
         return null;
 
