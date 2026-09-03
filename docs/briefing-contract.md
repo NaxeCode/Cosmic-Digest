@@ -43,6 +43,7 @@ The profile contains only the minimum context needed to rank external informatio
 
 - A failed RSS feed is reported while other feeds continue.
 - A failed AI synthesis falls back to deterministic ranked headlines.
+- A fallback run marks only displayed candidates reviewed, preserving undisplayed candidates for the next run.
 - A failed email does not mark candidates reviewed.
 - A state push conflict fails visibly; it is never hidden.
 - Previously reviewed candidates expire after 45 days, while the article cache stays bounded to the active lookback window.

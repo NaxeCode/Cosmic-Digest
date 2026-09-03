@@ -41,11 +41,13 @@ if (candidates.Count == 0)
 
 BriefingDocument briefing;
 var enableAi = Environment.GetEnvironmentVariable("ENABLE_AI_SUMMARY")?.Equals("true", StringComparison.OrdinalIgnoreCase) == true;
+var allCandidatesEvaluated = false;
 if (enableAi)
 {
     try
     {
         briefing = await NewsAi.BuildBriefingAsync(profile, candidates);
+        allCandidatesEvaluated = true;
         Console.WriteLine($"AI selected {briefing.Items.Count} material item(s).");
     }
     catch (Exception ex)
@@ -60,9 +62,10 @@ else
 }
 
 var displayed = DigestComposer.DisplayedArticles(candidates, briefing);
+var reviewedThisRun = ReviewPolicy.CandidatesToMarkReviewed(candidates, displayed, allCandidatesEvaluated);
 if (displayed.Count == 0)
 {
-    StateStore.MarkReviewed(state, candidates.Select(item => item.Article), displayed, now);
+    StateStore.MarkReviewed(state, reviewedThisRun, displayed, now);
     state.LastRunUtc = now;
     StateStore.Save(state);
     Console.WriteLine("No candidate cleared the AI decision gate; email suppressed.");
@@ -105,7 +108,7 @@ if (!response.IsSuccessStatusCode)
     return 1;
 }
 
-StateStore.MarkReviewed(state, candidates.Select(item => item.Article), displayed, now);
+StateStore.MarkReviewed(state, reviewedThisRun, displayed, now);
 state.LastRunUtc = now;
 state.LastDigestUtc = now;
 StateStore.Save(state);

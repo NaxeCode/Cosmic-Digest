@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.RegularExpressions;
 
 public static class DigestComposer
 {
@@ -91,7 +92,10 @@ public static class DigestComposer
 
     private static DateTimeOffset ToLocalTime(DateTimeOffset utc)
     {
-        var timezone = Environment.GetEnvironmentVariable("TIMEZONE") ?? "America/New_York";
+        var configuredTimezone = Environment.GetEnvironmentVariable("TIMEZONE");
+        var timezone = string.IsNullOrWhiteSpace(configuredTimezone)
+            ? "America/New_York"
+            : configuredTimezone;
         try
         {
             return TimeZoneInfo.ConvertTime(utc, TimeZoneInfo.FindSystemTimeZoneById(timezone));
@@ -105,17 +109,16 @@ public static class DigestComposer
 
     private static string EscapeInline(string value) => value.Replace("`", "'");
 
-    private static string EscapeLinkText(string value) =>
-        EscapeText(value).Replace("[", "\\[").Replace("]", "\\]");
+    private static string EscapeLinkText(string value) => EscapeText(value);
 
-    private static string EscapeText(string? value) =>
-        (value ?? "")
-            .Replace("\\", "\\\\")
-            .Replace("*", "\\*")
-            .Replace("_", "\\_")
-            .Replace("<", "&lt;")
-            .Replace(">", "&gt;")
-            .Trim();
+    private static string EscapeText(string? value)
+    {
+        var escapedMarkdown = Regex.Replace(
+            value ?? "",
+            @"[\\`*_\[\]()]",
+            match => "\\" + match.Value);
+        return System.Net.WebUtility.HtmlEncode(escapedMarkdown).Trim();
+    }
 
     private static string SafeLink(string value) =>
         Uri.TryCreate(value, UriKind.Absolute, out var uri)
