@@ -250,6 +250,31 @@ public sealed class ArticleSelectorTests
         Assert.Contains(result.IdentityTitles!, title => title.Contains("3.0", StringComparison.Ordinal));
     }
 
+    [Fact]
+    public void Rank_allows_an_explicit_delivery_retry_beyond_the_normal_lookback()
+    {
+        var article = new NewsItem(
+            "OpenAI agent SDK release",
+            "https://example.com/old-retry",
+            Now.AddDays(-3),
+            "Example");
+        var withoutRetry = ArticleSelector.Rank(
+            new[] { article },
+            Profile(),
+            Array.Empty<string>(),
+            Now);
+
+        var withRetry = ArticleSelector.Rank(
+            new[] { article },
+            Profile(),
+            Array.Empty<string>(),
+            Now,
+            forcedRetryLinks: new[] { article.Link });
+
+        Assert.Empty(withoutRetry);
+        Assert.Single(withRetry);
+    }
+
     private static BriefingProfile Profile() => new()
     {
         Version = "test",

@@ -14,6 +14,12 @@ var apiKey = Environment.GetEnvironmentVariable("RESEND_API_KEY");
 using var resend = new ResendEmailClient();
 if (await ReconcilePendingDeliveriesAsync(state, apiKey, resend))
     StateStore.Save(state);
+if (!string.IsNullOrWhiteSpace(apiKey))
+{
+    var replayExitCode = await ReplayPendingDigestAsync(state, apiKey, resend);
+    if (replayExitCode is not null)
+        return replayExitCode.Value;
+}
 StateStore.PruneReviewed(state, now);
 
 Console.WriteLine($"Profile: {profile.Version}; priorities: {profile.Priorities.Count}; sources: {profile.Sources.Count}");
@@ -32,14 +38,16 @@ var keepDays = Math.Max(4, (int)Math.Ceiling(profile.LookbackHours / 24d) + 1);
 StateStore.AppendNews(state, ingestion.Articles, keepDays);
 
 var candidateCutoff = StateStore.ResolveCandidateCutoff(state, now, profile.LookbackHours);
+var retryArticles = state.DeliveryRetries.Select(item => item.Article).ToList();
 var candidates = ArticleSelector.Rank(
-    state.CacheNews,
+    state.CacheNews.Concat(retryArticles),
     profile,
     state.ReviewedArticles.Select(item => item.Link),
     now,
     candidateCutoff,
     state.ReviewedEvents.Select(item => item.EventKey),
-    state.ReviewedEvents.Select(item => item.Title));
+    state.ReviewedEvents.Select(item => item.Title),
+    retryArticles.Select(item => item.Link));
 
 Console.WriteLine($"Candidate events above threshold: {candidates.Count}");
 var metrics = new RunMetrics
@@ -118,8 +126,18 @@ if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(recipient))
 var subject = DigestComposer.BuildSubject(profile, briefing);
 var text = DigestComposer.BuildMarkdown(profile, candidates, briefing, now);
 var html = DigestComposer.BuildHtml(profile, candidates, briefing, now);
-var pendingSend = DigestIdempotency.Prepare(state, displayed, now);
+var preparedSend = DigestIdempotency.Prepare(
+    state,
+    reviewedThisRun,
+    displayed,
+    now,
+    apiKey,
+    new PendingEmailPayload(sender, recipient, subject, text, html));
 StateStore.Save(state);
+var pendingSend = preparedSend.Outbox;
+var payload = preparedSend.Payload;
+var reviewedForDelivery = DigestIdempotency.ReviewedCandidates(pendingSend);
+var displayedForDelivery = DigestIdempotency.ReviewedCandidates(pendingSend, included: true);
 var idempotencyKey = pendingSend.IdempotencyKey;
 
 ResendSendResult sendResult;
@@ -127,11 +145,11 @@ try
 {
     sendResult = await resend.SendAsync(
         apiKey,
-        sender,
-        recipient,
-        subject,
-        text,
-        html,
+        payload.Sender,
+        payload.Recipient,
+        payload.Subject,
+        payload.Text,
+        payload.Html,
         idempotencyKey);
 }
 catch (Exception ex)
@@ -158,16 +176,25 @@ if (verifyDelivery)
 }
 
 DigestIdempotency.Complete(state, idempotencyKey);
-StateStore.RecordDelivery(state, new DeliveryAttempt(
+var delivery = new DeliveryAttempt(
     sendResult.EmailId,
     now,
-    subject,
+    "Cosmic Digest",
     deliveryStatus,
     DateTimeOffset.UtcNow,
-    idempotencyKey));
+    idempotencyKey,
+    displayedForDelivery.Select(item => item.Article).ToList());
+StateStore.RecordDelivery(state, delivery);
 
 if (ResendDeliveryStatus.IsRetryableFailure(deliveryStatus))
 {
+    StateStore.MarkReviewed(
+        state,
+        reviewedForDelivery,
+        displayedForDelivery,
+        now,
+        sendResult.EmailId);
+    StateStore.RestoreEligibilityForFailedDelivery(state, delivery, DateTimeOffset.UtcNow);
     runTimer.Stop();
     metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
     StateStore.RecordRun(state, metrics);
@@ -179,7 +206,8 @@ if (ResendDeliveryStatus.IsRetryableFailure(deliveryStatus))
 
 if (ResendDeliveryStatus.IsComplaint(deliveryStatus))
 {
-    StateStore.MarkReviewed(state, reviewedThisRun, displayed, now, sendResult.EmailId);
+    StateStore.MarkReviewed(state, reviewedForDelivery, displayedForDelivery, now, sendResult.EmailId);
+    StateStore.CompleteDeliveryRetries(state, displayedForDelivery);
     state.LastRunUtc = now;
     state.LastDigestUtc = now;
     runTimer.Stop();
@@ -190,14 +218,15 @@ if (ResendDeliveryStatus.IsComplaint(deliveryStatus))
     return 1;
 }
 
-StateStore.MarkReviewed(state, reviewedThisRun, displayed, now, sendResult.EmailId);
+StateStore.MarkReviewed(state, reviewedForDelivery, displayedForDelivery, now, sendResult.EmailId);
+StateStore.CompleteDeliveryRetries(state, displayedForDelivery);
 state.LastRunUtc = now;
 state.LastDigestUtc = now;
 runTimer.Stop();
 metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
 StateStore.RecordRun(state, metrics);
 StateStore.Save(state);
-Console.WriteLine($"Email {deliveryStatus} with {displayed.Count} material item(s); Resend id: {sendResult.EmailId}.");
+Console.WriteLine($"Email {deliveryStatus} with {displayedForDelivery.Count} material item(s); Resend id: {sendResult.EmailId}.");
 return 0;
 
 static async Task<bool> ReconcilePendingDeliveriesAsync(
@@ -233,7 +262,10 @@ static async Task<bool> ReconcilePendingDeliveriesAsync(
             });
             changed = true;
             if (ResendDeliveryStatus.IsRetryableFailure(latest)
-                && StateStore.RestoreEligibilityForFailedDelivery(state, delivery.EmailId))
+                && StateStore.RestoreEligibilityForFailedDelivery(
+                    state,
+                    delivery,
+                    DateTimeOffset.UtcNow))
             {
                 Console.Error.WriteLine(
                     $"Delivery {delivery.EmailId} later entered '{latest}'; its included events are eligible again.");
@@ -247,4 +279,107 @@ static async Task<bool> ReconcilePendingDeliveriesAsync(
     }
 
     return changed;
+}
+
+static async Task<int?> ReplayPendingDigestAsync(
+    StateOfWorld state,
+    string apiKey,
+    ResendEmailClient resend,
+    CancellationToken cancellationToken = default)
+{
+    var prepared = DigestIdempotency.ResumeOldest(state, apiKey);
+    if (prepared is null)
+        return null;
+
+    var now = DateTimeOffset.UtcNow;
+    var reviewed = DigestIdempotency.ReviewedCandidates(prepared.Outbox);
+    var displayed = DigestIdempotency.ReviewedCandidates(prepared.Outbox, included: true);
+    if (displayed.Count == 0)
+        throw new InvalidOperationException("The pending digest outbox has no included items to replay.");
+
+    ResendSendResult sendResult;
+    try
+    {
+        sendResult = await resend.SendAsync(
+            apiKey,
+            prepared.Payload.Sender,
+            prepared.Payload.Recipient,
+            prepared.Payload.Subject,
+            prepared.Payload.Text,
+            prepared.Payload.Html,
+            prepared.Outbox.IdempotencyKey,
+            cancellationToken);
+    }
+    catch (Exception ex)
+    {
+        Console.Error.WriteLine($"Pending email replay failed: {ex.Message}");
+        return 1;
+    }
+
+    var deliveryStatus = sendResult.Status;
+    var verifyDelivery = !string.Equals(
+        Environment.GetEnvironmentVariable("RESEND_VERIFY_DELIVERY"),
+        "false",
+        StringComparison.OrdinalIgnoreCase);
+    if (verifyDelivery)
+    {
+        try
+        {
+            deliveryStatus = await resend.WaitForLatestStatusAsync(
+                apiKey,
+                sendResult.EmailId,
+                cancellationToken: cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(
+                $"Pending delivery verification unavailable; preserving accepted status: {ex.Message}");
+        }
+    }
+
+    DigestIdempotency.Complete(state, prepared.Outbox.IdempotencyKey);
+    var delivery = new DeliveryAttempt(
+        sendResult.EmailId,
+        now,
+        "Cosmic Digest",
+        deliveryStatus,
+        DateTimeOffset.UtcNow,
+        prepared.Outbox.IdempotencyKey,
+        displayed.Select(item => item.Article).ToList());
+    StateStore.RecordDelivery(state, delivery);
+    StateStore.MarkReviewed(state, reviewed, displayed, now, sendResult.EmailId);
+
+    var metrics = new RunMetrics
+    {
+        RunAtUtc = now,
+        CandidateEventCount = reviewed.Count,
+        SelectedEventCount = displayed.Count,
+        SuppressedEventCount = Math.Max(0, reviewed.Count - displayed.Count),
+        SelectionMode = "outbox_replay"
+    };
+    StateStore.RecordRun(state, metrics);
+    state.LastRunUtc = now;
+
+    if (ResendDeliveryStatus.IsRetryableFailure(deliveryStatus))
+    {
+        StateStore.RestoreEligibilityForFailedDelivery(state, delivery, DateTimeOffset.UtcNow);
+        StateStore.Save(state);
+        Console.Error.WriteLine(
+            $"Pending email replay entered terminal delivery state '{deliveryStatus}'. Included events were queued for retry.");
+        return 1;
+    }
+
+    StateStore.CompleteDeliveryRetries(state, displayed);
+    state.LastDigestUtc = now;
+    StateStore.Save(state);
+    if (ResendDeliveryStatus.IsComplaint(deliveryStatus))
+    {
+        Console.Error.WriteLine(
+            "Pending email replay received a complaint; its events remain reviewed and will not be retried.");
+        return 1;
+    }
+
+    Console.WriteLine(
+        $"Replayed pending email {deliveryStatus} with {displayed.Count} material item(s); Resend id: {sendResult.EmailId}.");
+    return 0;
 }

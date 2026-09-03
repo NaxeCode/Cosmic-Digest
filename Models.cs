@@ -65,7 +65,28 @@ public sealed record DeliveryAttempt(
     string Subject,
     string Status,
     DateTimeOffset StatusAtUtc,
-    string? IdempotencyKey = null);
+    string? IdempotencyKey = null,
+    IReadOnlyList<NewsItem>? IncludedItems = null);
+
+public sealed record PendingEmailPayload(
+    string Sender,
+    string Recipient,
+    string Subject,
+    string Text,
+    string Html);
+
+public sealed record PreparedDigestSend(
+    PendingDigestSend Outbox,
+    PendingEmailPayload Payload,
+    bool Reused);
+
+public sealed class PendingDigestItem
+{
+    public NewsItem Article { get; set; } = new("", "", DateTimeOffset.MinValue, "");
+    public List<string> EventKeys { get; set; } = new();
+    public List<string> EventTitles { get; set; } = new();
+    public bool Included { get; set; }
+}
 
 public sealed class PendingDigestSend
 {
@@ -73,7 +94,13 @@ public sealed class PendingDigestSend
     public DateTimeOffset PreparedAtUtc { get; set; }
     public List<string> EventKeys { get; set; } = new();
     public List<string> EventTitles { get; set; } = new();
+    public string PayloadNonce { get; set; } = "";
+    public string PayloadCiphertext { get; set; } = "";
+    public string PayloadTag { get; set; } = "";
+    public List<PendingDigestItem> ReviewedItems { get; set; } = new();
 }
+
+public sealed record DeliveryRetryItem(NewsItem Article, DateTimeOffset QueuedAtUtc);
 
 public sealed class RunMetrics
 {
@@ -133,5 +160,6 @@ public sealed class StateOfWorld
     public List<FeedHealthState> FeedHealth { get; set; } = new();
     public List<DeliveryAttempt> Deliveries { get; set; } = new();
     public List<PendingDigestSend> PendingDigestSends { get; set; } = new();
+    public List<DeliveryRetryItem> DeliveryRetries { get; set; } = new();
     public List<RunMetrics> RecentRuns { get; set; } = new();
 }

@@ -25,7 +25,17 @@ public static class StateStore
         {
             pending.EventKeys ??= new();
             pending.EventTitles ??= new();
+            pending.PayloadNonce ??= "";
+            pending.PayloadCiphertext ??= "";
+            pending.PayloadTag ??= "";
+            pending.ReviewedItems ??= new();
+            foreach (var item in pending.ReviewedItems)
+            {
+                item.EventKeys ??= new();
+                item.EventTitles ??= new();
+            }
         }
+        state.DeliveryRetries ??= new();
         state.RecentRuns ??= new();
         return state;
     }
@@ -159,8 +169,12 @@ public static class StateStore
             .ToList();
     }
 
-    public static bool RestoreEligibilityForFailedDelivery(StateOfWorld state, string emailId)
+    public static bool RestoreEligibilityForFailedDelivery(
+        StateOfWorld state,
+        DeliveryAttempt delivery,
+        DateTimeOffset queuedAtUtc)
     {
+        var emailId = delivery.EmailId;
         if (string.IsNullOrWhiteSpace(emailId))
             return false;
 
@@ -170,7 +184,48 @@ public static class StateStore
         var removedEvents = state.ReviewedEvents.RemoveAll(item =>
             item.Included
             && string.Equals(item.DeliveryEmailId, emailId, StringComparison.OrdinalIgnoreCase));
-        return removedArticles > 0 || removedEvents > 0;
+        var queued = QueueDeliveryRetries(state, delivery.IncludedItems, queuedAtUtc);
+        return removedArticles > 0 || removedEvents > 0 || queued;
+    }
+
+    public static bool QueueDeliveryRetries(
+        StateOfWorld state,
+        IEnumerable<NewsItem>? articles,
+        DateTimeOffset queuedAtUtc)
+    {
+        if (articles is null)
+            return false;
+
+        var before = state.DeliveryRetries
+            .Select(item => ArticleSelector.CanonicalizeLink(item.Article.Link))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        state.DeliveryRetries.AddRange(articles
+            .Where(article => !string.IsNullOrWhiteSpace(article.Link))
+            .Select(article => new DeliveryRetryItem(article, queuedAtUtc)));
+        state.DeliveryRetries = state.DeliveryRetries
+            .GroupBy(item => ArticleSelector.CanonicalizeLink(item.Article.Link), StringComparer.OrdinalIgnoreCase)
+            .Select(group => group.OrderByDescending(item => item.QueuedAtUtc).First())
+            .OrderByDescending(item => item.QueuedAtUtc)
+            .Take(50)
+            .ToList();
+        return state.DeliveryRetries.Any(item =>
+            !before.Contains(ArticleSelector.CanonicalizeLink(item.Article.Link)));
+    }
+
+    public static void CompleteDeliveryRetries(
+        StateOfWorld state,
+        IEnumerable<ScoredArticle> delivered)
+    {
+        var deliveredList = delivered.ToList();
+        var links = deliveredList
+            .Select(item => ArticleSelector.CanonicalizeLink(item.Article.Link))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var eventKeys = deliveredList
+            .SelectMany(item => item.ReviewEventKeys)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        state.DeliveryRetries.RemoveAll(item =>
+            links.Contains(ArticleSelector.CanonicalizeLink(item.Article.Link))
+            || eventKeys.Contains(EventIdentity.KeyFor(item.Article)));
     }
 
     public static void RecordRun(StateOfWorld state, RunMetrics metrics)

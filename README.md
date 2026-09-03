@@ -162,7 +162,7 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 
 ## State and failure semantics
 
-`data/state.json` stores a short article cache plus bounded reviewed-event, source-health, delivery, and run-metric history.
+`data/state.json` stores a short article cache plus bounded reviewed-event, delivery-retry, source-health, delivery, and run-metric history.
 
 - Upgrades use the prior `LastDigestUtc` as a migration boundary and persist it until it ages outside the active lookback window.
 - URL tracking parameters are removed before deduplication.
@@ -170,10 +170,11 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 - New links are also compared with retained reviewed titles, so a corroborating retitle that arrives on a later run is suppressed without collapsing conflicting version numbers.
 - AI-rejected candidates are marked reviewed so they do not consume tokens every day.
 - If AI synthesis fails, the email falls back to deterministic ranked headlines.
-- If delivery fails, candidates are not marked reviewed. A nonterminal delivery keeps an email-id association, and the next run restores its included events if Resend later reports a terminal failure.
+- If delivery fails, included events are restored and placed in a bounded retry queue, while AI-rejected candidates remain reviewed and do not consume tokens again.
+- Explicit delivery retries remain eligible beyond the normal freshness lookback until they succeed or become terminal nonretryable outcomes.
 - Resend is polled briefly for `last_event`; pending delivery ids are reconciled again before every later selection run.
 - Content-derived idempotency keys stay stable across clock and date boundaries while a send outcome is ambiguous, then advance only after a recorded retryable terminal failure.
-- A prepared-send outbox is saved before the Resend call, pinning the exact ambiguity key even if later corroboration changes cluster membership.
+- A prepared-send outbox is saved before the Resend call. It encrypts the exact sender, recipient, subject, and bodies with authenticated encryption derived from the delivery key, then replays that payload directly before any new selection work if the outcome was ambiguous.
 - Recipient complaints remain terminal and reviewed; they are never treated as retryable delivery failures.
 - If the state commit conflicts, the workflow fails instead of silently losing state.
 - The workflow commits a state file produced by the digest even when delivery exits nonzero, while preserving the failed job result.

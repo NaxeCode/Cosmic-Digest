@@ -14,7 +14,8 @@ public static class ArticleSelector
         DateTimeOffset now,
         DateTimeOffset? notBefore = null,
         IEnumerable<string>? previouslyReviewedEventKeys = null,
-        IEnumerable<string>? previouslyReviewedEventTitles = null)
+        IEnumerable<string>? previouslyReviewedEventTitles = null,
+        IEnumerable<string>? forcedRetryLinks = null)
     {
         var sent = previouslySentLinks
             .Select(CanonicalizeLink)
@@ -27,11 +28,18 @@ public static class ArticleSelector
             .Where(title => !string.IsNullOrWhiteSpace(title))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
+        var forcedRetries = (forcedRetryLinks ?? Array.Empty<string>())
+            .Select(CanonicalizeLink)
+            .Where(link => !string.IsNullOrWhiteSpace(link))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var cutoff = notBefore ?? now.AddHours(-profile.LookbackHours);
         var eligible = articles
-            .Where(article => article.Published >= cutoff && article.Published <= now.AddHours(2))
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
+            .Where(article =>
+                (article.Published >= cutoff
+                    || forcedRetries.Contains(CanonicalizeLink(article.Link)))
+                && article.Published <= now.AddHours(2))
             .Where(article => !sent.Contains(CanonicalizeLink(article.Link)))
             .GroupBy(article => CanonicalizeLink(article.Link), StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(article => article.Published).First())

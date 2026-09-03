@@ -114,7 +114,17 @@ public sealed class StateStoreTests
         StateStore.MarkReviewed(state, new[] { failed, rejected }, new[] { failed }, now, "email-failed");
         StateStore.MarkReviewed(state, new[] { delivered }, new[] { delivered }, now.AddMinutes(1), "email-delivered");
 
-        var changed = StateStore.RestoreEligibilityForFailedDelivery(state, "email-failed");
+        var failure = new DeliveryAttempt(
+            "email-failed",
+            now,
+            "Cosmic Digest",
+            "bounced",
+            now,
+            IncludedItems: new[] { failed.Article });
+        var changed = StateStore.RestoreEligibilityForFailedDelivery(
+            state,
+            failure,
+            now.AddMinutes(2));
 
         Assert.True(changed);
         Assert.DoesNotContain(state.ReviewedEvents, item => item.EventKey == "event-failed");
@@ -123,6 +133,29 @@ public sealed class StateStoreTests
         Assert.Contains(state.ReviewedArticles, item => item.Link.EndsWith("/rejected") && !item.Included);
         Assert.Contains(state.ReviewedEvents, item => item.EventKey == "event-delivered");
         Assert.Contains(state.ReviewedArticles, item => item.Link.EndsWith("/delivered"));
+        Assert.Equal(failed.Article, Assert.Single(state.DeliveryRetries).Article);
+    }
+
+    [Fact]
+    public void Completed_delivery_removes_its_item_from_the_retry_queue()
+    {
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
+        var article = new NewsItem(
+            "OpenAI agent release",
+            "https://example.com/retry?utm_source=rss",
+            now.AddDays(-3),
+            "Example");
+        var state = new StateOfWorld();
+        StateStore.QueueDeliveryRetries(state, new[] { article }, now);
+        var delivered = new ScoredArticle(
+            article with { Link = "https://example.com/retry" },
+            5,
+            new[] { "AI" },
+            EventIdentity.KeyFor(article));
+
+        StateStore.CompleteDeliveryRetries(state, new[] { delivered });
+
+        Assert.Empty(state.DeliveryRetries);
     }
 
     [Fact]
