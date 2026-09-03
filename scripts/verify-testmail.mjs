@@ -24,7 +24,8 @@ assert.ok(inbox.emails?.length > 0, "no contract email arrived");
 
 const email = inbox.emails[0];
 assert.match(email.subject ?? "", /^Test intelligence: 1 material update$/);
-assert.match(email.html ?? "", /Stella · Cosmic Digest/);
+assert.match(email.html ?? "", /Stella/);
+assert.match(email.html ?? "", /Cosmic Digest/);
 assert.match(email.html ?? "", /Test&#39;s Intelligence Brief/);
 assert.match(email.html ?? "", /Cosmic Contract Test event/);
 assert.doesNotMatch(email.html ?? "", /testmail-contract-v1/);

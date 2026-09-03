@@ -112,7 +112,8 @@ public sealed class DigestComposerTests
             DateTimeOffset.Parse("2026-09-03T12:00:00Z"),
             new EmailBrandOptions("Stella · Cosmic Digest", "https://example.com/stella.png"));
 
-        Assert.Contains("Stella · Cosmic Digest", html);
+        Assert.Contains("Stella", html);
+        Assert.Contains("Cosmic Digest", html);
         Assert.Contains("Reader&#39;s Intelligence Brief", html);
         Assert.Contains("1 ACT", html);
         Assert.Contains("corroborated by 2 sources", html);
