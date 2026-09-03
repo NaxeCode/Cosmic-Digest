@@ -1,11 +1,11 @@
-# Contributing to AI Newsletter
+# Contributing to Cosmic Digest
 
 Thank you for your interest in contributing! Here are some guidelines to help you get started.
 
 ## Getting Started
 
 1. Fork the repository
-2. Clone your fork: `git clone https://github.com/yourusername/ai-newsletter.git`
+2. Clone your fork: `git clone https://github.com/yourusername/Cosmic-Digest.git`
 3. Create a feature branch: `git checkout -b feature/your-feature-name`
 4. Make your changes
 5. Test thoroughly
@@ -19,7 +19,8 @@ Thank you for your interest in contributing! Here are some guidelines to help yo
 2. Copy `.env.example` to `.env` and configure with test credentials
 3. Run `dotnet restore` to install dependencies
 4. Run `dotnet build` to verify everything compiles
-5. Run `dotnet run` to test locally
+5. Run `dotnet test` to run the regression suite
+6. Run `dotnet run` to test locally
 
 ## Code Style
 
@@ -31,9 +32,10 @@ Thank you for your interest in contributing! Here are some guidelines to help yo
 
 ## Testing
 
-- Test your changes thoroughly before submitting
-- Ensure the build passes: `dotnet build`
+- Add or update a regression test for behavior changes
+- Ensure `dotnet build` and `dotnet test` pass
 - Verify no secrets are committed
+- Preserve the zero-item/no-email behavior and reviewed-link state semantics
 
 ## Pull Request Guidelines
 
@@ -59,5 +61,3 @@ We welcome feature requests! Please:
 ## Questions?
 
 Feel free to open a discussion or issue if you have questions!
-
-Thank you for contributing! ??

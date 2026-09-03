@@ -37,8 +37,8 @@ bld/
 
 # Environment variables - IMPORTANT: Never commit this!
 .env
-
-# State files (old - see bottom for better pattern)
+briefing-profile.local.json
+config/briefing-profile.local.json
 
 # OS files
 .DS_Store

@@ -1,4 +1,5 @@
-﻿// Models.cs
+﻿using System.Text.Json.Serialization;
+
 public record NewsItem(
     string Title,
     string Link,
@@ -6,34 +7,47 @@ public record NewsItem(
     string Source,
     string? Summary = null);
 
-public record TopicTrend(
-    string Topic,
-    int CountNow,
-    int CountPrev,
-    double Slope,        // simple linear slope over N days
-    double Relevance);   // 0..1
+public sealed record ScoredArticle(
+    NewsItem Article,
+    double Score,
+    IReadOnlyList<string> MatchedPriorities);
 
-public record PricePoint(DateTimeOffset Ts, decimal Price);
+public sealed record ReviewedArticle(string Link, DateTimeOffset ReviewedAtUtc, bool Included);
 
-public class PriceItem
+public sealed class BriefingItem
 {
-    public string Name { get; set; }
-    public string Url { get; set; }
-    public string Currency { get; set; }
-    public List<PricePoint> Series { get; set; }
+    [JsonPropertyName("article_index")]
+    public int ArticleIndex { get; set; }
 
-    public PriceItem(string name, string url, string currency, List<PricePoint> series)
-    {
-        Name = name;
-        Url = url;
-        Currency = currency;
-        Series = series;
-    }
+    [JsonPropertyName("what_changed")]
+    public string WhatChanged { get; set; } = "";
+
+    [JsonPropertyName("why_it_matters")]
+    public string WhyItMatters { get; set; } = "";
+
+    [JsonPropertyName("decision")]
+    public string Decision { get; set; } = "watch";
+
+    [JsonPropertyName("next_step")]
+    public string NextStep { get; set; } = "";
+
+    [JsonPropertyName("confidence")]
+    public string Confidence { get; set; } = "medium";
 }
 
-public class StateOfWorld
+public sealed class BriefingDocument
 {
+    [JsonPropertyName("bottom_line")]
+    public string BottomLine { get; set; } = "";
+
+    [JsonPropertyName("items")]
+    public List<BriefingItem> Items { get; set; } = new();
+}
+
+public sealed class StateOfWorld
+{
+    public DateTimeOffset? LastRunUtc { get; set; }
     public DateTimeOffset? LastDigestUtc { get; set; }
-    public List<NewsItem> CacheNews { get; set; } = new();   // last ~7 days (trim)
-    public List<PriceItem> Prices { get; set; } = new();
+    public List<NewsItem> CacheNews { get; set; } = new();
+    public List<ReviewedArticle> ReviewedArticles { get; set; } = new();
 }

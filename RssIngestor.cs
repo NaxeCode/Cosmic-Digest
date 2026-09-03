@@ -20,7 +20,10 @@ public static class RssIngestor
                     results.Add(new NewsItem(e.Title ?? "", e.Link ?? "", pub, src, e.Description));
                 }
             }
-            catch { /* swallow per-feed errors */ }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Feed failed ({url}): {ex.Message}");
+            }
         }
         return results.OrderByDescending(n => n.Published).ToList();
     }

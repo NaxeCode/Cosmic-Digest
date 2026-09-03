@@ -1,68 +1,39 @@
-# Security Policy
+# Security policy
 
-## Reporting Security Issues
+## Reporting
 
-If you discover a security issue in this personal project, please open a GitHub issue or submit a pull request with a fix.
+Report a suspected vulnerability privately through GitHub's security-advisory flow. Do not open a public issue containing a credential, personal profile, recipient address, exploit payload, or other sensitive evidence.
 
-## Supported Versions
+Only the latest revision is supported.
 
-Currently supporting the latest version only.
+## Data boundary
 
-## Security Best Practices
+- Never commit `.env`, `briefing-profile.local.json`, API keys, recipient addresses, or a real personal profile.
+- Store the production profile in the `DIGEST_PROFILE_B64` GitHub Actions secret.
+- Keep the profile limited to ranking context. Credentials, mutable balances, private records, and raw personal-system files do not belong in the digest.
+- `data/state.json` may contain public article titles and links. It must not contain secrets or private profile content.
 
-When using this project:
+## Untrusted inputs
 
-### API Keys and Secrets
-- ? **NEVER** commit `.env` files to Git
-- ? Use environment variables in production
-- ? Rotate API keys regularly
-- ? Use secret management systems (e.g., Azure Key Vault, AWS Secrets Manager)
+RSS titles, summaries, links, and model output are untrusted.
 
-### Mailgun Configuration
-- ? Use authorized recipients list for sandbox domains
-- ? Validate email addresses before sending
-- ? Consider rate limiting in production
+- The AI instruction treats feed content as data and rejects embedded instructions.
+- Structured output constrains the model response.
+- Markdown rendering disables raw HTML.
+- Email links accept only absolute HTTP or HTTPS URLs.
+- Unsupported versions, metrics, prices, dates, availability, and causal claims are forbidden by the briefing contract.
 
-### OpenAI API
-- ? Monitor API usage and costs
-- ? Set spending limits in OpenAI dashboard
-- ? Use least-privilege API keys
+## Dependencies and operations
 
-### Data Storage
-- ? The `/data/state.json` file may contain sensitive information
-- ? Ensure proper file permissions in production
-- ? Consider encryption for sensitive data
+Before merging a change:
 
-### Dependencies
-- ? Regularly update NuGet packages
-- ? Monitor for security advisories
-- ? Use `dotnet list package --vulnerable` to check for vulnerabilities
-
-## Known Security Considerations
-
-1. **Price Scraping**: The `NaivePriceFetcher` uses simple web scraping which may expose you to malicious content. Consider using official APIs when available.
-
-2. **RSS Feeds**: Untrusted RSS feeds could contain malicious content. The current implementation has basic error handling but should be enhanced for production use.
-
-3. **State File**: The `state.json` file is stored in plain text. Consider encryption if it contains sensitive information.
-
-## Recommended Production Hardening
-
-- [ ] Use HTTPS for all API calls (already default)
-- [ ] Implement request timeouts and retries
-- [ ] Add input validation and sanitization
-- [ ] Use structured logging with sanitization
-- [ ] Implement rate limiting for external APIs
-- [ ] Set up monitoring and alerting
-- [ ] Use containerization with minimal base images
-- [ ] Run with least-privilege user accounts
-
-## Dependency Security
-
-Regular security checks:
 ```bash
-dotnet list package --vulnerable
-dotnet list package --outdated
+dotnet restore
+dotnet build --configuration Release
+dotnet test --configuration Release
+dotnet list package --vulnerable --include-transitive
 ```
 
-Thank you for helping keep this project secure!
+The delivery workflow has a timeout and concurrency guard. A failed email does not mark candidates reviewed, and a failed state push must fail visibly.
+
+If a credential is exposed, revoke it first, replace the repository secret, and then remove the leaked value from history if necessary.
