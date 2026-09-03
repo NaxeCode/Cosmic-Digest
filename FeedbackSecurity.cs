@@ -120,12 +120,12 @@ public static class ResendWebhookVerifier
             return false;
         }
 
-        var signedAt = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
-        if ((now - signedAt).Duration() > (tolerance ?? TimeSpan.FromMinutes(5)))
-            return false;
-
         try
         {
+            var signedAt = DateTimeOffset.FromUnixTimeSeconds(unixTimestamp);
+            if ((now - signedAt).Duration() > (tolerance ?? TimeSpan.FromMinutes(5)))
+                return false;
+
             var secretValue = webhookSecret.StartsWith("whsec_", StringComparison.Ordinal)
                 ? webhookSecret[6..]
                 : webhookSecret;
@@ -141,7 +141,7 @@ public static class ResendWebhookVerifier
                 .Where(value => value is not null)
                 .Any(value => CryptographicOperations.FixedTimeEquals(expected, value!));
         }
-        catch (FormatException)
+        catch (Exception ex) when (ex is FormatException or ArgumentOutOfRangeException)
         {
             return false;
         }

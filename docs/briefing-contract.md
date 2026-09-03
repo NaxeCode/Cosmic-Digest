@@ -53,6 +53,7 @@ The profile contains only the minimum context needed to rank external informatio
 - A state push conflict fails visibly; it is never hidden.
 - Previously reviewed candidates expire after 45 days, while the article cache stays bounded to the active lookback window.
 - Resend acceptance and the latest observed delivery state are stored separately. Nonterminal deliveries retain an email-id association; each later run polls them again and removes that delivery's review markers if it eventually fails.
+- A retry reuses its idempotency key while the earlier outcome is ambiguous, then advances to a numbered key only after a recorded terminal failure.
 
 ## Identity and feedback boundary
 

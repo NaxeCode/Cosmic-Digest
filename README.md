@@ -171,6 +171,7 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 - If AI synthesis fails, the email falls back to deterministic ranked headlines.
 - If delivery fails, candidates are not marked reviewed. A nonterminal delivery keeps an email-id association, and the next run restores its included events if Resend later reports a terminal failure.
 - Resend is polled briefly for `last_event`; pending delivery ids are reconciled again before every later selection run.
+- Idempotency keys stay stable while a send outcome is ambiguous and advance only after a recorded terminal failure, allowing a real same-day retry without creating duplicates.
 - If the state commit conflicts, the workflow fails instead of silently losing state.
 
 This remains intentionally small. JSON is still the correct store for one daily writer. The optional feedback service uses an append-only journal and can be moved to managed storage only when observed volume or multiple writers justify it.

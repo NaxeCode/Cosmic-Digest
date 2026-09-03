@@ -100,7 +100,7 @@ public static partial class EventIdentity
     private static HashSet<string> Tokens(string value) =>
         TokenPattern().Matches(value.ToLowerInvariant()).Cast<Match>()
             .Select(match => match.Value.Trim('.', '-', '_'))
-            .Where(token => token.Length >= 2)
+            .Where(token => token.Length >= 2 || token.Any(char.IsDigit))
             .Where(token => !StopWords.Contains(token))
             .ToHashSet(StringComparer.Ordinal);
 

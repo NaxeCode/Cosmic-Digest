@@ -13,7 +13,7 @@ public static class ResendDeliveryStatus
         status == "delivered" || IsFailure(status);
 
     public static bool IsPending(string? status) =>
-        status is "accepted" or "queued" or "scheduled" or "sent" or "delayed";
+        status is "accepted" or "queued" or "scheduled" or "sent" or "delayed" or "delivery_delayed";
 }
 
 public sealed class ResendEmailClient : IDisposable

@@ -54,6 +54,18 @@ public sealed class FeedbackSecurityTests
         Assert.False(ResendWebhookVerifier.Verify(payload + "x", secret, id, timestamp, signature, now));
     }
 
+    [Fact]
+    public void Resend_webhook_verifier_rejects_out_of_range_unix_timestamps()
+    {
+        Assert.False(ResendWebhookVerifier.Verify(
+            "{}",
+            "whsec_" + Convert.ToBase64String(Encoding.UTF8.GetBytes("secret")),
+            "msg_test",
+            long.MaxValue.ToString(),
+            "v1,invalid",
+            DateTimeOffset.UtcNow));
+    }
+
     private static string ExtractToken(string url) =>
         Uri.UnescapeDataString(new Uri(url).Query.TrimStart('?').Split("token=", 2)[1]);
 }

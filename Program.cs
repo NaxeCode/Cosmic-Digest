@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.Security.Cryptography;
-using System.Text;
 using DotNetEnv;
 
 Env.Load(".env");
@@ -119,7 +117,7 @@ if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(recipient))
 var subject = DigestComposer.BuildSubject(profile, briefing);
 var text = DigestComposer.BuildMarkdown(profile, candidates, briefing, now);
 var html = DigestComposer.BuildHtml(profile, candidates, briefing, now);
-var idempotencyKey = BuildIdempotencyKey(now, displayed);
+var idempotencyKey = DigestIdempotency.BuildKey(now, displayed, state.Deliveries);
 
 ResendSendResult sendResult;
 try
@@ -161,7 +159,8 @@ StateStore.RecordDelivery(state, new DeliveryAttempt(
     now,
     subject,
     deliveryStatus,
-    DateTimeOffset.UtcNow));
+    DateTimeOffset.UtcNow,
+    idempotencyKey));
 
 if (ResendDeliveryStatus.IsFailure(deliveryStatus))
 {
@@ -183,18 +182,6 @@ StateStore.RecordRun(state, metrics);
 StateStore.Save(state);
 Console.WriteLine($"Email {deliveryStatus} with {displayed.Count} material item(s); Resend id: {sendResult.EmailId}.");
 return 0;
-
-static string BuildIdempotencyKey(DateTimeOffset sentAtUtc, IReadOnlyList<ScoredArticle> displayed)
-{
-    var eventKeys = displayed
-        .Select(item => string.IsNullOrWhiteSpace(item.EventKey)
-            ? EventIdentity.KeyFor(item.Article)
-            : item.EventKey)
-        .Order(StringComparer.Ordinal);
-    var digest = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(string.Join('|', eventKeys))))[..16]
-        .ToLowerInvariant();
-    return $"cosmic-digest-{sentAtUtc:yyyyMMdd}-{digest}";
-}
 
 static async Task<bool> ReconcilePendingDeliveriesAsync(
     StateOfWorld state,

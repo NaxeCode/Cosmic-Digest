@@ -156,6 +156,23 @@ public sealed class ArticleSelectorTests
         Assert.NotEqual(ranked[0].EventKey, ranked[1].EventKey);
     }
 
+    [Fact]
+    public void Rank_keeps_single_digit_major_versions_in_separate_events()
+    {
+        var profile = Profile();
+        profile.Priorities[0].Signals = new List<string> { ".NET", "release" };
+        var articles = new[]
+        {
+            new NewsItem(".NET 8 release for developers", "https://example.com/dotnet-8", Now, "Example"),
+            new NewsItem(".NET 9 release for developers", "https://example.com/dotnet-9", Now.AddMinutes(-1), "Example")
+        };
+
+        var ranked = ArticleSelector.Rank(articles, profile, Array.Empty<string>(), Now);
+
+        Assert.Equal(2, ranked.Count);
+        Assert.NotEqual(ranked[0].EventKey, ranked[1].EventKey);
+    }
+
     private static BriefingProfile Profile() => new()
     {
         Version = "test",

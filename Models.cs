@@ -63,7 +63,8 @@ public sealed record DeliveryAttempt(
     DateTimeOffset SentAtUtc,
     string Subject,
     string Status,
-    DateTimeOffset StatusAtUtc);
+    DateTimeOffset StatusAtUtc,
+    string? IdempotencyKey = null);
 
 public sealed class RunMetrics
 {

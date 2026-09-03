@@ -44,6 +44,16 @@ public sealed class ResendEmailClientTests
         Assert.Equal("delivered", await client.GetStatusAsync("re_test", "email-123"));
     }
 
+    [Theory]
+    [InlineData("accepted")]
+    [InlineData("sent")]
+    [InlineData("delivery_delayed")]
+    public void Pending_statuses_are_reconciled_on_later_runs(string status)
+    {
+        Assert.True(ResendDeliveryStatus.IsPending(status));
+        Assert.False(ResendDeliveryStatus.IsTerminal(status));
+    }
+
     private sealed class StubHandler(Func<HttpRequestMessage, HttpResponseMessage> response) : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) =>
