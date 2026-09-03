@@ -1,114 +1,125 @@
-﻿// DigestComposer.cs
 using System.Text;
 
 public static class DigestComposer
 {
     public static string BuildMarkdown(
-        List<NewsItem> relevant,
-        List<PriceItem> prices,
-        string? aiSummary = null,
-        string? dailyChallenge = null)
+        BriefingProfile profile,
+        IReadOnlyList<ScoredArticle> candidates,
+        BriefingDocument briefing,
+        DateTimeOffset generatedAtUtc)
     {
         var sb = new StringBuilder();
+        var localTime = ToLocalTime(generatedAtUtc);
+        var possessiveName = profile.DisplayName.Equals("Your", StringComparison.OrdinalIgnoreCase)
+            ? "Your"
+            : $"{profile.DisplayName}'s";
 
-        // Format timestamp in user's timezone
-        var tzName = Environment.GetEnvironmentVariable("TIMEZONE");
-        if (string.IsNullOrWhiteSpace(tzName))
-            tzName = "America/New_York";
-        var tz = TimeZoneInfo.FindSystemTimeZoneById(tzName);
-        var localTime = TimeZoneInfo.ConvertTimeFromUtc(DateTimeOffset.UtcNow.DateTime, tz);
-        var tzAbbr = tz.IsDaylightSavingTime(localTime) ? tz.DaylightName : tz.StandardName;
-
-        // Friendly format: "Tuesday, December 31, 2025 at 2:19 PM EST"
-        var formattedDate = localTime.ToString("dddd, MMMM d, yyyy") +
-                           " at " + localTime.ToString("h:mm tt") +
-                           " " + GetTimezoneAbbreviation(tzName);
-
-        sb.AppendLine($"# Daily Digest — {formattedDate}");
+        sb.AppendLine($"# {possessiveName} Intelligence Brief");
         sb.AppendLine();
+        sb.AppendLine($"{localTime:dddd, MMMM d, yyyy} · Profile `{EscapeInline(profile.Version)}`");
+        sb.AppendLine();
+        sb.AppendLine($"> {EscapeText(briefing.BottomLine)}");
 
-        // AI-generated summary (if enabled)
-        if (!string.IsNullOrWhiteSpace(aiSummary))
-        {
-            sb.AppendLine("## AI Summary");
-
-            // Make citation numbers clickable by replacing [1], [2], etc. with links
-            var processedSummary = aiSummary;
-            if (relevant.Any())
-            {
-                for (int i = 1; i <= Math.Min(15, relevant.Count); i++)
-                {
-                    var article = relevant[i - 1];
-                    // Replace [1] with [[1]](url) to make it a clickable markdown link
-                    processedSummary = System.Text.RegularExpressions.Regex.Replace(
-                        processedSummary,
-                        $@"\[{i}\](?!\()",  // Match [1] but not [1](url)
-                        $"[[{i}]]({article.Link})"
-                    );
-                }
-            }
-
-            sb.AppendLine(processedSummary);
-            sb.AppendLine();
-        }
-
-        sb.AppendLine("## Worldwide but relevant to you");
-        foreach (var n in relevant.Take(8))
-            sb.AppendLine($"- [{n.Title}]({n.Link}) — {n.Source} ({n.Published:yyyy-MM-dd})");
+        AppendSection(sb, "Act", "act", candidates, briefing.Items);
+        AppendSection(sb, "Watch", "watch", candidates, briefing.Items);
 
         sb.AppendLine();
-        sb.AppendLine("## Price trends (watchlist)");
-        foreach (var p in prices)
-        {
-            var (decision, why) = PriceTracker.BuyHold(p);
-            var last = p.Series.OrderByDescending(x => x.Ts).FirstOrDefault();
-            sb.AppendLine($"- **{p.Name}** — {decision}. {why}. Latest: {(last is null ? "n/a" : $"{last.Price} {p.Currency} on {last.Ts:yyyy-MM-dd}")}");
-        }
-
-        // Daily challenge section
-        if (!string.IsNullOrWhiteSpace(dailyChallenge))
-        {
-            sb.AppendLine();
-            sb.AppendLine("---");
-            sb.AppendLine();
-            sb.AppendLine(dailyChallenge);
-        }
-
-        // metadata footer
-        var footer = new
-        {
-            version = "v0.2",
-            digest_id = DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH-mm-ssZ"),
-            items_considered = relevant.Count,
-            price_items = prices.Select(p => new {
-                p.Name,
-                p.Url,
-                last = p.Series.OrderByDescending(x => x.Ts).FirstOrDefault()?.Price
-            })
-        };
-        sb.AppendLine();
-        sb.AppendLine("```json");
-        sb.AppendLine(System.Text.Json.JsonSerializer.Serialize(footer));
-        sb.AppendLine("```");
+        sb.AppendLine("---");
+        sb.AppendLine($"Evaluated {candidates.Count} new candidate{(candidates.Count == 1 ? "" : "s")}. No quota filling; previously sent links are suppressed.");
 
         return sb.ToString();
     }
 
-    private static string GetTimezoneAbbreviation(string tzName)
+    public static string BuildSubject(BriefingProfile profile, BriefingDocument briefing)
     {
-        // Map common timezones to their abbreviations
-        return tzName switch
-        {
-            "America/New_York" => "EST/EDT",
-            "America/Chicago" => "CST/CDT",
-            "America/Denver" => "MST/MDT",
-            "America/Los_Angeles" => "PST/PDT",
-            "America/Phoenix" => "MST",
-            "Europe/London" => "GMT/BST",
-            "Europe/Paris" => "CET/CEST",
-            "Asia/Tokyo" => "JST",
-            "Australia/Sydney" => "AEDT/AEST",
-            _ => TimeZoneInfo.FindSystemTimeZoneById(tzName).StandardName
-        };
+        var actionCount = briefing.Items.Count(item => item.Decision == "act");
+        var prefix = profile.DisplayName.Equals("Your", StringComparison.OrdinalIgnoreCase)
+            ? "Daily intelligence"
+            : $"{profile.DisplayName} intelligence";
+
+        return actionCount > 0
+            ? $"{prefix}: {actionCount} action signal{(actionCount == 1 ? "" : "s")}"
+            : $"{prefix}: {briefing.Items.Count} material update{(briefing.Items.Count == 1 ? "" : "s")}";
     }
+
+    public static IReadOnlyList<NewsItem> DisplayedArticles(
+        IReadOnlyList<ScoredArticle> candidates,
+        BriefingDocument briefing) =>
+        briefing.Items
+            .Where(item => item.Decision is "act" or "watch")
+            .Where(item => item.ArticleIndex >= 1 && item.ArticleIndex <= candidates.Count)
+            .Select(item => candidates[item.ArticleIndex - 1].Article)
+            .DistinctBy(article => ArticleSelector.CanonicalizeLink(article.Link))
+            .ToList();
+
+    private static void AppendSection(
+        StringBuilder sb,
+        string heading,
+        string decision,
+        IReadOnlyList<ScoredArticle> candidates,
+        IEnumerable<BriefingItem> items)
+    {
+        var selected = items
+            .Where(item => item.Decision == decision)
+            .Where(item => item.ArticleIndex >= 1 && item.ArticleIndex <= candidates.Count)
+            .ToList();
+        if (selected.Count == 0)
+            return;
+
+        sb.AppendLine();
+        sb.AppendLine($"## {heading}");
+
+        foreach (var item in selected)
+        {
+            var article = candidates[item.ArticleIndex - 1].Article;
+            sb.AppendLine();
+            sb.AppendLine($"### [{EscapeLinkText(article.Title)}]({SafeLink(article.Link)})");
+            sb.AppendLine();
+            sb.AppendLine($"**What changed:** {EscapeText(item.WhatChanged)}");
+            sb.AppendLine();
+            sb.AppendLine($"**Why it matters:** {EscapeText(item.WhyItMatters)}");
+            if (!string.IsNullOrWhiteSpace(item.NextStep))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"**Next move:** {EscapeText(item.NextStep)}");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine($"Evidence: {EscapeText(article.Source)} · {article.Published:yyyy-MM-dd} · {item.Confidence} confidence");
+        }
+    }
+
+    private static DateTimeOffset ToLocalTime(DateTimeOffset utc)
+    {
+        var timezone = Environment.GetEnvironmentVariable("TIMEZONE") ?? "America/New_York";
+        try
+        {
+            return TimeZoneInfo.ConvertTime(utc, TimeZoneInfo.FindSystemTimeZoneById(timezone));
+        }
+        catch (Exception ex) when (ex is TimeZoneNotFoundException or InvalidTimeZoneException)
+        {
+            Console.Error.WriteLine($"Unknown TIMEZONE '{timezone}'; using UTC.");
+            return utc;
+        }
+    }
+
+    private static string EscapeInline(string value) => value.Replace("`", "'");
+
+    private static string EscapeLinkText(string value) =>
+        EscapeText(value).Replace("[", "\\[").Replace("]", "\\]");
+
+    private static string EscapeText(string? value) =>
+        (value ?? "")
+            .Replace("\\", "\\\\")
+            .Replace("*", "\\*")
+            .Replace("_", "\\_")
+            .Replace("<", "&lt;")
+            .Replace(">", "&gt;")
+            .Trim();
+
+    private static string SafeLink(string value) =>
+        Uri.TryCreate(value, UriKind.Absolute, out var uri)
+        && (uri.Scheme == Uri.UriSchemeHttps || uri.Scheme == Uri.UriSchemeHttp)
+            ? uri.AbsoluteUri.Replace("(", "%28").Replace(")", "%29")
+            : "#";
 }

@@ -2,23 +2,31 @@ name: Daily Digest
 
 on:
   schedule:
-    # Run every day at 8 AM UTC (adjust timezone as needed)
-    - cron: '0 8 * * *'
-  workflow_dispatch: # Allow manual trigger
+    # Avoid the top-of-hour queue and preserve local time across DST.
+    - cron: '17 8 * * *'
+      timezone: 'America/New_York'
+  workflow_dispatch:
+
+concurrency:
+  group: daily-digest
+  cancel-in-progress: false
 
 jobs:
   send-digest:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     permissions:
-      contents: write # Needed to commit state.json
+      contents: write
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
+      with:
+        fetch-depth: 0
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '10.0.x'
 
@@ -28,6 +36,9 @@ jobs:
     - name: Build
       run: dotnet build --no-restore --configuration Release
 
+    - name: Test
+      run: dotnet test --no-build --configuration Release
+
     - name: Run digest
       env:
         RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
@@ -35,18 +46,24 @@ jobs:
         MAIL_FROM: ${{ secrets.MAIL_FROM }}
         TIMEZONE: ${{ secrets.TIMEZONE }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.6-terra' }}
+        OPENAI_REASONING_EFFORT: ${{ vars.OPENAI_REASONING_EFFORT || 'medium' }}
         ENABLE_AI_SUMMARY: ${{ secrets.ENABLE_AI_SUMMARY }}
+        DIGEST_PROFILE_B64: ${{ secrets.DIGEST_PROFILE_B64 }}
         PREF_TOPICS: ${{ secrets.PREF_TOPICS }}
         PREF_REGIONS: ${{ secrets.PREF_REGIONS }}
         PREF_KEYWORDS: ${{ secrets.PREF_KEYWORDS }}
         RSS_FEEDS: ${{ secrets.RSS_FEEDS }}
-        PRICE_WATCH: ${{ secrets.PRICE_WATCH }}
       run: dotnet run --no-build --configuration Release
 
     - name: Commit state changes
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add -A data/state.json || true
-        git diff --quiet && git diff --staged --quiet || git commit -m "chore: update state.json [skip ci]"
-        git push || true
+        git add data/state.json
+        if git diff --staged --quiet; then
+          exit 0
+        fi
+        git commit -m "chore: update state.json [skip ci]"
+        git pull --rebase origin main
+        git push origin HEAD:main

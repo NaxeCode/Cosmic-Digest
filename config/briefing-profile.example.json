@@ -1,0 +1,42 @@
+{
+  "version": "example-v1",
+  "displayName": "Reader",
+  "objective": "Surface credible external changes that materially improve decisions or capability per unit of attention.",
+  "priorities": [
+    {
+      "name": "AI engineering",
+      "weight": 5,
+      "signals": ["AI agent", "LLM", "OpenAI", "Anthropic", "MCP", "model release"],
+      "whyItMatters": "Changes implementation choices, agent workflows, or model economics."
+    },
+    {
+      "name": "Backend systems",
+      "weight": 5,
+      "signals": [".NET", "C#", "PostgreSQL", "distributed systems", "event-driven", "observability"],
+      "whyItMatters": "Improves architecture, reliability, or senior engineering leverage."
+    },
+    {
+      "name": "Developer productivity",
+      "weight": 4,
+      "signals": ["GitHub Actions", "CLI", "Docker", "Linux", "developer tooling"],
+      "whyItMatters": "Removes repeated engineering effort or shortens feedback loops."
+    }
+  ],
+  "regions": ["United States"],
+  "trustedDomains": ["openai.com", "anthropic.com", "github.com", "microsoft.com"],
+  "exclusions": [
+    "repeated stories",
+    "generic hype without a concrete change",
+    "rumors without credible evidence",
+    "content with no plausible decision or capability impact"
+  ],
+  "feeds": [
+    "https://openai.com/news/rss.xml",
+    "https://github.blog/changelog/feed/",
+    "https://devblogs.microsoft.com/dotnet/feed/"
+  ],
+  "lookbackHours": 36,
+  "candidateLimit": 18,
+  "maxItems": 5,
+  "minimumScore": 1.5
+}

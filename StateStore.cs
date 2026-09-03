@@ -5,7 +5,11 @@ public static class StateStore
 {
     static readonly string DataDir = Environment.GetEnvironmentVariable("DATA_DIR") ?? "./data";
     static readonly string PathFile = Path.Combine(DataDir, "state.json");
-    static readonly JsonSerializerOptions J = new() { WriteIndented = true };
+    static readonly JsonSerializerOptions J = new()
+    {
+        WriteIndented = true,
+        PropertyNameCaseInsensitive = true
+    };
 
     public static StateOfWorld Load()
     {
@@ -16,20 +20,45 @@ public static class StateStore
     public static void Save(StateOfWorld s)
     {
         Directory.CreateDirectory(DataDir);
-        File.WriteAllText(PathFile, JsonSerializer.Serialize(s, J));
+        var temporaryPath = PathFile + ".tmp";
+        File.WriteAllText(temporaryPath, JsonSerializer.Serialize(s, J));
+        File.Move(temporaryPath, PathFile, true);
     }
 
-    public static void AppendNews(StateOfWorld s, IEnumerable<NewsItem> items, int keepDays = 10)
+    public static void AppendNews(StateOfWorld s, IEnumerable<NewsItem> items, int keepDays = 4)
     {
         s.CacheNews.AddRange(items);
         var cutoff = DateTimeOffset.UtcNow.AddDays(-keepDays);
-        s.CacheNews = s.CacheNews.Where(n => n.Published >= cutoff).DistinctBy(n => n.Link).ToList();
+        s.CacheNews = s.CacheNews
+            .Where(item => item.Published >= cutoff)
+            .Where(item => !string.IsNullOrWhiteSpace(item.Link))
+            .GroupBy(item => ArticleSelector.CanonicalizeLink(item.Link), StringComparer.OrdinalIgnoreCase)
+            .Select(group => group.OrderByDescending(item => item.Published).First())
+            .OrderByDescending(item => item.Published)
+            .ToList();
     }
 
-    public static void UpsertPrice(StateOfWorld s, PriceItem item)
+    public static void MarkReviewed(
+        StateOfWorld state,
+        IEnumerable<NewsItem> candidates,
+        IEnumerable<NewsItem> included,
+        DateTimeOffset reviewedAtUtc)
     {
-        var existing = s.Prices.FirstOrDefault(p => p.Name == item.Name && p.Url == item.Url);
-        if (existing is null) s.Prices.Add(item);
-        else existing.Series = item.Series;
+        var includedLinks = included
+            .Select(article => ArticleSelector.CanonicalizeLink(article.Link))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        state.ReviewedArticles.AddRange(candidates.Select(article =>
+        {
+            var link = ArticleSelector.CanonicalizeLink(article.Link);
+            return new ReviewedArticle(link, reviewedAtUtc, includedLinks.Contains(link));
+        }));
+
+        var cutoff = reviewedAtUtc.AddDays(-45);
+        state.ReviewedArticles = state.ReviewedArticles
+            .Where(item => item.ReviewedAtUtc >= cutoff)
+            .GroupBy(item => item.Link, StringComparer.OrdinalIgnoreCase)
+            .Select(group => group.OrderByDescending(item => item.ReviewedAtUtc).First())
+            .OrderByDescending(item => item.ReviewedAtUtc)
+            .ToList();
     }
 }
