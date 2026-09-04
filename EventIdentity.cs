@@ -18,6 +18,12 @@ public static partial class EventIdentity
         "to", "up", "was", "what", "when", "with", "you", "your"
     };
 
+    private static readonly HashSet<string> GenericVersionMarkers = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "version", "ver", "release", "released", "update", "updated", "build", "preview", "beta", "alpha",
+        "stable", "rc", "edition"
+    };
+
     public static IReadOnlyList<NewsEventCluster> Cluster(
         IEnumerable<NewsItem> articles,
         double similarityThreshold)
@@ -122,8 +128,15 @@ public static partial class EventIdentity
                 continue;
 
             identities.Add(token);
-            if (i > 0 && !tokens[i - 1].Any(char.IsDigit))
-                identities.Add($"{tokens[i - 1]}:{token}");
+            for (var productIndex = i - 1; productIndex >= 0; productIndex--)
+            {
+                var productToken = tokens[productIndex];
+                if (productToken.Any(char.IsDigit) || GenericVersionMarkers.Contains(productToken))
+                    continue;
+
+                identities.Add($"{productToken}:{token}");
+                break;
+            }
         }
 
         return identities;
