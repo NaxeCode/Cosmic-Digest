@@ -7,6 +7,12 @@ public static class ArticleSelector
         "fbclid", "gclid", "mc_cid", "mc_eid", "ref", "ref_src"
     };
 
+    private sealed record PreclusterCandidate(
+        NewsItem Article,
+        bool IsForcedRetry,
+        ScoredArticle PreScore,
+        string SourceKey);
+
     public static List<ScoredArticle> Rank(
         IEnumerable<NewsItem> articles,
         BriefingProfile profile,
@@ -43,7 +49,7 @@ public static class ArticleSelector
 
         var cutoff = notBefore ?? now.AddHours(-profile.LookbackHours);
         var clusterInputLimit = Math.Clamp(profile.CandidateLimit * 12, 120, 480);
-        var eligible = articles
+        var precluster = articles
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
             .Where(article =>
                 (article.Published >= cutoff
@@ -52,17 +58,14 @@ public static class ArticleSelector
             .Where(article => !sent.Contains(CanonicalizeLink(article.Link)))
             .GroupBy(article => CanonicalizeLink(article.Link), StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(article => article.Published).First())
-            .Select(article => new
-            {
-                Article = article,
-                IsForcedRetry = forcedRetries.Contains(CanonicalizeLink(article.Link)),
-                PreScore = ScoreArticle(article, profile, now)
-            })
-            .OrderByDescending(item => item.IsForcedRetry)
-            .ThenByDescending(item => item.PreScore.MatchedPriorities.Count > 0)
-            .ThenByDescending(item => item.PreScore.Score)
-            .ThenByDescending(item => item.Article.Published)
-            .Take(clusterInputLimit)
+            .Select(article => SourceIdentity.Rehydrate(article, profile))
+            .Select(article => new PreclusterCandidate(
+                article,
+                forcedRetries.Contains(CanonicalizeLink(article.Link)),
+                ScoreArticle(article, profile, now),
+                ResolveSourceKey(article)))
+            .ToList();
+        var eligible = SelectFairClusterInput(precluster, clusterInputLimit)
             .Select(item => item.Article)
             .ToList();
 
@@ -128,6 +131,65 @@ public static class ArticleSelector
         return builder.Uri.AbsoluteUri.TrimEnd('/');
     }
 
+    private static IReadOnlyList<PreclusterCandidate> SelectFairClusterInput(
+        IReadOnlyList<PreclusterCandidate> candidates,
+        int limit)
+    {
+        if (candidates.Count <= limit)
+            return candidates
+                .OrderByDescending(item => item.IsForcedRetry)
+                .ThenByDescending(item => item.PreScore.MatchedPriorities.Count > 0)
+                .ThenByDescending(item => item.PreScore.Score)
+                .ThenByDescending(item => item.Article.Published)
+                .ToList();
+
+        var selected = candidates
+            .Where(item => item.IsForcedRetry)
+            .OrderByDescending(item => item.Article.Published)
+            .Take(limit)
+            .ToList();
+        if (selected.Count >= limit)
+            return selected;
+
+        var groups = candidates
+            .Where(item => !item.IsForcedRetry)
+            .GroupBy(item => item.SourceKey, StringComparer.OrdinalIgnoreCase)
+            .Select(group => new Queue<PreclusterCandidate>(group
+                .GroupBy(
+                    item => EventIdentity.Signature(item.Article.Title),
+                    StringComparer.OrdinalIgnoreCase)
+                .Select(signatureGroup => signatureGroup
+                    .OrderByDescending(item => item.PreScore.MatchedPriorities.Count > 0)
+                    .ThenByDescending(item => item.PreScore.Score)
+                    .ThenByDescending(item => item.Article.Published)
+                    .First())
+                .OrderByDescending(item => item.PreScore.MatchedPriorities.Count > 0)
+                .ThenByDescending(item => item.PreScore.Score)
+                .ThenByDescending(item => item.Article.Published)))
+            .Where(queue => queue.Count > 0)
+            .OrderByDescending(queue => queue.Peek().PreScore.MatchedPriorities.Count > 0)
+            .ThenByDescending(queue => queue.Peek().PreScore.Score)
+            .ToList();
+
+        while (selected.Count < limit && groups.Any(queue => queue.Count > 0))
+        {
+            foreach (var queue in groups)
+            {
+                if (selected.Count >= limit)
+                    break;
+                if (queue.Count > 0)
+                    selected.Add(queue.Dequeue());
+            }
+        }
+
+        return selected;
+    }
+
+    private static string ResolveSourceKey(NewsItem article) =>
+        !string.IsNullOrWhiteSpace(article.FeedUrl)
+            ? SourceIdentity.NormalizePersisted(article.FeedUrl)
+            : article.Source;
+
     private static bool IsSuppressedByReviewedIdentity(
         NewsEventCluster cluster,
         IReadOnlySet<string> reviewedEvents,
@@ -146,8 +208,6 @@ public static class ArticleSelector
                 continue;
             }
 
-            // Legacy review state may not carry a title. Only suppress a whole
-            // cluster without version evidence when every identity is already known.
             if (cluster.IdentityKeys.All(reviewedEvents.Contains))
                 return true;
         }
@@ -221,8 +281,7 @@ public static class ArticleSelector
         }
 
         var configuredSource = profile.Sources.FirstOrDefault(source =>
-            !string.IsNullOrWhiteSpace(article.FeedUrl)
-            && source.Url.Equals(article.FeedUrl, StringComparison.OrdinalIgnoreCase));
+            SourceIdentity.Matches(article.FeedUrl, source.Url));
         if (configuredSource is not null)
         {
             score += (configuredSource.Trust - 3) * 0.15;
