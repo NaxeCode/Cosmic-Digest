@@ -1,8 +1,6 @@
 name: Daily Digest
 
 on:
-  push:
-    branches: [main]
   schedule:
     # Avoid the top-of-hour queue and preserve local time across DST.
     - cron: '17 8 * * *'
@@ -15,11 +13,10 @@ concurrency:
 
 jobs:
   send-digest:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[send digest once]'))
+    if: github.event_name == 'schedule' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      DATA_DIR: ${{ github.event_name == 'push' && format('{0}/cosmic-digest-live-test', runner.temp) || './data' }}
       RESEND_VERIFY_DELIVERY: ${{ vars.RESEND_VERIFY_DELIVERY || 'true' }}
       BRAND_NAME: ${{ vars.BRAND_NAME || 'Stella · Cosmic Digest' }}
       BRAND_AVATAR_URL: ${{ vars.BRAND_AVATAR_URL || 'https://raw.githubusercontent.com/NaxeCode/Cosmic-Digest/main/assets/brand/stella-avatar-128.png' }}
@@ -54,7 +51,7 @@ jobs:
       id: prepare-digest
       env:
         RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-        OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY || secrets.RESEND_API_KEY }}
+        OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY }}
         MAIL_TO: ${{ secrets.MAIL_TO }}
         MAIL_FROM: ${{ secrets.MAIL_FROM }}
         FEEDBACK_BASE_URL: ${{ secrets.FEEDBACK_BASE_URL }}
@@ -85,7 +82,7 @@ jobs:
       id: run-digest
       env:
         RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-        OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY || secrets.RESEND_API_KEY }}
+        OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY }}
       run: |
         set +e
         for attempt in 1 2 3 4; do
@@ -96,7 +93,7 @@ jobs:
           fi
 
           # A terminal provider result retires the outbox and must not be retried.
-          if ! jq -e '.PendingDigestSends | length > 0' "$DATA_DIR/state.json" >/dev/null; then
+          if ! jq -e '.PendingDigestSends | length > 0' data/state.json >/dev/null; then
             exit "$status"
           fi
           if [ "$attempt" -eq 4 ]; then
