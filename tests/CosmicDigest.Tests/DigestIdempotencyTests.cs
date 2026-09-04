@@ -154,7 +154,7 @@ public sealed class DigestIdempotencyTests
     public void Prepared_outbox_preserves_the_encrypted_functional_link_and_a_safe_identity()
     {
         var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
-        const string link = "https://example.com/read?entry=123&signature=private-capability";
+        const string link = "https://example.com/read?entry=123&signature=private-capability#/story/456";
         const string key = "stable-link-key";
         var candidate = new ScoredArticle(
             new NewsItem("Private entry", link, now, "Example"),

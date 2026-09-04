@@ -3,7 +3,7 @@ using System.Text.Json;
 
 public static class StateStore
 {
-    private const int CurrentProtectionVersion = 1;
+    private const int CurrentProtectionVersion = 2;
     static readonly string DataDir = Environment.GetEnvironmentVariable("DATA_DIR") ?? "./data";
     static readonly string PathFile = Path.Combine(DataDir, "state.json");
     static readonly JsonSerializerOptions J = new()
@@ -48,13 +48,20 @@ public static class StateStore
         }
         state.DeliveryRetries ??= new();
         state.RecentRuns ??= new();
-        if (state.ProtectionVersion > CurrentProtectionVersion)
+        if (state.ProtectionVersion < 0 || state.ProtectionVersion > CurrentProtectionVersion)
             throw new InvalidOperationException("The durable state protection version is not supported.");
         if (state.ProtectionVersion == 0
             && !RestoreLegacyProtectedDurableContent(state, protectionKey))
         {
             throw new InvalidOperationException(
                 "Legacy durable state contains an encrypted envelope that cannot be authenticated. " +
+                "Restore the correct OUTBOX_ENCRYPTION_KEY before running again.");
+        }
+        if (state.ProtectionVersion == 1
+            && !RestoreVersionOneDurableContent(state, protectionKey))
+        {
+            throw new InvalidOperationException(
+                "Version-1 durable state cannot be authenticated. " +
                 "Restore the correct OUTBOX_ENCRYPTION_KEY before running again.");
         }
         if (state.ProtectionVersion == CurrentProtectionVersion
@@ -441,8 +448,24 @@ public static class StateStore
         string? protectionKey)
     {
         var restorer = new ProtectedTextRestorer(protectionKey, requireEnvelope: true);
-        RestoreDurableContent(state, restorer);
+        RestoreDurableContent(state, restorer, restoreArticleIdentity: true);
         return restorer.Succeeded;
+    }
+
+    private static bool RestoreVersionOneDurableContent(
+        StateOfWorld state,
+        string? protectionKey)
+    {
+        var protectedRestorer = new ProtectedTextRestorer(protectionKey, requireEnvelope: true);
+        RestoreDurableContent(state, protectedRestorer, restoreArticleIdentity: false);
+
+        var transitionalIdentityRestorer = new ProtectedTextRestorer(
+            protectionKey,
+            requireEnvelope: false);
+        foreach (var item in state.PendingDigestSends.SelectMany(pending => pending.ReviewedItems))
+            item.ArticleIdentity = transitionalIdentityRestorer.Restore(item.ArticleIdentity);
+
+        return protectedRestorer.Succeeded && transitionalIdentityRestorer.Succeeded;
     }
 
     private static bool RestoreLegacyProtectedDurableContent(
@@ -450,13 +473,14 @@ public static class StateStore
         string? protectionKey)
     {
         var restorer = new ProtectedTextRestorer(protectionKey, requireEnvelope: false);
-        RestoreDurableContent(state, restorer);
+        RestoreDurableContent(state, restorer, restoreArticleIdentity: true);
         return restorer.Succeeded;
     }
 
     private static void RestoreDurableContent(
         StateOfWorld state,
-        ProtectedTextRestorer restorer)
+        ProtectedTextRestorer restorer,
+        bool restoreArticleIdentity)
     {
         state.CacheNews = state.CacheNews
             .Select(article => RestoreArticle(article, restorer))
@@ -497,7 +521,8 @@ public static class StateStore
             foreach (var item in pending.ReviewedItems)
             {
                 item.Article = RestoreArticle(item.Article, restorer);
-                item.ArticleIdentity = restorer.Restore(item.ArticleIdentity);
+                if (restoreArticleIdentity)
+                    item.ArticleIdentity = restorer.Restore(item.ArticleIdentity);
                 item.EventTitles = item.EventTitles
                     .Select(restorer.Restore)
                     .ToList();

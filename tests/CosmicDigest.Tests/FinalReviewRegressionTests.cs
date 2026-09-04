@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 
 public sealed class FinalReviewRegressionTests
 {
@@ -317,7 +318,7 @@ public sealed class FinalReviewRegressionTests
         Assert.DoesNotContain(title, migrated, StringComparison.Ordinal);
         Assert.DoesNotContain("legacy-private-story", migrated, StringComparison.Ordinal);
         Assert.DoesNotContain("Legacy private summary", migrated, StringComparison.Ordinal);
-        Assert.Contains("\"ProtectionVersion\": 1", migrated, StringComparison.Ordinal);
+        Assert.Contains("\"ProtectionVersion\": 2", migrated, StringComparison.Ordinal);
         var restored = StateStore.DeserializeFromStorage(migrated, key);
         Assert.Equal(title, Assert.Single(restored.CacheNews).Title);
         Assert.Equal(link, Assert.Single(restored.ReviewedArticles).Link);
@@ -354,11 +355,49 @@ public sealed class FinalReviewRegressionTests
             StateStore.DeserializeFromStorage(legacyJson, "wrong-key"));
 
         var migrated = StateStore.SerializeForStorage(loaded, key);
-        Assert.Contains("\"ProtectionVersion\": 1", migrated, StringComparison.Ordinal);
+        Assert.Contains("\"ProtectionVersion\": 2", migrated, StringComparison.Ordinal);
         Assert.DoesNotContain(title, migrated, StringComparison.Ordinal);
         Assert.Equal(
             title,
             Assert.Single(StateStore.DeserializeFromStorage(migrated, key).CacheNews).Title);
+    }
+
+    [Fact]
+    public void Durable_state_migrates_the_version_one_plaintext_article_identity()
+    {
+        const string key = "stable-version-one-key";
+        const string identity = "https://example.com/read?entry=123";
+        var candidate = new ScoredArticle(
+            new NewsItem(
+                "Version one pending item",
+                identity + "&signature=secret#/story/456",
+                Now,
+                "Example"),
+            5,
+            new[] { "AI" },
+            "event-version-one");
+        var state = new StateOfWorld();
+        DigestIdempotency.Prepare(
+            state,
+            new[] { candidate },
+            new[] { candidate },
+            Now,
+            key,
+            new PendingEmailPayload("from", "to", "subject", "text", "html"));
+        var versionOne = JsonNode.Parse(StateStore.SerializeForStorage(state, key))!.AsObject();
+        versionOne["ProtectionVersion"] = 1;
+        var pending = versionOne["PendingDigestSends"]!.AsArray()[0]!.AsObject();
+        var reviewedItem = pending["ReviewedItems"]!.AsArray()[0]!.AsObject();
+        reviewedItem["ArticleIdentity"] = identity;
+
+        var loaded = StateStore.DeserializeFromStorage(versionOne.ToJsonString(), key);
+
+        Assert.Equal(
+            identity,
+            Assert.Single(Assert.Single(loaded.PendingDigestSends).ReviewedItems).ArticleIdentity);
+        var migrated = StateStore.SerializeForStorage(loaded, key);
+        Assert.Contains("\"ProtectionVersion\": 2", migrated, StringComparison.Ordinal);
+        Assert.DoesNotContain(identity, migrated, StringComparison.Ordinal);
     }
 
     [Fact]

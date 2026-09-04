@@ -85,8 +85,7 @@ public static class SourceIdentity
             return "";
         }
 
-        var fragment = trimmed.IndexOf('#');
-        return fragment >= 0 ? trimmed[..fragment] : trimmed;
+        return trimmed;
     }
 
     public static string SanitizeArticleLink(string? link)
