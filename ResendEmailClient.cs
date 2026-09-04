@@ -1,3 +1,4 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
@@ -7,7 +8,7 @@ public sealed record ResendSendResult(string EmailId, string Status);
 public static class ResendDeliveryStatus
 {
     public static bool IsRetryableFailure(string? status) =>
-        status is "bounced" or "suppressed" or "failed" or "canceled";
+        status is "bounced" or "suppressed" or "failed" or "canceled" or "request_rejected";
 
     public static bool IsComplaint(string? status) => status == "complained";
 
@@ -20,6 +21,7 @@ public static class ResendDeliveryStatus
 
 public sealed class ResendEmailClient : IDisposable
 {
+    private const string RejectedEmailPrefix = "rejected:";
     private readonly HttpClient _http;
     private readonly bool _ownsClient;
 
@@ -58,7 +60,20 @@ public sealed class ResendEmailClient : IDisposable
         using var response = await _http.SendAsync(request, cancellationToken);
         var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
         if (!response.IsSuccessStatusCode)
-            throw new InvalidOperationException($"Resend rejected the email: {response.StatusCode} - {Compact(responseBody)}");
+        {
+            if (IsPermanentRequestRejection(response.StatusCode))
+            {
+                Console.Error.WriteLine(
+                    $"Resend permanently rejected the prepared request ({response.StatusCode}); " +
+                    "the durable outbox will be retired so corrected sender/recipient configuration can rebuild it.");
+                return new ResendSendResult(
+                    RejectedEmailPrefix + idempotencyKey,
+                    "request_rejected");
+            }
+
+            throw new InvalidOperationException(
+                $"Resend rejected the email: {response.StatusCode} - {Compact(responseBody)}");
+        }
 
         using var document = JsonDocument.Parse(responseBody);
         if (!document.RootElement.TryGetProperty("id", out var idElement)
@@ -75,6 +90,9 @@ public sealed class ResendEmailClient : IDisposable
         string emailId,
         CancellationToken cancellationToken = default)
     {
+        if (emailId.StartsWith(RejectedEmailPrefix, StringComparison.Ordinal))
+            return "request_rejected";
+
         var latest = "accepted";
         foreach (var delay in new[] { TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10) })
         {
@@ -91,6 +109,9 @@ public sealed class ResendEmailClient : IDisposable
         string emailId,
         CancellationToken cancellationToken = default)
     {
+        if (emailId.StartsWith(RejectedEmailPrefix, StringComparison.Ordinal))
+            return "request_rejected";
+
         using var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.resend.com/emails/{Uri.EscapeDataString(emailId)}");
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
         using var response = await _http.SendAsync(request, cancellationToken);
@@ -108,6 +129,15 @@ public sealed class ResendEmailClient : IDisposable
     {
         if (_ownsClient)
             _http.Dispose();
+    }
+
+    private static bool IsPermanentRequestRejection(HttpStatusCode statusCode)
+    {
+        var code = (int)statusCode;
+        return code is >= 400 and < 500
+            && statusCode is not HttpStatusCode.RequestTimeout
+            && statusCode is not HttpStatusCode.Conflict
+            && code != 429;
     }
 
     private static string Compact(string value)
