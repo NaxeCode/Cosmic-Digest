@@ -38,8 +38,9 @@ public static class RssIngestor
         HttpClient? httpClient = null,
         CancellationToken cancellationToken = default)
     {
-        var healthByUrl = (previousHealth ?? Array.Empty<FeedHealthState>())
-            .GroupBy(item => item.Url, StringComparer.OrdinalIgnoreCase)
+        var healthByIdentity = (previousHealth ?? Array.Empty<FeedHealthState>())
+            .Where(item => !string.IsNullOrWhiteSpace(item.Url))
+            .GroupBy(item => SourceIdentity.NormalizePersisted(item.Url), StringComparer.OrdinalIgnoreCase)
             .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
         var ownsClient = httpClient is null;
         var http = httpClient ?? new HttpClient { Timeout = TimeSpan.FromSeconds(20) };
@@ -50,7 +51,7 @@ public static class RssIngestor
         {
             var tasks = sources.Select(source => FetchOneAsync(
                 source,
-                healthByUrl.GetValueOrDefault(source.Url),
+                healthByIdentity.GetValueOrDefault(SourceIdentity.ForUrl(source.Url)),
                 now,
                 circuitFailureThreshold,
                 circuitHours,
@@ -119,8 +120,8 @@ public static class RssIngestor
                         source,
                         "not_modified",
                         Array.Empty<NewsItem>(),
-                        previous?.ETag,
-                        previous?.LastModifiedUtc);
+                        response.Headers.ETag?.ToString() ?? previous?.ETag,
+                        response.Content.Headers.LastModified ?? previous?.LastModifiedUtc);
                 }
 
                 if (IsTransient(response.StatusCode) && attempt < 3)
@@ -158,8 +159,10 @@ public static class RssIngestor
             }
         }
 
-        var message = CompactError(lastException?.Message ?? "Unknown feed failure.");
-        Console.Error.WriteLine($"Feed failed ({source.Name}, {source.Url}): {message}");
+        var message = CompactError(SourceIdentity.RedactFrom(
+            lastException?.Message ?? "Unknown feed failure.",
+            source.Url));
+        Console.Error.WriteLine($"Feed failed ({SourceIdentity.PublicLabel(source.Url)}): {message}");
         return new FeedFetchResult(
             source,
             "failed",
@@ -175,9 +178,8 @@ public static class RssIngestor
         DateTimeOffset fallbackPublishedAt)
     {
         var feed = FeedReader.ReadFromString(content);
-        var sourceName = string.IsNullOrWhiteSpace(source.Name)
-            ? feed.Title ?? new Uri(source.Url).Host
-            : source.Name;
+        var sourceIdentity = SourceIdentity.ForUrl(source.Url);
+        var sourceLabel = SourceIdentity.PublicLabel(sourceIdentity);
 
         return (feed.Items ?? Enumerable.Empty<FeedItem>())
             .Select(item =>
@@ -190,9 +192,9 @@ public static class RssIngestor
                     item.Title ?? "",
                     item.Link ?? "",
                     published,
-                    sourceName,
+                    sourceLabel,
                     item.Description,
-                    source.Url);
+                    sourceIdentity);
             })
             .Where(item => !string.IsNullOrWhiteSpace(item.Title) && !string.IsNullOrWhiteSpace(item.Link))
             .ToList();
