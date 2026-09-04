@@ -53,6 +53,50 @@ public sealed class FinalReviewRegressionTests
     }
 
     [Fact]
+    public void Clustering_tracks_every_explicit_product_version_in_a_headline()
+    {
+        var clusters = EventIdentity.Cluster(
+            new[]
+            {
+                new NewsItem(
+                    "Visual Studio 17.12 adds .NET 9 support",
+                    "https://example.com/dotnet-9",
+                    Now,
+                    "Example"),
+                new NewsItem(
+                    "Visual Studio 17.12 adds .NET 10 support",
+                    "https://example.com/dotnet-10",
+                    Now.AddMinutes(-1),
+                    "Other")
+            },
+            0.56);
+
+        Assert.Equal(2, clusters.Count);
+        Assert.False(EventIdentity.ReviewedVersionCanSuppress(
+            "Visual Studio 17.12 adds .NET 9 support",
+            new[] { "Visual Studio 17.12 adds .NET 10 support" }));
+    }
+
+    [Fact]
+    public void Directional_events_preserve_actor_order()
+    {
+        const string first = "Microsoft acquires OpenAI";
+        const string reversed = "OpenAI acquires Microsoft";
+
+        var clusters = EventIdentity.Cluster(
+            new[]
+            {
+                new NewsItem(first, "https://example.com/first", Now, "Example"),
+                new NewsItem(reversed, "https://example.com/reversed", Now.AddMinutes(-1), "Other")
+            },
+            0.56);
+
+        Assert.Equal(2, clusters.Count);
+        Assert.NotEqual(EventIdentity.KeyForTitle(first), EventIdentity.KeyForTitle(reversed));
+        Assert.Equal(0, EventIdentity.TitleSimilarity(first, reversed));
+    }
+
+    [Fact]
     public void Durable_state_redacts_article_link_credentials_everywhere()
     {
         const string secret = "subscriber-secret-token";
@@ -89,6 +133,34 @@ public sealed class FinalReviewRegressionTests
         Assert.All(state.CacheNews, item => Assert.Equal("https://example.com/story", item.Link));
         Assert.All(state.ReviewedArticles, item => Assert.Equal("https://example.com/story", item.Link));
         Assert.All(state.DeliveryRetries, item => Assert.Equal("https://example.com/story", item.Article.Link));
+    }
+
+    [Fact]
+    public void Included_review_links_use_the_same_durable_normalization_as_retries()
+    {
+        var article = new NewsItem(
+            "OpenAI release",
+            "https://example.com/story?category=release",
+            Now,
+            "Example");
+        var scored = new ScoredArticle(article, 5, new[] { "AI" }, "event-query");
+        var state = new StateOfWorld();
+        StateStore.MarkReviewed(state, new[] { scored }, new[] { scored }, Now, "email-query");
+
+        var reviewed = Assert.Single(state.ReviewedArticles);
+        Assert.True(reviewed.Included);
+        Assert.Equal("https://example.com/story", reviewed.Link);
+
+        var failure = new DeliveryAttempt(
+            "email-query",
+            Now,
+            "Digest",
+            "bounced",
+            Now,
+            IncludedItems: new[] { article });
+        Assert.True(StateStore.RestoreEligibilityForFailedDelivery(state, failure, Now.AddMinutes(1)));
+        Assert.Empty(state.ReviewedArticles);
+        Assert.Equal("https://example.com/story", Assert.Single(state.DeliveryRetries).Article.Link);
     }
 
     [Fact]

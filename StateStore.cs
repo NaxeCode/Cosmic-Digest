@@ -75,7 +75,7 @@ public static class StateStore
         string? deliveryEmailId = null)
     {
         var includedLinks = included
-            .Select(candidate => ArticleSelector.CanonicalizeLink(candidate.Article.Link))
+            .Select(candidate => SourceIdentity.SanitizeArticleLink(candidate.Article.Link))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         var includedEvents = included
             .SelectMany(candidate => candidate.ReviewEventKeys)

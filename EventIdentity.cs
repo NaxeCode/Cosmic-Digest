@@ -41,7 +41,14 @@ public static partial class EventIdentity
     {
         "announces", "announced", "introduces", "introduced", "launches", "launched", "releases", "released",
         "reports", "reported", "says", "said", "adds", "added", "cuts", "cut", "raises", "raised", "ships",
-        "shipped", "unveils", "unveiled", "shows", "showed", "targets", "targeted", "expects", "expected"
+        "shipped", "unveils", "unveiled", "shows", "showed", "targets", "targeted", "expects", "expected",
+        "gets", "got", "includes", "included", "requires", "required", "supports", "supported", "uses", "used"
+    };
+
+    private static readonly HashSet<string> DirectionalModifiers = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "agreed", "agrees", "finally", "formally", "officially", "plans", "reportedly", "successfully",
+        "today", "yesterday"
     };
 
     public static IReadOnlyList<NewsEventCluster> Cluster(
@@ -117,8 +124,14 @@ public static partial class EventIdentity
         return seed.Length == 0 ? "" : HashSeed(seed);
     }
 
-    public static string Signature(string title) =>
-        string.Join(' ', Tokens(title).Order(StringComparer.Ordinal));
+    public static string Signature(string title)
+    {
+        var signature = string.Join(' ', Tokens(title).Order(StringComparer.Ordinal));
+        var direction = DirectionalSignature(title);
+        return string.IsNullOrWhiteSpace(direction)
+            ? signature
+            : signature + " | " + direction;
+    }
 
     public static double TitleSimilarity(string left, string right) =>
         CanCluster(left, right) ? Similarity(Tokens(left), Tokens(right)) : 0;
@@ -139,6 +152,15 @@ public static partial class EventIdentity
 
     private static bool CanCluster(string left, string right)
     {
+        var leftDirection = DirectionalSignature(left);
+        var rightDirection = DirectionalSignature(right);
+        if (!string.IsNullOrWhiteSpace(leftDirection)
+            && !string.IsNullOrWhiteSpace(rightDirection)
+            && !string.Equals(leftDirection, rightDirection, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
         var leftNumeric = NumericIdentityTokens(left);
         var rightNumeric = NumericIdentityTokens(right);
         return leftNumeric.Count == 0
@@ -199,11 +221,59 @@ public static partial class EventIdentity
 
             identities.Add(numericToken);
             identities.Add($"{productPhrase}:{numericToken}");
-            return identities;
         }
 
         return identities;
     }
+
+    private static string? DirectionalSignature(string value)
+    {
+        var tokens = OrderedTokens(value);
+        for (var i = 0; i < tokens.Count; i++)
+        {
+            var verb = NormalizeDirectionalVerb(tokens[i]);
+            if (verb is null)
+                continue;
+
+            var actor = FindDirectionalActor(tokens, i - 1, -1);
+            var target = FindDirectionalActor(tokens, i + 1, 1);
+            if (!string.IsNullOrWhiteSpace(actor) && !string.IsNullOrWhiteSpace(target))
+                return $"{actor}>{verb}>{target}";
+        }
+        return null;
+    }
+
+    private static string? FindDirectionalActor(
+        IReadOnlyList<string> tokens,
+        int start,
+        int direction)
+    {
+        for (var i = start; i >= 0 && i < tokens.Count; i += direction)
+        {
+            var token = tokens[i];
+            if (!DirectionalModifiers.Contains(token)
+                && !GenericVersionMarkers.Contains(token)
+                && NormalizeDirectionalVerb(token) is null)
+            {
+                return token;
+            }
+        }
+        return null;
+    }
+
+    private static string? NormalizeDirectionalVerb(string token) => token switch
+    {
+        "acquire" or "acquired" or "acquires" or "acquiring" => "acquire",
+        "appoint" or "appointed" or "appoints" or "appointing" => "appoint",
+        "beat" or "beaten" or "beats" or "beating" => "beat",
+        "bought" or "buy" or "buying" or "buys" => "buy",
+        "defeat" or "defeated" or "defeating" or "defeats" => "defeat",
+        "fire" or "fired" or "fires" or "firing" => "fire",
+        "hire" or "hired" or "hires" or "hiring" => "hire",
+        "replace" or "replaced" or "replaces" or "replacing" => "replace",
+        "sue" or "sued" or "sues" or "suing" => "sue",
+        _ => null
+    };
 
     private static string FindPrecedingProductPhrase(IReadOnlyList<string> tokens, int numericIndex)
     {
