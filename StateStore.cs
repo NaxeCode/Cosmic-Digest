@@ -37,11 +37,13 @@ public static class StateStore
         }
         state.DeliveryRetries ??= new();
         state.RecentRuns ??= new();
+        SanitizeDurableSourceMetadata(state);
         return state;
     }
 
     public static void Save(StateOfWorld s)
     {
+        SanitizeDurableSourceMetadata(s);
         Directory.CreateDirectory(DataDir);
         var temporaryPath = PathFile + ".tmp";
         File.WriteAllText(temporaryPath, JsonSerializer.Serialize(s, J));
@@ -50,10 +52,10 @@ public static class StateStore
 
     public static void AppendNews(StateOfWorld s, IEnumerable<NewsItem> items, int keepDays = 4)
     {
-        var incoming = items.ToList();
+        var incoming = items.Select(SourceIdentity.Sanitize).ToList();
         var cutoff = DateTimeOffset.UtcNow.AddDays(-keepDays);
         s.CacheNews = incoming
-            .Concat(s.CacheNews)
+            .Concat(s.CacheNews.Select(SourceIdentity.Sanitize))
             .Where(item => item.Published >= cutoff)
             .Where(item => !string.IsNullOrWhiteSpace(item.Link))
             .GroupBy(item => ArticleSelector.CanonicalizeLink(item.Link), StringComparer.OrdinalIgnoreCase)
@@ -127,14 +129,16 @@ public static class StateStore
         DateTimeOffset attemptedAtUtc)
     {
         var existing = state.FeedHealth
-            .GroupBy(item => item.Url, StringComparer.OrdinalIgnoreCase)
+            .Where(item => !string.IsNullOrWhiteSpace(item.Url))
+            .GroupBy(item => SourceIdentity.NormalizePersisted(item.Url), StringComparer.OrdinalIgnoreCase)
             .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
 
         foreach (var result in results)
         {
-            var health = existing.GetValueOrDefault(result.Source.Url) ?? new FeedHealthState();
-            health.Name = result.Source.Name;
-            health.Url = result.Source.Url;
+            var sourceIdentity = SourceIdentity.ForUrl(result.Source.Url);
+            var health = existing.GetValueOrDefault(sourceIdentity) ?? new FeedHealthState();
+            health.Name = SourceIdentity.PublicLabel(sourceIdentity);
+            health.Url = sourceIdentity;
             health.LastAttemptUtc = attemptedAtUtc;
             if (result.Status == "ok")
             {
@@ -159,11 +163,11 @@ public static class StateStore
             {
                 health.LastFailureUtc = attemptedAtUtc;
                 health.ConsecutiveFailures++;
-                health.LastError = result.Error;
+                health.LastError = SourceIdentity.RedactFrom(result.Error, result.Source.Url);
                 health.LastItemCount = 0;
             }
 
-            existing[result.Source.Url] = health;
+            existing[sourceIdentity] = health;
         }
 
         state.FeedHealth = existing.Values
@@ -173,7 +177,11 @@ public static class StateStore
 
     public static void RecordDelivery(StateOfWorld state, DeliveryAttempt delivery)
     {
-        state.Deliveries.Add(delivery);
+        var sanitized = delivery with
+        {
+            IncludedItems = delivery.IncludedItems?.Select(SourceIdentity.Sanitize).ToList()
+        };
+        state.Deliveries.Add(sanitized);
         state.Deliveries = state.Deliveries
             .GroupBy(item => item.EmailId, StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(item => item.StatusAtUtc).First())
@@ -214,12 +222,11 @@ public static class StateStore
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         state.DeliveryRetries.AddRange(articles
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
-            .Select(article => new DeliveryRetryItem(article, queuedAtUtc)));
+            .Select(article => new DeliveryRetryItem(SourceIdentity.Sanitize(article), queuedAtUtc)));
         state.DeliveryRetries = state.DeliveryRetries
             .GroupBy(item => ArticleSelector.CanonicalizeLink(item.Article.Link), StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(item => item.QueuedAtUtc).First())
             .OrderByDescending(item => item.QueuedAtUtc)
-            .Take(50)
             .ToList();
         return state.DeliveryRetries.Any(item =>
             !before.Contains(ArticleSelector.CanonicalizeLink(item.Article.Link)));
@@ -272,6 +279,32 @@ public static class StateStore
                 : lookbackCutoff;
     }
 
+    private static void SanitizeDurableSourceMetadata(StateOfWorld state)
+    {
+        state.CacheNews = state.CacheNews.Select(SourceIdentity.Sanitize).ToList();
+
+        foreach (var health in state.FeedHealth)
+        {
+            var identity = SourceIdentity.NormalizePersisted(health.Url);
+            health.Url = identity;
+            health.Name = SourceIdentity.PublicLabel(identity);
+        }
+
+        state.Deliveries = state.Deliveries.Select(delivery => delivery with
+        {
+            IncludedItems = delivery.IncludedItems?.Select(SourceIdentity.Sanitize).ToList()
+        }).ToList();
+
+        state.DeliveryRetries = state.DeliveryRetries.Select(item =>
+            item with { Article = SourceIdentity.Sanitize(item.Article) }).ToList();
+
+        foreach (var pending in state.PendingDigestSends)
+        {
+            foreach (var item in pending.ReviewedItems)
+                item.Article = SourceIdentity.Sanitize(item.Article);
+        }
+    }
+
     private static IEnumerable<(string EventKey, string Title)> ResolveEventIdentities(
         ScoredArticle candidate)
     {
@@ -284,5 +317,4 @@ public static class StateStore
 
         return candidate.ReviewEventKeys.Select(key => (key, candidate.Article.Title));
     }
-
 }
