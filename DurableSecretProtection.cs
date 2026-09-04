@@ -47,6 +47,30 @@ public static class DurableSecretProtection
         !string.IsNullOrEmpty(value)
         && value.StartsWith(Prefix, StringComparison.Ordinal);
 
+    public static bool HasEnvelopeShape(string? value)
+    {
+        if (!IsProtected(value))
+            return false;
+
+        var parts = value![Prefix.Length..].Split(':');
+        if (parts.Length != 3)
+            return false;
+
+        try
+        {
+            var nonce = Convert.FromBase64String(parts[0]);
+            var ciphertext = Convert.FromBase64String(parts[1]);
+            var tag = Convert.FromBase64String(parts[2]);
+            return nonce.Length == NonceSize
+                && ciphertext.Length > 0
+                && tag.Length == TagSize;
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+    }
+
     public static bool TryUnprotect(
         string? protectedValue,
         string? protectionKey,

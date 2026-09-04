@@ -49,6 +49,13 @@ public static class StateStore
         state.RecentRuns ??= new();
         if (state.ProtectionVersion > CurrentProtectionVersion)
             throw new InvalidOperationException("The durable state protection version is not supported.");
+        if (state.ProtectionVersion == 0
+            && !RestoreLegacyProtectedDurableContent(state, protectionKey))
+        {
+            throw new InvalidOperationException(
+                "Legacy durable state contains an encrypted envelope that cannot be authenticated. " +
+                "Restore the correct OUTBOX_ENCRYPTION_KEY before running again.");
+        }
         if (state.ProtectionVersion == CurrentProtectionVersion
             && !RestoreProtectedDurableContent(state, protectionKey))
         {
@@ -422,7 +429,24 @@ public static class StateStore
         StateOfWorld state,
         string? protectionKey)
     {
-        var restorer = new ProtectedTextRestorer(protectionKey);
+        var restorer = new ProtectedTextRestorer(protectionKey, requireEnvelope: true);
+        RestoreDurableContent(state, restorer);
+        return restorer.Succeeded;
+    }
+
+    private static bool RestoreLegacyProtectedDurableContent(
+        StateOfWorld state,
+        string? protectionKey)
+    {
+        var restorer = new ProtectedTextRestorer(protectionKey, requireEnvelope: false);
+        RestoreDurableContent(state, restorer);
+        return restorer.Succeeded;
+    }
+
+    private static void RestoreDurableContent(
+        StateOfWorld state,
+        ProtectedTextRestorer restorer)
+    {
         state.CacheNews = state.CacheNews
             .Select(article => RestoreArticle(article, restorer))
             .ToList();
@@ -467,7 +491,6 @@ public static class StateStore
                     .ToList();
             }
         }
-        return restorer.Succeeded;
     }
 
     private static NewsItem ProtectArticle(NewsItem article, string? protectionKey) =>
@@ -503,7 +526,9 @@ public static class StateStore
         || state.DeliveryRetries.Count > 0
         || state.PendingDigestSends.Count > 0;
 
-    private sealed class ProtectedTextRestorer(string? protectionKey)
+    private sealed class ProtectedTextRestorer(
+        string? protectionKey,
+        bool requireEnvelope)
     {
         public bool Succeeded { get; private set; } = true;
 
@@ -511,11 +536,17 @@ public static class StateStore
         {
             if (string.IsNullOrEmpty(value))
                 return value;
-            if (!DurableSecretProtection.IsProtected(value)
-                || !DurableSecretProtection.TryUnprotect(
-                    value,
-                    protectionKey,
-                    out var plaintext)
+            if (!DurableSecretProtection.HasEnvelopeShape(value))
+            {
+                if (requireEnvelope)
+                    Succeeded = false;
+                return value;
+            }
+
+            if (!DurableSecretProtection.TryUnprotect(
+                value,
+                protectionKey,
+                out var plaintext)
                 || plaintext is null)
             {
                 Succeeded = false;

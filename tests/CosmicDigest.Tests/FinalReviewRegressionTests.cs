@@ -319,6 +319,43 @@ public sealed class FinalReviewRegressionTests
     }
 
     [Fact]
+    public void Durable_state_restores_pre_version_envelopes_before_migrating()
+    {
+        const string title = "Legacy encrypted subscriber headline";
+        const string link = "https://example.com/legacy-encrypted-story";
+        const string key = "stable-pre-version-key";
+        var protectedArticle = new NewsItem(
+            DurableSecretProtection.Protect(title, key)!,
+            DurableSecretProtection.Protect(link, key)!,
+            Now,
+            "Legacy source",
+            DurableSecretProtection.Protect("Legacy encrypted summary", key));
+        var legacy = new StateOfWorld
+        {
+            CacheNews = new List<NewsItem> { protectedArticle },
+            DeliveryRetries = new List<DeliveryRetryItem>
+            {
+                new(protectedArticle, Now)
+            }
+        };
+        var legacyJson = JsonSerializer.Serialize(legacy);
+
+        var loaded = StateStore.DeserializeFromStorage(legacyJson, key);
+
+        Assert.Equal(title, Assert.Single(loaded.CacheNews).Title);
+        Assert.Equal(link, Assert.Single(loaded.DeliveryRetries).Article.Link);
+        Assert.Throws<InvalidOperationException>(() =>
+            StateStore.DeserializeFromStorage(legacyJson, "wrong-key"));
+
+        var migrated = StateStore.SerializeForStorage(loaded, key);
+        Assert.Contains("\"ProtectionVersion\": 1", migrated, StringComparison.Ordinal);
+        Assert.DoesNotContain(title, migrated, StringComparison.Ordinal);
+        Assert.Equal(
+            title,
+            Assert.Single(StateStore.DeserializeFromStorage(migrated, key).CacheNews).Title);
+    }
+
+    [Fact]
     public void Included_review_links_use_the_same_durable_normalization_as_retries()
     {
         var article = new NewsItem(
