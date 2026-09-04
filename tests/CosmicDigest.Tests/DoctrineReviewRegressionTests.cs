@@ -58,6 +58,71 @@ public sealed class DoctrineReviewRegressionTests
     }
 
     [Fact]
+    public void Incidental_year_price_and_statistic_do_not_split_the_same_product_event()
+    {
+        var now = DateTimeOffset.UtcNow;
+        var clusters = EventIdentity.Cluster(
+            new[]
+            {
+                new NewsItem("Nvidia launches RTX 5090", "https://example.com/base", now, "A"),
+                new NewsItem("Nvidia launches RTX 5090 at CES 2026", "https://example.com/year", now.AddMinutes(-1), "B"),
+                new NewsItem("Nvidia launches RTX 5090 at $1,999", "https://example.com/price", now.AddMinutes(-2), "C"),
+                new NewsItem("Nvidia launches RTX 5090 with 25% faster rendering", "https://example.com/stat", now.AddMinutes(-3), "D")
+            },
+            0.56);
+
+        var cluster = Assert.Single(clusters);
+        Assert.Equal(4, cluster.Articles.Count);
+        Assert.True(EventIdentity.ReviewedVersionCanSuppress(
+            "Nvidia launches RTX 5090",
+            new[] { "Nvidia launches RTX 5090 at CES 2026" }));
+    }
+
+    [Fact]
+    public void Prepared_outbox_carries_selection_metrics_across_delivery_handoff()
+    {
+        var now = DateTimeOffset.UtcNow;
+        var article = new ScoredArticle(
+            new NewsItem("OpenAI agent release", "https://example.com/release", now, "Example"),
+            5,
+            new[] { "AI" },
+            "event-1");
+        var metrics = new RunMetrics
+        {
+            RunAtUtc = now,
+            FeedCount = 12,
+            HealthyFeedCount = 11,
+            FetchedArticleCount = 37,
+            CandidateEventCount = 4,
+            SelectedEventCount = 1,
+            SuppressedEventCount = 3,
+            SelectionMode = "ai",
+            Model = "gpt-5.6-terra",
+            ReasoningEffort = "medium",
+            InputTokens = 1234,
+            OutputTokens = 321,
+            DurationMilliseconds = 987
+        };
+        var state = new StateOfWorld();
+
+        var prepared = DigestIdempotency.Prepare(
+            state,
+            new[] { article },
+            new[] { article },
+            now,
+            "stable-test-key",
+            new PendingEmailPayload("from", "to", "subject", "text", "html"),
+            metrics);
+
+        var persisted = Assert.IsType<RunMetrics>(prepared.Outbox.PreparedMetrics);
+        Assert.Equal(12, persisted.FeedCount);
+        Assert.Equal(37, persisted.FetchedArticleCount);
+        Assert.Equal("gpt-5.6-terra", persisted.Model);
+        Assert.Equal(1234, persisted.InputTokens);
+        Assert.Equal(987, persisted.DurationMilliseconds);
+    }
+
+    [Fact]
     public async Task Permanent_resend_request_rejection_returns_a_rebuildable_terminal_result()
     {
         using var http = new HttpClient(new StaticResponseHandler(
