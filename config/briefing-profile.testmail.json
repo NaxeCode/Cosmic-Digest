@@ -1,0 +1,26 @@
+{
+  "version": "testmail-contract-v1",
+  "displayName": "Test",
+  "objective": "Verify the complete email delivery and presentation contract.",
+  "priorities": [
+    {
+      "name": "Contract verification",
+      "weight": 5,
+      "signals": ["Cosmic Contract Test", "supported API"],
+      "whyItMatters": "Proves the rendered email reaches a programmable inbox."
+    }
+  ],
+  "sources": [
+    {
+      "name": "Contract Fixture",
+      "url": "http://127.0.0.1:8123/tests/fixtures/feed.xml",
+      "official": true,
+      "trust": 5,
+      "tags": ["test"]
+    }
+  ],
+  "lookbackHours": 6,
+  "candidateLimit": 5,
+  "maxItems": 1,
+  "minimumScore": 0.5
+}

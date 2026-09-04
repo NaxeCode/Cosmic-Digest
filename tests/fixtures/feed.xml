@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>Cosmic Digest Contract Feed</title>
+    <link>https://github.com/NaxeCode/Cosmic-Digest</link>
+    <description>Deterministic end-to-end email fixture.</description>
+    <item>
+      <title>Cosmic Contract Test event changes the supported API</title>
+      <link>https://github.com/NaxeCode/Cosmic-Digest</link>
+      <description>A deterministic API change used only to verify the email delivery contract.</description>
+    </item>
+  </channel>
+</rss>

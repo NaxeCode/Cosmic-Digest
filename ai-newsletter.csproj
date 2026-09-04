@@ -17,6 +17,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="tests/**/*.cs" />
+    <Compile Remove="feedback/**/*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources/public_suffix_list.dat" />
   </ItemGroup>
 
 </Project>

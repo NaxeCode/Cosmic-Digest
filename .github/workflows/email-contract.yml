@@ -1,0 +1,55 @@
+name: Email Contract
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 13 * * 1'
+
+concurrency:
+  group: email-contract
+  cancel-in-progress: false
+
+jobs:
+  testmail:
+    if: vars.TESTMAIL_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+    - uses: actions/checkout@v7
+
+    - uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Build and test
+      run: |
+        dotnet restore
+        dotnet build --no-restore --configuration Release
+        dotnet test --no-build --configuration Release
+
+    - name: Start deterministic feed
+      run: |
+        python3 -m http.server 8123 > /tmp/cosmic-feed.log 2>&1 &
+        echo "TEST_STARTED_AT_MS=$(date +%s%3N)" >> "$GITHUB_ENV"
+
+    - name: Send contract email
+      env:
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        OUTBOX_ENCRYPTION_KEY: contract-${{ github.run_id }}-${{ github.run_attempt }}
+        MAIL_FROM: ${{ secrets.MAIL_FROM }}
+        MAIL_TO: ${{ secrets.TESTMAIL_NAMESPACE }}.cosmic-${{ github.run_id }}-${{ github.run_attempt }}@inbox.testmail.app
+        DIGEST_PROFILE_PATH: config/briefing-profile.testmail.json
+        DATA_DIR: ${{ runner.temp }}/cosmic-digest-state
+        ENABLE_AI_SUMMARY: 'false'
+        RESEND_VERIFY_DELIVERY: 'true'
+        TESTMAIL_TAG: cosmic-${{ github.run_id }}-${{ github.run_attempt }}
+      run: dotnet run --no-build --configuration Release
+
+    - name: Verify delivery and content
+      env:
+        TESTMAIL_APIKEY: ${{ secrets.TESTMAIL_APIKEY }}
+        TESTMAIL_NAMESPACE: ${{ secrets.TESTMAIL_NAMESPACE }}
+        TESTMAIL_TAG: cosmic-${{ github.run_id }}-${{ github.run_attempt }}
+        TEST_STARTED_AT_MS: ${{ env.TEST_STARTED_AT_MS }}
+      run: node scripts/verify-testmail.mjs

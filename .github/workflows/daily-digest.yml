@@ -16,6 +16,12 @@ jobs:
     if: github.event_name == 'schedule' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      RESEND_VERIFY_DELIVERY: ${{ vars.RESEND_VERIFY_DELIVERY || 'true' }}
+      BRAND_NAME: ${{ vars.BRAND_NAME || 'Stella · Cosmic Digest' }}
+      BRAND_AVATAR_URL: ${{ vars.BRAND_AVATAR_URL || 'https://raw.githubusercontent.com/NaxeCode/Cosmic-Digest/main/assets/brand/stella-avatar-128.png' }}
+      OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.6-terra' }}
+      OPENAI_REASONING_EFFORT: ${{ vars.OPENAI_REASONING_EFFORT || 'medium' }}
 
     permissions:
       contents: write
@@ -41,24 +47,66 @@ jobs:
     - name: Test
       run: dotnet test --no-build --configuration Release
 
-    - name: Run digest
+    - name: Prepare digest without sending
+      id: prepare-digest
       env:
         RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY }}
         MAIL_TO: ${{ secrets.MAIL_TO }}
         MAIL_FROM: ${{ secrets.MAIL_FROM }}
+        FEEDBACK_BASE_URL: ${{ secrets.FEEDBACK_BASE_URL }}
+        FEEDBACK_SIGNING_KEY: ${{ secrets.FEEDBACK_SIGNING_KEY }}
         TIMEZONE: ${{ secrets.TIMEZONE }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.6-terra' }}
-        OPENAI_REASONING_EFFORT: ${{ vars.OPENAI_REASONING_EFFORT || 'medium' }}
         ENABLE_AI_SUMMARY: ${{ secrets.ENABLE_AI_SUMMARY }}
         DIGEST_PROFILE_B64: ${{ secrets.DIGEST_PROFILE_B64 }}
         PREF_TOPICS: ${{ secrets.PREF_TOPICS }}
         PREF_REGIONS: ${{ secrets.PREF_REGIONS }}
         PREF_KEYWORDS: ${{ secrets.PREF_KEYWORDS }}
         RSS_FEEDS: ${{ secrets.RSS_FEEDS }}
-      run: dotnet run --no-build --configuration Release
+      run: dotnet run --no-build --configuration Release -- --prepare-only
 
-    - name: Commit state changes
+    - name: Persist prepared outbox
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add data/state.json
+        if git diff --staged --quiet; then
+          exit 0
+        fi
+        git commit -m "chore: prepare digest outbox [skip ci]"
+        git pull --rebase origin main
+        git push origin HEAD:main
+
+    - name: Deliver prepared digest
+      id: run-digest
+      env:
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY }}
+      run: |
+        set +e
+        for attempt in 1 2 3 4; do
+          dotnet run --no-build --configuration Release -- --deliver-pending
+          status=$?
+          if [ "$status" -eq 0 ]; then
+            exit 0
+          fi
+
+          # A terminal provider result retires the outbox and must not be retried.
+          if ! jq -e '.PendingDigestSends | length > 0' data/state.json >/dev/null; then
+            exit "$status"
+          fi
+          if [ "$attempt" -eq 4 ]; then
+            exit "$status"
+          fi
+
+          delay=$((attempt * attempt * 20))
+          echo "Pending delivery remains ambiguous; retrying in ${delay}s (attempt $((attempt + 1))/4)."
+          sleep "$delay"
+        done
+
+    - name: Commit final state
+      if: ${{ always() && steps.run-digest.outcome != 'skipped' }}
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"

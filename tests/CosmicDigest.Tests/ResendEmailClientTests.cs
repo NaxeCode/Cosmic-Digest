@@ -1,0 +1,80 @@
+using System.Net;
+using System.Text;
+
+public sealed class ResendEmailClientTests
+{
+    [Fact]
+    public async Task Send_uses_idempotency_and_returns_resend_id()
+    {
+        var handler = new StubHandler(request =>
+        {
+            Assert.Equal("digest-20260903", request.Headers.GetValues("Idempotency-Key").Single());
+            Assert.Equal("Bearer", request.Headers.Authorization?.Scheme);
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("{\"id\":\"email-123\"}", Encoding.UTF8, "application/json")
+            };
+        });
+        using var http = new HttpClient(handler);
+        using var client = new ResendEmailClient(http);
+
+        var result = await client.SendAsync(
+            "re_test",
+            "Stella <digest@example.com>",
+            "reader@example.com",
+            "Subject",
+            "Text",
+            "<p>HTML</p>",
+            "digest-20260903");
+
+        Assert.Equal("email-123", result.EmailId);
+        Assert.Equal("accepted", result.Status);
+    }
+
+    [Fact]
+    public async Task GetStatus_reads_last_event()
+    {
+        var handler = new StubHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent("{\"last_event\":\"delivered\"}", Encoding.UTF8, "application/json")
+        });
+        using var http = new HttpClient(handler);
+        using var client = new ResendEmailClient(http);
+
+        Assert.Equal("delivered", await client.GetStatusAsync("re_test", "email-123"));
+    }
+
+    [Theory]
+    [InlineData("accepted")]
+    [InlineData("sent")]
+    [InlineData("delivery_delayed")]
+    public void Pending_statuses_are_reconciled_on_later_runs(string status)
+    {
+        Assert.True(ResendDeliveryStatus.IsPending(status));
+        Assert.False(ResendDeliveryStatus.IsTerminal(status));
+    }
+
+    [Fact]
+    public void Complaint_is_terminal_but_never_retryable()
+    {
+        Assert.True(ResendDeliveryStatus.IsComplaint("complained"));
+        Assert.True(ResendDeliveryStatus.IsNonRetryableFailure("complained"));
+        Assert.True(ResendDeliveryStatus.IsTerminal("complained"));
+        Assert.False(ResendDeliveryStatus.IsRetryableFailure("complained"));
+    }
+
+    [Fact]
+    public void Suppressed_recipient_is_terminal_but_never_retryable()
+    {
+        Assert.True(ResendDeliveryStatus.IsSuppressed("suppressed"));
+        Assert.True(ResendDeliveryStatus.IsNonRetryableFailure("suppressed"));
+        Assert.True(ResendDeliveryStatus.IsTerminal("suppressed"));
+        Assert.False(ResendDeliveryStatus.IsRetryableFailure("suppressed"));
+    }
+
+    private sealed class StubHandler(Func<HttpRequestMessage, HttpResponseMessage> response) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) =>
+            Task.FromResult(response(request));
+    }
+}

@@ -77,6 +77,77 @@ public sealed class DigestComposerTests
         }
     }
 
+    [Fact]
+    public void Html_uses_stella_identity_without_exposing_internal_profile_version()
+    {
+        var profile = Profile();
+        var candidate = new ScoredArticle(
+            new NewsItem("A useful release", "https://example.com/release", DateTimeOffset.Parse("2026-09-03T12:00:00Z"), "Official source"),
+            5,
+            new[] { "Backend" },
+            "event-1",
+            2,
+            new[] { "Official source", "Second source" });
+        var briefing = new BriefingDocument
+        {
+            BottomLine = "One practical action is ready.",
+            Items = new List<BriefingItem>
+            {
+                new()
+                {
+                    ArticleIndex = 1,
+                    WhatChanged = "The supported API changed.",
+                    WhyItMatters = "It changes the implementation choice.",
+                    Decision = "act",
+                    NextStep = "Review the migration note.",
+                    Confidence = "high"
+                }
+            }
+        };
+
+        var html = DigestComposer.BuildHtml(
+            profile,
+            new[] { candidate },
+            briefing,
+            DateTimeOffset.Parse("2026-09-03T12:00:00Z"),
+            new EmailBrandOptions("Stella · Cosmic Digest", "https://example.com/stella.png"));
+
+        Assert.Contains("Stella", html);
+        Assert.Contains("Cosmic Digest", html);
+        Assert.Contains("Reader&#39;s Intelligence Brief", html);
+        Assert.Contains("1 ACT", html);
+        Assert.Contains("corroborated by 2 sources", html);
+        Assert.Contains("width=\"48\" height=\"48\"", html);
+        Assert.DoesNotContain(profile.Version, html);
+    }
+
+    [Fact]
+    public void Html_adds_signed_feedback_only_when_fully_configured()
+    {
+        var candidate = new ScoredArticle(
+            new NewsItem("Release", "https://example.com/release", DateTimeOffset.Parse("2026-09-03T12:00:00Z"), "Example"),
+            5,
+            new[] { "Backend" },
+            "event-1");
+        var briefing = new BriefingDocument
+        {
+            BottomLine = "One update.",
+            Items = new List<BriefingItem>
+            {
+                new() { ArticleIndex = 1, WhatChanged = "Changed.", WhyItMatters = "Useful.", Decision = "watch", Confidence = "high" }
+            }
+        };
+
+        var disabled = DigestComposer.BuildHtml(Profile(), new[] { candidate }, briefing, DateTimeOffset.UtcNow,
+            new EmailBrandOptions("Stella", "https://example.com/stella.png"));
+        var enabled = DigestComposer.BuildHtml(Profile(), new[] { candidate }, briefing, DateTimeOffset.UtcNow,
+            new EmailBrandOptions("Stella", "https://example.com/stella.png", "https://feedback.example.com/feedback", "secret"));
+
+        Assert.DoesNotContain("Was this signal right?", disabled);
+        Assert.Contains("Was this signal right?", enabled);
+        Assert.Contains("token=", enabled);
+    }
+
     private static BriefingProfile Profile() => new()
     {
         Version = "test-v1",

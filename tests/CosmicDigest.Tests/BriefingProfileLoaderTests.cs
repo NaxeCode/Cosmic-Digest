@@ -39,6 +39,7 @@ public sealed class BriefingProfileLoaderTests
             Assert.Single(profile.Priorities[0].Signals);
             Assert.Equal("Reliable systems.", profile.Priorities[0].WhyItMatters);
             Assert.Equal(new[] { "https://example.com/feed" }, profile.Feeds);
+            Assert.Equal("example.com", Assert.Single(profile.Sources).Name);
         }
         finally
         {

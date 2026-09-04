@@ -1,5 +1,7 @@
 # Cosmic Digest
 
+![Stella](assets/brand/stella-avatar-128.png)
+
 Cosmic Digest turns RSS updates into a sparse personal intelligence brief. It decides whether a development deserves attention before it writes or sends anything.
 
 The goal is not to fill a newsletter. The goal is to surface credible changes that can alter a decision, improve a capability, expose a time-sensitive opportunity, or invalidate a current model.
@@ -7,11 +9,15 @@ The goal is not to fill a newsletter. The goal is to surface credible changes th
 ## What it does
 
 - pulls candidate stories from configured RSS feeds;
+- records per-source health, conditional-cache metadata, retries, and circuit state;
+- clusters corroborating links into one external event instead of repeating the same story;
 - ranks them against a versioned personal briefing profile;
 - rejects previously reviewed, stale, irrelevant, and low-value items;
-- asks an OpenAI model for a structured `act` or `watch` decision and omits low-value items;
+- asks an OpenAI model for a structured `act`, `watch`, or tightly capped `learn` decision and omits low-value items;
 - states what changed, why it matters, the smallest justified next move, and evidence confidence;
-- sends a compact email through Resend;
+- sends a compact, accessible Stella-branded email through Resend with an idempotency key;
+- distinguishes API acceptance from the latest observed delivery state;
+- optionally captures signed usefulness feedback and verified Resend webhooks;
 - suppresses the email when nothing clears the materiality gate; and
 - persists a bounded review history through GitHub Actions.
 
@@ -20,13 +26,14 @@ The full behavior is defined in [the briefing contract](docs/briefing-contract.m
 ## Pipeline
 
 ```text
-RSS feeds
+source registry
   -> bounded article cache
+  -> cross-source event identity and corroboration
   -> deterministic priority, freshness, trust, and novelty score
   -> structured AI decision gate
-  -> compact evidence-linked brief
+  -> Stella-branded evidence-linked brief
   -> Resend
-  -> reviewed-link state
+  -> reviewed-event, delivery, source-health, and run state
 ```
 
 The deterministic layer keeps the AI input small and auditable. The AI layer performs the context-sensitive judgment that literal keyword scoring cannot: whether a matched item actually changes anything for the reader.
@@ -44,6 +51,14 @@ cp .env.example .env
 dotnet restore
 dotnet run
 ```
+
+Generate a deterministic presentation preview without network calls or secrets:
+
+```bash
+dotnet run -- --preview
+```
+
+The resulting `artifacts/email-preview.html` is intentionally gitignored.
 
 ## Personalization
 
@@ -78,11 +93,15 @@ If no JSON profile is supplied, Cosmic Digest remains backward compatible with `
 | `priorities` | Weighted domains, matching signals, and why each matters |
 | `trustedDomains` | Adds a bounded source-quality boost |
 | `exclusions` | Names recurring classes of noise |
-| `feeds` | RSS inputs for this profile |
+| `sources` | Named RSS inputs with official/trust metadata and tags |
+| `feeds` | Backward-compatible list converted into source entries |
 | `lookbackHours` | Bounds freshness and cache retention |
 | `candidateLimit` | Caps AI input size |
 | `maxItems` | Caps the brief, never creates a quota |
 | `minimumScore` | Deterministic admission threshold |
+| `eventSimilarityThreshold` | Bounds cross-source title clustering |
+| `feedCircuitFailureThreshold` | Opens a temporary feed circuit after repeated failures |
+| `feedCircuitHours` | Duration of the temporary feed pause |
 
 Keep the profile minimal. It should contain only context needed to rank external developments, never credentials, mutable balances, private records, or raw personal-system files.
 
@@ -91,9 +110,15 @@ Keep the profile minimal. It should contain only context needed to rank external
 ```dotenv
 # Required delivery settings
 RESEND_API_KEY=re_xxxxx
+OUTBOX_ENCRYPTION_KEY=replace-with-an-independent-random-secret
 MAIL_TO=you@example.com
-MAIL_FROM=digest@yourdomain.com
+MAIL_FROM=Stella · Cosmic Digest <stella@digest.yourdomain.com>
 TIMEZONE=America/New_York
+RESEND_VERIFY_DELIVERY=true
+
+# Sender identity
+BRAND_NAME=Stella · Cosmic Digest
+BRAND_AVATAR_URL=https://raw.githubusercontent.com/NaxeCode/Cosmic-Digest/main/assets/brand/stella-avatar-128.png
 
 # AI decision layer
 OPENAI_API_KEY=sk-proj-xxxxx
@@ -103,6 +128,10 @@ OPENAI_REASONING_EFFORT=medium
 
 # Preferred profile input
 DIGEST_PROFILE_PATH=briefing-profile.local.json
+
+# Optional outcome loop; both values are required before links appear
+FEEDBACK_BASE_URL=https://feedback.yourdomain.com/feedback
+FEEDBACK_SIGNING_KEY=replace-with-a-long-random-secret
 
 # Legacy fallback inputs
 PREF_TOPICS=ai,backend,developer tooling
@@ -120,11 +149,14 @@ The daily workflow runs at 8:17 AM in `America/New_York`. The off-hour minute re
 Configure these repository secrets:
 
 - `RESEND_API_KEY`
+- `OUTBOX_ENCRYPTION_KEY`
 - `MAIL_TO`
 - `MAIL_FROM`
 - `OPENAI_API_KEY`
 - `ENABLE_AI_SUMMARY`
 - `DIGEST_PROFILE_B64`
+
+Optional capabilities use `BRAND_AVATAR_URL`, `FEEDBACK_BASE_URL`, `FEEDBACK_SIGNING_KEY`, and `RESEND_VERIFY_DELIVERY`.
 
 `OPENAI_MODEL` and `OPENAI_REASONING_EFFORT` may be set as repository variables. The workflow has a concurrency guard, runs the test suite before delivery, and fails visibly if reviewed-state persistence cannot be pushed.
 
@@ -132,16 +164,48 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 
 ## State and failure semantics
 
-`data/state.json` stores a short article cache and 45 days of reviewed-link history.
+`data/state.json` stores a short article cache plus reviewed-event, durable delivery-retry, source-health, delivery, and run-metric history.
 
 - Upgrades use the prior `LastDigestUtc` as a migration boundary and persist it until it ages outside the active lookback window.
 - URL tracking parameters are removed before deduplication.
+- Similar titles from independent sources are clustered into one event and receive a bounded corroboration boost.
+- New links are also compared with retained reviewed titles, so a corroborating retitle that arrives on a later run is suppressed without collapsing conflicting version numbers.
 - AI-rejected candidates are marked reviewed so they do not consume tokens every day.
 - If AI synthesis fails, the email falls back to deterministic ranked headlines.
-- If delivery fails, candidates are not marked reviewed.
+- Feed URLs are replaced by non-reversible identities. Functional article URLs are retained only inside authenticated encryption, while separately sanitized link identities drive deduplication. Feed validators, errors, article titles, summaries, links, and reviewed identities are encrypted with `OUTBOX_ENCRYPTION_KEY` before state is committed. Legacy records migrate on their next write; a missing or incorrect key aborts without overwriting the last valid ciphertext.
+- Ambiguous delivery failures are retried with the same idempotency key during the active workflow; terminal retryable failures restore included events to the durable retry queue, while AI-rejected candidates remain reviewed.
+- Explicit delivery retries remain eligible beyond the normal freshness lookback until they succeed or become terminal nonretryable outcomes.
+- Resend is polled briefly for `last_event`; pending delivery ids are reconciled again before every later selection run.
+- Content-derived idempotency keys stay stable across clock and date boundaries while a send outcome is ambiguous, then advance only after a recorded retryable terminal failure.
+- A prepared-send outbox is committed before the Resend process begins. It encrypts the exact sender, recipient, subject, and bodies with a stable dedicated key, then replays that payload directly before any new selection work if the outcome was ambiguous.
+- Recipient complaints remain terminal and reviewed; they are never treated as retryable delivery failures.
 - If the state commit conflicts, the workflow fails instead of silently losing state.
+- The workflow commits a state file produced by the digest even when delivery exits nonzero, while preserving the failed job result.
 
-This remains intentionally small. A database is not justified for one daily personal workflow with one writer.
+This remains intentionally small. JSON is still the correct store for one daily writer. The optional feedback service is explicitly a single-replica, append-only journal and can be moved to managed storage only when observed volume or multiple replicas justify it.
+
+## Feedback and delivery service
+
+`feedback/CosmicDigest.Feedback.Api` is an optional minimal ASP.NET service with:
+
+- `GET /feedback` for a scanner-safe confirmation page and `POST /feedback` for the signed, expiring `Useful`, `Noise`, `Wrong`, and `I acted` response;
+- `POST /webhooks/resend` for raw-body Svix-verified delivery events with `svix-id` deduplication;
+- `GET /metrics` for aggregate outcomes behind a bearer token; and
+- `GET /health` for hosting checks.
+
+Feedback is deduplicated by validated event identity, so an event can contribute only one outcome even if multiple signal links are confirmed. Feedback and webhook entries use the same atomically replaced journal record, and a shared lock file coordinates overlapping processes on the mounted volume, so an interrupted or concurrent write cannot separate an event from its uniqueness marker.
+Unsigned webhook bodies are rejected above 256 KB before the service constructs the payload string.
+Feedback confirmation bodies accept only URL-encoded forms and are rejected above 8 KB before parsing.
+
+It is deliberately dormant until its URL and secrets are configured. Build its container from the repository root:
+
+```bash
+docker build -f feedback/CosmicDigest.Feedback.Api/Dockerfile -t cosmic-digest-feedback .
+```
+
+Use persistent storage for `FEEDBACK_DATA_DIR`. The service stores outcomes, not a public digest archive, and it never adjusts profile weights automatically.
+
+See [external setup](docs/external-setup.md) for the custom domain, Gmail avatar, Resend webhook, Student Pack, and Testmail gates.
 
 ## Development
 
@@ -160,7 +224,12 @@ Relevance.cs                       deterministic selection and URL identity
 NewsAi.cs                          structured AI decision gate
 DigestComposer.cs                  plain-text and HTML-safe rendering
 RssIngestor.cs                     feed ingestion
-StateStore.cs                      bounded cache and review history
+EventIdentity.cs                   event clustering and stable identity
+FeedbackSecurity.cs                signed feedback and webhook verification
+ResendEmailClient.cs               idempotent send and delivery-state lookup
+StateStore.cs                      bounded operational memory
+feedback/CosmicDigest.Feedback.Api optional outcome and webhook service
+assets/brand/                      Stella sender identity assets
 tests/CosmicDigest.Tests/          regression tests
 docs/briefing-contract.md          product and failure contract
 ```

@@ -9,6 +9,16 @@ public sealed class BriefingPriority
     public string WhyItMatters { get; set; } = "";
 }
 
+public sealed class BriefingSource
+{
+    public string Name { get; set; } = "";
+    public string Url { get; set; } = "";
+    public bool Enabled { get; set; } = true;
+    public bool Official { get; set; }
+    public int Trust { get; set; } = 3;
+    public List<string> Tags { get; set; } = new();
+}
+
 public sealed class BriefingProfile
 {
     public string Version { get; set; } = "legacy-env";
@@ -25,11 +35,15 @@ public sealed class BriefingProfile
         "rumors without credible evidence",
         "content with no plausible decision or capability impact"
     };
+    public List<BriefingSource> Sources { get; set; } = new();
     public List<string> Feeds { get; set; } = new();
     public int LookbackHours { get; set; } = 36;
     public int CandidateLimit { get; set; } = 18;
     public int MaxItems { get; set; } = 5;
     public double MinimumScore { get; set; } = 1.5;
+    public double EventSimilarityThreshold { get; set; } = 0.56;
+    public int FeedCircuitFailureThreshold { get; set; } = 3;
+    public int FeedCircuitHours { get; set; } = 6;
 }
 
 public static class BriefingProfileLoader
@@ -120,6 +134,9 @@ public static class BriefingProfileLoader
         profile.CandidateLimit = Math.Clamp(profile.CandidateLimit, 5, 40);
         profile.MaxItems = Math.Clamp(profile.MaxItems, 1, 6);
         profile.MinimumScore = Math.Clamp(profile.MinimumScore, 0.5, 20);
+        profile.EventSimilarityThreshold = Math.Clamp(profile.EventSimilarityThreshold, 0.4, 0.9);
+        profile.FeedCircuitFailureThreshold = Math.Clamp(profile.FeedCircuitFailureThreshold, 2, 10);
+        profile.FeedCircuitHours = Math.Clamp(profile.FeedCircuitHours, 1, 48);
 
         profile.Priorities ??= new();
         profile.Priorities = profile.Priorities
@@ -145,14 +162,45 @@ public static class BriefingProfileLoader
             .Select(d => d.TrimStart('.').ToLowerInvariant())
             .ToList();
         profile.Exclusions = Clean(profile.Exclusions ?? new());
-        profile.Feeds = Clean(profile.Feeds ?? new())
-            .Where(IsHttpUrl)
+        profile.Feeds = Clean(profile.Feeds ?? new()).Where(IsHttpUrl).ToList();
+        profile.Sources ??= new();
+
+        var explicitSources = profile.Sources
+            .Where(source => IsHttpUrl(source.Url))
+            .Select(source =>
+            {
+                source.Name = SingleLine(source.Name, new Uri(source.Url).Host);
+                source.Url = source.Url.Trim();
+                source.Trust = Math.Clamp(source.Trust, 1, 5);
+                source.Tags = Clean(source.Tags ?? new());
+                return source;
+            })
+            .GroupBy(source => source.Url, StringComparer.OrdinalIgnoreCase)
+            .Select(group => group.First())
             .ToList();
+        var explicitlyConfiguredUrls = explicitSources
+            .Select(source => source.Url)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var legacySources = profile.Feeds
+            .Where(url => !explicitlyConfiguredUrls.Contains(url))
+            .Select(url => new BriefingSource
+            {
+                Name = new Uri(url).Host,
+                Url = url,
+                Enabled = true,
+                Trust = 3
+            });
+
+        profile.Sources = explicitSources
+            .Where(source => source.Enabled)
+            .Concat(legacySources)
+            .ToList();
+        profile.Feeds = profile.Sources.Select(source => source.Url).ToList();
 
         if (profile.Priorities.Count == 0)
             throw new InvalidOperationException("The briefing profile must define at least one priority with one signal.");
-        if (profile.Feeds.Count == 0)
-            throw new InvalidOperationException("No RSS feeds are configured in the briefing profile or RSS_FEEDS.");
+        if (profile.Sources.Count == 0)
+            throw new InvalidOperationException("No RSS sources are configured in the briefing profile or RSS_FEEDS.");
     }
 
     private static List<string> Clean(IEnumerable<string> values) =>
