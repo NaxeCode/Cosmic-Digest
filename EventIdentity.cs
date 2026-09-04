@@ -39,9 +39,9 @@ public static partial class EventIdentity
 
     private static readonly HashSet<string> NarrativeNumberContexts = new(StringComparer.OrdinalIgnoreCase)
     {
-        "announces", "announced", "launches", "launched", "releases", "released", "reports", "reported",
-        "says", "said", "adds", "added", "cuts", "cut", "raises", "raised", "ships", "shipped", "unveils",
-        "unveiled", "shows", "showed", "targets", "targeted", "expects", "expected"
+        "announces", "announced", "introduces", "introduced", "launches", "launched", "releases", "released",
+        "reports", "reported", "says", "said", "adds", "added", "cuts", "cut", "raises", "raised", "ships",
+        "shipped", "unveils", "unveiled", "shows", "showed", "targets", "targeted", "expects", "expected"
     };
 
     public static IReadOnlyList<NewsEventCluster> Cluster(
@@ -158,76 +158,70 @@ public static partial class EventIdentity
                 continue;
 
             var strongVersionContext = HasStrongVersionMarkerBefore(tokens, i);
-            var precedingContext = FindPrecedingContext(tokens, i);
-            if (precedingContext is not null
-                && NarrativeNumberContexts.Contains(precedingContext))
-            {
-                continue;
-            }
-
+            var productPhrase = FindPrecedingProductPhrase(tokens, i);
             if (IsLikelyCalendarYear(numericToken)
-                && precedingContext is not null
-                && IncidentalCalendarContexts.Contains(precedingContext))
+                && ProductPhraseHasIncidentalCalendarContext(productPhrase))
             {
                 continue;
             }
 
-            var productToken = precedingContext;
-            if (productToken is null || GenericVersionMarkers.Contains(productToken))
-            {
-                if (!strongVersionContext)
-                    continue;
-                productToken = FindFollowingProductToken(tokens, i);
-            }
+            if (string.IsNullOrWhiteSpace(productPhrase) && strongVersionContext)
+                productPhrase = FindFollowingProductPhrase(tokens, i);
 
-            if (string.IsNullOrWhiteSpace(productToken)
-                || productToken.Any(char.IsDigit)
-                || NarrativeNumberContexts.Contains(productToken)
-                || (IsLikelyCalendarYear(numericToken)
-                    && IncidentalCalendarContexts.Contains(productToken)))
-            {
+            if (string.IsNullOrWhiteSpace(productPhrase))
                 continue;
-            }
 
             identities.Add(numericToken);
-            identities.Add($"{productToken}:{numericToken}");
+            identities.Add($"{productPhrase}:{numericToken}");
             return identities;
         }
 
         return identities;
     }
 
-    private static string? FindPrecedingContext(IReadOnlyList<string> tokens, int numericIndex)
+    private static string FindPrecedingProductPhrase(IReadOnlyList<string> tokens, int numericIndex)
     {
-        var examined = 0;
-        for (var i = numericIndex - 1; i >= 0 && examined < 3; i--, examined++)
+        var parts = new List<string>();
+        for (var i = numericIndex - 1; i >= 0 && parts.Count < 4; i--)
         {
             var token = tokens[i];
-            if (token.Any(char.IsDigit))
-                return null;
+            if (token.Any(char.IsDigit) || NarrativeNumberContexts.Contains(token))
+                break;
             if (GenericVersionMarkers.Contains(token))
                 continue;
-            return token;
+            parts.Add(token);
         }
-        return null;
+
+        parts.Reverse();
+        return string.Join(':', parts);
     }
 
-    private static string? FindFollowingProductToken(IReadOnlyList<string> tokens, int numericIndex)
+    private static string FindFollowingProductPhrase(IReadOnlyList<string> tokens, int numericIndex)
     {
-        var examined = 0;
-        for (var i = numericIndex + 1; i < tokens.Count && examined < 3; i++, examined++)
+        var parts = new List<string>();
+        for (var i = numericIndex + 1; i < tokens.Count && parts.Count < 4; i++)
         {
             var token = tokens[i];
-            if (token.Any(char.IsDigit))
-                return null;
+            if (token.Any(char.IsDigit)
+                || NarrativeNumberContexts.Contains(token)
+                || IncidentalCalendarContexts.Contains(token))
+            {
+                break;
+            }
             if (GenericVersionMarkers.Contains(token))
+            {
+                if (parts.Count > 0)
+                    break;
                 continue;
-            if (NarrativeNumberContexts.Contains(token) || IncidentalCalendarContexts.Contains(token))
-                return null;
-            return token;
+            }
+            parts.Add(token);
         }
-        return null;
+        return string.Join(':', parts);
     }
+
+    private static bool ProductPhraseHasIncidentalCalendarContext(string productPhrase) =>
+        productPhrase.Split(':', StringSplitOptions.RemoveEmptyEntries)
+            .Any(IncidentalCalendarContexts.Contains);
 
     private static bool HasStrongVersionMarkerBefore(IReadOnlyList<string> tokens, int numericIndex)
     {
