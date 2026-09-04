@@ -52,7 +52,9 @@ public static class SourceIdentity
         return article with
         {
             Link = SanitizeArticleLink(article.Link),
-            FeedUrl = identity,
+            FeedUrl = string.IsNullOrWhiteSpace(identity)
+                ? article.FeedUrl
+                : identity,
             Source = string.IsNullOrWhiteSpace(identity)
                 ? article.Source
                 : PublicLabel(identity)
