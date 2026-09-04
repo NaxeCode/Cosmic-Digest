@@ -164,8 +164,9 @@ public static class BriefingProfileLoader
         profile.Exclusions = Clean(profile.Exclusions ?? new());
         profile.Feeds = Clean(profile.Feeds ?? new()).Where(IsHttpUrl).ToList();
         profile.Sources ??= new();
-        profile.Sources = profile.Sources
-            .Where(source => source.Enabled && IsHttpUrl(source.Url))
+
+        var explicitSources = profile.Sources
+            .Where(source => IsHttpUrl(source.Url))
             .Select(source =>
             {
                 source.Name = SingleLine(source.Name, new Uri(source.Url).Host);
@@ -174,15 +175,25 @@ public static class BriefingProfileLoader
                 source.Tags = Clean(source.Tags ?? new());
                 return source;
             })
-            .Concat(profile.Feeds.Select(url => new BriefingSource
+            .GroupBy(source => source.Url, StringComparer.OrdinalIgnoreCase)
+            .Select(group => group.First())
+            .ToList();
+        var explicitlyConfiguredUrls = explicitSources
+            .Select(source => source.Url)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var legacySources = profile.Feeds
+            .Where(url => !explicitlyConfiguredUrls.Contains(url))
+            .Select(url => new BriefingSource
             {
                 Name = new Uri(url).Host,
                 Url = url,
                 Enabled = true,
                 Trust = 3
-            }))
-            .GroupBy(source => source.Url, StringComparer.OrdinalIgnoreCase)
-            .Select(group => group.First())
+            });
+
+        profile.Sources = explicitSources
+            .Where(source => source.Enabled)
+            .Concat(legacySources)
             .ToList();
         profile.Feeds = profile.Sources.Select(source => source.Url).ToList();
 
