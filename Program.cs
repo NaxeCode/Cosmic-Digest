@@ -249,17 +249,19 @@ if (ResendDeliveryStatus.IsRetryableFailure(deliveryStatus))
     return 1;
 }
 
-if (ResendDeliveryStatus.IsComplaint(deliveryStatus))
+if (ResendDeliveryStatus.IsNonRetryableFailure(deliveryStatus))
 {
     StateStore.MarkReviewed(state, reviewedForDelivery, displayedForDelivery, now, sendResult.EmailId);
     StateStore.CompleteDeliveryRetries(state, displayedForDelivery);
     state.LastRunUtc = now;
-    state.LastDigestUtc = now;
+    if (ResendDeliveryStatus.IsComplaint(deliveryStatus))
+        state.LastDigestUtc = now;
     runTimer.Stop();
     metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
     StateStore.RecordRun(state, metrics);
     StateStore.Save(state);
-    Console.Error.WriteLine("Email received a complaint; its events remain reviewed and will not be retried.");
+    Console.Error.WriteLine(
+        $"Email entered non-retryable delivery state '{deliveryStatus}'; its events remain reviewed and will not be retried automatically.");
     return 1;
 }
 
@@ -415,16 +417,20 @@ static async Task<int?> ReplayPendingDigestAsync(
         return 1;
     }
 
-    StateStore.CompleteDeliveryRetries(state, displayed);
-    state.LastDigestUtc = now;
-    StateStore.Save(state);
-    if (ResendDeliveryStatus.IsComplaint(deliveryStatus))
+    if (ResendDeliveryStatus.IsNonRetryableFailure(deliveryStatus))
     {
+        StateStore.CompleteDeliveryRetries(state, displayed);
+        if (ResendDeliveryStatus.IsComplaint(deliveryStatus))
+            state.LastDigestUtc = now;
+        StateStore.Save(state);
         Console.Error.WriteLine(
-            "Pending email replay received a complaint; its events remain reviewed and will not be retried.");
+            $"Pending email replay entered non-retryable state '{deliveryStatus}'; its events remain reviewed and will not be retried automatically.");
         return 1;
     }
 
+    StateStore.CompleteDeliveryRetries(state, displayed);
+    state.LastDigestUtc = now;
+    StateStore.Save(state);
     Console.WriteLine(
         $"Replayed pending email {deliveryStatus} with {displayed.Count} material item(s); Resend id: {sendResult.EmailId}.");
     return 0;
