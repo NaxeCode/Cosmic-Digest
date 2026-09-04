@@ -119,28 +119,36 @@ public static partial class EventIdentity
 
     private static HashSet<string> NumericIdentityTokens(string value)
     {
-        var tokens = OrderedTokens(value);
+        var sanitized = PercentagePattern().Replace(value, " ");
+        sanitized = CurrencyNumberPattern().Replace(sanitized, " ");
+        sanitized = MultiplierPattern().Replace(sanitized, " ");
+        var tokens = OrderedTokens(sanitized);
         var identities = new HashSet<string>(StringComparer.Ordinal);
         for (var i = 0; i < tokens.Count; i++)
         {
             var token = tokens[i];
-            if (!token.Any(char.IsDigit))
+            if (!token.Any(char.IsDigit) || IsLikelyCalendarYear(token))
                 continue;
 
-            identities.Add(token);
             for (var productIndex = i - 1; productIndex >= 0; productIndex--)
             {
                 var productToken = tokens[productIndex];
                 if (productToken.Any(char.IsDigit) || GenericVersionMarkers.Contains(productToken))
                     continue;
 
+                identities.Add(token);
                 identities.Add($"{productToken}:{token}");
-                break;
+                return identities;
             }
         }
 
         return identities;
     }
+
+    private static bool IsLikelyCalendarYear(string token) =>
+        token.Length == 4
+        && int.TryParse(token, out var year)
+        && year is >= 1900 and <= 2100;
 
     private static HashSet<string> Tokens(string value) =>
         OrderedTokens(value).ToHashSet(StringComparer.Ordinal);
@@ -174,4 +182,13 @@ public static partial class EventIdentity
 
     [GeneratedRegex(@"(?<![\p{L}\p{N}])v(?=\d)", RegexOptions.CultureInvariant)]
     private static partial Regex ConventionalVersionPrefixPattern();
+
+    [GeneratedRegex(@"(?<![\p{L}\p{N}])\d+(?:[.,]\d+)?\s*%", RegexOptions.CultureInvariant)]
+    private static partial Regex PercentagePattern();
+
+    [GeneratedRegex(@"[$€£¥]\s*\d+(?:[.,]\d+)*", RegexOptions.CultureInvariant)]
+    private static partial Regex CurrencyNumberPattern();
+
+    [GeneratedRegex(@"(?<![\p{L}\p{N}])\d+(?:\.\d+)?x(?![\p{L}\p{N}])", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex MultiplierPattern();
 }
