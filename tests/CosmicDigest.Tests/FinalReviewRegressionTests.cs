@@ -115,6 +115,32 @@ public sealed class FinalReviewRegressionTests
     }
 
     [Fact]
+    public void Directional_events_do_not_treat_method_by_as_passive_voice()
+    {
+        const string method = "Microsoft acquires OpenAI by tender offer";
+        const string equivalent = "Microsoft acquires OpenAI through tender offer";
+
+        Assert.Single(EventIdentity.Cluster(
+            new[]
+            {
+                new NewsItem(method, "https://example.com/method", Now, "Example"),
+                new NewsItem(equivalent, "https://other.example.com/equivalent", Now.AddMinutes(-1), "Other")
+            },
+            0.56));
+    }
+
+    [Fact]
+    public void Directional_events_normalize_continuous_passive_voice()
+    {
+        const string active = "Microsoft acquires OpenAI";
+        const string passive = "OpenAI is being acquired by Microsoft";
+
+        Assert.Equal(
+            EventIdentity.KeyForTitle(active),
+            EventIdentity.KeyForTitle(passive));
+    }
+
+    [Fact]
     public void Durable_state_redacts_article_link_credentials_everywhere()
     {
         const string secret = "subscriber-secret-token";

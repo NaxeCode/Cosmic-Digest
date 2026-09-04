@@ -147,6 +147,86 @@ public sealed class RssIngestorTests
     }
 
     [Fact]
+    public async Task Fetch_bounds_concurrent_source_requests()
+    {
+        var handler = new ConcurrencyTrackingHandler();
+        using var http = new HttpClient(handler);
+        var sources = Enumerable.Range(0, 24)
+            .Select(index => new BriefingSource
+            {
+                Name = $"Source {index}",
+                Url = $"https://8.8.8.8/feed-{index}"
+            })
+            .ToList();
+
+        var result = await RssIngestor.FetchAsync(sources, null, Now, httpClient: http);
+
+        Assert.Equal(24, result.Feeds.Count);
+        Assert.All(result.Feeds, feed => Assert.Equal("ok", feed.Status));
+        Assert.InRange(handler.MaximumConcurrency, 2, 8);
+    }
+
+    [Fact]
+    public async Task Fetch_blocks_public_redirects_to_private_networks()
+    {
+        var handler = new RecordingHandler(_ =>
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.Redirect);
+            response.Headers.Location = new Uri("http://127.0.0.1/private-feed");
+            return response;
+        });
+        using var http = new HttpClient(handler);
+        var source = new BriefingSource { Name = "Example", Url = "https://8.8.8.8/feed" };
+
+        var result = await RssIngestor.FetchAsync(new[] { source }, null, Now, httpClient: http);
+
+        var feed = Assert.Single(result.Feeds);
+        Assert.Equal("failed", feed.Status);
+        Assert.Contains("private network", feed.Error, StringComparison.OrdinalIgnoreCase);
+        Assert.Single(handler.Requests);
+    }
+
+    [Fact]
+    public async Task Fetch_validates_each_redirect_and_does_not_forward_validators_cross_origin()
+    {
+        var handler = new RecordingHandler(request =>
+        {
+            if (request.RequestUri == new Uri("https://8.8.8.8/feed"))
+            {
+                var first = new HttpResponseMessage(HttpStatusCode.Redirect);
+                first.Headers.Location = new Uri("https://1.1.1.1/feed");
+                return first;
+            }
+
+            var second = new HttpResponseMessage(HttpStatusCode.Redirect);
+            second.Headers.Location = new Uri("http://10.0.0.1/private-feed");
+            return second;
+        });
+        using var http = new HttpClient(handler);
+        var source = new BriefingSource { Name = "Example", Url = "https://8.8.8.8/feed" };
+        var previous = new FeedHealthState
+        {
+            Url = source.Url,
+            ETag = "\"private-validator\"",
+            LastModifiedUtc = Now.AddHours(-1)
+        };
+
+        var result = await RssIngestor.FetchAsync(
+            new[] { source },
+            new[] { previous },
+            Now,
+            httpClient: http);
+
+        var feed = Assert.Single(result.Feeds);
+        Assert.Equal("failed", feed.Status);
+        Assert.Contains("private network", feed.Error, StringComparison.OrdinalIgnoreCase);
+        Assert.Equal(2, handler.Requests.Count);
+        Assert.NotEmpty(handler.Requests[0].Headers.IfNoneMatch);
+        Assert.Empty(handler.Requests[1].Headers.IfNoneMatch);
+        Assert.Null(handler.Requests[1].Headers.IfModifiedSince);
+    }
+
+    [Fact]
     public async Task Fetch_honors_XML_declared_legacy_encoding_without_HTTP_charset()
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -211,6 +291,46 @@ public sealed class RssIngestorTests
             if (disposing)
                 inner.Dispose();
             base.Dispose(disposing);
+        }
+    }
+
+    private sealed class ConcurrencyTrackingHandler : HttpMessageHandler
+    {
+        private int _currentConcurrency;
+        private int _maximumConcurrency;
+        public int MaximumConcurrency => Volatile.Read(ref _maximumConcurrency);
+
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            var current = Interlocked.Increment(ref _currentConcurrency);
+            while (true)
+            {
+                var maximum = Volatile.Read(ref _maximumConcurrency);
+                if (current <= maximum
+                    || Interlocked.CompareExchange(ref _maximumConcurrency, current, maximum) == maximum)
+                {
+                    break;
+                }
+            }
+
+            try
+            {
+                await Task.Delay(40, cancellationToken);
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent("""
+                        <rss version="2.0"><channel><title>Example</title>
+                        <item><title>Agent release</title><link>https://example.com/release</link></item>
+                        </channel></rss>
+                        """)
+                };
+            }
+            finally
+            {
+                Interlocked.Decrement(ref _currentConcurrency);
+            }
         }
     }
 }

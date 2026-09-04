@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using CodeHollow.FeedReader;
@@ -22,6 +23,8 @@ public sealed record IngestionResult(
 public static class RssIngestor
 {
     private const int MaximumFeedBytes = 5 * 1024 * 1024;
+    private const int MaximumConcurrentFeeds = 8;
+    private const int MaximumRedirects = 5;
     private const int XmlDeclarationProbeBytes = 1024;
     private const int MaximumTitleCharacters = 320;
     private const int MaximumSummaryCharacters = 4_000;
@@ -46,20 +49,36 @@ public static class RssIngestor
             .GroupBy(item => SourceIdentity.NormalizePersisted(item.Url), StringComparer.OrdinalIgnoreCase)
             .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
         var ownsClient = httpClient is null;
-        var http = httpClient ?? new HttpClient { Timeout = TimeSpan.FromSeconds(20) };
+        var http = httpClient ?? new HttpClient(new HttpClientHandler
+        {
+            AllowAutoRedirect = false,
+            UseCookies = false
+        }) { Timeout = TimeSpan.FromSeconds(20) };
         if (!http.DefaultRequestHeaders.UserAgent.Any())
             http.DefaultRequestHeaders.UserAgent.ParseAdd("Cosmic-Digest/2.0 (+https://github.com/NaxeCode/Cosmic-Digest)");
 
         try
         {
-            var tasks = sources.Select(source => FetchOneAsync(
-                source,
-                healthByIdentity.GetValueOrDefault(SourceIdentity.ForUrl(source.Url)),
-                now,
-                circuitFailureThreshold,
-                circuitHours,
-                http,
-                cancellationToken));
+            using var gate = new SemaphoreSlim(MaximumConcurrentFeeds, MaximumConcurrentFeeds);
+            var tasks = sources.Select(async source =>
+            {
+                await gate.WaitAsync(cancellationToken);
+                try
+                {
+                    return await FetchOneAsync(
+                        source,
+                        healthByIdentity.GetValueOrDefault(SourceIdentity.ForUrl(source.Url)),
+                        now,
+                        circuitFailureThreshold,
+                        circuitHours,
+                        http,
+                        cancellationToken);
+                }
+                finally
+                {
+                    gate.Release();
+                }
+            });
             var feedResults = await Task.WhenAll(tasks);
             var articles = feedResults
                 .SelectMany(result => result.Items)
@@ -101,21 +120,10 @@ public static class RssIngestor
         {
             try
             {
-                using var request = new HttpRequestMessage(HttpMethod.Get, source.Url);
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/rss+xml"));
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/atom+xml"));
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml", 0.9));
-                if (!string.IsNullOrWhiteSpace(previous?.ETag)
-                    && EntityTagHeaderValue.TryParse(previous.ETag, out var etag))
-                {
-                    request.Headers.IfNoneMatch.Add(etag);
-                }
-                if (previous?.LastModifiedUtc is { } lastModified)
-                    request.Headers.IfModifiedSince = lastModified;
-
-                using var response = await http.SendAsync(
-                    request,
-                    HttpCompletionOption.ResponseHeadersRead,
+                using var response = await SendWithValidatedRedirectsAsync(
+                    source.Url,
+                    previous,
+                    http,
                     cancellationToken);
                 if (response.StatusCode == HttpStatusCode.NotModified)
                 {
@@ -216,12 +224,157 @@ public static class RssIngestor
     {
         HttpRequestException { StatusCode: { } statusCode } => IsTransient(statusCode),
         HttpRequestException => true,
+        SocketException => true,
         InvalidDataException => false,
         IOException => true,
         TimeoutException => true,
         OperationCanceledException => true,
         _ => false
     };
+
+    private static async Task<HttpResponseMessage> SendWithValidatedRedirectsAsync(
+        string sourceUrl,
+        FeedHealthState? previous,
+        HttpClient http,
+        CancellationToken cancellationToken)
+    {
+        if (!Uri.TryCreate(sourceUrl, UriKind.Absolute, out var initialUri)
+            || (initialUri.Scheme != Uri.UriSchemeHttps && initialUri.Scheme != Uri.UriSchemeHttp))
+        {
+            throw new InvalidDataException("Feed URL must be absolute HTTP or HTTPS.");
+        }
+
+        if (!string.IsNullOrWhiteSpace(initialUri.UserInfo))
+            throw new InvalidDataException("Feed URL must not contain embedded credentials.");
+
+        var currentUri = initialUri;
+        var initialIsPublic = IsPublicSource(initialUri);
+        for (var redirectCount = 0; ; redirectCount++)
+        {
+            using var request = CreateFeedRequest(
+                currentUri,
+                IsSameOrigin(initialUri, currentUri) ? previous : null);
+            var response = await http.SendAsync(
+                request,
+                HttpCompletionOption.ResponseHeadersRead,
+                cancellationToken);
+            if (!IsRedirect(response.StatusCode))
+                return response;
+
+            if (redirectCount >= MaximumRedirects)
+            {
+                response.Dispose();
+                throw new InvalidDataException("Feed exceeded the redirect safety limit.");
+            }
+
+            var location = response.Headers.Location;
+            response.Dispose();
+            if (location is null
+                || !Uri.TryCreate(currentUri, location, out var nextUri)
+                || (nextUri.Scheme != Uri.UriSchemeHttps && nextUri.Scheme != Uri.UriSchemeHttp)
+                || !string.IsNullOrWhiteSpace(nextUri.UserInfo)
+                || (currentUri.Scheme == Uri.UriSchemeHttps && nextUri.Scheme != Uri.UriSchemeHttps))
+            {
+                throw new InvalidDataException("Feed returned an unsafe redirect destination.");
+            }
+
+            if (initialIsPublic
+                && !await IsPublicDestinationAsync(nextUri, cancellationToken))
+            {
+                throw new InvalidDataException("Public feed redirected to a private network destination.");
+            }
+            currentUri = nextUri;
+        }
+    }
+
+    private static HttpRequestMessage CreateFeedRequest(
+        Uri uri,
+        FeedHealthState? previous)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, uri);
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/rss+xml"));
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/atom+xml"));
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/xml", 0.9));
+        if (!string.IsNullOrWhiteSpace(previous?.ETag)
+            && EntityTagHeaderValue.TryParse(previous.ETag, out var etag))
+        {
+            request.Headers.IfNoneMatch.Add(etag);
+        }
+        if (previous?.LastModifiedUtc is { } lastModified)
+            request.Headers.IfModifiedSince = lastModified;
+        return request;
+    }
+
+    private static bool IsSameOrigin(Uri left, Uri right) =>
+        string.Equals(left.Scheme, right.Scheme, StringComparison.OrdinalIgnoreCase)
+        && string.Equals(left.IdnHost, right.IdnHost, StringComparison.OrdinalIgnoreCase)
+        && left.Port == right.Port;
+
+    private static bool IsPublicSource(Uri uri)
+    {
+        var host = uri.IdnHost.Trim('.');
+        if (IsLocalHostName(host))
+            return false;
+        return !IPAddress.TryParse(host, out var literal) || IsPublicAddress(literal);
+    }
+
+    private static bool IsRedirect(HttpStatusCode statusCode) =>
+        statusCode is HttpStatusCode.Moved
+            or HttpStatusCode.Redirect
+            or HttpStatusCode.RedirectMethod
+            or HttpStatusCode.TemporaryRedirect
+        || (int)statusCode == 308;
+
+    private static async Task<bool> IsPublicDestinationAsync(
+        Uri uri,
+        CancellationToken cancellationToken)
+    {
+        var host = uri.IdnHost.Trim('.');
+        if (IsLocalHostName(host))
+            return false;
+
+        IPAddress[] addresses;
+        if (IPAddress.TryParse(host, out var literal))
+            addresses = new[] { literal };
+        else
+            addresses = await Dns.GetHostAddressesAsync(host, cancellationToken);
+        return addresses.Length > 0 && addresses.All(IsPublicAddress);
+    }
+
+    private static bool IsLocalHostName(string host) =>
+        host.Equals("localhost", StringComparison.OrdinalIgnoreCase)
+        || host.EndsWith(".localhost", StringComparison.OrdinalIgnoreCase)
+        || host.EndsWith(".local", StringComparison.OrdinalIgnoreCase)
+        || host.EndsWith(".internal", StringComparison.OrdinalIgnoreCase);
+
+    private static bool IsPublicAddress(IPAddress address)
+    {
+        if (address.IsIPv4MappedToIPv6)
+            address = address.MapToIPv4();
+        if (IPAddress.IsLoopback(address))
+            return false;
+
+        if (address.AddressFamily == AddressFamily.InterNetworkV6)
+        {
+            var bytes = address.GetAddressBytes();
+            return !address.Equals(IPAddress.IPv6Any)
+                && !address.IsIPv6LinkLocal
+                && !address.IsIPv6SiteLocal
+                && !address.IsIPv6Multicast
+                && (bytes[0] & 0xFE) != 0xFC;
+        }
+
+        var octets = address.GetAddressBytes();
+        return octets[0] != 0
+            && octets[0] != 10
+            && octets[0] != 127
+            && !(octets[0] == 100 && octets[1] is >= 64 and <= 127)
+            && !(octets[0] == 169 && octets[1] == 254)
+            && !(octets[0] == 172 && octets[1] is >= 16 and <= 31)
+            && !(octets[0] == 192 && octets[1] == 168)
+            && !(octets[0] == 198 && octets[1] is 18 or 19)
+            && octets[0] < 224;
+    }
 
     private static string? ResolveArticleLink(string sourceUrl, string? itemLink)
     {
