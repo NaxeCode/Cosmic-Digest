@@ -136,8 +136,17 @@ public static class StateStore
             health.Name = result.Source.Name;
             health.Url = result.Source.Url;
             health.LastAttemptUtc = attemptedAtUtc;
-            health.ETag = result.ETag ?? health.ETag;
-            health.LastModifiedUtc = result.LastModifiedUtc ?? health.LastModifiedUtc;
+            if (result.Status == "ok")
+            {
+                health.ETag = result.ETag;
+                health.LastModifiedUtc = result.LastModifiedUtc;
+            }
+            else if (result.Status == "not_modified")
+            {
+                health.ETag = result.ETag ?? health.ETag;
+                health.LastModifiedUtc = result.LastModifiedUtc ?? health.LastModifiedUtc;
+            }
+
             if (result.IsHealthy)
             {
                 health.LastSuccessUtc = attemptedAtUtc;
