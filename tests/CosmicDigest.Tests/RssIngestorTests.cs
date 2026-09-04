@@ -7,7 +7,7 @@ public sealed class RssIngestorTests
     private static readonly DateTimeOffset Now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
 
     [Fact]
-    public void Parse_preserves_configured_source_identity()
+    public void Parse_uses_opaque_source_identity_for_durable_article_metadata()
     {
         const string rss = """
             <?xml version="1.0" encoding="UTF-8" ?>
@@ -15,12 +15,18 @@ public sealed class RssIngestorTests
               <item><title>Agent release</title><link>https://example.com/release</link><pubDate>Thu, 03 Sep 2026 11:00:00 GMT</pubDate><description>Details</description></item>
             </channel></rss>
             """;
-        var source = new BriefingSource { Name = "Official Example", Url = "https://example.com/feed", Official = true };
+        var source = new BriefingSource
+        {
+            Name = "Private source name",
+            Url = "https://example.com/feed?token=secret-value",
+            Official = true
+        };
 
         var item = Assert.Single(RssIngestor.Parse(source, rss, Now));
 
-        Assert.Equal("Official Example", item.Source);
-        Assert.Equal(source.Url, item.FeedUrl);
+        Assert.Equal(SourceIdentity.ForUrl(source.Url), item.FeedUrl);
+        Assert.Equal(SourceIdentity.PublicLabel(source.Url), item.Source);
+        Assert.DoesNotContain("secret-value", item.FeedUrl!, StringComparison.Ordinal);
         Assert.Equal(DateTimeOffset.Parse("2026-09-03T11:00:00Z"), item.Published);
     }
 
@@ -42,6 +48,36 @@ public sealed class RssIngestorTests
         Assert.Equal("not_modified", Assert.Single(result.Feeds).Status);
         Assert.Equal("\"version-1\"", Assert.Single(handler.Requests).Headers.IfNoneMatch.Single().Tag);
         Assert.Equal(previous.LastModifiedUtc, handler.Requests[0].Headers.IfModifiedSince);
+    }
+
+    [Fact]
+    public async Task Fetch_adopts_replacement_validators_returned_with_not_modified()
+    {
+        var replacementModified = Now.AddMinutes(-15);
+        var handler = new RecordingHandler(_ =>
+        {
+            var response = new HttpResponseMessage(HttpStatusCode.NotModified)
+            {
+                Content = new ByteArrayContent(Array.Empty<byte>())
+            };
+            response.Headers.ETag = new EntityTagHeaderValue("\"version-2\"");
+            response.Content.Headers.LastModified = replacementModified;
+            return response;
+        });
+        using var http = new HttpClient(handler);
+        var source = new BriefingSource { Name = "Example", Url = "https://example.com/feed" };
+        var previous = new FeedHealthState
+        {
+            Url = SourceIdentity.ForUrl(source.Url),
+            ETag = "\"version-1\"",
+            LastModifiedUtc = Now.AddHours(-1)
+        };
+
+        var result = await RssIngestor.FetchAsync(new[] { source }, new[] { previous }, Now, httpClient: http);
+
+        var feed = Assert.Single(result.Feeds);
+        Assert.Equal("\"version-2\"", feed.ETag);
+        Assert.Equal(replacementModified, feed.LastModifiedUtc);
     }
 
     [Fact]
