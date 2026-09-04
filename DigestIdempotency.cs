@@ -15,7 +15,8 @@ public static class DigestIdempotency
         IReadOnlyList<ScoredArticle> displayed,
         DateTimeOffset preparedAtUtc,
         string encryptionKey,
-        PendingEmailPayload payload)
+        PendingEmailPayload payload,
+        RunMetrics? preparedMetrics = null)
     {
         var eventKeys = displayed
             .SelectMany(item => item.ReviewEventKeys)
@@ -47,7 +48,8 @@ public static class DigestIdempotency
             PreparedAtUtc = preparedAtUtc,
             EventKeys = eventKeys,
             EventTitles = eventTitles,
-            ReviewedItems = BuildReviewedItems(reviewed, displayed)
+            ReviewedItems = BuildReviewedItems(reviewed, displayed),
+            PreparedMetrics = preparedMetrics
         };
         EncryptPayload(pending, encryptionKey, payload);
         state.PendingDigestSends.Add(pending);
