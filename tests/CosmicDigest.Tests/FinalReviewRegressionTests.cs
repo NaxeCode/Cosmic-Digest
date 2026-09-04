@@ -21,6 +21,68 @@ public sealed class FinalReviewRegressionTests
     }
 
     [Fact]
+    public void Clustering_retains_multiword_product_context_for_same_number()
+    {
+        var articles = new[]
+        {
+            new NewsItem("Microsoft releases SQL Server 2022 update for developers", "https://example.com/sql", Now, "Example"),
+            new NewsItem("Microsoft releases Windows Server 2022 update for developers", "https://example.com/windows", Now.AddMinutes(-1), "Other")
+        };
+
+        var clusters = EventIdentity.Cluster(articles, 0.56);
+
+        Assert.Equal(2, clusters.Count);
+    }
+
+    [Fact]
+    public void Precluster_cap_does_not_let_one_noisy_source_starve_other_sources()
+    {
+        var noisyUrl = "https://noisy.example/feed";
+        var healthyUrl = "https://healthy.example/feed";
+        var profile = new BriefingProfile
+        {
+            Version = "fairness-test",
+            LookbackHours = 36,
+            CandidateLimit = 5,
+            MinimumScore = 1.5,
+            EventSimilarityThreshold = 0.56,
+            Priorities = new List<BriefingPriority>
+            {
+                new() { Name = "Engineering", Weight = 5, Signals = new List<string> { "OpenAI", "Kubernetes" } }
+            },
+            Sources = new List<BriefingSource>
+            {
+                new() { Name = "Noisy", Url = noisyUrl },
+                new() { Name = "Healthy", Url = healthyUrl }
+            },
+            Feeds = new List<string> { noisyUrl, healthyUrl }
+        };
+        var noisy = Enumerable.Range(0, 300)
+            .Select(index => new NewsItem(
+                "OpenAI launches Agent SDK reliability update",
+                $"https://noisy.example/story-{index}",
+                Now.AddSeconds(-index),
+                SourceIdentity.PublicLabel(noisyUrl),
+                FeedUrl: SourceIdentity.ForUrl(noisyUrl)))
+            .ToList();
+        var healthy = new NewsItem(
+            "Kubernetes releases operator reliability update",
+            "https://healthy.example/operator-update",
+            Now.AddMinutes(-2),
+            SourceIdentity.PublicLabel(healthyUrl),
+            FeedUrl: SourceIdentity.ForUrl(healthyUrl));
+
+        var ranked = ArticleSelector.Rank(
+            noisy.Append(healthy),
+            profile,
+            Array.Empty<string>(),
+            Now);
+
+        Assert.Contains(ranked, item => item.Article.Link == healthy.Link);
+        Assert.Contains(ranked, item => item.Article.Link.StartsWith("https://noisy.example/story-", StringComparison.Ordinal));
+    }
+
+    [Fact]
     public async Task Fetch_decodes_common_legacy_charset()
     {
         const string rss = """
