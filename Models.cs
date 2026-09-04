@@ -98,6 +98,7 @@ public sealed class PendingDigestSend
     public string PayloadCiphertext { get; set; } = "";
     public string PayloadTag { get; set; } = "";
     public List<PendingDigestItem> ReviewedItems { get; set; } = new();
+    public RunMetrics? PreparedMetrics { get; set; }
 }
 
 public sealed record DeliveryRetryItem(NewsItem Article, DateTimeOffset QueuedAtUtc);
