@@ -164,7 +164,7 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 
 ## State and failure semantics
 
-`data/state.json` stores a short article cache plus bounded reviewed-event, delivery-retry, source-health, delivery, and run-metric history.
+`data/state.json` stores a short article cache plus reviewed-event, durable delivery-retry, source-health, delivery, and run-metric history.
 
 - Upgrades use the prior `LastDigestUtc` as a migration boundary and persist it until it ages outside the active lookback window.
 - URL tracking parameters are removed before deduplication.
@@ -172,7 +172,8 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 - New links are also compared with retained reviewed titles, so a corroborating retitle that arrives on a later run is suppressed without collapsing conflicting version numbers.
 - AI-rejected candidates are marked reviewed so they do not consume tokens every day.
 - If AI synthesis fails, the email falls back to deterministic ranked headlines.
-- If delivery fails, included events are restored and placed in a bounded retry queue, while AI-rejected candidates remain reviewed and do not consume tokens again.
+- Feed URLs and private item-link parameters are redacted, while feed validators are encrypted with `OUTBOX_ENCRYPTION_KEY` before state is committed.
+- Ambiguous delivery failures are retried with the same idempotency key during the active workflow; terminal retryable failures restore included events to the durable retry queue, while AI-rejected candidates remain reviewed.
 - Explicit delivery retries remain eligible beyond the normal freshness lookback until they succeed or become terminal nonretryable outcomes.
 - Resend is polled briefly for `last_event`; pending delivery ids are reconciled again before every later selection run.
 - Content-derived idempotency keys stay stable across clock and date boundaries while a send outcome is ambiguous, then advance only after a recorded retryable terminal failure.

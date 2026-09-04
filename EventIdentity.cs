@@ -126,7 +126,10 @@ public static partial class EventIdentity
 
     public static string Signature(string title)
     {
-        var signature = string.Join(' ', Tokens(title).Order(StringComparer.Ordinal));
+        var signature = string.Join(' ', Tokens(title)
+            .Select(token => NormalizeDirectionalVerb(token) ?? token)
+            .Distinct(StringComparer.Ordinal)
+            .Order(StringComparer.Ordinal));
         var direction = DirectionalSignature(title);
         return string.IsNullOrWhiteSpace(direction)
             ? signature
@@ -228,19 +231,36 @@ public static partial class EventIdentity
 
     private static string? DirectionalSignature(string value)
     {
-        var tokens = OrderedTokens(value);
+        var tokens = AllOrderedTokens(value);
         for (var i = 0; i < tokens.Count; i++)
         {
             var verb = NormalizeDirectionalVerb(tokens[i]);
             if (verb is null)
                 continue;
 
-            var actor = FindDirectionalActor(tokens, i - 1, -1);
-            var target = FindDirectionalActor(tokens, i + 1, 1);
+            var passiveBy = FindPassiveBy(tokens, i);
+            var actor = passiveBy >= 0
+                ? FindDirectionalActor(tokens, passiveBy + 1, 1)
+                : FindDirectionalActor(tokens, i - 1, -1);
+            var target = passiveBy >= 0
+                ? FindDirectionalActor(tokens, i - 1, -1)
+                : FindDirectionalActor(tokens, i + 1, 1);
             if (!string.IsNullOrWhiteSpace(actor) && !string.IsNullOrWhiteSpace(target))
                 return $"{actor}>{verb}>{target}";
         }
         return null;
+    }
+
+    private static int FindPassiveBy(IReadOnlyList<string> tokens, int verbIndex)
+    {
+        for (var i = verbIndex + 1; i < tokens.Count && i <= verbIndex + 3; i++)
+        {
+            if (tokens[i] == "by")
+                return i;
+            if (NormalizeDirectionalVerb(tokens[i]) is not null)
+                break;
+        }
+        return -1;
     }
 
     private static string? FindDirectionalActor(
@@ -251,7 +271,8 @@ public static partial class EventIdentity
         for (var i = start; i >= 0 && i < tokens.Count; i += direction)
         {
             var token = tokens[i];
-            if (!DirectionalModifiers.Contains(token)
+            if (!StopWords.Contains(token)
+                && !DirectionalModifiers.Contains(token)
                 && !GenericVersionMarkers.Contains(token)
                 && NormalizeDirectionalVerb(token) is null)
             {
@@ -342,12 +363,18 @@ public static partial class EventIdentity
 
     private static List<string> OrderedTokens(string value)
     {
+        return AllOrderedTokens(value)
+            .Where(token => !StopWords.Contains(token))
+            .ToList();
+    }
+
+    private static List<string> AllOrderedTokens(string value)
+    {
         var normalized = LetterVersionSeparatorPattern().Replace(value.ToLowerInvariant(), " ");
         normalized = ConventionalVersionPrefixPattern().Replace(normalized, "");
         return TokenPattern().Matches(normalized).Cast<Match>()
             .Select(match => match.Value.Trim('.', '-', '_'))
             .Where(token => token.Length >= 2 || token.Any(char.IsDigit))
-            .Where(token => !StopWords.Contains(token))
             .ToList();
     }
 

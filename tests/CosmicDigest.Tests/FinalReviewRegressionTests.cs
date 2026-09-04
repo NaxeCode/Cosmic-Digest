@@ -97,6 +97,24 @@ public sealed class FinalReviewRegressionTests
     }
 
     [Fact]
+    public void Directional_events_normalize_passive_voice()
+    {
+        const string active = "Microsoft acquires OpenAI in landmark deal";
+        const string passive = "OpenAI was acquired by Microsoft in landmark deal";
+
+        var clusters = EventIdentity.Cluster(
+            new[]
+            {
+                new NewsItem(active, "https://example.com/active", Now, "Example"),
+                new NewsItem(passive, "https://other.example.com/passive", Now.AddMinutes(-1), "Other")
+            },
+            0.56);
+
+        Assert.Single(clusters);
+        Assert.Equal(EventIdentity.KeyForTitle(active), EventIdentity.KeyForTitle(passive));
+    }
+
+    [Fact]
     public void Durable_state_redacts_article_link_credentials_everywhere()
     {
         const string secret = "subscriber-secret-token";
@@ -133,6 +151,34 @@ public sealed class FinalReviewRegressionTests
         Assert.All(state.CacheNews, item => Assert.Equal("https://example.com/story", item.Link));
         Assert.All(state.ReviewedArticles, item => Assert.Equal("https://example.com/story", item.Link));
         Assert.All(state.DeliveryRetries, item => Assert.Equal("https://example.com/story", item.Article.Link));
+    }
+
+    [Fact]
+    public void Durable_state_encrypts_feed_validators_and_restores_them_in_memory()
+    {
+        const string validator = "\"owner@example.com:subscriber-capability\"";
+        const string key = "stable-validator-protection-key";
+        var state = new StateOfWorld
+        {
+            FeedHealth = new List<FeedHealthState>
+            {
+                new()
+                {
+                    Name = "Example",
+                    Url = "https://example.com/private-feed",
+                    ETag = validator
+                }
+            }
+        };
+
+        var serialized = StateStore.SerializeForStorage(state, key);
+
+        Assert.DoesNotContain("owner@example.com", serialized, StringComparison.Ordinal);
+        Assert.Contains("enc:v1:", serialized, StringComparison.Ordinal);
+        Assert.Equal(validator, Assert.Single(state.FeedHealth).ETag);
+        var encrypted = DurableSecretProtection.Protect(validator, key);
+        Assert.Equal(validator, DurableSecretProtection.Unprotect(encrypted, key));
+        Assert.Null(DurableSecretProtection.Unprotect(encrypted, "wrong-key"));
     }
 
     [Fact]

@@ -38,6 +38,9 @@ public static class StateStore
         state.DeliveryRetries ??= new();
         state.RecentRuns ??= new();
         SanitizeDurableSourceMetadata(state);
+        RestoreFeedValidators(
+            state,
+            Environment.GetEnvironmentVariable("OUTBOX_ENCRYPTION_KEY"));
         return state;
     }
 
@@ -46,8 +49,35 @@ public static class StateStore
         SanitizeDurableSourceMetadata(s);
         Directory.CreateDirectory(DataDir);
         var temporaryPath = PathFile + ".tmp";
-        File.WriteAllText(temporaryPath, JsonSerializer.Serialize(s, J));
+        File.WriteAllText(
+            temporaryPath,
+            SerializeForStorage(
+                s,
+                Environment.GetEnvironmentVariable("OUTBOX_ENCRYPTION_KEY")));
         File.Move(temporaryPath, PathFile, true);
+    }
+
+    public static string SerializeForStorage(
+        StateOfWorld state,
+        string? validatorProtectionKey)
+    {
+        SanitizeDurableSourceMetadata(state);
+        var validators = state.FeedHealth.Select(item => item.ETag).ToList();
+        try
+        {
+            for (var i = 0; i < state.FeedHealth.Count; i++)
+            {
+                state.FeedHealth[i].ETag = DurableSecretProtection.Protect(
+                    state.FeedHealth[i].ETag,
+                    validatorProtectionKey);
+            }
+            return JsonSerializer.Serialize(state, J);
+        }
+        finally
+        {
+            for (var i = 0; i < state.FeedHealth.Count; i++)
+                state.FeedHealth[i].ETag = validators[i];
+        }
     }
 
     public static void AppendNews(StateOfWorld s, IEnumerable<NewsItem> items, int keepDays = 4)
@@ -337,5 +367,17 @@ public static class StateStore
         }
 
         return candidate.ReviewEventKeys.Select(key => (key, candidate.Article.Title));
+    }
+
+    private static void RestoreFeedValidators(
+        StateOfWorld state,
+        string? validatorProtectionKey)
+    {
+        foreach (var health in state.FeedHealth)
+        {
+            health.ETag = DurableSecretProtection.Unprotect(
+                health.ETag,
+                validatorProtectionKey);
+        }
     }
 }
