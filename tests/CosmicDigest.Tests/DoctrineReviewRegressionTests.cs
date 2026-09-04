@@ -268,18 +268,19 @@ public sealed class DoctrineReviewRegressionTests
                 new("Release", "https://example.com/release", published, "Example", "old summary")
             }
         };
+        const string feedUrl = "https://example.com/feed.xml";
         var incoming = new NewsItem(
             "Release",
             "https://example.com/release",
             published,
             "Example",
             "fresh summary",
-            "https://example.com/feed.xml");
+            feedUrl);
 
         StateStore.AppendNews(state, new[] { incoming });
 
         var cached = Assert.Single(state.CacheNews);
-        Assert.Equal("https://example.com/feed.xml", cached.FeedUrl);
+        Assert.Equal(SourceIdentity.ForUrl(feedUrl), cached.FeedUrl);
         Assert.Equal("fresh summary", cached.Summary);
     }
 
