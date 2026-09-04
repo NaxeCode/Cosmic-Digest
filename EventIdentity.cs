@@ -24,6 +24,26 @@ public static partial class EventIdentity
         "stable", "rc", "edition"
     };
 
+    private static readonly HashSet<string> StrongVersionMarkers = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "version", "ver", "build", "edition"
+    };
+
+    private static readonly HashSet<string> IncidentalCalendarContexts = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "ces", "wwdc", "gdc", "conference", "conf", "summit", "keynote", "expo", "event",
+        "january", "february", "march", "april", "may", "june", "july", "august", "september",
+        "october", "november", "december", "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep",
+        "sept", "oct", "nov", "dec", "today", "tomorrow", "yesterday", "roadmap", "forecast"
+    };
+
+    private static readonly HashSet<string> NarrativeNumberContexts = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "announces", "announced", "launches", "launched", "releases", "released", "reports", "reported",
+        "says", "said", "adds", "added", "cuts", "cut", "raises", "raised", "ships", "shipped", "unveils",
+        "unveiled", "shows", "showed", "targets", "targeted", "expects", "expected"
+    };
+
     public static IReadOnlyList<NewsEventCluster> Cluster(
         IEnumerable<NewsItem> articles,
         double similarityThreshold)
@@ -80,12 +100,17 @@ public static partial class EventIdentity
 
     public static string KeyFor(NewsItem article)
     {
-        var seed = Signature(article.Title);
-        if (seed.Length == 0)
-            seed = ArticleSelector.CanonicalizeLink(article.Link);
-        return Convert.ToHexString(
-                SHA256.HashData(Encoding.UTF8.GetBytes(seed)))[..24]
-            .ToLowerInvariant();
+        var titleKey = KeyForTitle(article.Title);
+        if (!string.IsNullOrWhiteSpace(titleKey))
+            return titleKey;
+
+        return HashSeed(ArticleSelector.CanonicalizeLink(article.Link));
+    }
+
+    public static string KeyForTitle(string title)
+    {
+        var seed = Signature(title);
+        return seed.Length == 0 ? "" : HashSeed(seed);
     }
 
     public static string Signature(string title) =>
@@ -122,33 +147,105 @@ public static partial class EventIdentity
         var sanitized = PercentagePattern().Replace(value, " ");
         sanitized = CurrencyNumberPattern().Replace(sanitized, " ");
         sanitized = MultiplierPattern().Replace(sanitized, " ");
+        sanitized = QuantityPattern().Replace(sanitized, " ");
         var tokens = OrderedTokens(sanitized);
         var identities = new HashSet<string>(StringComparer.Ordinal);
+
         for (var i = 0; i < tokens.Count; i++)
         {
-            var token = tokens[i];
-            if (!token.Any(char.IsDigit) || IsLikelyCalendarYear(token))
+            var numericToken = tokens[i];
+            if (!numericToken.Any(char.IsDigit) || IsIncidentalPeriodToken(numericToken))
                 continue;
 
-            for (var productIndex = i - 1; productIndex >= 0; productIndex--)
+            var strongVersionContext = HasStrongVersionMarkerBefore(tokens, i);
+            var precedingContext = FindPrecedingContext(tokens, i);
+            if (precedingContext is not null
+                && NarrativeNumberContexts.Contains(precedingContext))
             {
-                var productToken = tokens[productIndex];
-                if (productToken.Any(char.IsDigit) || GenericVersionMarkers.Contains(productToken))
-                    continue;
-
-                identities.Add(token);
-                identities.Add($"{productToken}:{token}");
-                return identities;
+                continue;
             }
+
+            if (IsLikelyCalendarYear(numericToken)
+                && precedingContext is not null
+                && IncidentalCalendarContexts.Contains(precedingContext))
+            {
+                continue;
+            }
+
+            var productToken = precedingContext;
+            if (productToken is null || GenericVersionMarkers.Contains(productToken))
+            {
+                if (!strongVersionContext)
+                    continue;
+                productToken = FindFollowingProductToken(tokens, i);
+            }
+
+            if (string.IsNullOrWhiteSpace(productToken)
+                || productToken.Any(char.IsDigit)
+                || NarrativeNumberContexts.Contains(productToken)
+                || (IsLikelyCalendarYear(numericToken)
+                    && IncidentalCalendarContexts.Contains(productToken)))
+            {
+                continue;
+            }
+
+            identities.Add(numericToken);
+            identities.Add($"{productToken}:{numericToken}");
+            return identities;
         }
 
         return identities;
+    }
+
+    private static string? FindPrecedingContext(IReadOnlyList<string> tokens, int numericIndex)
+    {
+        var examined = 0;
+        for (var i = numericIndex - 1; i >= 0 && examined < 3; i--, examined++)
+        {
+            var token = tokens[i];
+            if (token.Any(char.IsDigit))
+                return null;
+            if (GenericVersionMarkers.Contains(token))
+                continue;
+            return token;
+        }
+        return null;
+    }
+
+    private static string? FindFollowingProductToken(IReadOnlyList<string> tokens, int numericIndex)
+    {
+        var examined = 0;
+        for (var i = numericIndex + 1; i < tokens.Count && examined < 3; i++, examined++)
+        {
+            var token = tokens[i];
+            if (token.Any(char.IsDigit))
+                return null;
+            if (GenericVersionMarkers.Contains(token))
+                continue;
+            if (NarrativeNumberContexts.Contains(token) || IncidentalCalendarContexts.Contains(token))
+                return null;
+            return token;
+        }
+        return null;
+    }
+
+    private static bool HasStrongVersionMarkerBefore(IReadOnlyList<string> tokens, int numericIndex)
+    {
+        for (var i = Math.Max(0, numericIndex - 2); i < numericIndex; i++)
+        {
+            if (StrongVersionMarkers.Contains(tokens[i]))
+                return true;
+        }
+        return false;
     }
 
     private static bool IsLikelyCalendarYear(string token) =>
         token.Length == 4
         && int.TryParse(token, out var year)
         && year is >= 1900 and <= 2100;
+
+    private static bool IsIncidentalPeriodToken(string token) =>
+        Regex.IsMatch(token, @"^(?:q[1-4]|h[12]|fy\d{2,4})$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
     private static HashSet<string> Tokens(string value) =>
         OrderedTokens(value).ToHashSet(StringComparer.Ordinal);
@@ -174,6 +271,10 @@ public static partial class EventIdentity
         return union == 0 ? 0 : (double)intersection / union;
     }
 
+    private static string HashSeed(string seed) =>
+        Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(seed)))[..24]
+            .ToLowerInvariant();
+
     [GeneratedRegex(@"[\p{L}\p{N}][\p{L}\p{N}+#._-]*", RegexOptions.CultureInvariant)]
     private static partial Regex TokenPattern();
 
@@ -183,7 +284,7 @@ public static partial class EventIdentity
     [GeneratedRegex(@"(?<![\p{L}\p{N}])v(?=\d)", RegexOptions.CultureInvariant)]
     private static partial Regex ConventionalVersionPrefixPattern();
 
-    [GeneratedRegex(@"(?<![\p{L}\p{N}])\d+(?:[.,]\d+)?\s*%", RegexOptions.CultureInvariant)]
+    [GeneratedRegex(@"(?<![\p{L}\p{N}])\d+(?:[.,]\d+)?\s*(?:%|percent(?:age)?(?:\s+points?)?)", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex PercentagePattern();
 
     [GeneratedRegex(@"[$€£¥]\s*\d+(?:[.,]\d+)*", RegexOptions.CultureInvariant)]
@@ -191,4 +292,7 @@ public static partial class EventIdentity
 
     [GeneratedRegex(@"(?<![\p{L}\p{N}])\d+(?:\.\d+)?x(?![\p{L}\p{N}])", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
     private static partial Regex MultiplierPattern();
+
+    [GeneratedRegex(@"(?<![\p{L}\p{N}])\d+(?:[.,]\d+)?\s*(?:thousand|million|billion|trillion|users?|customers?|parameters?|tokens?|gb|tb|mb|fps|hz|watts?|days?|weeks?|months?|years?|hours?|minutes?|seconds?)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex QuantityPattern();
 }
