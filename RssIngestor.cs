@@ -272,8 +272,7 @@ public static class RssIngestor
             if (location is null
                 || !Uri.TryCreate(currentUri, location, out var nextUri)
                 || (nextUri.Scheme != Uri.UriSchemeHttps && nextUri.Scheme != Uri.UriSchemeHttp)
-                || !string.IsNullOrWhiteSpace(nextUri.UserInfo)
-                || (currentUri.Scheme == Uri.UriSchemeHttps && nextUri.Scheme != Uri.UriSchemeHttps))
+                || !string.IsNullOrWhiteSpace(nextUri.UserInfo))
             {
                 throw new InvalidDataException("Feed returned an unsafe redirect destination.");
             }
@@ -282,6 +281,11 @@ public static class RssIngestor
                 && !await IsPublicDestinationAsync(nextUri, cancellationToken))
             {
                 throw new InvalidDataException("Public feed redirected to a private network destination.");
+            }
+            if (currentUri.Scheme == Uri.UriSchemeHttps
+                && nextUri.Scheme != Uri.UriSchemeHttps)
+            {
+                throw new InvalidDataException("Feed redirect attempted to downgrade HTTPS.");
             }
             currentUri = nextUri;
         }
@@ -396,10 +400,11 @@ public static class RssIngestor
         else
         {
             if (!Uri.TryCreate(sourceUrl, UriKind.Absolute, out var sourceUri)
-                || !Uri.TryCreate(sourceUri, parsed, out resolved))
+                || !Uri.TryCreate(sourceUri, parsed, out var combined))
             {
                 return null;
             }
+            resolved = combined;
         }
 
         if ((resolved.Scheme != Uri.UriSchemeHttps && resolved.Scheme != Uri.UriSchemeHttp)
