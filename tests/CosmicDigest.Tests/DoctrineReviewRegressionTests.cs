@@ -79,6 +79,98 @@ public sealed class DoctrineReviewRegressionTests
     }
 
     [Fact]
+    public void Product_following_an_explicit_version_number_is_preserved()
+    {
+        var now = DateTimeOffset.UtcNow;
+        var clusters = EventIdentity.Cluster(
+            new[]
+            {
+                new NewsItem("Version 2.0 of Agent SDK released", "https://example.com/sdk-2", now, "A"),
+                new NewsItem("Version 3.0 of Agent SDK released", "https://example.com/sdk-3", now.AddMinutes(-1), "B")
+            },
+            0.56);
+
+        Assert.Equal(2, clusters.Count);
+    }
+
+    [Fact]
+    public void Year_based_product_versions_remain_distinct()
+    {
+        var now = DateTimeOffset.UtcNow;
+        var clusters = EventIdentity.Cluster(
+            new[]
+            {
+                new NewsItem("Microsoft releases SQL Server 2022 update", "https://example.com/sql-2022", now, "A"),
+                new NewsItem("Microsoft releases SQL Server 2025 update", "https://example.com/sql-2025", now.AddMinutes(-1), "B")
+            },
+            0.56);
+
+        Assert.Equal(2, clusters.Count);
+    }
+
+    [Fact]
+    public void Exact_reviewed_generic_key_does_not_hide_a_new_explicit_version()
+    {
+        var now = DateTimeOffset.UtcNow;
+        var profile = TestProfile();
+        var reviewed = Assert.Single(ArticleSelector.Rank(
+            new[]
+            {
+                new NewsItem("OpenAI releases Agent SDK", "https://example.com/old", now, "A")
+            },
+            profile,
+            Array.Empty<string>(),
+            now));
+        var state = new StateOfWorld();
+        StateStore.MarkReviewed(state, new[] { reviewed }, new[] { reviewed }, now);
+
+        var result = Assert.Single(ArticleSelector.Rank(
+            new[]
+            {
+                new NewsItem("OpenAI releases Agent SDK", "https://example.com/generic-new-link", now.AddMinutes(2), "B"),
+                new NewsItem("OpenAI releases Agent SDK 3.0", "https://example.com/sdk-3", now.AddMinutes(1), "C")
+            },
+            profile,
+            state.ReviewedArticles.Select(item => item.Link),
+            now.AddMinutes(3),
+            previouslyReviewedEventKeys: state.ReviewedEvents.Select(item => item.EventKey),
+            previouslyReviewedEventTitles: state.ReviewedEvents.Select(item => item.Title)));
+
+        Assert.Contains(result.IdentityTitles!, title => title.Contains("3.0", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void Large_feed_input_keeps_forced_retries_ahead_of_the_cluster_bound()
+    {
+        var now = DateTimeOffset.UtcNow;
+        var profile = TestProfile();
+        profile.CandidateLimit = 5;
+        var articles = Enumerable.Range(0, 1_000)
+            .Select(index => new NewsItem(
+                $"OpenAI engineering update item {index}",
+                $"https://example.com/item-{index}",
+                now.AddSeconds(-index),
+                "Example"))
+            .ToList();
+        var retry = new NewsItem(
+            "Previously failed delivery retry",
+            "https://example.com/forced-retry",
+            now.AddDays(-3),
+            "Example");
+        articles.Add(retry);
+
+        var ranked = ArticleSelector.Rank(
+            articles,
+            profile,
+            Array.Empty<string>(),
+            now,
+            forcedRetryLinks: new[] { retry.Link });
+
+        Assert.Contains(ranked, item => item.Article.Link == retry.Link);
+        Assert.True(ranked.Count <= profile.CandidateLimit);
+    }
+
+    [Fact]
     public void Prepared_outbox_carries_selection_metrics_across_delivery_handoff()
     {
         var now = DateTimeOffset.UtcNow;
@@ -190,6 +282,30 @@ public sealed class DoctrineReviewRegressionTests
         Assert.Equal("https://example.com/feed.xml", cached.FeedUrl);
         Assert.Equal("fresh summary", cached.Summary);
     }
+
+    private static BriefingProfile TestProfile() => new()
+    {
+        Version = "test",
+        LookbackHours = 36,
+        CandidateLimit = 12,
+        MaxItems = 5,
+        MinimumScore = 1.5,
+        EventSimilarityThreshold = 0.56,
+        Priorities = new List<BriefingPriority>
+        {
+            new()
+            {
+                Name = "Engineering",
+                Weight = 5,
+                Signals = new List<string> { "OpenAI", "Agent SDK", "SQL Server", "Nvidia" }
+            }
+        },
+        Sources = new List<BriefingSource>
+        {
+            new() { Name = "Example", Url = "https://example.com/feed" }
+        },
+        Feeds = new List<string> { "https://example.com/feed" }
+    };
 
     private sealed class StaticResponseHandler(HttpStatusCode statusCode, string body) : HttpMessageHandler
     {
