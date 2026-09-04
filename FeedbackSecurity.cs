@@ -73,6 +73,16 @@ public static class FeedbackTokenService
         }
     }
 
+    public static string JournalIdForEvent(string eventKey)
+    {
+        if (string.IsNullOrWhiteSpace(eventKey))
+            throw new ArgumentException("A feedback event key is required.", nameof(eventKey));
+
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(
+            "cosmic-digest-feedback-event-v1\0" + eventKey.Trim().ToLowerInvariant())))
+            .ToLowerInvariant();
+    }
+
     private static byte[] Sign(string payload, string key) =>
         HMACSHA256.HashData(Encoding.UTF8.GetBytes(key), Encoding.UTF8.GetBytes(payload));
 

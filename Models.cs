@@ -83,6 +83,7 @@ public sealed record PreparedDigestSend(
 public sealed class PendingDigestItem
 {
     public NewsItem Article { get; set; } = new("", "", DateTimeOffset.MinValue, "");
+    public string ArticleIdentity { get; set; } = "";
     public List<string> EventKeys { get; set; } = new();
     public List<string> EventTitles { get; set; } = new();
     public bool Included { get; set; }

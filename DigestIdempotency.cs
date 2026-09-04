@@ -166,7 +166,8 @@ public static class DigestIdempotency
 
             return new PendingDigestItem
             {
-                Article = SourceIdentity.Sanitize(item.Article),
+                Article = SourceIdentity.PrepareForProtectedStorage(item.Article),
+                ArticleIdentity = SourceIdentity.SanitizeArticleLink(item.Article.Link),
                 EventKeys = eventKeys,
                 EventTitles = eventTitles,
                 Included = includedLinks.Contains(ArticleSelector.CanonicalizeLink(item.Article.Link))

@@ -172,7 +172,7 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 - New links are also compared with retained reviewed titles, so a corroborating retitle that arrives on a later run is suppressed without collapsing conflicting version numbers.
 - AI-rejected candidates are marked reviewed so they do not consume tokens every day.
 - If AI synthesis fails, the email falls back to deterministic ranked headlines.
-- Feed URLs and private item-link parameters are redacted. Feed validators, errors, article titles, summaries, links, and reviewed identities are encrypted with `OUTBOX_ENCRYPTION_KEY` before state is committed. Legacy records migrate on their next write; a missing or incorrect key aborts without overwriting the last valid ciphertext.
+- Feed URLs are replaced by non-reversible identities. Functional article URLs are retained only inside authenticated encryption, while separately sanitized link identities drive deduplication. Feed validators, errors, article titles, summaries, links, and reviewed identities are encrypted with `OUTBOX_ENCRYPTION_KEY` before state is committed. Legacy records migrate on their next write; a missing or incorrect key aborts without overwriting the last valid ciphertext.
 - Ambiguous delivery failures are retried with the same idempotency key during the active workflow; terminal retryable failures restore included events to the durable retry queue, while AI-rejected candidates remain reviewed.
 - Explicit delivery retries remain eligible beyond the normal freshness lookback until they succeed or become terminal nonretryable outcomes.
 - Resend is polled briefly for `last_event`; pending delivery ids are reconciled again before every later selection run.
@@ -193,7 +193,7 @@ This remains intentionally small. JSON is still the correct store for one daily 
 - `GET /metrics` for aggregate outcomes behind a bearer token; and
 - `GET /health` for hosting checks.
 
-Feedback and webhook entries are deduplicated from the same atomically replaced journal record, and a shared lock file coordinates overlapping processes on the mounted volume, so an interrupted or concurrent write cannot separate an event from its uniqueness marker.
+Feedback is deduplicated by validated event identity, so an event can contribute only one outcome even if multiple signal links are confirmed. Feedback and webhook entries use the same atomically replaced journal record, and a shared lock file coordinates overlapping processes on the mounted volume, so an interrupted or concurrent write cannot separate an event from its uniqueness marker.
 Unsigned webhook bodies are rejected above 256 KB before the service constructs the payload string.
 Feedback confirmation bodies accept only URL-encoded forms and are rejected above 8 KB before parsing.
 

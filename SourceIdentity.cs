@@ -6,7 +6,7 @@ public static class SourceIdentity
     private const string Prefix = "source:";
     private static readonly HashSet<string> DurableQueryKeys = new(StringComparer.OrdinalIgnoreCase)
     {
-        "article", "article_id", "id", "lang", "locale", "p", "page", "post", "post_id", "slug",
+        "article", "article_id", "entry", "id", "lang", "locale", "p", "page", "post", "post_id", "slug",
         "story", "story_id", "v", "version"
     };
 
@@ -64,6 +64,29 @@ public static class SourceIdentity
                 ? article.Source
                 : PublicLabel(identity)
         };
+    }
+
+    public static NewsItem PrepareForProtectedStorage(NewsItem article)
+    {
+        var sanitized = Sanitize(article);
+        return sanitized with
+        {
+            Link = PreserveFunctionalArticleLink(article.Link)
+        };
+    }
+
+    public static string PreserveFunctionalArticleLink(string? link)
+    {
+        var trimmed = link?.Trim() ?? "";
+        if (!Uri.TryCreate(trimmed, UriKind.Absolute, out var uri)
+            || (uri.Scheme != Uri.UriSchemeHttps && uri.Scheme != Uri.UriSchemeHttp)
+            || !string.IsNullOrWhiteSpace(uri.UserInfo))
+        {
+            return "";
+        }
+
+        var fragment = trimmed.IndexOf('#');
+        return fragment >= 0 ? trimmed[..fragment] : trimmed;
     }
 
     public static string SanitizeArticleLink(string? link)

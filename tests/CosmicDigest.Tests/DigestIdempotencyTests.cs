@@ -149,4 +149,38 @@ public sealed class DigestIdempotencyTests
             "Rejected",
             Assert.Single(DigestIdempotency.ReviewedCandidates(prepared.Outbox, included: false)).Article.Title);
     }
+
+    [Fact]
+    public void Prepared_outbox_preserves_the_encrypted_functional_link_and_a_safe_identity()
+    {
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
+        const string link = "https://example.com/read?entry=123&signature=private-capability";
+        const string key = "stable-link-key";
+        var candidate = new ScoredArticle(
+            new NewsItem("Private entry", link, now, "Example"),
+            5,
+            new[] { "AI" },
+            "event-private-entry");
+        var state = new StateOfWorld();
+
+        var prepared = DigestIdempotency.Prepare(
+            state,
+            new[] { candidate },
+            new[] { candidate },
+            now,
+            key,
+            new PendingEmailPayload("from", "to", "subject", "text", "html"));
+
+        var pendingItem = Assert.Single(prepared.Outbox.ReviewedItems);
+        Assert.Equal(link, pendingItem.Article.Link);
+        Assert.Equal("https://example.com/read?entry=123", pendingItem.ArticleIdentity);
+
+        var serialized = StateStore.SerializeForStorage(state, key);
+        Assert.DoesNotContain("private-capability", serialized, StringComparison.Ordinal);
+        var restored = StateStore.DeserializeFromStorage(serialized, key);
+        var replayed = Assert.Single(DigestIdempotency.ReviewedCandidates(
+            Assert.Single(restored.PendingDigestSends),
+            included: true));
+        Assert.Equal(link, replayed.Article.Link);
+    }
 }

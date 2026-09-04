@@ -38,6 +38,17 @@ public sealed class FeedbackSecurityTests
     }
 
     [Fact]
+    public void Feedback_journal_identity_is_stable_across_signals_for_one_event()
+    {
+        Assert.Equal(
+            FeedbackTokenService.JournalIdForEvent("event-42"),
+            FeedbackTokenService.JournalIdForEvent(" EVENT-42 "));
+        Assert.NotEqual(
+            FeedbackTokenService.JournalIdForEvent("event-42"),
+            FeedbackTokenService.JournalIdForEvent("event-43"));
+    }
+
+    [Fact]
     public void Resend_webhook_verifier_accepts_svix_signature_and_rejects_replays_outside_tolerance()
     {
         var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");

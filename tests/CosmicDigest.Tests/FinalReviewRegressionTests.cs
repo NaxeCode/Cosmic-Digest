@@ -152,7 +152,7 @@ public sealed class FinalReviewRegressionTests
     }
 
     [Fact]
-    public void Durable_state_redacts_article_link_credentials_everywhere()
+    public void Durable_state_encrypts_functional_article_links_and_keeps_safe_comparison_identities()
     {
         const string secret = "subscriber-secret-token";
         var article = new NewsItem(
@@ -190,12 +190,18 @@ public sealed class FinalReviewRegressionTests
             "stable-test-key",
             new PendingEmailPayload("from", "to", "subject", "text", "html"));
 
-        var serialized = JsonSerializer.Serialize(state);
+        var serialized = StateStore.SerializeForStorage(state, "stable-test-key");
         Assert.DoesNotContain(secret, serialized, StringComparison.Ordinal);
         Assert.DoesNotContain("access_token", serialized, StringComparison.OrdinalIgnoreCase);
-        Assert.All(state.CacheNews, item => Assert.Equal("https://example.com/story", item.Link));
+        Assert.All(state.CacheNews, item => Assert.Equal(article.Link, item.Link));
         Assert.All(state.ReviewedArticles, item => Assert.Equal("https://example.com/story", item.Link));
-        Assert.All(state.DeliveryRetries, item => Assert.Equal("https://example.com/story", item.Article.Link));
+        Assert.All(state.DeliveryRetries, item => Assert.Equal(article.Link, item.Article.Link));
+        Assert.Equal(
+            "https://example.com/story",
+            Assert.Single(Assert.Single(state.PendingDigestSends).ReviewedItems).ArticleIdentity);
+        var restored = StateStore.DeserializeFromStorage(serialized, "stable-test-key");
+        Assert.Equal(article.Link, Assert.Single(restored.CacheNews).Link);
+        Assert.Equal(article.Link, Assert.Single(restored.DeliveryRetries).Article.Link);
     }
 
     [Fact]
@@ -380,7 +386,7 @@ public sealed class FinalReviewRegressionTests
             IncludedItems: new[] { article });
         Assert.True(StateStore.RestoreEligibilityForFailedDelivery(state, failure, Now.AddMinutes(1)));
         Assert.Empty(state.ReviewedArticles);
-        Assert.Equal("https://example.com/story", Assert.Single(state.DeliveryRetries).Article.Link);
+        Assert.Equal(article.Link, Assert.Single(state.DeliveryRetries).Article.Link);
     }
 
     [Fact]

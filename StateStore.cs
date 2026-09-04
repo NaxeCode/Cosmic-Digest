@@ -41,6 +41,7 @@ public static class StateStore
             pending.ReviewedItems ??= new();
             foreach (var item in pending.ReviewedItems)
             {
+                item.ArticleIdentity ??= "";
                 item.EventKeys ??= new();
                 item.EventTitles ??= new();
             }
@@ -101,13 +102,13 @@ public static class StateStore
 
     public static void AppendNews(StateOfWorld s, IEnumerable<NewsItem> items, int keepDays = 4)
     {
-        var incoming = items.Select(SourceIdentity.Sanitize).ToList();
+        var incoming = items.Select(SourceIdentity.PrepareForProtectedStorage).ToList();
         var cutoff = DateTimeOffset.UtcNow.AddDays(-keepDays);
         s.CacheNews = incoming
-            .Concat(s.CacheNews.Select(SourceIdentity.Sanitize))
+            .Concat(s.CacheNews.Select(SourceIdentity.PrepareForProtectedStorage))
             .Where(item => item.Published >= cutoff)
             .Where(item => !string.IsNullOrWhiteSpace(item.Link))
-            .GroupBy(item => ArticleSelector.CanonicalizeLink(item.Link), StringComparer.OrdinalIgnoreCase)
+            .GroupBy(item => SourceIdentity.SanitizeArticleLink(item.Link), StringComparer.OrdinalIgnoreCase)
             .Select(group => group
                 .OrderByDescending(item => item.Published)
                 .ThenByDescending(item => string.IsNullOrWhiteSpace(item.FeedUrl) ? 0 : 1)
@@ -229,7 +230,7 @@ public static class StateStore
         var sanitized = delivery with
         {
             IncludedItems = delivery.IncludedItems?
-                .Select(SourceIdentity.Sanitize)
+                .Select(SourceIdentity.PrepareForProtectedStorage)
                 .Where(item => !string.IsNullOrWhiteSpace(item.Link))
                 .ToList()
         };
@@ -274,7 +275,7 @@ public static class StateStore
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         state.DeliveryRetries.AddRange(articles
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
-            .Select(SourceIdentity.Sanitize)
+            .Select(SourceIdentity.PrepareForProtectedStorage)
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
             .Select(article => new DeliveryRetryItem(article, queuedAtUtc)));
         state.DeliveryRetries = state.DeliveryRetries
@@ -336,7 +337,7 @@ public static class StateStore
     private static void SanitizeDurableSourceMetadata(StateOfWorld state)
     {
         state.CacheNews = state.CacheNews
-            .Select(SourceIdentity.Sanitize)
+            .Select(SourceIdentity.PrepareForProtectedStorage)
             .Where(item => !string.IsNullOrWhiteSpace(item.Link))
             .ToList();
 
@@ -358,20 +359,29 @@ public static class StateStore
         state.Deliveries = state.Deliveries.Select(delivery => delivery with
         {
             IncludedItems = delivery.IncludedItems?
-                .Select(SourceIdentity.Sanitize)
+                .Select(SourceIdentity.PrepareForProtectedStorage)
                 .Where(item => !string.IsNullOrWhiteSpace(item.Link))
                 .ToList()
         }).ToList();
 
         state.DeliveryRetries = state.DeliveryRetries
-            .Select(item => item with { Article = SourceIdentity.Sanitize(item.Article) })
+            .Select(item => item with
+            {
+                Article = SourceIdentity.PrepareForProtectedStorage(item.Article)
+            })
             .Where(item => !string.IsNullOrWhiteSpace(item.Article.Link))
             .ToList();
 
         foreach (var pending in state.PendingDigestSends)
         {
             foreach (var item in pending.ReviewedItems)
-                item.Article = SourceIdentity.Sanitize(item.Article);
+            {
+                item.Article = SourceIdentity.PrepareForProtectedStorage(item.Article);
+                item.ArticleIdentity = SourceIdentity.SanitizeArticleLink(
+                    string.IsNullOrWhiteSpace(item.ArticleIdentity)
+                        ? item.Article.Link
+                        : item.ArticleIdentity);
+            }
         }
     }
 

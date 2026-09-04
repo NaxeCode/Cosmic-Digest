@@ -56,8 +56,8 @@ app.MapPost("/feedback", async (HttpRequest request) =>
     if (!FeedbackTokenService.TryValidate(token, signingKey, DateTimeOffset.UtcNow, out var payload))
         return Results.Content(ResponsePage("That feedback link is invalid or expired."), "text/html", Encoding.UTF8, 400);
 
-    var id = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token))).ToLowerInvariant();
-    await journal.AppendUniqueAsync(
+    var id = FeedbackTokenService.JournalIdForEvent(payload!.EventKey);
+    var recorded = await journal.AppendUniqueAsync(
         "feedback",
         id,
         new
@@ -70,7 +70,11 @@ app.MapPost("/feedback", async (HttpRequest request) =>
         request.HttpContext.RequestAborted);
 
     return Results.Content(
-        ResponsePage(payload!.Signal == "acted" ? "Action recorded. Keep moving." : "Signal recorded. Stella will use the evidence, not guesswork."),
+        ResponsePage(recorded
+            ? payload.Signal == "acted"
+                ? "Action recorded. Keep moving."
+                : "Signal recorded. Stella will use the evidence, not guesswork."
+            : "Feedback was already recorded for this event."),
         "text/html",
         Encoding.UTF8,
         200);
