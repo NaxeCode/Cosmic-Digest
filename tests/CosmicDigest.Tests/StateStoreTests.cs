@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 public sealed class StateStoreTests
 {
     [Fact]
@@ -89,6 +91,7 @@ public sealed class StateStoreTests
         Assert.Equal(0, health.ConsecutiveFailures);
         Assert.Null(health.LastError);
         Assert.Equal("\"v1\"", health.ETag);
+        Assert.Equal(SourceIdentity.ForUrl(source.Url), health.Url);
     }
 
     [Fact]
@@ -156,6 +159,74 @@ public sealed class StateStoreTests
         StateStore.CompleteDeliveryRetries(state, new[] { delivered });
 
         Assert.Empty(state.DeliveryRetries);
+    }
+
+    [Fact]
+    public void Retry_queue_never_silently_evicts_undelivered_work_at_fifty_items()
+    {
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
+        var state = new StateOfWorld();
+        var articles = Enumerable.Range(0, 75)
+            .Select(index => new NewsItem(
+                $"Retry {index}",
+                $"https://example.com/retry-{index}",
+                now,
+                "Example"))
+            .ToList();
+
+        StateStore.QueueDeliveryRetries(state, articles, now);
+
+        Assert.Equal(75, state.DeliveryRetries.Count);
+        Assert.Contains(state.DeliveryRetries, item => item.Article.Link.EndsWith("retry-0"));
+        Assert.Contains(state.DeliveryRetries, item => item.Article.Link.EndsWith("retry-74"));
+    }
+
+    [Fact]
+    public void Authenticated_feed_url_is_absent_from_all_durable_article_and_health_metadata()
+    {
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
+        const string secret = "ultra-secret-token";
+        var source = new BriefingSource
+        {
+            Name = "Private feed name",
+            Url = $"https://private.example/feed?token={secret}"
+        };
+        var article = new NewsItem(
+            "Private source public story",
+            "https://public.example/story",
+            now,
+            source.Name,
+            "Summary",
+            source.Url);
+        var scored = new ScoredArticle(article, 5, new[] { "AI" }, "event-private");
+        var state = new StateOfWorld();
+
+        StateStore.AppendNews(state, new[] { article });
+        StateStore.UpdateFeedHealth(state, new[]
+        {
+            new FeedFetchResult(source, "ok", new[] { article }, ETag: "\"v1\"")
+        }, now);
+        StateStore.QueueDeliveryRetries(state, new[] { article }, now);
+        StateStore.RecordDelivery(state, new DeliveryAttempt(
+            "email-1",
+            now,
+            "Cosmic Digest",
+            "accepted",
+            now,
+            IncludedItems: new[] { article }));
+        DigestIdempotency.Prepare(
+            state,
+            new[] { scored },
+            new[] { scored },
+            now,
+            "stable-outbox-key",
+            new PendingEmailPayload("from", "to", "subject", "text", "html"));
+
+        var serialized = JsonSerializer.Serialize(state);
+        Assert.DoesNotContain(secret, serialized, StringComparison.Ordinal);
+        Assert.DoesNotContain(source.Url, serialized, StringComparison.Ordinal);
+        Assert.DoesNotContain(source.Name, serialized, StringComparison.Ordinal);
+        Assert.Contains(SourceIdentity.ForUrl(source.Url), serialized, StringComparison.Ordinal);
     }
 
     [Fact]
