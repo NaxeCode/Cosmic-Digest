@@ -10,7 +10,7 @@ Generate an independent random key once and keep it stable across Resend credent
 openssl rand -base64 32 | gh secret set OUTBOX_ENCRYPTION_KEY
 ```
 
-The workflow commits only authenticated ciphertext before delivery begins. The same stable key also encrypts feed validators such as ETags and all feed-origin article content before state is committed. Rotating `RESEND_API_KEY` must not rotate this key while a prepared send may be pending.
+The workflow commits only authenticated ciphertext before delivery begins. The same stable key also encrypts feed validators such as ETags, feed errors, article content, links, and reviewed identities before state is committed. A missing or incorrect key aborts state loading or saving without overwriting valid ciphertext. Rotating `RESEND_API_KEY` must not rotate this key while protected state or a prepared send exists.
 
 ## 2. Activate the private briefing profile
 

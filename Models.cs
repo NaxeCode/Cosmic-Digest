@@ -6,8 +6,7 @@ public sealed record NewsItem(
     DateTimeOffset Published,
     string Source,
     string? Summary = null,
-    string? FeedUrl = null,
-    bool PrivateSource = false);
+    string? FeedUrl = null);
 
 public sealed record ScoredArticle(
     NewsItem Article,
@@ -17,8 +16,7 @@ public sealed record ScoredArticle(
     int SourceCount = 1,
     IReadOnlyList<string>? Sources = null,
     IReadOnlyList<string>? IdentityKeys = null,
-    IReadOnlyList<string>? IdentityTitles = null,
-    IReadOnlyList<bool>? IdentityPrivateSources = null)
+    IReadOnlyList<string>? IdentityTitles = null)
 {
     public IReadOnlyList<string> EvidenceSources =>
         Sources is { Count: > 0 } ? Sources : new[] { Article.Source };
@@ -38,16 +36,14 @@ public sealed record ReviewedArticle(
     string Link,
     DateTimeOffset ReviewedAtUtc,
     bool Included,
-    string? DeliveryEmailId = null,
-    bool PrivateSource = false);
+    string? DeliveryEmailId = null);
 
 public sealed record ReviewedEvent(
     string EventKey,
     DateTimeOffset ReviewedAtUtc,
     bool Included,
     string Title,
-    string? DeliveryEmailId = null,
-    bool PrivateSource = false);
+    string? DeliveryEmailId = null);
 
 public sealed class FeedHealthState
 {
@@ -89,7 +85,6 @@ public sealed class PendingDigestItem
     public NewsItem Article { get; set; } = new("", "", DateTimeOffset.MinValue, "");
     public List<string> EventKeys { get; set; } = new();
     public List<string> EventTitles { get; set; } = new();
-    public List<bool> EventPrivateSources { get; set; } = new();
     public bool Included { get; set; }
 }
 
@@ -157,6 +152,7 @@ public sealed class BriefingDocument
 
 public sealed class StateOfWorld
 {
+    public int ProtectionVersion { get; set; }
     public DateTimeOffset? LastRunUtc { get; set; }
     public DateTimeOffset? LastDigestUtc { get; set; }
     public DateTimeOffset? LegacyMigrationNotBeforeUtc { get; set; }

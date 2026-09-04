@@ -28,7 +28,6 @@ public sealed class RssIngestorTests
         Assert.Equal(SourceIdentity.PublicLabel(source.Url), item.Source);
         Assert.DoesNotContain("secret-value", item.FeedUrl!, StringComparison.Ordinal);
         Assert.Equal(DateTimeOffset.Parse("2026-09-03T11:00:00Z"), item.Published);
-        Assert.True(item.PrivateSource);
     }
 
     [Fact]

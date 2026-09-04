@@ -229,7 +229,7 @@ public sealed class FinalReviewRegressionTests
     [Fact]
     public void Durable_state_encrypts_feed_article_content_in_every_storage_path()
     {
-        const string title = "Private acquisition codename Orion";
+        const string title = "enc:v1: Private acquisition codename Orion";
         const string summary = "Subscriber-only diligence details";
         const string link = "https://example.com/private-orion-brief";
         const string key = "stable-private-content-key";
@@ -277,11 +277,45 @@ public sealed class FinalReviewRegressionTests
         Assert.Equal(summary, Assert.Single(restored.DeliveryRetries).Article.Summary);
         Assert.Equal(link, Assert.Single(restored.Deliveries).IncludedItems!.Single().Link);
 
-        var withoutKey = StateStore.SerializeForStorage(state, null);
-        Assert.DoesNotContain(title, withoutKey, StringComparison.Ordinal);
-        Assert.DoesNotContain(summary, withoutKey, StringComparison.Ordinal);
-        Assert.DoesNotContain("private-orion-brief", withoutKey, StringComparison.Ordinal);
-        Assert.Empty(StateStore.DeserializeFromStorage(serialized, "wrong-key").CacheNews);
+        Assert.Throws<InvalidOperationException>(() => StateStore.SerializeForStorage(state, null));
+        Assert.Throws<InvalidOperationException>(() =>
+            StateStore.DeserializeFromStorage(serialized, "wrong-key"));
+    }
+
+    [Fact]
+    public void Durable_state_migrates_legacy_unflagged_records_before_the_next_write()
+    {
+        const string title = "Legacy subscriber headline";
+        const string link = "https://example.com/legacy-private-story";
+        const string key = "stable-migration-key";
+        var legacy = new StateOfWorld
+        {
+            CacheNews = new List<NewsItem>
+            {
+                new(title, link, Now, "Legacy source", "Legacy private summary")
+            },
+            ReviewedArticles = new List<ReviewedArticle>
+            {
+                new(link, Now, true)
+            },
+            ReviewedEvents = new List<ReviewedEvent>
+            {
+                new("legacy-event", Now, true, title)
+            }
+        };
+        var legacyJson = JsonSerializer.Serialize(legacy);
+
+        var loaded = StateStore.DeserializeFromStorage(legacyJson, null);
+        var migrated = StateStore.SerializeForStorage(loaded, key);
+
+        Assert.DoesNotContain(title, migrated, StringComparison.Ordinal);
+        Assert.DoesNotContain("legacy-private-story", migrated, StringComparison.Ordinal);
+        Assert.DoesNotContain("Legacy private summary", migrated, StringComparison.Ordinal);
+        Assert.Contains("\"ProtectionVersion\": 1", migrated, StringComparison.Ordinal);
+        var restored = StateStore.DeserializeFromStorage(migrated, key);
+        Assert.Equal(title, Assert.Single(restored.CacheNews).Title);
+        Assert.Equal(link, Assert.Single(restored.ReviewedArticles).Link);
+        Assert.Equal(title, Assert.Single(restored.ReviewedEvents).Title);
     }
 
     [Fact]

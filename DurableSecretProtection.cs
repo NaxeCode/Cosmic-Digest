@@ -10,12 +10,10 @@ public static class DurableSecretProtection
 
     public static string? Protect(string? plaintext, string? protectionKey)
     {
-        if (string.IsNullOrWhiteSpace(plaintext))
+        if (string.IsNullOrEmpty(plaintext))
             return plaintext;
         if (string.IsNullOrWhiteSpace(protectionKey))
             return null;
-        if (plaintext.StartsWith(Prefix, StringComparison.Ordinal))
-            return plaintext;
 
         var key = DeriveKey(protectionKey);
         var nonce = RandomNumberGenerator.GetBytes(NonceSize);
@@ -40,46 +38,75 @@ public static class DurableSecretProtection
 
     public static string? Unprotect(string? protectedValue, string? protectionKey)
     {
-        if (string.IsNullOrWhiteSpace(protectedValue)
-            || !protectedValue.StartsWith(Prefix, StringComparison.Ordinal))
-        {
-            return protectedValue;
-        }
+        return TryUnprotect(protectedValue, protectionKey, out var plaintext)
+            ? plaintext
+            : null;
+    }
+
+    public static bool IsProtected(string? value) =>
+        !string.IsNullOrEmpty(value)
+        && value.StartsWith(Prefix, StringComparison.Ordinal);
+
+    public static bool TryUnprotect(
+        string? protectedValue,
+        string? protectionKey,
+        out string? plaintext)
+    {
+        plaintext = protectedValue;
+        if (string.IsNullOrEmpty(protectedValue) || !IsProtected(protectedValue))
+            return true;
         if (string.IsNullOrWhiteSpace(protectionKey))
-            return null;
+        {
+            plaintext = null;
+            return false;
+        }
 
         var parts = protectedValue[Prefix.Length..].Split(':');
         if (parts.Length != 3)
-            return null;
+        {
+            plaintext = null;
+            return false;
+        }
 
         var key = DeriveKey(protectionKey);
-        byte[]? plaintext = null;
         try
         {
             var nonce = Convert.FromBase64String(parts[0]);
             var ciphertext = Convert.FromBase64String(parts[1]);
             var tag = Convert.FromBase64String(parts[2]);
             if (nonce.Length != NonceSize || tag.Length != TagSize)
-                return null;
+            {
+                plaintext = null;
+                return false;
+            }
 
-            plaintext = new byte[ciphertext.Length];
+            var plaintextBytes = new byte[ciphertext.Length];
+            plaintext = null;
             using var aes = new AesGcm(key, TagSize);
-            aes.Decrypt(nonce, ciphertext, tag, plaintext, AssociatedData);
-            return Encoding.UTF8.GetString(plaintext);
+            try
+            {
+                aes.Decrypt(nonce, ciphertext, tag, plaintextBytes, AssociatedData);
+                plaintext = Encoding.UTF8.GetString(plaintextBytes);
+                return true;
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(plaintextBytes);
+            }
         }
         catch (FormatException)
         {
-            return null;
+            plaintext = null;
+            return false;
         }
         catch (CryptographicException)
         {
-            return null;
+            plaintext = null;
+            return false;
         }
         finally
         {
             CryptographicOperations.ZeroMemory(key);
-            if (plaintext is not null)
-                CryptographicOperations.ZeroMemory(plaintext);
         }
     }
 

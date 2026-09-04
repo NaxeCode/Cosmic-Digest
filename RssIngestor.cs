@@ -230,8 +230,7 @@ public static class RssIngestor
                 published,
                 sourceLabel,
                 BoundField(item.Description, MaximumSummaryCharacters),
-                sourceIdentity,
-                PrivateSource: true));
+                sourceIdentity));
         }
         return items;
     }
