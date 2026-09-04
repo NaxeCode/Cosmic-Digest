@@ -13,9 +13,10 @@ public static partial class EventIdentity
 {
     private static readonly HashSet<string> StopWords = new(StringComparer.OrdinalIgnoreCase)
     {
-        "a", "an", "and", "are", "as", "at", "be", "been", "being", "by", "for", "from", "has", "have", "how",
+        "a", "an", "and", "are", "as", "at", "be", "been", "being", "by", "can", "could", "did", "do", "does",
+        "for", "from", "had", "has", "have", "how", "may", "might", "must",
         "in", "into", "is", "it", "its", "new", "of", "on", "or", "that", "the", "their", "this",
-        "to", "up", "was", "were", "what", "when", "with", "you", "your"
+        "shall", "should", "to", "up", "was", "were", "what", "when", "will", "with", "would", "you", "your"
     };
 
     private static readonly HashSet<string> GenericVersionMarkers = new(StringComparer.OrdinalIgnoreCase)

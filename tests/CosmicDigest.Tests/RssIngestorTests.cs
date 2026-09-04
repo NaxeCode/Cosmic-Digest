@@ -227,6 +227,75 @@ public sealed class RssIngestorTests
     }
 
     [Fact]
+    public async Task Fetch_resolves_relative_article_links_against_the_final_feed_uri()
+    {
+        var handler = new RecordingHandler(request =>
+        {
+            if (request.RequestUri == new Uri("https://8.8.8.8/feed"))
+            {
+                var redirect = new HttpResponseMessage(HttpStatusCode.Redirect);
+                redirect.Headers.Location = new Uri("https://1.1.1.1/rss/current.xml");
+                return redirect;
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("""
+                    <rss version="2.0"><channel><title>Example</title>
+                    <item><title>Agent release</title><link>../articles/123</link></item>
+                    </channel></rss>
+                    """)
+            };
+        });
+        using var http = new HttpClient(handler);
+        var source = new BriefingSource { Name = "Example", Url = "https://8.8.8.8/feed" };
+
+        var result = await RssIngestor.FetchAsync(new[] { source }, null, Now, httpClient: http);
+
+        var item = Assert.Single(Assert.Single(result.Feeds).Items);
+        Assert.Equal("https://1.1.1.1/articles/123", item.Link);
+        Assert.Equal(SourceIdentity.ForUrl(source.Url), item.FeedUrl);
+    }
+
+    [Fact]
+    public async Task Fetch_applies_the_attempt_timeout_while_reading_the_body()
+    {
+        var attempt = 0;
+        var handler = new RecordingHandler(_ =>
+        {
+            attempt++;
+            if (attempt == 1)
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StreamContent(new StallingStream())
+                };
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent("""
+                    <rss version="2.0"><channel><title>Example</title>
+                    <item><title>Agent release</title><link>https://example.com/release</link></item>
+                    </channel></rss>
+                    """)
+            };
+        });
+        using var http = new HttpClient(handler);
+        var source = new BriefingSource { Name = "Example", Url = "https://example.com/feed" };
+
+        var result = await RssIngestor.FetchAsync(
+            new[] { source },
+            null,
+            Now,
+            httpClient: http,
+            feedAttemptTimeout: TimeSpan.FromMilliseconds(50));
+
+        Assert.Equal("ok", Assert.Single(result.Feeds).Status);
+        Assert.Equal(2, handler.Requests.Count);
+    }
+
+    [Fact]
     public async Task Fetch_honors_XML_declared_legacy_encoding_without_HTTP_charset()
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -332,5 +401,34 @@ public sealed class RssIngestorTests
                 Interlocked.Decrement(ref _currentConcurrency);
             }
         }
+    }
+
+    private sealed class StallingStream : Stream
+    {
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new NotSupportedException();
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush() { }
+        public override int Read(byte[] buffer, int offset, int count) =>
+            throw new NotSupportedException();
+
+        public override async ValueTask<int> ReadAsync(
+            Memory<byte> buffer,
+            CancellationToken cancellationToken = default)
+        {
+            await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken);
+            return 0;
+        }
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+        public override void SetLength(long value) => throw new NotSupportedException();
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Sockets;
@@ -29,6 +30,7 @@ public static class RssIngestor
     private const int MaximumTitleCharacters = 320;
     private const int MaximumSummaryCharacters = 4_000;
     private const int MaximumArticleUrlCharacters = 2_048;
+    private static readonly TimeSpan DefaultFeedAttemptTimeout = TimeSpan.FromSeconds(20);
 
     static RssIngestor()
     {
@@ -42,55 +44,65 @@ public static class RssIngestor
         int circuitFailureThreshold = 3,
         int circuitHours = 6,
         HttpClient? httpClient = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        TimeSpan? feedAttemptTimeout = null)
     {
+        var attemptTimeout = feedAttemptTimeout ?? DefaultFeedAttemptTimeout;
+        if (attemptTimeout <= TimeSpan.Zero)
+            throw new ArgumentOutOfRangeException(nameof(feedAttemptTimeout));
+
         var healthByIdentity = (previousHealth ?? Array.Empty<FeedHealthState>())
             .Where(item => !string.IsNullOrWhiteSpace(item.Url))
             .GroupBy(item => SourceIdentity.NormalizePersisted(item.Url), StringComparer.OrdinalIgnoreCase)
             .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
-        var ownsClient = httpClient is null;
-        var http = httpClient ?? new HttpClient(new HttpClientHandler
-        {
-            AllowAutoRedirect = false,
-            UseCookies = false
-        }) { Timeout = TimeSpan.FromSeconds(20) };
-        if (!http.DefaultRequestHeaders.UserAgent.Any())
-            http.DefaultRequestHeaders.UserAgent.ParseAdd("Cosmic-Digest/2.0 (+https://github.com/NaxeCode/Cosmic-Digest)");
+        if (httpClient is not null)
+            EnsureUserAgent(httpClient);
 
-        try
+        using var gate = new SemaphoreSlim(MaximumConcurrentFeeds, MaximumConcurrentFeeds);
+        var tasks = sources.Select(async source =>
         {
-            using var gate = new SemaphoreSlim(MaximumConcurrentFeeds, MaximumConcurrentFeeds);
-            var tasks = sources.Select(async source =>
+            await gate.WaitAsync(cancellationToken);
+            try
             {
-                await gate.WaitAsync(cancellationToken);
-                try
+                var previous = healthByIdentity.GetValueOrDefault(SourceIdentity.ForUrl(source.Url));
+                if (httpClient is not null)
                 {
                     return await FetchOneAsync(
                         source,
-                        healthByIdentity.GetValueOrDefault(SourceIdentity.ForUrl(source.Url)),
+                        previous,
                         now,
                         circuitFailureThreshold,
                         circuitHours,
-                        http,
+                        httpClient,
+                        null,
+                        attemptTimeout,
                         cancellationToken);
                 }
-                finally
-                {
-                    gate.Release();
-                }
-            });
-            var feedResults = await Task.WhenAll(tasks);
-            var articles = feedResults
-                .SelectMany(result => result.Items)
-                .OrderByDescending(item => item.Published)
-                .ToList();
-            return new IngestionResult(articles, feedResults);
-        }
-        finally
-        {
-            if (ownsClient)
-                http.Dispose();
-        }
+
+                var connector = new PinnedAddressConnector();
+                using var ownedHttp = CreateOwnedHttpClient(connector);
+                return await FetchOneAsync(
+                    source,
+                    previous,
+                    now,
+                    circuitFailureThreshold,
+                    circuitHours,
+                    ownedHttp,
+                    connector,
+                    attemptTimeout,
+                    cancellationToken);
+            }
+            finally
+            {
+                gate.Release();
+            }
+        });
+        var feedResults = await Task.WhenAll(tasks);
+        var articles = feedResults
+            .SelectMany(result => result.Items)
+            .OrderByDescending(item => item.Published)
+            .ToList();
+        return new IngestionResult(articles, feedResults);
     }
 
     private static async Task<FeedFetchResult> FetchOneAsync(
@@ -100,6 +112,8 @@ public static class RssIngestor
         int circuitFailureThreshold,
         int circuitHours,
         HttpClient http,
+        PinnedAddressConnector? connector,
+        TimeSpan attemptTimeout,
         CancellationToken cancellationToken)
     {
         if (previous is { ConsecutiveFailures: >= 1, LastFailureUtc: not null }
@@ -118,13 +132,18 @@ public static class RssIngestor
         Exception? lastException = null;
         for (var attempt = 1; attempt <= 3; attempt++)
         {
+            using var attemptCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            attemptCancellation.CancelAfter(attemptTimeout);
+            var attemptToken = attemptCancellation.Token;
             try
             {
-                using var response = await SendWithValidatedRedirectsAsync(
+                var received = await SendWithValidatedRedirectsAsync(
                     source.Url,
                     previous,
                     http,
-                    cancellationToken);
+                    connector,
+                    attemptToken);
+                using var response = received.Response;
                 if (response.StatusCode == HttpStatusCode.NotModified)
                 {
                     return new FeedFetchResult(
@@ -149,8 +168,8 @@ public static class RssIngestor
                 if (mediaType?.Contains("html", StringComparison.OrdinalIgnoreCase) == true)
                     throw new InvalidDataException($"Expected RSS or Atom XML but received {mediaType}.");
 
-                var body = await ReadBoundedAsync(response.Content, cancellationToken);
-                var items = Parse(source, body, now);
+                var body = await ReadBoundedAsync(response.Content, attemptToken);
+                var items = Parse(source, body, now, received.EffectiveUri.AbsoluteUri);
                 return new FeedFetchResult(
                     source,
                     "ok",
@@ -186,7 +205,8 @@ public static class RssIngestor
     public static IReadOnlyList<NewsItem> Parse(
         BriefingSource source,
         string content,
-        DateTimeOffset fallbackPublishedAt)
+        DateTimeOffset fallbackPublishedAt,
+        string? effectiveFeedUrl = null)
     {
         var feed = FeedReader.ReadFromString(content);
         var sourceIdentity = SourceIdentity.ForUrl(source.Url);
@@ -196,7 +216,7 @@ public static class RssIngestor
         foreach (var item in feed.Items ?? Enumerable.Empty<FeedItem>())
         {
             var title = BoundField(item.Title, MaximumTitleCharacters);
-            var link = ResolveArticleLink(source.Url, item.Link);
+            var link = ResolveArticleLink(effectiveFeedUrl ?? source.Url, item.Link);
             if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(link))
                 continue;
 
@@ -232,10 +252,11 @@ public static class RssIngestor
         _ => false
     };
 
-    private static async Task<HttpResponseMessage> SendWithValidatedRedirectsAsync(
+    private static async Task<(HttpResponseMessage Response, Uri EffectiveUri)> SendWithValidatedRedirectsAsync(
         string sourceUrl,
         FeedHealthState? previous,
         HttpClient http,
+        PinnedAddressConnector? connector,
         CancellationToken cancellationToken)
     {
         if (!Uri.TryCreate(sourceUrl, UriKind.Absolute, out var initialUri)
@@ -249,6 +270,14 @@ public static class RssIngestor
 
         var currentUri = initialUri;
         var initialIsPublic = IsPublicSource(initialUri);
+        if (connector is not null && initialIsPublic)
+        {
+            var initialAddresses = await ResolvePublicAddressesAsync(initialUri, cancellationToken);
+            if (initialAddresses is null)
+                throw new InvalidDataException("Public feed resolved to a private network destination.");
+            connector.Pin(initialUri, initialAddresses);
+        }
+
         for (var redirectCount = 0; ; redirectCount++)
         {
             using var request = CreateFeedRequest(
@@ -259,7 +288,7 @@ public static class RssIngestor
                 HttpCompletionOption.ResponseHeadersRead,
                 cancellationToken);
             if (!IsRedirect(response.StatusCode))
-                return response;
+                return (response, currentUri);
 
             if (redirectCount >= MaximumRedirects)
             {
@@ -277,10 +306,12 @@ public static class RssIngestor
                 throw new InvalidDataException("Feed returned an unsafe redirect destination.");
             }
 
-            if (initialIsPublic
-                && !await IsPublicDestinationAsync(nextUri, cancellationToken))
+            if (initialIsPublic)
             {
-                throw new InvalidDataException("Public feed redirected to a private network destination.");
+                var nextAddresses = await ResolvePublicAddressesAsync(nextUri, cancellationToken);
+                if (nextAddresses is null)
+                    throw new InvalidDataException("Public feed redirected to a private network destination.");
+                connector?.Pin(nextUri, nextAddresses);
             }
             if (currentUri.Scheme == Uri.UriSchemeHttps
                 && nextUri.Scheme != Uri.UriSchemeHttps)
@@ -309,6 +340,26 @@ public static class RssIngestor
         return request;
     }
 
+    private static HttpClient CreateOwnedHttpClient(PinnedAddressConnector connector)
+    {
+        var handler = new SocketsHttpHandler
+        {
+            AllowAutoRedirect = false,
+            UseCookies = false,
+            UseProxy = false,
+            ConnectCallback = connector.ConnectAsync
+        };
+        var http = new HttpClient(handler) { Timeout = Timeout.InfiniteTimeSpan };
+        EnsureUserAgent(http);
+        return http;
+    }
+
+    private static void EnsureUserAgent(HttpClient http)
+    {
+        if (!http.DefaultRequestHeaders.UserAgent.Any())
+            http.DefaultRequestHeaders.UserAgent.ParseAdd("Cosmic-Digest/2.0 (+https://github.com/NaxeCode/Cosmic-Digest)");
+    }
+
     private static bool IsSameOrigin(Uri left, Uri right) =>
         string.Equals(left.Scheme, right.Scheme, StringComparison.OrdinalIgnoreCase)
         && string.Equals(left.IdnHost, right.IdnHost, StringComparison.OrdinalIgnoreCase)
@@ -329,20 +380,22 @@ public static class RssIngestor
             or HttpStatusCode.TemporaryRedirect
         || (int)statusCode == 308;
 
-    private static async Task<bool> IsPublicDestinationAsync(
+    private static async Task<IPAddress[]?> ResolvePublicAddressesAsync(
         Uri uri,
         CancellationToken cancellationToken)
     {
         var host = uri.IdnHost.Trim('.');
         if (IsLocalHostName(host))
-            return false;
+            return null;
 
         IPAddress[] addresses;
         if (IPAddress.TryParse(host, out var literal))
             addresses = new[] { literal };
         else
             addresses = await Dns.GetHostAddressesAsync(host, cancellationToken);
-        return addresses.Length > 0 && addresses.All(IsPublicAddress);
+        return addresses.Length > 0 && addresses.All(IsPublicAddress)
+            ? addresses
+            : null;
     }
 
     private static bool IsLocalHostName(string host) =>
@@ -482,6 +535,60 @@ public static class RssIngestor
 
     private static Task DelayBeforeRetry(int attempt, CancellationToken cancellationToken) =>
         Task.Delay(TimeSpan.FromMilliseconds(attempt == 1 ? 350 : 900), cancellationToken);
+
+    private sealed class PinnedAddressConnector
+    {
+        private readonly ConcurrentDictionary<string, IPAddress[]> _pins =
+            new(StringComparer.OrdinalIgnoreCase);
+
+        public void Pin(Uri uri, IEnumerable<IPAddress> addresses) =>
+            _pins[Key(uri.IdnHost, uri.Port)] = addresses.ToArray();
+
+        public async ValueTask<Stream> ConnectAsync(
+            SocketsHttpConnectionContext context,
+            CancellationToken cancellationToken)
+        {
+            var endpoint = context.DnsEndPoint;
+            if (!_pins.TryGetValue(Key(endpoint.Host, endpoint.Port), out var addresses))
+            {
+                addresses = IPAddress.TryParse(endpoint.Host, out var literal)
+                    ? new[] { literal }
+                    : await Dns.GetHostAddressesAsync(endpoint.Host, cancellationToken);
+            }
+
+            Exception? lastException = null;
+            foreach (var address in addresses)
+            {
+                var socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
+                {
+                    NoDelay = true
+                };
+                try
+                {
+                    await socket.ConnectAsync(
+                        new IPEndPoint(address, endpoint.Port),
+                        cancellationToken);
+                    return new NetworkStream(socket, ownsSocket: true);
+                }
+                catch (OperationCanceledException)
+                {
+                    socket.Dispose();
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    socket.Dispose();
+                    lastException = ex;
+                }
+            }
+
+            throw new HttpRequestException(
+                $"Unable to connect to feed host '{endpoint.Host}'.",
+                lastException);
+        }
+
+        private static string Key(string host, int port) => $"{host.Trim('.')}:{port}";
+    }
 
     private static string CompactError(string value)
     {

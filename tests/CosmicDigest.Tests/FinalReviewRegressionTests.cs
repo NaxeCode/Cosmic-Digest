@@ -141,6 +141,17 @@ public sealed class FinalReviewRegressionTests
     }
 
     [Fact]
+    public void Directional_events_skip_modal_auxiliaries_when_finding_the_actor()
+    {
+        const string future = "Microsoft will acquire OpenAI";
+        const string present = "Microsoft acquires OpenAI";
+
+        Assert.Equal(
+            EventIdentity.KeyForTitle(present),
+            EventIdentity.KeyForTitle(future));
+    }
+
+    [Fact]
     public void Durable_state_redacts_article_link_credentials_everywhere()
     {
         const string secret = "subscriber-secret-token";
