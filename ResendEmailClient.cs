@@ -8,12 +8,17 @@ public sealed record ResendSendResult(string EmailId, string Status);
 public static class ResendDeliveryStatus
 {
     public static bool IsRetryableFailure(string? status) =>
-        status is "bounced" or "suppressed" or "failed" or "canceled" or "request_rejected";
+        status is "bounced" or "failed" or "canceled" or "request_rejected";
 
     public static bool IsComplaint(string? status) => status == "complained";
 
+    public static bool IsSuppressed(string? status) => status == "suppressed";
+
+    public static bool IsNonRetryableFailure(string? status) =>
+        IsComplaint(status) || IsSuppressed(status);
+
     public static bool IsTerminal(string? status) =>
-        status == "delivered" || IsComplaint(status) || IsRetryableFailure(status);
+        status == "delivered" || IsNonRetryableFailure(status) || IsRetryableFailure(status);
 
     public static bool IsPending(string? status) =>
         status is "accepted" or "queued" or "scheduled" or "sent" or "delayed" or "delivery_delayed";
