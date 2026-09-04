@@ -6,6 +6,7 @@ public static class DigestIdempotency
 {
     private const int NonceSize = 12;
     private const int TagSize = 16;
+    private static readonly TimeSpan AutomaticReplayWindow = TimeSpan.FromHours(24);
     private static readonly JsonSerializerOptions Json = new(JsonSerializerDefaults.Web);
 
     public static PreparedDigestSend Prepare(
@@ -58,9 +59,18 @@ public static class DigestIdempotency
         var pending = state.PendingDigestSends
             .OrderBy(item => item.PreparedAtUtc)
             .FirstOrDefault();
-        return pending is null
-            ? null
-            : new PreparedDigestSend(pending, DecryptPayload(pending, encryptionKey), true);
+        if (pending is null)
+            return null;
+
+        var age = DateTimeOffset.UtcNow - pending.PreparedAtUtc;
+        if (age >= AutomaticReplayWindow)
+        {
+            throw new InvalidOperationException(
+                "The oldest pending digest is outside Resend's 24-hour idempotency window. " +
+                "Automatic replay is blocked to avoid a duplicate delivery; inspect and explicitly resolve the durable outbox.");
+        }
+
+        return new PreparedDigestSend(pending, DecryptPayload(pending, encryptionKey), true);
     }
 
     public static List<ScoredArticle> ReviewedCandidates(
