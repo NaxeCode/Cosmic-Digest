@@ -92,6 +92,67 @@ public sealed class FinalReviewRegressionTests
     }
 
     [Fact]
+    public void Durable_link_redaction_preserves_meaningful_query_identity()
+    {
+        var first = SourceIdentity.SanitizeArticleLink(
+            "https://example.com/story?id=1&access_token=first-secret&utm_source=rss");
+        var second = SourceIdentity.SanitizeArticleLink(
+            "https://example.com/story?id=2&access_token=second-secret&utm_source=rss");
+
+        Assert.Contains("id=1", first, StringComparison.Ordinal);
+        Assert.Contains("id=2", second, StringComparison.Ordinal);
+        Assert.DoesNotContain("secret", first, StringComparison.Ordinal);
+        Assert.DoesNotContain("access_token", first, StringComparison.OrdinalIgnoreCase);
+        Assert.NotEqual(first, second);
+
+        var profile = new BriefingProfile
+        {
+            LookbackHours = 36,
+            CandidateLimit = 5,
+            MinimumScore = 1.5,
+            EventSimilarityThreshold = 0.56,
+            Priorities = new List<BriefingPriority>
+            {
+                new() { Name = "Engineering", Weight = 5, Signals = new List<string> { "OpenAI" } }
+            }
+        };
+        var ranked = ArticleSelector.Rank(
+            new[]
+            {
+                new NewsItem("OpenAI launches Agent SDK", first, Now, "Example"),
+                new NewsItem("OpenAI publishes Kubernetes security guide", second, Now.AddMinutes(-1), "Example")
+            },
+            profile,
+            Array.Empty<string>(),
+            Now);
+        Assert.Equal(2, ranked.Count);
+    }
+
+    [Fact]
+    public void Clustering_counts_independent_publishers_not_feed_endpoints()
+    {
+        var cluster = Assert.Single(EventIdentity.Cluster(
+            new[]
+            {
+                new NewsItem(
+                    "Vendor launches Agent SDK 2.0",
+                    "https://news.vendor.example/releases/sdk-2",
+                    Now,
+                    "Vendor news feed",
+                    FeedUrl: SourceIdentity.ForUrl("https://vendor.example/news.xml")),
+                new NewsItem(
+                    "Vendor launches Agent SDK 2.0 for developers",
+                    "https://engineering.vendor.example/posts/sdk-2",
+                    Now.AddMinutes(-1),
+                    "Vendor engineering feed",
+                    FeedUrl: SourceIdentity.ForUrl("https://vendor.example/engineering.xml"))
+            },
+            0.56));
+
+        Assert.Single(cluster.Sources);
+    }
+
+    [Fact]
     public void Precluster_cap_does_not_let_one_noisy_source_starve_other_sources()
     {
         var noisyUrl = "https://noisy.example/feed";

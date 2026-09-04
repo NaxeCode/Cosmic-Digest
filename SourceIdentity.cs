@@ -4,6 +4,16 @@ using System.Text;
 public static class SourceIdentity
 {
     private const string Prefix = "source:";
+    private static readonly HashSet<string> SensitiveQueryKeys = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "access_token", "accesstoken", "api_key", "apikey", "auth", "authorization", "code",
+        "credential", "jwt", "key", "password", "pwd", "refresh_token", "refreshtoken", "secret",
+        "session", "session_id", "sessionid", "sig", "signature", "subscriber", "token"
+    };
+    private static readonly HashSet<string> SensitiveQueryWords = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "auth", "credential", "jwt", "key", "password", "secret", "session", "sig", "signature", "token"
+    };
 
     public static string ForUrl(string? url)
     {
@@ -72,11 +82,13 @@ public static class SourceIdentity
         var builder = new UriBuilder(uri)
         {
             Fragment = "",
-            Query = "",
             UserName = "",
             Password = "",
             Host = uri.Host.ToLowerInvariant()
         };
+        builder.Query = string.Join('&', builder.Query.TrimStart('?')
+            .Split('&', StringSplitOptions.RemoveEmptyEntries)
+            .Where(pair => !IsPrivateOrTrackingQueryKey(pair.Split('=', 2)[0])));
         if (builder.Path.Length > 1)
             builder.Path = builder.Path.TrimEnd('/');
         return builder.Uri.AbsoluteUri.TrimEnd('/');
@@ -107,4 +119,27 @@ public static class SourceIdentity
 
     private static bool IsIdentifier(string value) =>
         value.Trim().StartsWith(Prefix, StringComparison.OrdinalIgnoreCase);
+
+    private static bool IsPrivateOrTrackingQueryKey(string encodedKey)
+    {
+        string key;
+        try
+        {
+            key = Uri.UnescapeDataString(encodedKey).Trim().ToLowerInvariant();
+        }
+        catch (UriFormatException)
+        {
+            return true;
+        }
+
+        if (SensitiveQueryKeys.Contains(key))
+            return true;
+        if (key.StartsWith("utm_", StringComparison.OrdinalIgnoreCase)
+            || key is "fbclid" or "gclid" or "mc_cid" or "mc_eid" or "ref" or "ref_src")
+        {
+            return true;
+        }
+        return key.Split(new[] { '_', '-', '.' }, StringSplitOptions.RemoveEmptyEntries)
+            .Any(SensitiveQueryWords.Contains);
+    }
 }
