@@ -111,12 +111,28 @@ public static partial class EventIdentity
             || leftNumeric.SetEquals(rightNumeric);
     }
 
-    private static HashSet<string> NumericIdentityTokens(string value) =>
-        Tokens(value)
-            .Where(token => token.Any(char.IsDigit))
-            .ToHashSet(StringComparer.Ordinal);
+    private static HashSet<string> NumericIdentityTokens(string value)
+    {
+        var tokens = OrderedTokens(value);
+        var identities = new HashSet<string>(StringComparer.Ordinal);
+        for (var i = 0; i < tokens.Count; i++)
+        {
+            var token = tokens[i];
+            if (!token.Any(char.IsDigit))
+                continue;
 
-    private static HashSet<string> Tokens(string value)
+            identities.Add(token);
+            if (i > 0 && !tokens[i - 1].Any(char.IsDigit))
+                identities.Add($"{tokens[i - 1]}:{token}");
+        }
+
+        return identities;
+    }
+
+    private static HashSet<string> Tokens(string value) =>
+        OrderedTokens(value).ToHashSet(StringComparer.Ordinal);
+
+    private static List<string> OrderedTokens(string value)
     {
         var normalized = LetterVersionSeparatorPattern().Replace(value.ToLowerInvariant(), " ");
         normalized = ConventionalVersionPrefixPattern().Replace(normalized, "");
@@ -124,7 +140,7 @@ public static partial class EventIdentity
             .Select(match => match.Value.Trim('.', '-', '_'))
             .Where(token => token.Length >= 2 || token.Any(char.IsDigit))
             .Where(token => !StopWords.Contains(token))
-            .ToHashSet(StringComparer.Ordinal);
+            .ToList();
     }
 
     private static double Similarity(IReadOnlySet<string> left, IReadOnlySet<string> right)
