@@ -28,12 +28,21 @@ public static class ArticleSelector
             .Where(title => !string.IsNullOrWhiteSpace(title))
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
+        var reviewedTitlesByKey = reviewedTitles
+            .Select(title => new { Key = EventIdentity.KeyForTitle(title), Title = title })
+            .Where(item => !string.IsNullOrWhiteSpace(item.Key))
+            .GroupBy(item => item.Key, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(
+                group => group.Key,
+                group => group.Select(item => item.Title).ToList(),
+                StringComparer.OrdinalIgnoreCase);
         var forcedRetries = (forcedRetryLinks ?? Array.Empty<string>())
             .Select(CanonicalizeLink)
             .Where(link => !string.IsNullOrWhiteSpace(link))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
         var cutoff = notBefore ?? now.AddHours(-profile.LookbackHours);
+        var clusterInputLimit = Math.Clamp(profile.CandidateLimit * 12, 120, 480);
         var eligible = articles
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
             .Where(article =>
@@ -43,10 +52,25 @@ public static class ArticleSelector
             .Where(article => !sent.Contains(CanonicalizeLink(article.Link)))
             .GroupBy(article => CanonicalizeLink(article.Link), StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(article => article.Published).First())
+            .Select(article => new
+            {
+                Article = article,
+                IsForcedRetry = forcedRetries.Contains(CanonicalizeLink(article.Link)),
+                PreScore = ScoreArticle(article, profile, now)
+            })
+            .OrderByDescending(item => item.IsForcedRetry)
+            .ThenByDescending(item => item.PreScore.MatchedPriorities.Count > 0)
+            .ThenByDescending(item => item.PreScore.Score)
+            .ThenByDescending(item => item.Article.Published)
+            .Take(clusterInputLimit)
+            .Select(item => item.Article)
             .ToList();
 
         return EventIdentity.Cluster(eligible, profile.EventSimilarityThreshold)
-            .Where(cluster => !cluster.IdentityKeys.Any(reviewedEvents.Contains))
+            .Where(cluster => !IsSuppressedByReviewedIdentity(
+                cluster,
+                reviewedEvents,
+                reviewedTitlesByKey))
             .Where(cluster => !reviewedTitles.Any(reviewedTitle =>
                 EventIdentity.ReviewedVersionCanSuppress(
                     reviewedTitle,
@@ -102,6 +126,33 @@ public static class ArticleSelector
 
         builder.Query = string.Join('&', kept);
         return builder.Uri.AbsoluteUri.TrimEnd('/');
+    }
+
+    private static bool IsSuppressedByReviewedIdentity(
+        NewsEventCluster cluster,
+        IReadOnlySet<string> reviewedEvents,
+        IReadOnlyDictionary<string, List<string>> reviewedTitlesByKey)
+    {
+        var incomingTitles = cluster.Articles.Select(article => article.Title).ToList();
+        foreach (var matchingKey in cluster.IdentityKeys.Where(reviewedEvents.Contains))
+        {
+            if (reviewedTitlesByKey.TryGetValue(matchingKey, out var matchingTitles))
+            {
+                if (matchingTitles.Any(title =>
+                    EventIdentity.ReviewedVersionCanSuppress(title, incomingTitles)))
+                {
+                    return true;
+                }
+                continue;
+            }
+
+            // Legacy review state may not carry a title. Only suppress a whole
+            // cluster without version evidence when every identity is already known.
+            if (cluster.IdentityKeys.All(reviewedEvents.Contains))
+                return true;
+        }
+
+        return false;
     }
 
     private static ScoredArticle? Score(
