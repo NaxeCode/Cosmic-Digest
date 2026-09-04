@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using System.Text;
 
 public sealed class RssIngestorTests
 {
@@ -106,6 +107,32 @@ public sealed class RssIngestorTests
 
         Assert.Equal("ok", Assert.Single(result.Feeds).Status);
         Assert.Equal(3, handler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task Fetch_honors_XML_declared_legacy_encoding_without_HTTP_charset()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        var windows1252 = Encoding.GetEncoding(1252);
+        const string rss = """
+            <?xml version="1.0" encoding="windows-1252"?>
+            <rss version="2.0"><channel><title>Example</title>
+              <item><title>Café – agent release</title><link>https://example.com/release</link></item>
+            </channel></rss>
+            """;
+        var content = new ByteArrayContent(windows1252.GetBytes(rss));
+        content.Headers.ContentType = new MediaTypeHeaderValue("application/rss+xml");
+        var handler = new RecordingHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = content
+        });
+        using var http = new HttpClient(handler);
+        var source = new BriefingSource { Name = "Example", Url = "https://example.com/feed" };
+
+        var result = await RssIngestor.FetchAsync(new[] { source }, null, Now, httpClient: http);
+
+        var item = Assert.Single(Assert.Single(result.Feeds).Items);
+        Assert.Equal("Café – agent release", item.Title);
     }
 
     private sealed class RecordingHandler(Func<HttpRequestMessage, HttpResponseMessage> respond) : HttpMessageHandler
