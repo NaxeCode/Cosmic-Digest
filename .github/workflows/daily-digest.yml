@@ -83,7 +83,27 @@ jobs:
       env:
         RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY }}
-      run: dotnet run --no-build --configuration Release -- --deliver-pending
+      run: |
+        set +e
+        for attempt in 1 2 3 4; do
+          dotnet run --no-build --configuration Release -- --deliver-pending
+          status=$?
+          if [ "$status" -eq 0 ]; then
+            exit 0
+          fi
+
+          # A terminal provider result retires the outbox and must not be retried.
+          if ! jq -e '.PendingDigestSends | length > 0' data/state.json >/dev/null; then
+            exit "$status"
+          fi
+          if [ "$attempt" -eq 4 ]; then
+            exit "$status"
+          fi
+
+          delay=$((attempt * attempt * 20))
+          echo "Pending delivery remains ambiguous; retrying in ${delay}s (attempt $((attempt + 1))/4)."
+          sleep "$delay"
+        done
 
     - name: Commit final state
       if: ${{ always() && steps.run-digest.outcome != 'skipped' }}
