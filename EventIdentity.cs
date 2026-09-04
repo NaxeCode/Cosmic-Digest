@@ -7,7 +7,8 @@ public sealed record NewsEventCluster(
     IReadOnlyList<NewsItem> Articles,
     IReadOnlyList<string> Sources,
     IReadOnlyList<string> IdentityKeys,
-    IReadOnlyList<string> IdentityTitles);
+    IReadOnlyList<string> IdentityTitles,
+    IReadOnlyList<bool>? IdentityPrivateSources = null);
 
 public static partial class EventIdentity
 {
@@ -88,13 +89,19 @@ public static partial class EventIdentity
         return clusters.Select(cluster =>
         {
             var identities = cluster
-                .Select(article => new { Key = KeyFor(article), article.Title })
+                .Select(article => new { Key = KeyFor(article), article.Title, article.PrivateSource })
                 .GroupBy(identity => identity.Key, StringComparer.OrdinalIgnoreCase)
-                .Select(group => group.First())
+                .Select(group => new
+                {
+                    Key = group.Key,
+                    Title = group.First().Title,
+                    PrivateSource = group.Any(identity => identity.PrivateSource)
+                })
                 .OrderBy(identity => identity.Key, StringComparer.Ordinal)
                 .ToList();
             var identityKeys = identities.Select(identity => identity.Key).ToList();
             var identityTitles = identities.Select(identity => identity.Title).ToList();
+            var identityPrivateSources = identities.Select(identity => identity.PrivateSource).ToList();
             var eventKey = identityKeys.First();
             var sources = cluster
                 .GroupBy(PublisherIdentity.For, StringComparer.OrdinalIgnoreCase)
@@ -106,7 +113,13 @@ public static partial class EventIdentity
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .Order(StringComparer.OrdinalIgnoreCase)
                 .ToList();
-            return new NewsEventCluster(eventKey, cluster, sources, identityKeys, identityTitles);
+            return new NewsEventCluster(
+                eventKey,
+                cluster,
+                sources,
+                identityKeys,
+                identityTitles,
+                identityPrivateSources);
         }).ToList();
     }
 

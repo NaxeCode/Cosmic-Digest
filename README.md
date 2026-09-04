@@ -172,7 +172,7 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 - New links are also compared with retained reviewed titles, so a corroborating retitle that arrives on a later run is suppressed without collapsing conflicting version numbers.
 - AI-rejected candidates are marked reviewed so they do not consume tokens every day.
 - If AI synthesis fails, the email falls back to deterministic ranked headlines.
-- Feed URLs and private item-link parameters are redacted, while feed validators are encrypted with `OUTBOX_ENCRYPTION_KEY` before state is committed.
+- Feed URLs and private item-link parameters are redacted. Feed validators and all feed-origin article titles, summaries, and links are encrypted with `OUTBOX_ENCRYPTION_KEY` before state is committed; missing or incorrect keys omit unreadable private content instead of publishing it.
 - Ambiguous delivery failures are retried with the same idempotency key during the active workflow; terminal retryable failures restore included events to the durable retry queue, while AI-rejected candidates remain reviewed.
 - Explicit delivery retries remain eligible beyond the normal freshness lookback until they succeed or become terminal nonretryable outcomes.
 - Resend is polled briefly for `last_event`; pending delivery ids are reconciled again before every later selection run.

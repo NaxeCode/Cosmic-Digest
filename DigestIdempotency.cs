@@ -95,7 +95,10 @@ public static class DigestIdempotency
                     Array.Empty<string>(),
                     eventKeys.FirstOrDefault() ?? EventIdentity.KeyFor(item.Article),
                     IdentityKeys: eventKeys,
-                    IdentityTitles: titles);
+                    IdentityTitles: titles,
+                    IdentityPrivateSources: item.EventPrivateSources.Count == eventKeys.Count
+                        ? item.EventPrivateSources
+                        : eventKeys.Select(_ => item.Article.PrivateSource).ToList());
             })
             .ToList();
 
@@ -156,6 +159,7 @@ public static class DigestIdempotency
 
         return reviewed.Select(item =>
         {
+            var sanitizedArticle = SourceIdentity.Sanitize(item.Article);
             var eventKeys = item.ReviewEventKeys
                 .Where(key => !string.IsNullOrWhiteSpace(key))
                 .Distinct(StringComparer.OrdinalIgnoreCase)
@@ -166,9 +170,13 @@ public static class DigestIdempotency
 
             return new PendingDigestItem
             {
-                Article = SourceIdentity.Sanitize(item.Article),
+                Article = sanitizedArticle,
                 EventKeys = eventKeys,
                 EventTitles = eventTitles,
+                EventPrivateSources = item.IdentityPrivateSources is { Count: > 0 } privateSources
+                    && privateSources.Count == eventKeys.Count
+                        ? privateSources.ToList()
+                        : eventKeys.Select(_ => sanitizedArticle.PrivateSource).ToList(),
                 Included = includedLinks.Contains(ArticleSelector.CanonicalizeLink(item.Article.Link))
                     || eventKeys.Any(includedEvents.Contains)
             };

@@ -230,7 +230,8 @@ public static class RssIngestor
                 published,
                 sourceLabel,
                 BoundField(item.Description, MaximumSummaryCharacters),
-                sourceIdentity));
+                sourceIdentity,
+                PrivateSource: true));
         }
         return items;
     }
@@ -538,11 +539,16 @@ public static class RssIngestor
 
     private sealed class PinnedAddressConnector
     {
+        private const int MaximumPinnedAddresses = 8;
+        private static readonly TimeSpan AddressAttemptStagger = TimeSpan.FromMilliseconds(200);
         private readonly ConcurrentDictionary<string, IPAddress[]> _pins =
             new(StringComparer.OrdinalIgnoreCase);
 
         public void Pin(Uri uri, IEnumerable<IPAddress> addresses) =>
-            _pins[Key(uri.IdnHost, uri.Port)] = addresses.ToArray();
+            _pins[Key(uri.IdnHost, uri.Port)] = addresses
+                .Distinct()
+                .Take(MaximumPinnedAddresses)
+                .ToArray();
 
         public async ValueTask<Stream> ConnectAsync(
             SocketsHttpConnectionContext context,
@@ -556,28 +562,38 @@ public static class RssIngestor
                     : await Dns.GetHostAddressesAsync(endpoint.Host, cancellationToken);
             }
 
+            addresses = addresses
+                .Distinct()
+                .Take(MaximumPinnedAddresses)
+                .ToArray();
+            using var raceCancellation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            var attempts = addresses
+                .Select((address, index) => ConnectAddressAsync(
+                    address,
+                    endpoint.Port,
+                    TimeSpan.FromMilliseconds(AddressAttemptStagger.TotalMilliseconds * index),
+                    raceCancellation.Token))
+                .ToList();
             Exception? lastException = null;
-            foreach (var address in addresses)
+            while (attempts.Count > 0)
             {
-                var socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
-                {
-                    NoDelay = true
-                };
+                var completed = await Task.WhenAny(attempts);
+                attempts.Remove(completed);
                 try
                 {
-                    await socket.ConnectAsync(
-                        new IPEndPoint(address, endpoint.Port),
-                        cancellationToken);
-                    return new NetworkStream(socket, ownsSocket: true);
+                    var stream = await completed;
+                    raceCancellation.Cancel();
+                    await DisposeSuccessfulAttemptsAsync(attempts);
+                    return stream;
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
                 {
-                    socket.Dispose();
+                    raceCancellation.Cancel();
+                    await DisposeSuccessfulAttemptsAsync(attempts);
                     throw;
                 }
                 catch (Exception ex)
                 {
-                    socket.Dispose();
                     lastException = ex;
                 }
             }
@@ -585,6 +601,47 @@ public static class RssIngestor
             throw new HttpRequestException(
                 $"Unable to connect to feed host '{endpoint.Host}'.",
                 lastException);
+        }
+
+        private static async Task<Stream> ConnectAddressAsync(
+            IPAddress address,
+            int port,
+            TimeSpan delay,
+            CancellationToken cancellationToken)
+        {
+            if (delay > TimeSpan.Zero)
+                await Task.Delay(delay, cancellationToken);
+
+            var socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp)
+            {
+                NoDelay = true
+            };
+            try
+            {
+                await socket.ConnectAsync(new IPEndPoint(address, port), cancellationToken);
+                return new NetworkStream(socket, ownsSocket: true);
+            }
+            catch
+            {
+                socket.Dispose();
+                throw;
+            }
+        }
+
+        private static async Task DisposeSuccessfulAttemptsAsync(
+            IEnumerable<Task<Stream>> attempts)
+        {
+            foreach (var attempt in attempts)
+            {
+                try
+                {
+                    (await attempt).Dispose();
+                }
+                catch
+                {
+                    // Failed and canceled connection attempts own no live stream.
+                }
+            }
         }
 
         private static string Key(string host, int port) => $"{host.Trim('.')}:{port}";

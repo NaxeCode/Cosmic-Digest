@@ -174,6 +174,14 @@ public sealed class FinalReviewRegressionTests
             "accepted",
             Now,
             IncludedItems: new[] { article }));
+        StateStore.UpdateFeedHealth(state, new[]
+        {
+            new FeedFetchResult(
+                new BriefingSource { Name = "Private source", Url = article.FeedUrl! },
+                "failed",
+                Array.Empty<NewsItem>(),
+                Error: "Private parser detail Vega")
+        }, Now);
         DigestIdempotency.Prepare(
             state,
             new[] { scored },
@@ -216,6 +224,64 @@ public sealed class FinalReviewRegressionTests
         var encrypted = DurableSecretProtection.Protect(validator, key);
         Assert.Equal(validator, DurableSecretProtection.Unprotect(encrypted, key));
         Assert.Null(DurableSecretProtection.Unprotect(encrypted, "wrong-key"));
+    }
+
+    [Fact]
+    public void Durable_state_encrypts_feed_article_content_in_every_storage_path()
+    {
+        const string title = "Private acquisition codename Orion";
+        const string summary = "Subscriber-only diligence details";
+        const string link = "https://example.com/private-orion-brief";
+        const string key = "stable-private-content-key";
+        var article = new NewsItem(
+            title,
+            link,
+            Now,
+            "Private source",
+            summary,
+            "https://example.com/feed?subscriber=secret");
+        var scored = new ScoredArticle(article, 5, new[] { "AI" }, "event-private-content");
+        var state = new StateOfWorld();
+
+        StateStore.AppendNews(state, new[] { article });
+        StateStore.MarkReviewed(state, new[] { scored }, new[] { scored }, Now, "email-private-content");
+        StateStore.QueueDeliveryRetries(state, new[] { article }, Now);
+        StateStore.RecordDelivery(state, new DeliveryAttempt(
+            "email-private-content",
+            Now,
+            "Daily intelligence",
+            "accepted",
+            Now,
+            IncludedItems: new[] { article }));
+        DigestIdempotency.Prepare(
+            state,
+            new[] { scored },
+            new[] { scored },
+            Now,
+            key,
+            new PendingEmailPayload("from", "to", "subject", "text", "html"));
+
+        var serialized = StateStore.SerializeForStorage(state, key);
+
+        Assert.DoesNotContain(title, serialized, StringComparison.Ordinal);
+        Assert.DoesNotContain(summary, serialized, StringComparison.Ordinal);
+        Assert.DoesNotContain("private-orion-brief", serialized, StringComparison.Ordinal);
+        Assert.DoesNotContain("Private parser detail Vega", serialized, StringComparison.Ordinal);
+        Assert.Contains("enc:v1:", serialized, StringComparison.Ordinal);
+        Assert.Equal(title, Assert.Single(state.CacheNews).Title);
+        Assert.Equal(summary, Assert.Single(state.DeliveryRetries).Article.Summary);
+        Assert.Equal(link, Assert.Single(state.Deliveries).IncludedItems!.Single().Link);
+
+        var restored = StateStore.DeserializeFromStorage(serialized, key);
+        Assert.Equal(title, Assert.Single(restored.CacheNews).Title);
+        Assert.Equal(summary, Assert.Single(restored.DeliveryRetries).Article.Summary);
+        Assert.Equal(link, Assert.Single(restored.Deliveries).IncludedItems!.Single().Link);
+
+        var withoutKey = StateStore.SerializeForStorage(state, null);
+        Assert.DoesNotContain(title, withoutKey, StringComparison.Ordinal);
+        Assert.DoesNotContain(summary, withoutKey, StringComparison.Ordinal);
+        Assert.DoesNotContain("private-orion-brief", withoutKey, StringComparison.Ordinal);
+        Assert.Empty(StateStore.DeserializeFromStorage(serialized, "wrong-key").CacheNews);
     }
 
     [Fact]

@@ -14,7 +14,16 @@ public static class StateStore
     public static StateOfWorld Load()
     {
         if (!File.Exists(PathFile)) return new StateOfWorld();
-        var state = JsonSerializer.Deserialize<StateOfWorld>(File.ReadAllText(PathFile), J) ?? new StateOfWorld();
+        return DeserializeFromStorage(
+            File.ReadAllText(PathFile),
+            Environment.GetEnvironmentVariable("OUTBOX_ENCRYPTION_KEY"));
+    }
+
+    public static StateOfWorld DeserializeFromStorage(
+        string json,
+        string? protectionKey)
+    {
+        var state = JsonSerializer.Deserialize<StateOfWorld>(json, J) ?? new StateOfWorld();
         state.CacheNews ??= new();
         state.ReviewedArticles ??= new();
         state.ReviewedEvents ??= new();
@@ -33,14 +42,14 @@ public static class StateStore
             {
                 item.EventKeys ??= new();
                 item.EventTitles ??= new();
+                item.EventPrivateSources ??= new();
             }
         }
         state.DeliveryRetries ??= new();
         state.RecentRuns ??= new();
+        RestoreProtectedDurableContent(state, protectionKey);
         SanitizeDurableSourceMetadata(state);
-        RestoreFeedValidators(
-            state,
-            Environment.GetEnvironmentVariable("OUTBOX_ENCRYPTION_KEY"));
+        RestoreFeedValidators(state, protectionKey);
         return state;
     }
 
@@ -62,22 +71,17 @@ public static class StateStore
         string? validatorProtectionKey)
     {
         SanitizeDurableSourceMetadata(state);
-        var validators = state.FeedHealth.Select(item => item.ETag).ToList();
-        try
+        var storageState = JsonSerializer.Deserialize<StateOfWorld>(
+            JsonSerializer.Serialize(state, J),
+            J) ?? throw new InvalidOperationException("Unable to create a protected state snapshot.");
+        foreach (var health in storageState.FeedHealth)
         {
-            for (var i = 0; i < state.FeedHealth.Count; i++)
-            {
-                state.FeedHealth[i].ETag = DurableSecretProtection.Protect(
-                    state.FeedHealth[i].ETag,
-                    validatorProtectionKey);
-            }
-            return JsonSerializer.Serialize(state, J);
+            health.ETag = DurableSecretProtection.Protect(
+                health.ETag,
+                validatorProtectionKey);
         }
-        finally
-        {
-            for (var i = 0; i < state.FeedHealth.Count; i++)
-                state.FeedHealth[i].ETag = validators[i];
-        }
+        ProtectDurableArticleContent(storageState, validatorProtectionKey);
+        return JsonSerializer.Serialize(storageState, J);
     }
 
     public static void AppendNews(StateOfWorld s, IEnumerable<NewsItem> items, int keepDays = 4)
@@ -120,7 +124,8 @@ public static class StateStore
                 link,
                 reviewedAtUtc,
                 includedLinks.Contains(link),
-                deliveryEmailId);
+                deliveryEmailId,
+                SourceIdentity.Sanitize(candidate.Article).PrivateSource);
         }));
         state.ReviewedEvents.AddRange(candidateList.SelectMany(candidate =>
             ResolveEventIdentities(candidate)
@@ -130,7 +135,8 @@ public static class StateStore
                     reviewedAtUtc,
                     includedEvents.Contains(identity.EventKey),
                     identity.Title,
-                    deliveryEmailId))));
+                    deliveryEmailId,
+                    identity.PrivateSource))));
 
         PruneReviewed(state, reviewedAtUtc);
     }
@@ -356,17 +362,159 @@ public static class StateStore
         }
     }
 
-    private static IEnumerable<(string EventKey, string Title)> ResolveEventIdentities(
+    private static void ProtectDurableArticleContent(
+        StateOfWorld state,
+        string? protectionKey)
+    {
+        state.CacheNews = state.CacheNews
+            .Select(article => ProtectArticle(article, protectionKey))
+            .ToList();
+        state.ReviewedArticles = state.ReviewedArticles
+            .Select(item => item.PrivateSource
+                ? item with { Link = ProtectText(item.Link, protectionKey) }
+                : item)
+            .ToList();
+        state.ReviewedEvents = state.ReviewedEvents
+            .Select(item => item.PrivateSource
+                ? item with { Title = ProtectText(item.Title, protectionKey) }
+                : item)
+            .ToList();
+        state.Deliveries = state.Deliveries
+            .Select(delivery => delivery with
+            {
+                IncludedItems = delivery.IncludedItems?
+                    .Select(article => ProtectArticle(article, protectionKey))
+                    .ToList()
+            })
+            .ToList();
+        state.DeliveryRetries = state.DeliveryRetries
+            .Select(item => item with
+            {
+                Article = ProtectArticle(item.Article, protectionKey)
+            })
+            .ToList();
+        foreach (var health in state.FeedHealth)
+        {
+            if (health.LastError is not null)
+                health.LastError = ProtectText(health.LastError, protectionKey);
+        }
+
+        foreach (var pending in state.PendingDigestSends)
+        {
+            pending.EventTitles = pending.EventTitles
+                .Select(title => ProtectText(title, protectionKey))
+                .ToList();
+            foreach (var item in pending.ReviewedItems)
+            {
+                item.Article = ProtectArticle(item.Article, protectionKey);
+                item.EventTitles = item.EventTitles
+                    .Select(title => ProtectText(title, protectionKey))
+                    .ToList();
+            }
+        }
+    }
+
+    private static void RestoreProtectedDurableContent(
+        StateOfWorld state,
+        string? protectionKey)
+    {
+        state.CacheNews = state.CacheNews
+            .Select(article => RestoreArticle(article, protectionKey))
+            .ToList();
+        state.ReviewedArticles = state.ReviewedArticles
+            .Select(item => item.PrivateSource
+                ? item with { Link = RestoreText(item.Link, protectionKey) }
+                : item)
+            .ToList();
+        state.ReviewedEvents = state.ReviewedEvents
+            .Select(item => item.PrivateSource
+                ? item with { Title = RestoreText(item.Title, protectionKey) }
+                : item)
+            .ToList();
+        state.Deliveries = state.Deliveries
+            .Select(delivery => delivery with
+            {
+                IncludedItems = delivery.IncludedItems?
+                    .Select(article => RestoreArticle(article, protectionKey))
+                    .ToList()
+            })
+            .ToList();
+        state.DeliveryRetries = state.DeliveryRetries
+            .Select(item => item with
+            {
+                Article = RestoreArticle(item.Article, protectionKey)
+            })
+            .ToList();
+        foreach (var health in state.FeedHealth)
+        {
+            if (health.LastError is not null)
+                health.LastError = RestoreText(health.LastError, protectionKey);
+        }
+
+        foreach (var pending in state.PendingDigestSends)
+        {
+            pending.EventTitles = pending.EventTitles
+                .Select(title => RestoreText(title, protectionKey))
+                .ToList();
+            foreach (var item in pending.ReviewedItems)
+            {
+                item.Article = RestoreArticle(item.Article, protectionKey);
+                item.EventTitles = item.EventTitles
+                    .Select(title => RestoreText(title, protectionKey))
+                    .ToList();
+            }
+        }
+    }
+
+    private static NewsItem ProtectArticle(NewsItem article, string? protectionKey) =>
+        !article.PrivateSource
+            ? article
+            : article with
+            {
+                Title = ProtectText(article.Title, protectionKey),
+                Link = ProtectText(article.Link, protectionKey),
+                Summary = article.Summary is null
+                    ? null
+                    : ProtectText(article.Summary, protectionKey)
+            };
+
+    private static NewsItem RestoreArticle(NewsItem article, string? protectionKey) =>
+        !article.PrivateSource
+            ? article
+            : article with
+            {
+                Title = RestoreText(article.Title, protectionKey),
+                Link = RestoreText(article.Link, protectionKey),
+                Summary = article.Summary is null
+                    ? null
+                    : RestoreText(article.Summary, protectionKey)
+            };
+
+    private static string ProtectText(string value, string? protectionKey) =>
+        DurableSecretProtection.Protect(value, protectionKey) ?? "";
+
+    private static string RestoreText(string value, string? protectionKey) =>
+        DurableSecretProtection.Unprotect(value, protectionKey) ?? "";
+
+    private static IEnumerable<(string EventKey, string Title, bool PrivateSource)> ResolveEventIdentities(
         ScoredArticle candidate)
     {
         if (candidate.IdentityKeys is { Count: > 0 } keys
             && candidate.IdentityTitles is { Count: > 0 } titles
             && keys.Count == titles.Count)
         {
-            return keys.Zip(titles, (key, title) => (key, title));
+            var privacy = candidate.IdentityPrivateSources is { Count: > 0 } privateSources
+                && privateSources.Count == keys.Count
+                    ? privateSources
+                    : Enumerable.Repeat(
+                        SourceIdentity.Sanitize(candidate.Article).PrivateSource,
+                        keys.Count).ToList();
+            return keys.Select((key, index) => (key, titles[index], privacy[index]));
         }
 
-        return candidate.ReviewEventKeys.Select(key => (key, candidate.Article.Title));
+        var privateSource = SourceIdentity.Sanitize(candidate.Article).PrivateSource;
+        return candidate.ReviewEventKeys.Select(key =>
+            (key, candidate.Article.Title, privateSource));
     }
 
     private static void RestoreFeedValidators(

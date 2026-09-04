@@ -6,7 +6,8 @@ public sealed record NewsItem(
     DateTimeOffset Published,
     string Source,
     string? Summary = null,
-    string? FeedUrl = null);
+    string? FeedUrl = null,
+    bool PrivateSource = false);
 
 public sealed record ScoredArticle(
     NewsItem Article,
@@ -16,7 +17,8 @@ public sealed record ScoredArticle(
     int SourceCount = 1,
     IReadOnlyList<string>? Sources = null,
     IReadOnlyList<string>? IdentityKeys = null,
-    IReadOnlyList<string>? IdentityTitles = null)
+    IReadOnlyList<string>? IdentityTitles = null,
+    IReadOnlyList<bool>? IdentityPrivateSources = null)
 {
     public IReadOnlyList<string> EvidenceSources =>
         Sources is { Count: > 0 } ? Sources : new[] { Article.Source };
@@ -36,14 +38,16 @@ public sealed record ReviewedArticle(
     string Link,
     DateTimeOffset ReviewedAtUtc,
     bool Included,
-    string? DeliveryEmailId = null);
+    string? DeliveryEmailId = null,
+    bool PrivateSource = false);
 
 public sealed record ReviewedEvent(
     string EventKey,
     DateTimeOffset ReviewedAtUtc,
     bool Included,
     string Title,
-    string? DeliveryEmailId = null);
+    string? DeliveryEmailId = null,
+    bool PrivateSource = false);
 
 public sealed class FeedHealthState
 {
@@ -85,6 +89,7 @@ public sealed class PendingDigestItem
     public NewsItem Article { get; set; } = new("", "", DateTimeOffset.MinValue, "");
     public List<string> EventKeys { get; set; } = new();
     public List<string> EventTitles { get; set; } = new();
+    public List<bool> EventPrivateSources { get; set; } = new();
     public bool Included { get; set; }
 }
 

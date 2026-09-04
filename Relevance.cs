@@ -248,7 +248,8 @@ public static class ArticleSelector
             cluster.Sources.Count,
             cluster.Sources,
             cluster.IdentityKeys,
-            cluster.IdentityTitles);
+            cluster.IdentityTitles,
+            cluster.IdentityPrivateSources);
     }
 
     private static ScoredArticle ScoreArticle(NewsItem article, BriefingProfile profile, DateTimeOffset now)

@@ -62,7 +62,8 @@ public static class SourceIdentity
                 : identity,
             Source = string.IsNullOrWhiteSpace(identity)
                 ? article.Source
-                : PublicLabel(identity)
+                : PublicLabel(identity),
+            PrivateSource = article.PrivateSource || !string.IsNullOrWhiteSpace(article.FeedUrl)
         };
     }
 
@@ -101,7 +102,8 @@ public static class SourceIdentity
             : article with
             {
                 FeedUrl = ForUrl(configured.Url),
-                Source = configured.Name
+                Source = configured.Name,
+                PrivateSource = true
             };
     }
 
