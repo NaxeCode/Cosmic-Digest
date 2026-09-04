@@ -22,6 +22,11 @@ public static class RssIngestor
 {
     private const int MaximumFeedBytes = 5 * 1024 * 1024;
 
+    static RssIngestor()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    }
+
     public static async Task<IngestionResult> FetchAsync(
         IEnumerable<BriefingSource> sources,
         IEnumerable<FeedHealthState>? previousHealth,
