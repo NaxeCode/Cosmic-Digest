@@ -50,13 +50,17 @@ public static class StateStore
 
     public static void AppendNews(StateOfWorld s, IEnumerable<NewsItem> items, int keepDays = 4)
     {
-        s.CacheNews.AddRange(items);
+        var incoming = items.ToList();
         var cutoff = DateTimeOffset.UtcNow.AddDays(-keepDays);
-        s.CacheNews = s.CacheNews
+        s.CacheNews = incoming
+            .Concat(s.CacheNews)
             .Where(item => item.Published >= cutoff)
             .Where(item => !string.IsNullOrWhiteSpace(item.Link))
             .GroupBy(item => ArticleSelector.CanonicalizeLink(item.Link), StringComparer.OrdinalIgnoreCase)
-            .Select(group => group.OrderByDescending(item => item.Published).First())
+            .Select(group => group
+                .OrderByDescending(item => item.Published)
+                .ThenByDescending(item => string.IsNullOrWhiteSpace(item.FeedUrl) ? 0 : 1)
+                .First())
             .OrderByDescending(item => item.Published)
             .ToList();
     }
