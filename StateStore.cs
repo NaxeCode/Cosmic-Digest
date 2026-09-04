@@ -428,6 +428,7 @@ public static class StateStore
             foreach (var item in pending.ReviewedItems)
             {
                 item.Article = ProtectArticle(item.Article, protectionKey);
+                item.ArticleIdentity = ProtectText(item.ArticleIdentity, protectionKey);
                 item.EventTitles = item.EventTitles
                     .Select(title => ProtectText(title, protectionKey))
                     .ToList();
@@ -496,6 +497,7 @@ public static class StateStore
             foreach (var item in pending.ReviewedItems)
             {
                 item.Article = RestoreArticle(item.Article, restorer);
+                item.ArticleIdentity = restorer.Restore(item.ArticleIdentity);
                 item.EventTitles = item.EventTitles
                     .Select(restorer.Restore)
                     .ToList();

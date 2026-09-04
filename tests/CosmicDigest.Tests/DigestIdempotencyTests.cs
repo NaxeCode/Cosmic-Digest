@@ -177,7 +177,11 @@ public sealed class DigestIdempotencyTests
 
         var serialized = StateStore.SerializeForStorage(state, key);
         Assert.DoesNotContain("private-capability", serialized, StringComparison.Ordinal);
+        Assert.DoesNotContain("entry=123", serialized, StringComparison.Ordinal);
         var restored = StateStore.DeserializeFromStorage(serialized, key);
+        Assert.Equal(
+            "https://example.com/read?entry=123",
+            Assert.Single(Assert.Single(restored.PendingDigestSends).ReviewedItems).ArticleIdentity);
         var replayed = Assert.Single(DigestIdempotency.ReviewedCandidates(
             Assert.Single(restored.PendingDigestSends),
             included: true));
