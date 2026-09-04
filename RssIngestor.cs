@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using CodeHollow.FeedReader;
 
 public sealed record FeedFetchResult(
@@ -21,6 +22,7 @@ public sealed record IngestionResult(
 public static class RssIngestor
 {
     private const int MaximumFeedBytes = 5 * 1024 * 1024;
+    private const int XmlDeclarationProbeBytes = 1024;
 
     static RssIngestor()
     {
@@ -227,11 +229,8 @@ public static class RssIngestor
             await bounded.WriteAsync(buffer.AsMemory(0, read), cancellationToken);
         }
 
+        var encoding = ResolveEncoding(content, bounded);
         bounded.Position = 0;
-        var charset = content.Headers.ContentType?.CharSet?.Trim('"');
-        var encoding = string.IsNullOrWhiteSpace(charset)
-            ? Encoding.UTF8
-            : Encoding.GetEncoding(charset);
         using var reader = new StreamReader(
             bounded,
             encoding,
@@ -239,6 +238,26 @@ public static class RssIngestor
             bufferSize: 1024,
             leaveOpen: false);
         return await reader.ReadToEndAsync(cancellationToken);
+    }
+
+    private static Encoding ResolveEncoding(HttpContent content, MemoryStream bounded)
+    {
+        var charset = content.Headers.ContentType?.CharSet?.Trim('"');
+        if (!string.IsNullOrWhiteSpace(charset))
+            return Encoding.GetEncoding(charset);
+
+        var probeLength = Math.Min(checked((int)bounded.Length), XmlDeclarationProbeBytes);
+        if (probeLength == 0)
+            return Encoding.UTF8;
+
+        var probe = Encoding.ASCII.GetString(bounded.GetBuffer(), 0, probeLength);
+        var match = Regex.Match(
+            probe,
+            @"<\?xml\b[^>]*\bencoding\s*=\s*[\""'](?<encoding>[^\""']+)[\""']",
+            RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        return match.Success
+            ? Encoding.GetEncoding(match.Groups["encoding"].Value.Trim())
+            : Encoding.UTF8;
     }
 
     private static Task DelayBeforeRetry(int attempt, CancellationToken cancellationToken) =>
