@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json;
 
 public sealed class FinalReviewRegressionTests
 {
@@ -32,6 +33,62 @@ public sealed class FinalReviewRegressionTests
         var clusters = EventIdentity.Cluster(articles, 0.56);
 
         Assert.Equal(2, clusters.Count);
+    }
+
+    [Fact]
+    public void Version_identity_is_stable_across_headline_word_order()
+    {
+        const string announced = "Microsoft announces SQL Server 2025";
+        const string released = "Microsoft SQL Server 2025 is released";
+        var clusters = EventIdentity.Cluster(
+            new[]
+            {
+                new NewsItem(announced, "https://example.com/announced", Now, "Example"),
+                new NewsItem(released, "https://example.com/released", Now.AddMinutes(-1), "Other")
+            },
+            0.56);
+
+        Assert.Single(clusters);
+        Assert.True(EventIdentity.ReviewedVersionCanSuppress(announced, new[] { released }));
+    }
+
+    [Fact]
+    public void Durable_state_redacts_article_link_credentials_everywhere()
+    {
+        const string secret = "subscriber-secret-token";
+        var article = new NewsItem(
+            "Private article",
+            $"https://example.com/story?access_token={secret}",
+            Now,
+            "Example",
+            FeedUrl: "https://example.com/feed?token=feed-secret");
+        var scored = new ScoredArticle(article, 5, new[] { "AI" }, "event-private-link");
+        var state = new StateOfWorld();
+
+        StateStore.AppendNews(state, new[] { article });
+        StateStore.MarkReviewed(state, new[] { scored }, new[] { scored }, Now);
+        StateStore.QueueDeliveryRetries(state, new[] { article }, Now);
+        StateStore.RecordDelivery(state, new DeliveryAttempt(
+            "email-private",
+            Now,
+            "Digest",
+            "accepted",
+            Now,
+            IncludedItems: new[] { article }));
+        DigestIdempotency.Prepare(
+            state,
+            new[] { scored },
+            new[] { scored },
+            Now,
+            "stable-test-key",
+            new PendingEmailPayload("from", "to", "subject", "text", "html"));
+
+        var serialized = JsonSerializer.Serialize(state);
+        Assert.DoesNotContain(secret, serialized, StringComparison.Ordinal);
+        Assert.DoesNotContain("access_token", serialized, StringComparison.OrdinalIgnoreCase);
+        Assert.All(state.CacheNews, item => Assert.Equal("https://example.com/story", item.Link));
+        Assert.All(state.ReviewedArticles, item => Assert.Equal("https://example.com/story", item.Link));
+        Assert.All(state.DeliveryRetries, item => Assert.Equal("https://example.com/story", item.Article.Link));
     }
 
     [Fact]
@@ -107,6 +164,41 @@ public sealed class FinalReviewRegressionTests
 
         Assert.Equal("ok", Assert.Single(result.Feeds).Status);
         Assert.Equal("Agent release", Assert.Single(result.Articles).Title);
+    }
+
+    [Fact]
+    public async Task Fetch_does_not_retry_permanent_http_failures()
+    {
+        var handler = new CountingResponseHandler(() =>
+            new HttpResponseMessage(HttpStatusCode.Unauthorized));
+        using var http = new HttpClient(handler);
+        var source = new BriefingSource { Name = "Example", Url = "https://example.com/feed" };
+
+        var result = await RssIngestor.FetchAsync(new[] { source }, null, Now, httpClient: http);
+
+        Assert.Equal("failed", Assert.Single(result.Feeds).Status);
+        Assert.Equal(1, handler.RequestCount);
+    }
+
+    [Fact]
+    public void Parse_bounds_fields_resolves_relative_links_and_rejects_non_web_links()
+    {
+        var longTitle = new string('T', 500);
+        var longSummary = new string('S', 5_000);
+        var rss = $"""
+            <rss version="2.0"><channel><title>Example</title>
+              <item><title>{longTitle}</title><link>/releases/1</link><description>{longSummary}</description></item>
+              <item><title>Unsafe</title><link>javascript:alert(1)</link></item>
+              <item><title>Also unsafe</title><link>ftp://example.com/file</link></item>
+            </channel></rss>
+            """;
+        var source = new BriefingSource { Name = "Example", Url = "https://example.com/feed/index.xml" };
+
+        var item = Assert.Single(RssIngestor.Parse(source, rss, Now));
+
+        Assert.Equal("https://example.com/releases/1", item.Link);
+        Assert.Equal(320, item.Title.Length);
+        Assert.Equal(4_000, item.Summary!.Length);
     }
 
     [Fact]
@@ -195,5 +287,18 @@ public sealed class FinalReviewRegressionTests
             HttpRequestMessage request,
             CancellationToken cancellationToken) =>
             Task.FromResult(responseFactory());
+    }
+
+    private sealed class CountingResponseHandler(Func<HttpResponseMessage> responseFactory) : HttpMessageHandler
+    {
+        public int RequestCount { get; private set; }
+
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            RequestCount++;
+            return Task.FromResult(responseFactory());
+        }
     }
 }

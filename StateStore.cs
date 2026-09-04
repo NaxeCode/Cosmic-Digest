@@ -85,7 +85,7 @@ public static class StateStore
 
         state.ReviewedArticles.AddRange(candidateList.Select(candidate =>
         {
-            var link = ArticleSelector.CanonicalizeLink(candidate.Article.Link);
+            var link = SourceIdentity.SanitizeArticleLink(candidate.Article.Link);
             return new ReviewedArticle(
                 link,
                 reviewedAtUtc,
@@ -179,7 +179,10 @@ public static class StateStore
     {
         var sanitized = delivery with
         {
-            IncludedItems = delivery.IncludedItems?.Select(SourceIdentity.Sanitize).ToList()
+            IncludedItems = delivery.IncludedItems?
+                .Select(SourceIdentity.Sanitize)
+                .Where(item => !string.IsNullOrWhiteSpace(item.Link))
+                .ToList()
         };
         state.Deliveries.Add(sanitized);
         state.Deliveries = state.Deliveries
@@ -218,18 +221,20 @@ public static class StateStore
             return false;
 
         var before = state.DeliveryRetries
-            .Select(item => ArticleSelector.CanonicalizeLink(item.Article.Link))
+            .Select(item => SourceIdentity.SanitizeArticleLink(item.Article.Link))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         state.DeliveryRetries.AddRange(articles
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
-            .Select(article => new DeliveryRetryItem(SourceIdentity.Sanitize(article), queuedAtUtc)));
+            .Select(SourceIdentity.Sanitize)
+            .Where(article => !string.IsNullOrWhiteSpace(article.Link))
+            .Select(article => new DeliveryRetryItem(article, queuedAtUtc)));
         state.DeliveryRetries = state.DeliveryRetries
-            .GroupBy(item => ArticleSelector.CanonicalizeLink(item.Article.Link), StringComparer.OrdinalIgnoreCase)
+            .GroupBy(item => SourceIdentity.SanitizeArticleLink(item.Article.Link), StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(item => item.QueuedAtUtc).First())
             .OrderByDescending(item => item.QueuedAtUtc)
             .ToList();
         return state.DeliveryRetries.Any(item =>
-            !before.Contains(ArticleSelector.CanonicalizeLink(item.Article.Link)));
+            !before.Contains(SourceIdentity.SanitizeArticleLink(item.Article.Link)));
     }
 
     public static void CompleteDeliveryRetries(
@@ -238,13 +243,13 @@ public static class StateStore
     {
         var deliveredList = delivered.ToList();
         var links = deliveredList
-            .Select(item => ArticleSelector.CanonicalizeLink(item.Article.Link))
+            .Select(item => SourceIdentity.SanitizeArticleLink(item.Article.Link))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         var eventKeys = deliveredList
             .SelectMany(item => item.ReviewEventKeys)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         state.DeliveryRetries.RemoveAll(item =>
-            links.Contains(ArticleSelector.CanonicalizeLink(item.Article.Link))
+            links.Contains(SourceIdentity.SanitizeArticleLink(item.Article.Link))
             || eventKeys.Contains(EventIdentity.KeyFor(item.Article)));
     }
 
@@ -281,7 +286,18 @@ public static class StateStore
 
     private static void SanitizeDurableSourceMetadata(StateOfWorld state)
     {
-        state.CacheNews = state.CacheNews.Select(SourceIdentity.Sanitize).ToList();
+        state.CacheNews = state.CacheNews
+            .Select(SourceIdentity.Sanitize)
+            .Where(item => !string.IsNullOrWhiteSpace(item.Link))
+            .ToList();
+
+        state.ReviewedArticles = state.ReviewedArticles
+            .Select(item => item with
+            {
+                Link = SourceIdentity.SanitizeArticleLink(item.Link)
+            })
+            .Where(item => !string.IsNullOrWhiteSpace(item.Link))
+            .ToList();
 
         foreach (var health in state.FeedHealth)
         {
@@ -292,11 +308,16 @@ public static class StateStore
 
         state.Deliveries = state.Deliveries.Select(delivery => delivery with
         {
-            IncludedItems = delivery.IncludedItems?.Select(SourceIdentity.Sanitize).ToList()
+            IncludedItems = delivery.IncludedItems?
+                .Select(SourceIdentity.Sanitize)
+                .Where(item => !string.IsNullOrWhiteSpace(item.Link))
+                .ToList()
         }).ToList();
 
-        state.DeliveryRetries = state.DeliveryRetries.Select(item =>
-            item with { Article = SourceIdentity.Sanitize(item.Article) }).ToList();
+        state.DeliveryRetries = state.DeliveryRetries
+            .Select(item => item with { Article = SourceIdentity.Sanitize(item.Article) })
+            .Where(item => !string.IsNullOrWhiteSpace(item.Article.Link))
+            .ToList();
 
         foreach (var pending in state.PendingDigestSends)
         {

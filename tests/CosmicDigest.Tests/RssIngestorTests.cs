@@ -116,6 +116,7 @@ public sealed class RssIngestorTests
         Assert.Equal("failed", feed.Status);
         Assert.Contains("5 MB", feed.Error);
         Assert.Empty(feed.Items);
+        Assert.Single(handler.Requests);
     }
 
     [Fact]

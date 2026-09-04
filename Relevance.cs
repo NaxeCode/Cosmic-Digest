@@ -24,7 +24,7 @@ public static class ArticleSelector
         IEnumerable<string>? forcedRetryLinks = null)
     {
         var sent = previouslySentLinks
-            .Select(CanonicalizeLink)
+            .Select(ComparisonLink)
             .Where(link => !string.IsNullOrWhiteSpace(link))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         var reviewedEvents = (previouslyReviewedEventKeys ?? Array.Empty<string>())
@@ -43,7 +43,7 @@ public static class ArticleSelector
                 group => group.Select(item => item.Title).ToList(),
                 StringComparer.OrdinalIgnoreCase);
         var forcedRetries = (forcedRetryLinks ?? Array.Empty<string>())
-            .Select(CanonicalizeLink)
+            .Select(ComparisonLink)
             .Where(link => !string.IsNullOrWhiteSpace(link))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
@@ -53,15 +53,15 @@ public static class ArticleSelector
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
             .Where(article =>
                 (article.Published >= cutoff
-                    || forcedRetries.Contains(CanonicalizeLink(article.Link)))
+                    || forcedRetries.Contains(ComparisonLink(article.Link)))
                 && article.Published <= now.AddHours(2))
-            .Where(article => !sent.Contains(CanonicalizeLink(article.Link)))
-            .GroupBy(article => CanonicalizeLink(article.Link), StringComparer.OrdinalIgnoreCase)
+            .Where(article => !sent.Contains(ComparisonLink(article.Link)))
+            .GroupBy(article => ComparisonLink(article.Link), StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(article => article.Published).First())
             .Select(article => SourceIdentity.Rehydrate(article, profile))
             .Select(article => new PreclusterCandidate(
                 article,
-                forcedRetries.Contains(CanonicalizeLink(article.Link)),
+                forcedRetries.Contains(ComparisonLink(article.Link)),
                 ScoreArticle(article, profile, now),
                 ResolveSourceKey(article)))
             .ToList();
@@ -88,9 +88,9 @@ public static class ArticleSelector
                     profile,
                     now,
                     cluster.Articles.Any(article =>
-                        forcedRetries.Contains(CanonicalizeLink(article.Link)))),
+                        forcedRetries.Contains(ComparisonLink(article.Link)))),
                 IsForcedRetry = cluster.Articles.Any(article =>
-                    forcedRetries.Contains(CanonicalizeLink(article.Link)))
+                    forcedRetries.Contains(ComparisonLink(article.Link)))
             })
             .Where(item => item.Result is not null)
             .Select(item => new { Result = item.Result!, item.IsForcedRetry })
@@ -130,6 +130,9 @@ public static class ArticleSelector
         builder.Query = string.Join('&', kept);
         return builder.Uri.AbsoluteUri.TrimEnd('/');
     }
+
+    private static string ComparisonLink(string? link) =>
+        SourceIdentity.SanitizeArticleLink(CanonicalizeLink(link));
 
     private static IReadOnlyList<PreclusterCandidate> SelectFairClusterInput(
         IReadOnlyList<PreclusterCandidate> candidates,

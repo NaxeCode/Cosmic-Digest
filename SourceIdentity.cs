@@ -48,15 +48,36 @@ public static class SourceIdentity
 
     public static NewsItem Sanitize(NewsItem article)
     {
-        if (string.IsNullOrWhiteSpace(article.FeedUrl))
-            return article;
-
         var identity = NormalizePersisted(article.FeedUrl);
         return article with
         {
+            Link = SanitizeArticleLink(article.Link),
             FeedUrl = identity,
-            Source = PublicLabel(identity)
+            Source = string.IsNullOrWhiteSpace(identity)
+                ? article.Source
+                : PublicLabel(identity)
         };
+    }
+
+    public static string SanitizeArticleLink(string? link)
+    {
+        if (!Uri.TryCreate(link, UriKind.Absolute, out var uri)
+            || (uri.Scheme != Uri.UriSchemeHttps && uri.Scheme != Uri.UriSchemeHttp))
+        {
+            return "";
+        }
+
+        var builder = new UriBuilder(uri)
+        {
+            Fragment = "",
+            Query = "",
+            UserName = "",
+            Password = "",
+            Host = uri.Host.ToLowerInvariant()
+        };
+        if (builder.Path.Length > 1)
+            builder.Path = builder.Path.TrimEnd('/');
+        return builder.Uri.AbsoluteUri.TrimEnd('/');
     }
 
     public static NewsItem Rehydrate(NewsItem article, BriefingProfile profile)

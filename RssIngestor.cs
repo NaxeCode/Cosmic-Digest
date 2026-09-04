@@ -23,6 +23,9 @@ public static class RssIngestor
 {
     private const int MaximumFeedBytes = 5 * 1024 * 1024;
     private const int XmlDeclarationProbeBytes = 1024;
+    private const int MaximumTitleCharacters = 320;
+    private const int MaximumSummaryCharacters = 4_000;
+    private const int MaximumArticleUrlCharacters = 2_048;
 
     static RssIngestor()
     {
@@ -181,23 +184,27 @@ public static class RssIngestor
         var sourceIdentity = SourceIdentity.ForUrl(source.Url);
         var sourceLabel = SourceIdentity.PublicLabel(sourceIdentity);
 
-        return (feed.Items ?? Enumerable.Empty<FeedItem>())
-            .Select(item =>
-            {
-                var published = item.PublishingDate
-                    ?? (DateTimeOffset.TryParse(item.PublishingDateString, out var parsed)
-                        ? parsed
-                        : fallbackPublishedAt);
-                return new NewsItem(
-                    item.Title ?? "",
-                    item.Link ?? "",
-                    published,
-                    sourceLabel,
-                    item.Description,
-                    sourceIdentity);
-            })
-            .Where(item => !string.IsNullOrWhiteSpace(item.Title) && !string.IsNullOrWhiteSpace(item.Link))
-            .ToList();
+        var items = new List<NewsItem>();
+        foreach (var item in feed.Items ?? Enumerable.Empty<FeedItem>())
+        {
+            var title = BoundField(item.Title, MaximumTitleCharacters);
+            var link = ResolveArticleLink(source.Url, item.Link);
+            if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(link))
+                continue;
+
+            var published = item.PublishingDate
+                ?? (DateTimeOffset.TryParse(item.PublishingDateString, out var parsed)
+                    ? parsed
+                    : fallbackPublishedAt);
+            items.Add(new NewsItem(
+                title,
+                link,
+                published,
+                sourceLabel,
+                BoundField(item.Description, MaximumSummaryCharacters),
+                sourceIdentity));
+        }
+        return items;
     }
 
     private static bool IsTransient(HttpStatusCode statusCode) =>
@@ -205,8 +212,61 @@ public static class RssIngestor
         || (int)statusCode == 429
         || (int)statusCode >= 500;
 
-    private static bool IsTransient(Exception ex) =>
-        ex is HttpRequestException or IOException or TimeoutException or OperationCanceledException;
+    private static bool IsTransient(Exception ex) => ex switch
+    {
+        HttpRequestException { StatusCode: { } statusCode } => IsTransient(statusCode),
+        HttpRequestException => true,
+        InvalidDataException => false,
+        IOException => true,
+        TimeoutException => true,
+        OperationCanceledException => true,
+        _ => false
+    };
+
+    private static string? ResolveArticleLink(string sourceUrl, string? itemLink)
+    {
+        if (string.IsNullOrWhiteSpace(itemLink)
+            || itemLink.Length > MaximumArticleUrlCharacters)
+        {
+            return null;
+        }
+
+        var trimmed = itemLink.Trim();
+        if (!Uri.TryCreate(trimmed, UriKind.RelativeOrAbsolute, out var parsed))
+            return null;
+
+        Uri resolved;
+        if (parsed.IsAbsoluteUri)
+        {
+            resolved = parsed;
+        }
+        else
+        {
+            if (!Uri.TryCreate(sourceUrl, UriKind.Absolute, out var sourceUri)
+                || !Uri.TryCreate(sourceUri, parsed, out resolved))
+            {
+                return null;
+            }
+        }
+
+        if ((resolved.Scheme != Uri.UriSchemeHttps && resolved.Scheme != Uri.UriSchemeHttp)
+            || !string.IsNullOrWhiteSpace(resolved.UserInfo)
+            || resolved.AbsoluteUri.Length > MaximumArticleUrlCharacters)
+        {
+            return null;
+        }
+        return resolved.AbsoluteUri;
+    }
+
+    private static string? BoundField(string? value, int maximumCharacters)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return null;
+        var bounded = value.Length <= maximumCharacters
+            ? value
+            : value[..maximumCharacters];
+        return string.Join(' ', bounded.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+    }
 
     private static async Task<string> ReadBoundedAsync(
         HttpContent content,

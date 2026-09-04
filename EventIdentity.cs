@@ -130,7 +130,7 @@ public static partial class EventIdentity
             .ToList();
         return incomingNumeric.Count == 0
             || (reviewedNumeric.Count > 0
-                && incomingNumeric.All(tokens => tokens.SetEquals(reviewedNumeric)));
+                && incomingNumeric.All(tokens => NumericIdentitiesAreCompatible(tokens, reviewedNumeric)));
     }
 
     private static bool CanCluster(string left, string right)
@@ -139,8 +139,30 @@ public static partial class EventIdentity
         var rightNumeric = NumericIdentityTokens(right);
         return leftNumeric.Count == 0
             || rightNumeric.Count == 0
-            || leftNumeric.SetEquals(rightNumeric);
+            || NumericIdentitiesAreCompatible(leftNumeric, rightNumeric);
     }
+
+    private static bool NumericIdentitiesAreCompatible(
+        IReadOnlySet<string> left,
+        IReadOnlySet<string> right)
+    {
+        var leftNumbers = left.Where(token => !token.Contains(':')).ToHashSet(StringComparer.Ordinal);
+        var rightNumbers = right.Where(token => !token.Contains(':')).ToHashSet(StringComparer.Ordinal);
+        if (!leftNumbers.SetEquals(rightNumbers))
+            return false;
+
+        var leftContexts = left.Where(token => token.Contains(':')).ToList();
+        var rightContexts = right.Where(token => token.Contains(':')).ToList();
+        return leftContexts.Count == 0
+            || rightContexts.Count == 0
+            || leftContexts.Any(leftContext => rightContexts.Any(rightContext =>
+                ProductVersionContextMatches(leftContext, rightContext)));
+    }
+
+    private static bool ProductVersionContextMatches(string left, string right) =>
+        string.Equals(left, right, StringComparison.Ordinal)
+        || left.EndsWith(":" + right, StringComparison.Ordinal)
+        || right.EndsWith(":" + left, StringComparison.Ordinal);
 
     private static HashSet<string> NumericIdentityTokens(string value)
     {

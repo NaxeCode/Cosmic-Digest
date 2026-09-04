@@ -68,7 +68,7 @@ StateStore.AppendNews(state, ingestion.Articles, keepDays);
 var candidateCutoff = StateStore.ResolveCandidateCutoff(state, now, profile.LookbackHours);
 var retryArticles = state.DeliveryRetries.Select(item => item.Article).ToList();
 var candidates = ArticleSelector.Rank(
-    state.CacheNews.Concat(retryArticles),
+    ingestion.Articles.Concat(state.CacheNews).Concat(retryArticles),
     profile,
     state.ReviewedArticles.Select(item => item.Link),
     now,
