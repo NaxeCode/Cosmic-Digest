@@ -17,25 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-      OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY }}
-      MAIL_TO: ${{ secrets.MAIL_TO }}
-      MAIL_FROM: ${{ secrets.MAIL_FROM }}
       RESEND_VERIFY_DELIVERY: ${{ vars.RESEND_VERIFY_DELIVERY || 'true' }}
       BRAND_NAME: ${{ vars.BRAND_NAME || 'Stella · Cosmic Digest' }}
       BRAND_AVATAR_URL: ${{ vars.BRAND_AVATAR_URL || 'https://raw.githubusercontent.com/NaxeCode/Cosmic-Digest/main/assets/brand/stella-avatar-128.png' }}
-      FEEDBACK_BASE_URL: ${{ secrets.FEEDBACK_BASE_URL }}
-      FEEDBACK_SIGNING_KEY: ${{ secrets.FEEDBACK_SIGNING_KEY }}
-      TIMEZONE: ${{ secrets.TIMEZONE }}
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.6-terra' }}
       OPENAI_REASONING_EFFORT: ${{ vars.OPENAI_REASONING_EFFORT || 'medium' }}
-      ENABLE_AI_SUMMARY: ${{ secrets.ENABLE_AI_SUMMARY }}
-      DIGEST_PROFILE_B64: ${{ secrets.DIGEST_PROFILE_B64 }}
-      PREF_TOPICS: ${{ secrets.PREF_TOPICS }}
-      PREF_REGIONS: ${{ secrets.PREF_REGIONS }}
-      PREF_KEYWORDS: ${{ secrets.PREF_KEYWORDS }}
-      RSS_FEEDS: ${{ secrets.RSS_FEEDS }}
 
     permissions:
       contents: write
@@ -63,6 +49,21 @@ jobs:
 
     - name: Prepare digest without sending
       id: prepare-digest
+      env:
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY }}
+        MAIL_TO: ${{ secrets.MAIL_TO }}
+        MAIL_FROM: ${{ secrets.MAIL_FROM }}
+        FEEDBACK_BASE_URL: ${{ secrets.FEEDBACK_BASE_URL }}
+        FEEDBACK_SIGNING_KEY: ${{ secrets.FEEDBACK_SIGNING_KEY }}
+        TIMEZONE: ${{ secrets.TIMEZONE }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        ENABLE_AI_SUMMARY: ${{ secrets.ENABLE_AI_SUMMARY }}
+        DIGEST_PROFILE_B64: ${{ secrets.DIGEST_PROFILE_B64 }}
+        PREF_TOPICS: ${{ secrets.PREF_TOPICS }}
+        PREF_REGIONS: ${{ secrets.PREF_REGIONS }}
+        PREF_KEYWORDS: ${{ secrets.PREF_KEYWORDS }}
+        RSS_FEEDS: ${{ secrets.RSS_FEEDS }}
       run: dotnet run --no-build --configuration Release -- --prepare-only
 
     - name: Persist prepared outbox
@@ -79,6 +80,9 @@ jobs:
 
     - name: Deliver prepared digest
       id: run-digest
+      env:
+        RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY }}
       run: dotnet run --no-build --configuration Release -- --deliver-pending
 
     - name: Commit final state
