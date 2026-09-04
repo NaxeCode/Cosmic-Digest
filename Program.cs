@@ -163,13 +163,15 @@ if (string.IsNullOrWhiteSpace(apiKey)
 var subject = DigestComposer.BuildSubject(profile, briefing);
 var text = DigestComposer.BuildMarkdown(profile, candidates, briefing, now);
 var html = DigestComposer.BuildHtml(profile, candidates, briefing, now);
+metrics.DurationMilliseconds = runTimer.ElapsedMilliseconds;
 var preparedSend = DigestIdempotency.Prepare(
     state,
     reviewedThisRun,
     displayed,
     now,
     outboxEncryptionKey,
-    new PendingEmailPayload(sender, recipient, subject, text, html));
+    new PendingEmailPayload(sender, recipient, subject, text, html),
+    metrics);
 StateStore.Save(state);
 var pendingSend = preparedSend.Outbox;
 var payload = preparedSend.Payload;
@@ -393,7 +395,7 @@ static async Task<int?> ReplayPendingDigestAsync(
     StateStore.RecordDelivery(state, delivery);
     StateStore.MarkReviewed(state, reviewed, displayed, now, sendResult.EmailId);
 
-    var metrics = new RunMetrics
+    var metrics = prepared.Outbox.PreparedMetrics ?? new RunMetrics
     {
         RunAtUtc = now,
         CandidateEventCount = reviewed.Count,
