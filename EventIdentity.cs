@@ -1,5 +1,4 @@
 using System.Security.Cryptography;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -12,11 +11,6 @@ public sealed record NewsEventCluster(
 
 public static partial class EventIdentity
 {
-    private static readonly HashSet<string> CompoundPublicSuffixes = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "ac.uk", "co.jp", "co.nz", "co.uk", "com.au", "com.br", "com.mx", "com.sg", "com.tr",
-        "gov.uk", "net.au", "org.au", "org.uk"
-    };
     private static readonly HashSet<string> StopWords = new(StringComparer.OrdinalIgnoreCase)
     {
         "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has", "have", "how",
@@ -95,7 +89,7 @@ public static partial class EventIdentity
             var identityTitles = identities.Select(identity => identity.Title).ToList();
             var eventKey = identityKeys.First();
             var sources = cluster
-                .GroupBy(PublisherKey, StringComparer.OrdinalIgnoreCase)
+                .GroupBy(PublisherIdentity.For, StringComparer.OrdinalIgnoreCase)
                 .Select(group => group
                     .OrderByDescending(article => article.Published)
                     .Select(article => article.Source)
@@ -300,26 +294,6 @@ public static partial class EventIdentity
     private static string HashSeed(string seed) =>
         Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(seed)))[..24]
             .ToLowerInvariant();
-
-    private static string PublisherKey(NewsItem article)
-    {
-        if (!Uri.TryCreate(article.Link, UriKind.Absolute, out var uri)
-            || (uri.Scheme != Uri.UriSchemeHttps && uri.Scheme != Uri.UriSchemeHttp))
-        {
-            return "source:" + article.Source.Trim().ToLowerInvariant();
-        }
-
-        var host = uri.IdnHost.Trim('.').ToLowerInvariant();
-        if (IPAddress.TryParse(host, out _))
-            return host;
-        var labels = host.Split('.', StringSplitOptions.RemoveEmptyEntries);
-        if (labels.Length <= 2)
-            return host;
-
-        var trailingPair = labels[^2] + "." + labels[^1];
-        var labelCount = CompoundPublicSuffixes.Contains(trailingPair) && labels.Length >= 3 ? 3 : 2;
-        return string.Join(".", labels[^labelCount..]);
-    }
 
     [GeneratedRegex(@"[\p{L}\p{N}][\p{L}\p{N}+#._-]*", RegexOptions.CultureInvariant)]
     private static partial Regex TokenPattern();

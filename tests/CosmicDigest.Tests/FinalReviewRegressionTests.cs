@@ -99,11 +99,15 @@ public sealed class FinalReviewRegressionTests
         var second = SourceIdentity.SanitizeArticleLink(
             "https://example.com/story?id=2&access_token=second-secret&utm_source=rss");
 
-        Assert.Contains("id=1", first, StringComparison.Ordinal);
-        Assert.Contains("id=2", second, StringComparison.Ordinal);
+        Assert.Equal("https://example.com/story?id=1", first);
+        Assert.Equal("https://example.com/story?id=2", second);
         Assert.DoesNotContain("secret", first, StringComparison.Ordinal);
         Assert.DoesNotContain("access_token", first, StringComparison.OrdinalIgnoreCase);
         Assert.NotEqual(first, second);
+        Assert.Equal(
+            "https://example.com/story?id=1",
+            SourceIdentity.SanitizeArticleLink(
+                "https://example.com/story?id=1&email=owner@example.com&user_id=42&uid=84"));
 
         var profile = new BriefingProfile
         {
@@ -150,6 +154,24 @@ public sealed class FinalReviewRegressionTests
             0.56));
 
         Assert.Single(cluster.Sources);
+    }
+
+    [Fact]
+    public void Publisher_identity_uses_complete_public_suffix_rules()
+    {
+        Assert.Equal("vendor.co.in", PublisherIdentity.ForHost("news.vendor.co.in"));
+        Assert.Equal("other.co.in", PublisherIdentity.ForHost("press.other.co.in"));
+        Assert.Equal("news.vendor.ck", PublisherIdentity.ForHost("news.vendor.ck"));
+        Assert.Equal("www.ck", PublisherIdentity.ForHost("subdomain.www.ck"));
+
+        var cluster = Assert.Single(EventIdentity.Cluster(
+            new[]
+            {
+                new NewsItem("Agent release", "https://news.vendor.co.in/release", Now, "Vendor"),
+                new NewsItem("Agent release", "https://press.other.co.in/release", Now.AddMinutes(-1), "Other")
+            },
+            0.56));
+        Assert.Equal(2, cluster.Sources.Count);
     }
 
     [Fact]
