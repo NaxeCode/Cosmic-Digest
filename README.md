@@ -123,8 +123,8 @@ BRAND_AVATAR_URL=https://raw.githubusercontent.com/NaxeCode/Cosmic-Digest/main/a
 # AI decision layer
 OPENAI_API_KEY=sk-proj-xxxxx
 ENABLE_AI_SUMMARY=true
-OPENAI_MODEL=gpt-5.6-terra
-OPENAI_REASONING_EFFORT=medium
+OPENAI_MODEL=gpt-6-astra
+OPENAI_REASONING_EFFORT=xhigh
 
 # Preferred profile input
 DIGEST_PROFILE_PATH=briefing-profile.local.json
@@ -140,7 +140,7 @@ PREF_REGIONS=United States
 RSS_FEEDS=https://openai.com/news/rss.xml,https://github.blog/changelog/feed/
 ```
 
-The model and reasoning effort are explicit runtime settings. `gpt-5.6-terra` with medium effort is the default because this is routine multi-source synthesis with moderate ambiguity. Lower it only after the first three substantive briefs show no material misses; raise it only when observed quality justifies the cost.
+`gpt-6-astra` with `xhigh` reasoning is the project default in both the application and daily workflow. `OPENAI_MODEL` and `OPENAI_REASONING_EFFORT` remain explicit runtime overrides.
 
 ## GitHub Actions
 
