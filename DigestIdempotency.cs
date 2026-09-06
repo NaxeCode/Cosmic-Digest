@@ -148,8 +148,8 @@ public static class DigestIdempotency
         IReadOnlyList<ScoredArticle> displayed)
     {
         var includedLinks = displayed
-            .Select(item => ArticleSelector.CanonicalizeLink(item.Article.Link))
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            .Select(item => SourceIdentity.ArticleComparisonLink(item.Article.Link))
+            .ToHashSet(StringComparer.Ordinal);
         var includedEvents = displayed
             .SelectMany(item => item.ReviewEventKeys)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -167,10 +167,10 @@ public static class DigestIdempotency
             return new PendingDigestItem
             {
                 Article = SourceIdentity.PrepareForProtectedStorage(item.Article),
-                ArticleIdentity = SourceIdentity.SanitizeArticleLink(item.Article.Link),
+                ArticleIdentity = SourceIdentity.ArticleComparisonLink(item.Article.Link),
                 EventKeys = eventKeys,
                 EventTitles = eventTitles,
-                Included = includedLinks.Contains(ArticleSelector.CanonicalizeLink(item.Article.Link))
+                Included = includedLinks.Contains(SourceIdentity.ArticleComparisonLink(item.Article.Link))
                     || eventKeys.Any(includedEvents.Contains)
             };
         }).ToList();

@@ -72,6 +72,25 @@ public sealed class ResendEmailClientTests
         Assert.False(ResendDeliveryStatus.IsRetryableFailure("suppressed"));
     }
 
+    [Fact]
+    public async Task Send_transient_failure_reports_status_without_private_provider_body()
+    {
+        const string privateMarker = "SYNTHETIC_PRIVATE_RECIPIENT@example.com";
+        var handler = new StubHandler(_ => new HttpResponseMessage(HttpStatusCode.ServiceUnavailable)
+        {
+            Content = new StringContent($"{{\"message\":\"Temporary failure processing {privateMarker}\"}}")
+        });
+        using var http = new HttpClient(handler);
+        using var client = new ResendEmailClient(http);
+
+        var error = await Assert.ThrowsAsync<InvalidOperationException>(() => client.SendAsync(
+            "re_test", "from@example.com", "reader@example.com",
+            "Subject", "Text", "<p>HTML</p>", "digest-transient"));
+
+        Assert.Contains("503", error.Message);
+        Assert.DoesNotContain(privateMarker, error.ToString(), StringComparison.Ordinal);
+    }
+
     private sealed class StubHandler(Func<HttpRequestMessage, HttpResponseMessage> response) : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) =>

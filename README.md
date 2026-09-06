@@ -10,7 +10,7 @@ The goal is not to fill a newsletter. The goal is to surface credible changes th
 
 - pulls candidate stories from configured RSS feeds;
 - records per-source health, conditional-cache metadata, retries, and circuit state;
-- clusters corroborating links into one external event instead of repeating the same story;
+- groups related coverage into external events without treating publisher count as factual corroboration;
 - ranks them against a versioned personal briefing profile;
 - rejects previously reviewed, stale, irrelevant, and low-value items;
 - asks an OpenAI model for a structured `act`, `watch`, or tightly capped `learn` decision and omits low-value items;
@@ -28,7 +28,7 @@ The full behavior is defined in [the briefing contract](docs/briefing-contract.m
 ```text
 source registry
   -> bounded article cache
-  -> cross-source event identity and corroboration
+  -> cross-source event identity and related coverage
   -> deterministic priority, freshness, trust, and novelty score
   -> structured AI decision gate
   -> Stella-branded evidence-linked brief
@@ -160,6 +160,12 @@ Optional capabilities use `BRAND_AVATAR_URL`, `FEEDBACK_BASE_URL`, `FEEDBACK_SIG
 
 `OPENAI_MODEL` and `OPENAI_REASONING_EFFORT` may be set as repository variables. The workflow has a concurrency guard, runs the test suite before delivery, and fails visibly if reviewed-state persistence cannot be pushed.
 
+Manual dispatch defaults to `validate_only=true`: it prepares against a disposable copy of production state, without sending email or committing state. Use this mode after changing secrets or profiles. Set `validate_only=false` only for an intentional production send; scheduled runs continue to deliver normally.
+
+`OUTBOX_ENCRYPTION_KEY` is required even when no articles are selected because feed health and cached content are protected. A missing key exits before state loading or network requests. Generate an independent key once and keep it stable; never substitute the Resend API key.
+
+The log must show the intended private profile version. `legacy-env` means `DIGEST_PROFILE_B64` has not been activated; it is a compatibility mode, not proof that the private briefing profile was deployed.
+
 Scheduled GitHub Actions may still be delayed under platform load. The workflow preserves correct local scheduling, but GitHub does not provide a real-time delivery SLA.
 
 ## State and failure semantics
@@ -167,15 +173,15 @@ Scheduled GitHub Actions may still be delayed under platform load. The workflow 
 `data/state.json` stores a short article cache plus reviewed-event, durable delivery-retry, source-health, delivery, and run-metric history.
 
 - Upgrades use the prior `LastDigestUtc` as a migration boundary and persist it until it ages outside the active lookback window.
-- URL tracking parameters are removed before deduplication.
-- Similar titles from independent sources are clustered into one event and receive a bounded corroboration boost.
-- New links are also compared with retained reviewed titles, so a corroborating retitle that arrives on a later run is suppressed without collapsing conflicting version numbers.
+- URL tracking parameters are removed before deduplication; functional query values and path/query case remain part of private comparison identity.
+- Compatible titles from independent publishers are grouped as related coverage. Negations, cancellations, delays, and retractions remain distinct from the original event. Publisher count alone does not prove corroboration.
+- New links are also compared with retained reviewed titles without collapsing conflicting versions or reversal signals.
 - AI-rejected candidates are marked reviewed so they do not consume tokens every day.
-- If AI synthesis fails, the email falls back to deterministic ranked headlines.
-- Feed URLs are replaced by non-reversible identities. Functional article URLs are retained only inside authenticated encryption, while separately sanitized link identities drive deduplication. Feed validators, errors, article titles, summaries, links, and reviewed identities are encrypted with `OUTBOX_ENCRYPTION_KEY` before state is committed. Legacy records migrate on their next write; a missing or incorrect key aborts without overwriting the last valid ciphertext.
+- If AI synthesis fails, the email falls back to deterministic ranked headlines; undisplayed candidates stay eligible and are not counted as suppressed.
+- Feed URLs are replaced by non-reversible identities. Functional article URLs and comparison identities are retained only inside authenticated encryption; public URL redaction is not used as an identity key. Feed validators, errors, article titles, summaries, links, and reviewed identities are encrypted with `OUTBOX_ENCRYPTION_KEY` before state is committed. Legacy records migrate on their next write; a missing or incorrect key aborts without overwriting valid ciphertext. Public failure logs contain only controlled error categories or HTTP status, never private parser messages or provider response bodies.
 - Ambiguous delivery failures are retried with the same idempotency key during the active workflow; terminal retryable failures restore included events to the durable retry queue, while AI-rejected candidates remain reviewed.
 - Explicit delivery retries remain eligible beyond the normal freshness lookback until they succeed or become terminal nonretryable outcomes.
-- Resend is polled briefly for `last_event`; pending delivery ids are reconciled again before every later selection run.
+- Resend is polled briefly for `last_event`; all unresolved delivery ids remain available for reconciliation before later selection runs, independently of the bounded completed-delivery history.
 - Content-derived idempotency keys stay stable across clock and date boundaries while a send outcome is ambiguous, then advance only after a recorded retryable terminal failure.
 - A prepared-send outbox is committed before the Resend process begins. It encrypts the exact sender, recipient, subject, and bodies with a stable dedicated key, then replays that payload directly before any new selection work if the outcome was ambiguous.
 - Recipient complaints remain terminal and reviewed; they are never treated as retryable delivery failures.

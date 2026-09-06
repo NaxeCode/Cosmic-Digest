@@ -12,9 +12,16 @@ if (prepareOnly && deliverPendingOnly)
 
 var runTimer = Stopwatch.StartNew();
 var now = DateTimeOffset.UtcNow;
-var state = StateStore.Load();
 var apiKey = Environment.GetEnvironmentVariable("RESEND_API_KEY");
 var outboxEncryptionKey = Environment.GetEnvironmentVariable("OUTBOX_ENCRYPTION_KEY");
+if (string.IsNullOrWhiteSpace(outboxEncryptionKey))
+{
+    Console.Error.WriteLine(
+        "OUTBOX_ENCRYPTION_KEY is required before loading or preparing durable state. " +
+        "Configure a stable independent key; do not reuse RESEND_API_KEY.");
+    return 1;
+}
+var state = StateStore.Load();
 using var resend = new ResendEmailClient();
 if (await ReconcilePendingDeliveriesAsync(state, apiKey, resend))
     StateStore.Save(state);
@@ -117,7 +124,7 @@ if (enableAi)
     }
     catch (Exception ex)
     {
-        Console.Error.WriteLine($"AI briefing failed; using deterministic fallback: {ex.Message}");
+        Console.Error.WriteLine($"AI briefing failed; using deterministic fallback: {FailureCategory(ex)}");
         briefing = NewsAi.BuildDeterministicFallback(profile, candidates);
         metrics.SelectionMode = "deterministic_fallback";
     }
@@ -137,7 +144,7 @@ var reviewedThisRun = ReviewPolicy.CandidatesToMarkReviewed(
     allCandidatesEvaluated,
     retryEventKeys);
 metrics.SelectedEventCount = displayed.Count;
-metrics.SuppressedEventCount = Math.Max(0, candidates.Count - displayed.Count);
+metrics.SuppressedEventCount = Math.Max(0, reviewedThisRun.Count - displayed.Count);
 if (displayed.Count == 0)
 {
     StateStore.MarkReviewed(state, reviewedThisRun, displayed, now);
@@ -199,7 +206,7 @@ try
 }
 catch (Exception ex)
 {
-    Console.Error.WriteLine($"Email failed: {ex.Message}");
+    Console.Error.WriteLine($"Email failed: {FailureCategory(ex)}");
     return 1;
 }
 
@@ -216,7 +223,7 @@ if (verifyDelivery)
     }
     catch (Exception ex)
     {
-        Console.Error.WriteLine($"Delivery verification unavailable; preserving accepted status: {ex.Message}");
+        Console.Error.WriteLine($"Delivery verification unavailable; preserving accepted status: {FailureCategory(ex)}");
     }
 }
 
@@ -321,7 +328,7 @@ static async Task<bool> ReconcilePendingDeliveriesAsync(
         catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
         {
             Console.Error.WriteLine(
-                $"Pending delivery reconciliation failed for {delivery.EmailId}: {ex.Message}");
+                $"Pending delivery reconciliation failed for {delivery.EmailId}: {FailureCategory(ex)}");
         }
     }
 
@@ -360,7 +367,7 @@ static async Task<int?> ReplayPendingDigestAsync(
     }
     catch (Exception ex)
     {
-        Console.Error.WriteLine($"Pending email replay failed: {ex.Message}");
+        Console.Error.WriteLine($"Pending email replay failed: {FailureCategory(ex)}");
         return 1;
     }
 
@@ -381,7 +388,7 @@ static async Task<int?> ReplayPendingDigestAsync(
         catch (Exception ex)
         {
             Console.Error.WriteLine(
-                $"Pending delivery verification unavailable; preserving accepted status: {ex.Message}");
+                $"Pending delivery verification unavailable; preserving accepted status: {FailureCategory(ex)}");
         }
     }
 
@@ -435,3 +442,10 @@ static async Task<int?> ReplayPendingDigestAsync(
         $"Replayed pending email {deliveryStatus} with {displayed.Count} material item(s); Resend id: {sendResult.EmailId}.");
     return 0;
 }
+
+static string FailureCategory(Exception error) => error switch
+{
+    HttpRequestException { StatusCode: { } status } => $"HTTP {(int)status}",
+    System.ClientModel.ClientResultException result => $"HTTP {result.Status}",
+    _ => error.GetType().Name
+};

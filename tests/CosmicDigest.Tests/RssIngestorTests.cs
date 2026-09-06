@@ -321,6 +321,43 @@ public sealed class RssIngestorTests
         Assert.Equal("Café – agent release", item.Title);
     }
 
+    [Fact]
+    public async Task Fetch_keeps_private_parser_details_out_of_public_diagnostics()
+    {
+        const string privateMarker = "SYNTHETIC_PRIVATE_ENTITY";
+        var handler = new RecordingHandler(_ => new HttpResponseMessage(HttpStatusCode.OK)
+        {
+            Content = new StringContent($"<rss version=\"2.0\"><channel><title>Example</title><item><title>Story</title><link>https://example.com/story</link><description>&{privateMarker};</description></item></channel></rss>")
+        });
+        using var http = new HttpClient(handler);
+        var source = new BriefingSource { Name = "Example", Url = "https://example.com/feed?token=private-token" };
+        using var errors = new StringWriter();
+        var originalError = Console.Error;
+        try
+        {
+            Console.SetError(errors);
+            var result = await RssIngestor.FetchAsync(new[] { source }, null, Now, httpClient: http);
+
+            var feed = Assert.Single(result.Feeds);
+            Assert.Equal("failed", feed.Status);
+            Assert.Contains(privateMarker, feed.Error);
+            Assert.Contains("XmlException", errors.ToString());
+            Assert.DoesNotContain(privateMarker, errors.ToString(), StringComparison.Ordinal);
+            Assert.DoesNotContain("private-token", errors.ToString(), StringComparison.Ordinal);
+
+            var state = new StateOfWorld();
+            StateStore.UpdateFeedHealth(state, result.Feeds, Now);
+            var stored = StateStore.SerializeForStorage(state, "synthetic-diagnostic-key");
+            Assert.DoesNotContain(privateMarker, stored, StringComparison.Ordinal);
+            var restored = StateStore.DeserializeFromStorage(stored, "synthetic-diagnostic-key");
+            Assert.Contains(privateMarker, Assert.Single(restored.FeedHealth).LastError);
+        }
+        finally
+        {
+            Console.SetError(originalError);
+        }
+    }
+
     private sealed class RecordingHandler(Func<HttpRequestMessage, HttpResponseMessage> respond) : HttpMessageHandler
     {
         public List<HttpRequestMessage> Requests { get; } = new();

@@ -154,6 +154,7 @@ public static class NewsAi
             - Use "learn" for at most one mechanism-changing capability with a small independent practice step. Do not use it for generic tutorials or background reading.
             - Omit low-value items entirely.
             - Confidence is about support in the supplied evidence, not confidence in the recommendation's tone.
+            - Related publisher counts indicate coverage, not corroboration. Only the representative report is supplied for each candidate; do not infer agreement or raise confidence from a count. Preserve conflicting reports as uncertainty.
             - Write compactly and plainly. No hype, praise, intro, outro, or generic advice.
             """;
     }
@@ -171,7 +172,7 @@ public static class NewsAi
             sb.AppendLine($"Title: {PlainText(candidate.Article.Title)}");
             sb.AppendLine($"Source: {PlainText(candidate.Article.Source)}");
             sb.AppendLine($"Published: {candidate.Article.Published:O}");
-            sb.AppendLine($"Evidence sources ({candidate.SourceCount}): {string.Join(", ", candidate.EvidenceSources)}");
+            sb.AppendLine($"Related coverage ({candidate.SourceCount} publishers; representative report below): {string.Join(", ", candidate.EvidenceSources.Select(PlainText))}");
             sb.AppendLine($"Matched priorities: {string.Join(", ", candidate.MatchedPriorities)}");
             sb.AppendLine($"Deterministic score: {candidate.Score:F3}");
             sb.AppendLine($"Summary: {PlainText(candidate.Article.Summary)}");
@@ -243,14 +244,10 @@ public static class NewsAi
 
     private static string PlainText(string? value)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        var plainText = ArticleText.ToPlainText(value);
+        if (string.IsNullOrWhiteSpace(plainText))
             return "Not provided.";
 
-        var withoutTags = System.Text.RegularExpressions.Regex.Replace(value, "<[^>]+>", " ");
-        var plainText = System.Net.WebUtility.HtmlDecode(withoutTags)
-            .Replace("\r", " ")
-            .Replace("\n", " ")
-            .Trim();
         return plainText.Length <= 1_800 ? plainText : plainText[..1_800] + "…";
     }
 

@@ -154,7 +154,7 @@ public static class DigestComposer
             }
 
             sb.AppendLine();
-            sb.AppendLine($"Evidence: {EscapeMarkdown(string.Join(", ", candidate.EvidenceSources))} · {article.Published:yyyy-MM-dd} · {item.Confidence} confidence{CorroborationSuffix(candidate)}");
+            sb.AppendLine($"Evidence: {EscapeMarkdown(string.Join(", ", candidate.EvidenceSources))} · {article.Published:yyyy-MM-dd} · {item.Confidence} confidence{CoverageSuffix(candidate)}");
         }
     }
 
@@ -182,7 +182,7 @@ public static class DigestComposer
             AppendLabeledParagraph(sb, "Why for you", item.WhyItMatters);
             if (!string.IsNullOrWhiteSpace(item.NextStep))
                 AppendLabeledParagraph(sb, "Next move", item.NextStep);
-            sb.AppendLine($"<p class=\"muted\" style=\"margin:14px 0 0;color:#737e95;font-size:12px;line-height:18px;\">{Html(string.Join(", ", candidate.EvidenceSources))} · {article.Published:yyyy-MM-dd} · {Html(item.Confidence)} confidence{Html(CorroborationSuffix(candidate))}</p>");
+            sb.AppendLine($"<p class=\"muted\" style=\"margin:14px 0 0;color:#737e95;font-size:12px;line-height:18px;\">{Html(string.Join(", ", candidate.EvidenceSources))} · {article.Published:yyyy-MM-dd} · {Html(item.Confidence)} confidence{Html(CoverageSuffix(candidate))}</p>");
 
             if (decision is "act" or "learn")
             {
@@ -255,10 +255,10 @@ public static class DigestComposer
     }
 
     private static string BuildTransparencyLine(int candidateCount, int selectedCount) =>
-        $"{candidateCount} candidate event{(candidateCount == 1 ? "" : "s")} scanned · {selectedCount} kept · {Math.Max(0, candidateCount - selectedCount)} suppressed. No quota filling.";
+        $"{candidateCount} candidate event{(candidateCount == 1 ? "" : "s")} scanned · {selectedCount} kept · {Math.Max(0, candidateCount - selectedCount)} not displayed. No quota filling.";
 
-    private static string CorroborationSuffix(ScoredArticle candidate) =>
-        candidate.SourceCount > 1 ? $" · corroborated by {candidate.SourceCount} sources" : "";
+    private static string CoverageSuffix(ScoredArticle candidate) =>
+        candidate.SourceCount > 1 ? $" · covered by {candidate.SourceCount} publishers" : "";
 
     private static DateTimeOffset ToLocalTime(DateTimeOffset utc)
     {

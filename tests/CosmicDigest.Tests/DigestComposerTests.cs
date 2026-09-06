@@ -116,7 +116,6 @@ public sealed class DigestComposerTests
         Assert.Contains("Cosmic Digest", html);
         Assert.Contains("Reader&#39;s Intelligence Brief", html);
         Assert.Contains("1 ACT", html);
-        Assert.Contains("corroborated by 2 sources", html);
         Assert.Contains("width=\"48\" height=\"48\"", html);
         Assert.DoesNotContain(profile.Version, html);
     }
@@ -146,6 +145,46 @@ public sealed class DigestComposerTests
         Assert.DoesNotContain("Was this signal right?", disabled);
         Assert.Contains("Was this signal right?", enabled);
         Assert.Contains("token=", enabled);
+    }
+
+    [Fact]
+    public void Fallback_does_not_claim_unevaluated_items_were_suppressed_or_coverage_was_verified()
+    {
+        var now = DateTimeOffset.Parse("2026-09-06T12:00:00Z");
+        var profile = Profile();
+        profile.MaxItems = 1;
+        var articles = new[]
+        {
+            new NewsItem("Toolbox release 2.0", "https://example.com/release", now, "Example"),
+            new NewsItem("Toolbox release 2.0", "https://other.org/release", now, "Other"),
+            new NewsItem("Toolbox release 3.0", "https://example.com/next", now, "Example")
+        };
+        var candidates = ArticleSelector.Rank(articles, profile, Array.Empty<string>(), now);
+        var briefing = NewsAi.BuildDeterministicFallback(profile, candidates);
+        var displayed = DigestComposer.DisplayedCandidates(candidates, briefing);
+        var reviewed = ReviewPolicy.CandidatesToMarkReviewed(candidates, displayed, allCandidatesEvaluated: false);
+        var state = new StateOfWorld();
+        StateStore.MarkReviewed(state, reviewed, displayed, now);
+
+        Assert.Equal(2, candidates.Count);
+        Assert.Single(displayed);
+        Assert.Equal(0, reviewed.Count - displayed.Count);
+        var remaining = ArticleSelector.Rank(
+            articles, profile, state.ReviewedArticles.Select(item => item.Link), now,
+            previouslyReviewedEventKeys: state.ReviewedEvents.Select(item => item.EventKey),
+            previouslyReviewedEventTitles: state.ReviewedEvents.Select(item => item.Title));
+        Assert.Equal("https://example.com/next", Assert.Single(remaining).Article.Link);
+        var outputs = new[]
+        {
+            DigestComposer.BuildMarkdown(profile, candidates, briefing, now),
+            DigestComposer.BuildHtml(profile, candidates, briefing, now,
+                new EmailBrandOptions("Stella", "https://example.com/stella.png"))
+        };
+        Assert.All(outputs, output =>
+        {
+            Assert.DoesNotContain("suppressed", output, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain("corroborated", output, StringComparison.OrdinalIgnoreCase);
+        });
     }
 
     private static BriefingProfile Profile() => new()

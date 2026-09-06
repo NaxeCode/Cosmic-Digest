@@ -3,6 +3,41 @@ using System.Text.Json;
 public sealed class StateStoreTests
 {
     [Fact]
+    public void Query_article_identity_survives_encryption_review_and_retry_completion()
+    {
+        var now = DateTimeOffset.UtcNow;
+        const string key = "query-identity-test-key";
+        var first = new NewsItem("Compiler 4.0 released", "https://example.com/news?docid=Private-A", now, "Example");
+        var second = new NewsItem("Compiler 5.0 released", "https://example.com/news?docid=private-a", now, "Example");
+        var firstCandidate = new ScoredArticle(first, 5, new[] { "Compiler" }, "compiler-4");
+        var state = new StateOfWorld();
+        StateStore.AppendNews(state, new[] { first, second });
+        StateStore.MarkReviewed(state, new[] { firstCandidate }, new[] { firstCandidate }, now);
+        StateStore.QueueDeliveryRetries(state, new[] { first, second }, now);
+
+        var serialized = StateStore.SerializeForStorage(state, key);
+        Assert.DoesNotContain("docid", serialized, StringComparison.Ordinal);
+        Assert.DoesNotContain("Private-A", serialized, StringComparison.Ordinal);
+        Assert.DoesNotContain("private-a", serialized, StringComparison.Ordinal);
+        var restored = StateStore.DeserializeFromStorage(serialized, key);
+        var profile = new BriefingProfile
+        {
+            MinimumScore = 0,
+            Priorities = new List<BriefingPriority>
+            {
+                new() { Name = "Compiler", Weight = 5, Signals = new List<string> { "Compiler" } }
+            }
+        };
+
+        var remaining = ArticleSelector.Rank(
+            restored.CacheNews, profile, restored.ReviewedArticles.Select(item => item.Link), now, now.AddHours(-1));
+        Assert.Equal(second.Link, Assert.Single(remaining).Article.Link);
+        StateStore.CompleteDeliveryRetries(restored, new[] { firstCandidate });
+        Assert.Equal(second.Link, Assert.Single(restored.DeliveryRetries).Article.Link);
+    }
+
+
+    [Fact]
     public void MarkReviewed_records_included_and_filtered_candidates()
     {
         var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
@@ -137,6 +172,64 @@ public sealed class StateStoreTests
         Assert.Contains(state.ReviewedEvents, item => item.EventKey == "event-delivered");
         Assert.Contains(state.ReviewedArticles, item => item.Link.EndsWith("/delivered"));
         Assert.Equal(failed.Article, Assert.Single(state.DeliveryRetries).Article);
+    }
+
+    [Fact]
+    public void Terminal_history_retention_preserves_pending_delivery_for_failure_reconciliation()
+    {
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
+        var candidate = new ScoredArticle(
+            new NewsItem("Pending story", "https://example.com/pending", now, "Example"),
+            5, new[] { "AI" }, "event-pending");
+        var state = new StateOfWorld();
+        StateStore.MarkReviewed(state, new[] { candidate }, new[] { candidate }, now, "email-pending");
+        StateStore.RecordDelivery(state, new DeliveryAttempt(
+            "email-pending", now, "Digest", "accepted", now,
+            IncludedItems: new[] { candidate.Article }));
+        for (var index = 1; index <= 46; index++)
+        {
+            StateStore.RecordDelivery(state, new DeliveryAttempt(
+                $"delivered-{index}", now.AddMinutes(index), "Digest",
+                "delivered", now.AddMinutes(index)));
+        }
+
+        var restored = StateStore.DeserializeFromStorage(
+            StateStore.SerializeForStorage(state, "synthetic-retention-key"), "synthetic-retention-key");
+        var pending = Assert.Single(restored.Deliveries, item => ResendDeliveryStatus.IsPending(item.Status));
+        Assert.Equal("email-pending", pending.EmailId);
+        Assert.Equal(45, restored.Deliveries.Count(item => ResendDeliveryStatus.IsTerminal(item.Status)));
+        Assert.DoesNotContain(restored.Deliveries, item => item.EmailId == "delivered-1");
+        Assert.Contains(restored.Deliveries, item => item.EmailId == "delivered-46");
+
+        var failure = pending with { Status = "bounced", StatusAtUtc = now.AddHours(1) };
+        StateStore.RecordDelivery(restored, failure);
+        Assert.True(StateStore.RestoreEligibilityForFailedDelivery(restored, failure, now.AddHours(1)));
+        Assert.Empty(restored.ReviewedArticles);
+        Assert.Empty(restored.ReviewedEvents);
+        Assert.Equal(candidate.Article.Link, Assert.Single(restored.DeliveryRetries).Article.Link);
+    }
+
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public void Legacy_state_rejects_malformed_protected_links_instead_of_discarding_articles(
+        bool retry, bool invalidBase64)
+    {
+        const string key = "synthetic-legacy-key";
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
+        var envelope = DurableSecretProtection.Protect("https://example.com/legacy-story", key)!;
+        var brokenLink = invalidBase64 ? envelope + "!" : envelope[..^1];
+        var article = new NewsItem("Legacy story", brokenLink, now, "Example");
+        var state = new StateOfWorld();
+        if (retry)
+            state.DeliveryRetries.Add(new DeliveryRetryItem(article, now));
+        else
+            state.CacheNews.Add(article);
+
+        var serialized = JsonSerializer.Serialize(state);
+        Assert.Throws<InvalidOperationException>(() => StateStore.DeserializeFromStorage(serialized, key));
     }
 
     [Fact]

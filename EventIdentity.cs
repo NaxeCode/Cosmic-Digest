@@ -52,6 +52,19 @@ public static partial class EventIdentity
         "today", "yesterday"
     };
 
+    [Flags]
+    private enum ClaimStatus
+    {
+        None = 0,
+        Negated = 1,
+        Cancelled = 2,
+        Delayed = 4,
+        Withdrawn = 8,
+        Suspended = 16,
+        Denied = 32,
+        Resumed = 64
+    }
+
     public static IReadOnlyList<NewsEventCluster> Cluster(
         IEnumerable<NewsItem> articles,
         double similarityThreshold)
@@ -132,9 +145,10 @@ public static partial class EventIdentity
             .Distinct(StringComparer.Ordinal)
             .Order(StringComparer.Ordinal));
         var direction = DirectionalSignature(title);
-        return string.IsNullOrWhiteSpace(direction)
-            ? signature
-            : signature + " | " + direction;
+        if (!string.IsNullOrWhiteSpace(direction))
+            signature += " | " + direction;
+        var status = ClaimStatusFor(title);
+        return status == ClaimStatus.None ? signature : signature + " | status:" + (int)status;
     }
 
     public static double TitleSimilarity(string left, string right) =>
@@ -145,31 +159,65 @@ public static partial class EventIdentity
         IEnumerable<string> incomingTitles)
     {
         var reviewedNumeric = NumericIdentityTokens(reviewedTitle);
-        var incomingNumeric = incomingTitles
-            .Select(NumericIdentityTokens)
-            .Where(tokens => tokens.Count > 0)
-            .ToList();
-        return incomingNumeric.Count == 0
-            || (reviewedNumeric.Count > 0
-                && incomingNumeric.All(tokens => NumericIdentitiesAreCompatible(tokens, reviewedNumeric)));
+        foreach (var incomingTitle in incomingTitles)
+        {
+            if (!ClaimsAreCompatible(reviewedTitle, incomingTitle))
+                return false;
+
+            var incomingNumeric = NumericIdentityTokens(incomingTitle);
+            if (incomingNumeric.Count > 0
+                && (reviewedNumeric.Count == 0
+                    || !NumericIdentitiesAreCompatible(incomingNumeric, reviewedNumeric)))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static bool CanCluster(string left, string right)
     {
-        var leftDirection = DirectionalSignature(left);
-        var rightDirection = DirectionalSignature(right);
-        if (!string.IsNullOrWhiteSpace(leftDirection)
-            && !string.IsNullOrWhiteSpace(rightDirection)
-            && !string.Equals(leftDirection, rightDirection, StringComparison.Ordinal))
-        {
+        if (!ClaimsAreCompatible(left, right))
             return false;
-        }
 
         var leftNumeric = NumericIdentityTokens(left);
         var rightNumeric = NumericIdentityTokens(right);
         return leftNumeric.Count == 0
             || rightNumeric.Count == 0
             || NumericIdentitiesAreCompatible(leftNumeric, rightNumeric);
+    }
+
+    private static bool ClaimsAreCompatible(string left, string right)
+    {
+        // Unknown scope is not proof of agreement: keep materially different statuses separate.
+        if (ClaimStatusFor(left) != ClaimStatusFor(right))
+            return false;
+
+        var leftDirection = DirectionalSignature(left);
+        var rightDirection = DirectionalSignature(right);
+        return string.IsNullOrWhiteSpace(leftDirection)
+            || string.IsNullOrWhiteSpace(rightDirection)
+            || string.Equals(leftDirection, rightDirection, StringComparison.Ordinal);
+    }
+
+    private static ClaimStatus ClaimStatusFor(string title)
+    {
+        var plainTitle = ArticleText.ToPlainText(title).ToLowerInvariant();
+        var status = NegationPattern().IsMatch(plainTitle) ? ClaimStatus.Negated : ClaimStatus.None;
+        foreach (var match in TokenPattern().EnumerateMatches(plainTitle))
+        {
+            status |= plainTitle.AsSpan(match.Index, match.Length) switch
+            {
+                "cancel" or "cancels" or "canceled" or "cancelled" or "cancellation" => ClaimStatus.Cancelled,
+                "delay" or "delays" or "delayed" or "postpone" or "postpones" or "postponed" => ClaimStatus.Delayed,
+                "withdraw" or "withdraws" or "withdrawn" or "retract" or "retracts" or "retracted" => ClaimStatus.Withdrawn,
+                "suspend" or "suspends" or "suspended" or "suspension" => ClaimStatus.Suspended,
+                "deny" or "denies" or "denied" or "denial" => ClaimStatus.Denied,
+                "resume" or "resumes" or "resumed" or "reinstate" or "reinstates" or "reinstated" => ClaimStatus.Resumed,
+                _ => ClaimStatus.None
+            };
+        }
+        return status;
     }
 
     private static bool NumericIdentitiesAreCompatible(
@@ -376,7 +424,7 @@ public static partial class EventIdentity
 
     private static List<string> AllOrderedTokens(string value)
     {
-        var normalized = LetterVersionSeparatorPattern().Replace(value.ToLowerInvariant(), " ");
+        var normalized = LetterVersionSeparatorPattern().Replace(ArticleText.ToPlainText(value).ToLowerInvariant(), " ");
         normalized = ConventionalVersionPrefixPattern().Replace(normalized, "");
         return TokenPattern().Matches(normalized).Cast<Match>()
             .Select(match => match.Value.Trim('.', '-', '_'))
@@ -397,6 +445,9 @@ public static partial class EventIdentity
     private static string HashSeed(string seed) =>
         Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(seed)))[..24]
             .ToLowerInvariant();
+
+    [GeneratedRegex(@"\b(?:not|no|never|neither|nor|without|cannot)\b|n['’]t\b", RegexOptions.CultureInvariant)]
+    private static partial Regex NegationPattern();
 
     [GeneratedRegex(@"[\p{L}\p{N}][\p{L}\p{N}+#._-]*", RegexOptions.CultureInvariant)]
     private static partial Regex TokenPattern();

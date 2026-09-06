@@ -65,6 +65,27 @@ public sealed class NewsAiTests
         Assert.Contains("more than one learn item", error.Message);
     }
 
+    [Fact]
+    public void Fallback_preserves_both_reports_when_a_release_is_reversed()
+    {
+        var now = DateTimeOffset.Parse("2026-09-06T12:00:00Z");
+        var profile = Profile();
+        profile.Priorities.Add(new BriefingPriority { Name = "Engineering", Weight = 5, Signals = new() { "OpenAI" } });
+        var articles = new[]
+        {
+            new NewsItem("OpenAI releases Agent SDK 3.0", "https://example.com/release", now, "Example",
+                "<p>The toolkit is available now.</p>"),
+            new NewsItem("OpenAI will not release Agent SDK 3.0", "https://other.org/correction", now, "Other",
+                "<p>The toolkit release has been cancelled.</p>")
+        };
+        var candidates = ArticleSelector.Rank(articles, profile, Array.Empty<string>(), now);
+        var briefing = NewsAi.BuildDeterministicFallback(profile, candidates);
+
+        Assert.Equal(2, briefing.Items.Count);
+        Assert.Contains(briefing.Items, item => item.WhatChanged == "The toolkit is available now.");
+        Assert.Contains(briefing.Items, item => item.WhatChanged == "The toolkit release has been cancelled.");
+    }
+
     private static BriefingProfile Profile() => new() { MaxItems = 5 };
 
     private static IReadOnlyList<ScoredArticle> Candidates() => new[]

@@ -6,6 +6,11 @@ on:
     - cron: '17 8 * * *'
       timezone: 'America/New_York'
   workflow_dispatch:
+    inputs:
+      validate_only:
+        description: Prepare using a disposable copy of production state; never send or commit
+        type: boolean
+        default: true
 
 concurrency:
   group: daily-digest
@@ -32,6 +37,13 @@ jobs:
       with:
         fetch-depth: 0
         ref: main
+
+    - name: Configure validation state
+      if: ${{ inputs.validate_only }}
+      run: |
+        validation_dir="$(mktemp -d "$RUNNER_TEMP/cosmic-digest-validation.XXXXXX")"
+        cp data/state.json "$validation_dir/state.json"
+        echo "DATA_DIR=$validation_dir" >> "$GITHUB_ENV"
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v6
@@ -67,6 +79,7 @@ jobs:
       run: dotnet run --no-build --configuration Release -- --prepare-only
 
     - name: Persist prepared outbox
+      if: ${{ !inputs.validate_only }}
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
@@ -80,6 +93,7 @@ jobs:
 
     - name: Deliver prepared digest
       id: run-digest
+      if: ${{ !inputs.validate_only }}
       env:
         RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         OUTBOX_ENCRYPTION_KEY: ${{ secrets.OUTBOX_ENCRYPTION_KEY }}
@@ -106,7 +120,7 @@ jobs:
         done
 
     - name: Commit final state
-      if: ${{ always() && steps.run-digest.outcome != 'skipped' }}
+      if: ${{ always() && !inputs.validate_only && (steps.run-digest.outcome == 'success' || steps.run-digest.outcome == 'failure') }}
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
