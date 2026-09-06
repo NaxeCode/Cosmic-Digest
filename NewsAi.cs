@@ -24,7 +24,7 @@ public static class NewsAi
     {
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY")
             ?? throw new InvalidOperationException("OPENAI_API_KEY is not set.");
-        var model = Environment.GetEnvironmentVariable("OPENAI_MODEL") ?? "gpt-5.6-terra";
+        var model = Environment.GetEnvironmentVariable("OPENAI_MODEL") ?? "gpt-6-astra";
         var reasoningEffort = ResolveReasoningEffortName();
 
         var client = new OpenAI.OpenAIClient(apiKey).GetChatClient(model);
@@ -220,7 +220,7 @@ public static class NewsAi
         };
 
     private static string ResolveReasoningEffortName() =>
-        (Environment.GetEnvironmentVariable("OPENAI_REASONING_EFFORT") ?? "medium").Trim().ToLowerInvariant() switch
+        (Environment.GetEnvironmentVariable("OPENAI_REASONING_EFFORT") ?? "xhigh").Trim().ToLowerInvariant() switch
         {
             "low" => "low",
             "high" => "high",

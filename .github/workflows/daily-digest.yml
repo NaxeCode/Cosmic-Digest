@@ -25,8 +25,8 @@ jobs:
       RESEND_VERIFY_DELIVERY: ${{ vars.RESEND_VERIFY_DELIVERY || 'true' }}
       BRAND_NAME: ${{ vars.BRAND_NAME || 'Stella · Cosmic Digest' }}
       BRAND_AVATAR_URL: ${{ vars.BRAND_AVATAR_URL || 'https://raw.githubusercontent.com/NaxeCode/Cosmic-Digest/main/assets/brand/stella-avatar-128.png' }}
-      OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.6-terra' }}
-      OPENAI_REASONING_EFFORT: ${{ vars.OPENAI_REASONING_EFFORT || 'medium' }}
+      OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-6-astra' }}
+      OPENAI_REASONING_EFFORT: ${{ vars.OPENAI_REASONING_EFFORT || 'xhigh' }}
 
     permissions:
       contents: write
