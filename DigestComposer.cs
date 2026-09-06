@@ -177,7 +177,7 @@ public static class DigestComposer
         {
             var article = candidate.Article;
             sb.AppendLine("<tr><td class=\"rule\" style=\"padding:15px 30px 24px;border-bottom:1px solid #e4e8f0;\">");
-            sb.AppendLine($"<h2 class=\"copy\" style=\"margin:0;color:#172033;font-size:20px;line-height:27px;letter-spacing:-.2px;\"><a href=\"{Attribute(SafeUrl(article.Link))}\" style=\"color:#172033;text-decoration:underline;text-decoration-color:{color};text-underline-offset:3px;\">{Html(article.Title)}</a></h2>");
+            sb.AppendLine($"<h2 class=\"copy\" style=\"margin:0;color:#172033;font-size:20px;line-height:27px;letter-spacing:-.2px;\"><a class=\"copy\" href=\"{Attribute(SafeUrl(article.Link))}\" style=\"color:#172033;text-decoration:underline;text-decoration-color:{color};text-underline-offset:3px;\">{Html(article.Title)}</a></h2>");
             AppendLabeledParagraph(sb, "What changed", item.WhatChanged);
             AppendLabeledParagraph(sb, "Why for you", item.WhyItMatters);
             if (!string.IsNullOrWhiteSpace(item.NextStep))
@@ -195,7 +195,7 @@ public static class DigestComposer
     }
 
     private static void AppendLabeledParagraph(StringBuilder sb, string label, string value) =>
-        sb.AppendLine($"<p class=\"copy\" style=\"margin:13px 0 0;color:#30394c;font-size:15px;line-height:23px;\"><strong style=\"color:#172033;\">{label}:</strong> {Html(value)}</p>");
+        sb.AppendLine($"<p class=\"copy\" style=\"margin:13px 0 0;color:#30394c;font-size:15px;line-height:23px;\"><strong class=\"copy\" style=\"color:#172033;\">{label}:</strong> {Html(value)}</p>");
 
     private static void AppendFeedback(
         StringBuilder sb,
