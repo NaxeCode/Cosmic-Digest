@@ -158,7 +158,7 @@ Configure these repository secrets:
 
 Optional capabilities use `BRAND_AVATAR_URL`, `FEEDBACK_BASE_URL`, `FEEDBACK_SIGNING_KEY`, and `RESEND_VERIFY_DELIVERY`.
 
-`OPENAI_MODEL` and `OPENAI_REASONING_EFFORT` may be set as repository variables. The workflow has a concurrency guard, runs the test suite before delivery, and fails visibly if reviewed-state persistence cannot be pushed.
+`OPENAI_MODEL` and `OPENAI_REASONING_EFFORT` may be set as repository variables. Supported reasoning levels are `low`, `medium`, `high`, and `xhigh`; choose a level supported by the configured model. The workflow has a concurrency guard, runs the test suite before delivery, and fails visibly if reviewed-state persistence cannot be pushed.
 
 Manual dispatch defaults to `validate_only=true`: it prepares against a disposable copy of production state, without sending email or committing state. Use this mode after changing secrets or profiles. Set `validate_only=false` only for an intentional production send; scheduled runs continue to deliver normally.
 

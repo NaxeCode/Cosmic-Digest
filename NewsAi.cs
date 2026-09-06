@@ -215,6 +215,7 @@ public static class NewsAi
         {
             "low" => ChatReasoningEffortLevel.Low,
             "high" => ChatReasoningEffortLevel.High,
+            "xhigh" => new ChatReasoningEffortLevel("xhigh"),
             _ => ChatReasoningEffortLevel.Medium
         };
 
@@ -223,6 +224,7 @@ public static class NewsAi
         {
             "low" => "low",
             "high" => "high",
+            "xhigh" => "xhigh",
             _ => "medium"
         };
 
