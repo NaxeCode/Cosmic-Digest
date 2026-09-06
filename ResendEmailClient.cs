@@ -63,7 +63,6 @@ public sealed class ResendEmailClient : IDisposable
         request.Headers.TryAddWithoutValidation("Idempotency-Key", idempotencyKey);
 
         using var response = await _http.SendAsync(request, cancellationToken);
-        var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
             if (IsPermanentRequestRejection(response.StatusCode))
@@ -77,9 +76,10 @@ public sealed class ResendEmailClient : IDisposable
             }
 
             throw new InvalidOperationException(
-                $"Resend rejected the email: {response.StatusCode} - {Compact(responseBody)}");
+                $"Resend rejected the email: HTTP {(int)response.StatusCode} ({response.StatusCode}).");
         }
 
+        var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
         using var document = JsonDocument.Parse(responseBody);
         if (!document.RootElement.TryGetProperty("id", out var idElement)
             || string.IsNullOrWhiteSpace(idElement.GetString()))
@@ -143,11 +143,5 @@ public sealed class ResendEmailClient : IDisposable
             && statusCode is not HttpStatusCode.RequestTimeout
             && statusCode is not HttpStatusCode.Conflict
             && code != 429;
-    }
-
-    private static string Compact(string value)
-    {
-        var compact = string.Join(' ', value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
-        return compact.Length <= 500 ? compact : compact[..500] + "…";
     }
 }

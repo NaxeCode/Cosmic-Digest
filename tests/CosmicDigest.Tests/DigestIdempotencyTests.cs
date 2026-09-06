@@ -151,7 +151,7 @@ public sealed class DigestIdempotencyTests
     }
 
     [Fact]
-    public void Prepared_outbox_preserves_the_encrypted_functional_link_and_a_safe_identity()
+    public void Prepared_outbox_preserves_functional_links_without_persisting_private_identity_in_plaintext()
     {
         var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
         const string link = "https://example.com/read?entry=123&signature=private-capability#/story/456";
@@ -163,7 +163,7 @@ public sealed class DigestIdempotencyTests
             "event-private-entry");
         var state = new StateOfWorld();
 
-        var prepared = DigestIdempotency.Prepare(
+        DigestIdempotency.Prepare(
             state,
             new[] { candidate },
             new[] { candidate },
@@ -171,17 +171,11 @@ public sealed class DigestIdempotencyTests
             key,
             new PendingEmailPayload("from", "to", "subject", "text", "html"));
 
-        var pendingItem = Assert.Single(prepared.Outbox.ReviewedItems);
-        Assert.Equal(link, pendingItem.Article.Link);
-        Assert.Equal("https://example.com/read?entry=123", pendingItem.ArticleIdentity);
-
         var serialized = StateStore.SerializeForStorage(state, key);
         Assert.DoesNotContain("private-capability", serialized, StringComparison.Ordinal);
         Assert.DoesNotContain("entry=123", serialized, StringComparison.Ordinal);
         var restored = StateStore.DeserializeFromStorage(serialized, key);
-        Assert.Equal(
-            "https://example.com/read?entry=123",
-            Assert.Single(Assert.Single(restored.PendingDigestSends).ReviewedItems).ArticleIdentity);
+
         var replayed = Assert.Single(DigestIdempotency.ReviewedCandidates(
             Assert.Single(restored.PendingDigestSends),
             included: true));

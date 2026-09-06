@@ -284,6 +284,32 @@ public sealed class DoctrineReviewRegressionTests
         Assert.Equal("fresh summary", cached.Summary);
     }
 
+    [Fact]
+    public void Rss_relevance_uses_visible_text_not_html_attributes()
+    {
+        var now = DateTimeOffset.Parse("2026-09-06T12:00:00Z");
+        var profile = TestProfile();
+        profile.Priorities[0].Signals = new List<string> { "OpenAI" };
+        var feed = """
+            <rss version="2.0"><channel><title>Example</title>
+              <item><title>Cinema opens downtown</title><link>https://example.com/cinema</link>
+                <description><![CDATA[<a href="https://openai.com">Read more</a>]]></description>
+              </item>
+              <item><title>New development toolkit</title><link>https://example.com/toolkit</link>
+                <description><![CDATA[<p>Open&#65;I publishes a development toolkit.</p>]]></description>
+              </item>
+            </channel></rss>
+            """;
+        var parsed = RssIngestor.Parse(new BriefingSource { Name = "Example", Url = "https://example.com/feed" }, feed, now);
+        var candidates = ArticleSelector.Rank(parsed, profile, Array.Empty<string>(), now);
+        var briefing = NewsAi.BuildDeterministicFallback(profile, candidates);
+
+        Assert.Equal("https://example.com/toolkit", Assert.Single(candidates).Article.Link);
+        Assert.Equal("https://example.com/toolkit",
+            Assert.Single(DigestComposer.DisplayedArticles(candidates, briefing)).Link);
+        Assert.Contains("OpenAI", Assert.Single(briefing.Items).WhatChanged, StringComparison.Ordinal);
+    }
+
     private static BriefingProfile TestProfile() => new()
     {
         Version = "test",

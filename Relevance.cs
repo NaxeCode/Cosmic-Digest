@@ -26,7 +26,7 @@ public static class ArticleSelector
         var sent = previouslySentLinks
             .Select(ComparisonLink)
             .Where(link => !string.IsNullOrWhiteSpace(link))
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            .ToHashSet(StringComparer.Ordinal);
         var reviewedEvents = (previouslyReviewedEventKeys ?? Array.Empty<string>())
             .Where(key => !string.IsNullOrWhiteSpace(key))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
@@ -45,7 +45,7 @@ public static class ArticleSelector
         var forcedRetries = (forcedRetryLinks ?? Array.Empty<string>())
             .Select(ComparisonLink)
             .Where(link => !string.IsNullOrWhiteSpace(link))
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            .ToHashSet(StringComparer.Ordinal);
 
         var cutoff = notBefore ?? now.AddHours(-profile.LookbackHours);
         var clusterInputLimit = Math.Clamp(profile.CandidateLimit * 12, 120, 480);
@@ -56,7 +56,7 @@ public static class ArticleSelector
                     || forcedRetries.Contains(ComparisonLink(article.Link)))
                 && article.Published <= now.AddHours(2))
             .Where(article => !sent.Contains(ComparisonLink(article.Link)))
-            .GroupBy(article => ComparisonLink(article.Link), StringComparer.OrdinalIgnoreCase)
+            .GroupBy(article => ComparisonLink(article.Link), StringComparer.Ordinal)
             .Select(group => group.OrderByDescending(article => article.Published).First())
             .Select(article => SourceIdentity.Rehydrate(article, profile))
             .Select(article => new PreclusterCandidate(
@@ -132,7 +132,7 @@ public static class ArticleSelector
     }
 
     private static string ComparisonLink(string? link) =>
-        SourceIdentity.SanitizeArticleLink(CanonicalizeLink(link));
+        SourceIdentity.ArticleComparisonLink(link);
 
     private static IReadOnlyList<PreclusterCandidate> SelectFairClusterInput(
         IReadOnlyList<PreclusterCandidate> candidates,
@@ -238,11 +238,11 @@ public static class ArticleSelector
             .SelectMany(result => result.MatchedPriorities)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
-        var corroborationBoost = Math.Min(1.2, Math.Max(0, cluster.Sources.Count - 1) * 0.4);
+        var coverageBoost = Math.Min(1.2, Math.Max(0, cluster.Sources.Count - 1) * 0.4);
 
         return new ScoredArticle(
             representative.Article,
-            Math.Round(representative.Score + corroborationBoost, 3),
+            Math.Round(representative.Score + coverageBoost, 3),
             matchedPriorities,
             cluster.EventKey,
             cluster.Sources.Count,
@@ -253,8 +253,8 @@ public static class ArticleSelector
 
     private static ScoredArticle ScoreArticle(NewsItem article, BriefingProfile profile, DateTimeOffset now)
     {
-        var title = Normalize(article.Title);
-        var summary = Normalize(article.Summary ?? "");
+        var title = Normalize(ArticleText.ToPlainText(article.Title));
+        var summary = Normalize(ArticleText.ToPlainText(article.Summary));
         var matched = new List<string>();
         double score = 0;
 
@@ -313,4 +313,19 @@ public static class ArticleSelector
 
     private static string Normalize(string text) =>
         Regex.Replace(text.ToLowerInvariant(), @"\s+", " ").Trim();
+}
+
+internal static class ArticleText
+{
+    internal static string ToPlainText(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return "";
+
+        var withoutTags = Regex.Replace(value, "<[^>]+>", " ");
+        return System.Net.WebUtility.HtmlDecode(withoutTags)
+            .Replace("\r", " ")
+            .Replace("\n", " ")
+            .Trim();
+    }
 }

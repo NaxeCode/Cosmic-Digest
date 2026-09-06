@@ -10,6 +10,8 @@ Generate an independent random key once and keep it stable across Resend credent
 openssl rand -base64 32 | gh secret set OUTBOX_ENCRYPTION_KEY
 ```
 
+The key is required even for a zero-item run: feed health and cached content still require protection. Startup fails before network access if the key is absent. Never use a temporary data directory or fall back to `RESEND_API_KEY` to declare production setup complete.
+
 The workflow commits only authenticated ciphertext before delivery begins. The same stable key also encrypts feed validators such as ETags, feed errors, article content, links, and reviewed identities before state is committed. A missing or incorrect key aborts state loading or saving without overwriting valid ciphertext. Rotating `RESEND_API_KEY` must not rotate this key while protected state or a prepared send exists.
 
 ## 2. Activate the private briefing profile
@@ -20,7 +22,9 @@ The repository is public. Keep the real profile in the existing gitignored `conf
 gh secret set DIGEST_PROFILE_B64 --body "$(base64 -w0 config/briefing-profile.local.json)"
 ```
 
-Confirm the next run logs the expected profile version instead of `legacy-env`. The version remains in diagnostics but is intentionally absent from the email.
+Dispatch **Daily Digest** with `validate_only=true` after configuring the key or profile. This runs preparation against a disposable copy of production state and skips both delivery and Git state commits. Confirm the log shows the expected profile version instead of `legacy-env`. The version remains in diagnostics but is intentionally absent from the email.
+
+Set `validate_only=false` only when intentionally sending a production digest. The normal daily schedule is unaffected by validation mode.
 
 ## 3. Use the existing domain before claiming another
 

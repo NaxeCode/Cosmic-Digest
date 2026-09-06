@@ -35,6 +35,47 @@ public sealed class ArticleSelectorTests
     }
 
     [Fact]
+    public void Rank_preserves_distinct_query_addressed_articles()
+    {
+        var articles = new[]
+        {
+            new NewsItem("OpenAI releases Agent SDK 2.0", "https://example.com/news?docid=100", Now, "Example"),
+            new NewsItem("OpenAI releases Agent SDK 3.0", "https://example.com/news?docid=200", Now.AddMinutes(-1), "Example")
+        };
+
+        var ranked = ArticleSelector.Rank(articles, Profile(), Array.Empty<string>(), Now);
+
+        Assert.Equal(2, ranked.Count);
+        var remaining = ArticleSelector.Rank(articles, Profile(), new[] { articles[0].Link }, Now);
+        Assert.Equal(articles[1].Link, Assert.Single(remaining).Article.Link);
+    }
+
+    [Theory]
+    [InlineData("OpenAI will not release Agent SDK 3.0")]
+    [InlineData("OpenAI cancels Agent SDK 3.0 release")]
+    [InlineData("OpenAI delays Agent SDK 3.0 release")]
+    [InlineData("OpenAI retracts Agent SDK 3.0 release")]
+    public void Rank_keeps_reversals_separate_and_eligible_after_review(string reversalTitle)
+    {
+        var announcement = new NewsItem(
+            "OpenAI releases Agent SDK 3.0", "https://example.com/release", Now, "Example");
+        var reversal = new NewsItem(reversalTitle, "https://other.org/reversal", Now.AddMinutes(1), "Other");
+        var ranked = ArticleSelector.Rank(new[] { announcement, reversal }, Profile(), Array.Empty<string>(), Now);
+
+        Assert.Equal(2, ranked.Count);
+        Assert.All(ranked, candidate => Assert.Equal(1, candidate.SourceCount));
+        var reviewed = ArticleSelector.Rank(new[] { announcement }, Profile(), Array.Empty<string>(), Now);
+        var state = new StateOfWorld();
+        StateStore.MarkReviewed(state, reviewed, reviewed, Now);
+        var nextRun = ArticleSelector.Rank(
+            new[] { reversal }, Profile(), state.ReviewedArticles.Select(item => item.Link), Now.AddMinutes(2),
+            previouslyReviewedEventKeys: state.ReviewedEvents.Select(item => item.EventKey),
+            previouslyReviewedEventTitles: state.ReviewedEvents.Select(item => item.Title));
+
+        Assert.Equal(reversal.Link, Assert.Single(nextRun).Article.Link);
+    }
+
+    [Fact]
     public void Rank_deduplicates_tracking_variants()
     {
         var articles = new[]

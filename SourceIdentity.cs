@@ -88,6 +88,11 @@ public static class SourceIdentity
         return trimmed;
     }
 
+    // Comparison identity is private and must be encrypted before durable storage.
+    // Public redaction is deliberately not an identity function.
+    public static string ArticleComparisonLink(string? link) =>
+        ArticleSelector.CanonicalizeLink(PreserveFunctionalArticleLink(link));
+
     public static string SanitizeArticleLink(string? link)
     {
         if (!Uri.TryCreate(link, UriKind.Absolute, out var uri)

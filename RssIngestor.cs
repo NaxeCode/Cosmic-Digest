@@ -192,7 +192,10 @@ public static class RssIngestor
         var message = CompactError(SourceIdentity.RedactFrom(
             lastException?.Message ?? "Unknown feed failure.",
             source.Url));
-        Console.Error.WriteLine($"Feed failed ({SourceIdentity.PublicLabel(source.Url)}): {message}");
+        var failureKind = lastException is HttpRequestException { StatusCode: { } statusCode }
+            ? $"HTTP {(int)statusCode}"
+            : lastException?.GetType().Name ?? "Unknown failure";
+        Console.Error.WriteLine($"Feed failed ({SourceIdentity.PublicLabel(source.Url)}): {failureKind}.");
         return new FeedFetchResult(
             source,
             "failed",

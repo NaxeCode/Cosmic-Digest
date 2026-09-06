@@ -115,7 +115,7 @@ public static class StateStore
             .Concat(s.CacheNews.Select(SourceIdentity.PrepareForProtectedStorage))
             .Where(item => item.Published >= cutoff)
             .Where(item => !string.IsNullOrWhiteSpace(item.Link))
-            .GroupBy(item => SourceIdentity.SanitizeArticleLink(item.Link), StringComparer.OrdinalIgnoreCase)
+            .GroupBy(item => SourceIdentity.ArticleComparisonLink(item.Link), StringComparer.Ordinal)
             .Select(group => group
                 .OrderByDescending(item => item.Published)
                 .ThenByDescending(item => string.IsNullOrWhiteSpace(item.FeedUrl) ? 0 : 1)
@@ -132,8 +132,8 @@ public static class StateStore
         string? deliveryEmailId = null)
     {
         var includedLinks = included
-            .Select(candidate => SourceIdentity.SanitizeArticleLink(candidate.Article.Link))
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            .Select(candidate => SourceIdentity.ArticleComparisonLink(candidate.Article.Link))
+            .ToHashSet(StringComparer.Ordinal);
         var includedEvents = included
             .SelectMany(candidate => candidate.ReviewEventKeys)
             .Where(key => !string.IsNullOrWhiteSpace(key))
@@ -142,7 +142,7 @@ public static class StateStore
 
         state.ReviewedArticles.AddRange(candidateList.Select(candidate =>
         {
-            var link = SourceIdentity.SanitizeArticleLink(candidate.Article.Link);
+            var link = SourceIdentity.ArticleComparisonLink(candidate.Article.Link);
             return new ReviewedArticle(
                 link,
                 reviewedAtUtc,
@@ -167,7 +167,7 @@ public static class StateStore
         var cutoff = now.AddDays(-keepDays);
         state.ReviewedArticles = state.ReviewedArticles
             .Where(item => item.ReviewedAtUtc >= cutoff)
-            .GroupBy(item => item.Link, StringComparer.OrdinalIgnoreCase)
+            .GroupBy(item => item.Link, StringComparer.Ordinal)
             .Select(group => group.OrderByDescending(item => item.ReviewedAtUtc).First())
             .OrderByDescending(item => item.ReviewedAtUtc)
             .ToList();
@@ -246,8 +246,10 @@ public static class StateStore
             .GroupBy(item => item.EmailId, StringComparer.OrdinalIgnoreCase)
             .Select(group => group.OrderByDescending(item => item.StatusAtUtc).First())
             .OrderByDescending(item => item.SentAtUtc)
-            .Take(45)
             .ToList();
+        var terminalCount = 0;
+        state.Deliveries.RemoveAll(item =>
+            ResendDeliveryStatus.IsTerminal(item.Status) && ++terminalCount > 45);
     }
 
     public static bool RestoreEligibilityForFailedDelivery(
@@ -278,20 +280,20 @@ public static class StateStore
             return false;
 
         var before = state.DeliveryRetries
-            .Select(item => SourceIdentity.SanitizeArticleLink(item.Article.Link))
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            .Select(item => SourceIdentity.ArticleComparisonLink(item.Article.Link))
+            .ToHashSet(StringComparer.Ordinal);
         state.DeliveryRetries.AddRange(articles
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
             .Select(SourceIdentity.PrepareForProtectedStorage)
             .Where(article => !string.IsNullOrWhiteSpace(article.Link))
             .Select(article => new DeliveryRetryItem(article, queuedAtUtc)));
         state.DeliveryRetries = state.DeliveryRetries
-            .GroupBy(item => SourceIdentity.SanitizeArticleLink(item.Article.Link), StringComparer.OrdinalIgnoreCase)
+            .GroupBy(item => SourceIdentity.ArticleComparisonLink(item.Article.Link), StringComparer.Ordinal)
             .Select(group => group.OrderByDescending(item => item.QueuedAtUtc).First())
             .OrderByDescending(item => item.QueuedAtUtc)
             .ToList();
         return state.DeliveryRetries.Any(item =>
-            !before.Contains(SourceIdentity.SanitizeArticleLink(item.Article.Link)));
+            !before.Contains(SourceIdentity.ArticleComparisonLink(item.Article.Link)));
     }
 
     public static void CompleteDeliveryRetries(
@@ -300,13 +302,13 @@ public static class StateStore
     {
         var deliveredList = delivered.ToList();
         var links = deliveredList
-            .Select(item => SourceIdentity.SanitizeArticleLink(item.Article.Link))
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+            .Select(item => SourceIdentity.ArticleComparisonLink(item.Article.Link))
+            .ToHashSet(StringComparer.Ordinal);
         var eventKeys = deliveredList
             .SelectMany(item => item.ReviewEventKeys)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         state.DeliveryRetries.RemoveAll(item =>
-            links.Contains(SourceIdentity.SanitizeArticleLink(item.Article.Link))
+            links.Contains(SourceIdentity.ArticleComparisonLink(item.Article.Link))
             || eventKeys.Contains(EventIdentity.KeyFor(item.Article)));
     }
 
@@ -351,7 +353,7 @@ public static class StateStore
         state.ReviewedArticles = state.ReviewedArticles
             .Select(item => item with
             {
-                Link = SourceIdentity.SanitizeArticleLink(item.Link)
+                Link = SourceIdentity.ArticleComparisonLink(item.Link)
             })
             .Where(item => !string.IsNullOrWhiteSpace(item.Link))
             .ToList();
@@ -384,10 +386,10 @@ public static class StateStore
             foreach (var item in pending.ReviewedItems)
             {
                 item.Article = SourceIdentity.PrepareForProtectedStorage(item.Article);
-                item.ArticleIdentity = SourceIdentity.SanitizeArticleLink(
-                    string.IsNullOrWhiteSpace(item.ArticleIdentity)
-                        ? item.Article.Link
-                        : item.ArticleIdentity);
+                item.ArticleIdentity = SourceIdentity.ArticleComparisonLink(
+                    string.IsNullOrWhiteSpace(item.Article.Link)
+                        ? item.ArticleIdentity
+                        : item.Article.Link);
             }
         }
     }
@@ -575,7 +577,7 @@ public static class StateStore
                 return value;
             if (!DurableSecretProtection.HasEnvelopeShape(value))
             {
-                if (requireEnvelope)
+                if (requireEnvelope || DurableSecretProtection.IsProtected(value))
                     Succeeded = false;
                 return value;
             }
