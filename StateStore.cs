@@ -107,10 +107,14 @@ public static class StateStore
         return JsonSerializer.Serialize(storageState, J);
     }
 
-    public static void AppendNews(StateOfWorld s, IEnumerable<NewsItem> items, int keepDays = 4)
+    public static void AppendNews(
+        StateOfWorld s,
+        IEnumerable<NewsItem> items,
+        int keepDays = 4,
+        DateTimeOffset? now = null)
     {
         var incoming = items.Select(SourceIdentity.PrepareForProtectedStorage).ToList();
-        var cutoff = DateTimeOffset.UtcNow.AddDays(-keepDays);
+        var cutoff = (now ?? DateTimeOffset.UtcNow).AddDays(-keepDays);
         s.CacheNews = incoming
             .Concat(s.CacheNews.Select(SourceIdentity.PrepareForProtectedStorage))
             .Where(item => item.Published >= cutoff)

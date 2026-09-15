@@ -260,7 +260,8 @@ public sealed class DoctrineReviewRegressionTests
     [Fact]
     public void Incoming_duplicate_refreshes_feed_metadata_before_scoring()
     {
-        var published = DateTimeOffset.UtcNow.AddMinutes(-5);
+        var now = DateTimeOffset.Parse("2026-09-06T12:00:00Z");
+        var published = now.AddMinutes(-5);
         var state = new StateOfWorld
         {
             CacheNews = new List<NewsItem>
@@ -277,7 +278,7 @@ public sealed class DoctrineReviewRegressionTests
             "fresh summary",
             feedUrl);
 
-        StateStore.AppendNews(state, new[] { incoming });
+        StateStore.AppendNews(state, new[] { incoming }, now: now);
 
         var cached = Assert.Single(state.CacheNews);
         Assert.Equal(SourceIdentity.ForUrl(feedUrl), cached.FeedUrl);

@@ -2,16 +2,48 @@ using System.Text.Json;
 
 public sealed class StateStoreTests
 {
+    [Theory]
+    [InlineData("2000-01-01T12:00:00Z", 4)]
+    [InlineData("2040-01-01T12:00:00Z", 7)]
+    public void AppendNews_applies_retention_to_incoming_and_cached_articles_using_the_supplied_time(
+        string timestamp, int keepDays)
+    {
+        var now = DateTimeOffset.Parse(timestamp);
+        var cutoff = now.AddDays(-keepDays);
+        var state = new StateOfWorld
+        {
+            CacheNews = new List<NewsItem>
+            {
+                new("Expired cached", "https://example.com/expired-cached", cutoff.AddTicks(-1), "Example"),
+                new("Cached at cutoff", "https://example.com/cached", cutoff, "Example")
+            }
+        };
+        var incoming = new[]
+        {
+            new NewsItem("Expired incoming", "https://example.com/expired-incoming", cutoff.AddTicks(-1), "Example"),
+            new NewsItem("Incoming at cutoff", "https://example.com/incoming", cutoff, "Example"),
+            new NewsItem("Latest", "https://example.com/latest", now, "Example")
+        };
+
+        StateStore.AppendNews(state, incoming, keepDays, now);
+
+        Assert.Equal(3, state.CacheNews.Count);
+        Assert.Equal("https://example.com/latest", state.CacheNews[0].Link);
+        Assert.Contains(state.CacheNews, item => item.Link == "https://example.com/cached");
+        Assert.Contains(state.CacheNews, item => item.Link == "https://example.com/incoming");
+        Assert.DoesNotContain(state.CacheNews, item => item.Link.Contains("expired", StringComparison.Ordinal));
+    }
+
     [Fact]
     public void Query_article_identity_survives_encryption_review_and_retry_completion()
     {
-        var now = DateTimeOffset.UtcNow;
+        var now = DateTimeOffset.Parse("2026-09-03T12:00:00Z");
         const string key = "query-identity-test-key";
         var first = new NewsItem("Compiler 4.0 released", "https://example.com/news?docid=Private-A", now, "Example");
         var second = new NewsItem("Compiler 5.0 released", "https://example.com/news?docid=private-a", now, "Example");
         var firstCandidate = new ScoredArticle(first, 5, new[] { "Compiler" }, "compiler-4");
         var state = new StateOfWorld();
-        StateStore.AppendNews(state, new[] { first, second });
+        StateStore.AppendNews(state, new[] { first, second }, now: now);
         StateStore.MarkReviewed(state, new[] { firstCandidate }, new[] { firstCandidate }, now);
         StateStore.QueueDeliveryRetries(state, new[] { first, second }, now);
 
@@ -294,7 +326,7 @@ public sealed class StateStoreTests
         var scored = new ScoredArticle(article, 5, new[] { "AI" }, "event-private");
         var state = new StateOfWorld();
 
-        StateStore.AppendNews(state, new[] { article });
+        StateStore.AppendNews(state, new[] { article }, now: now);
         StateStore.UpdateFeedHealth(state, new[]
         {
             new FeedFetchResult(source, "ok", new[] { article }, ETag: "\"v1\"")
