@@ -70,7 +70,7 @@ var healthyFeeds = ingestion.Feeds.Count(feed => feed.IsHealthy);
 Console.WriteLine($"Sources healthy: {healthyFeeds}/{ingestion.Feeds.Count}; fetched articles: {ingestion.Articles.Count}");
 
 var keepDays = Math.Max(4, (int)Math.Ceiling(profile.LookbackHours / 24d) + 1);
-StateStore.AppendNews(state, ingestion.Articles, keepDays);
+StateStore.AppendNews(state, ingestion.Articles, keepDays, now);
 
 var candidateCutoff = StateStore.ResolveCandidateCutoff(state, now, profile.LookbackHours);
 var retryArticles = state.DeliveryRetries.Select(item => item.Article).ToList();

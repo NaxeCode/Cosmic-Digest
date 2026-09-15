@@ -165,7 +165,7 @@ public sealed class FinalReviewRegressionTests
         var scored = new ScoredArticle(article, 5, new[] { "AI" }, "event-private-link");
         var state = new StateOfWorld();
 
-        StateStore.AppendNews(state, new[] { article });
+        StateStore.AppendNews(state, new[] { article }, now: Now);
         StateStore.MarkReviewed(state, new[] { scored }, new[] { scored }, Now);
         StateStore.QueueDeliveryRetries(state, new[] { article }, Now);
         StateStore.RecordDelivery(state, new DeliveryAttempt(
@@ -245,7 +245,7 @@ public sealed class FinalReviewRegressionTests
         var scored = new ScoredArticle(article, 5, new[] { "AI" }, "event-private-content");
         var state = new StateOfWorld();
 
-        StateStore.AppendNews(state, new[] { article });
+        StateStore.AppendNews(state, new[] { article }, now: Now);
         StateStore.MarkReviewed(state, new[] { scored }, new[] { scored }, Now, "email-private-content");
         StateStore.QueueDeliveryRetries(state, new[] { article }, Now);
         StateStore.RecordDelivery(state, new DeliveryAttempt(
