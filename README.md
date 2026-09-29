@@ -1,255 +1,99 @@
 # Cosmic Digest
 
-![Stella](assets/brand/stella-avatar-128.png)
+A daily .NET job that turns RSS feeds into a short, relevance-gated email brief, built to deliver exactly once when feeds and providers fail.
 
-Cosmic Digest turns RSS updates into a sparse personal intelligence brief. It decides whether a development deserves attention before it writes or sends anything.
-
-The goal is not to fill a newsletter. The goal is to surface credible changes that can alter a decision, improve a capability, expose a time-sensitive opportunity, or invalidate a current model.
+[![status](https://img.shields.io/badge/status-active-a7c080?style=flat&labelColor=2d353b)](https://github.com/NaxeCode/Cosmic-Digest/actions/workflows/daily-digest.yml)
+![.NET](https://img.shields.io/badge/.NET-10-7fbbb3?style=flat&labelColor=2d353b&logo=dotnet&logoColor=d3c6aa)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-scheduled-7fbbb3?style=flat&labelColor=2d353b&logo=githubactions&logoColor=d3c6aa)
+![Resend](https://img.shields.io/badge/Resend-email-7fbbb3?style=flat&labelColor=2d353b&logo=resend&logoColor=d3c6aa)
 
 ## What it does
 
-- pulls candidate stories from configured RSS feeds;
-- records per-source health, conditional-cache metadata, retries, and circuit state;
-- groups related coverage into external events without treating publisher count as factual corroboration;
-- ranks them against a versioned personal briefing profile;
-- rejects previously reviewed, stale, irrelevant, and low-value items;
-- asks an OpenAI model for a structured `act`, `watch`, or tightly capped `learn` decision and omits low-value items;
-- states what changed, why it matters, the smallest justified next move, and evidence confidence;
-- sends a compact, accessible Stella-branded email through Resend with an idempotency key;
-- distinguishes API acceptance from the latest observed delivery state;
-- optionally captures signed usefulness feedback and verified Resend webhooks;
-- suppresses the email when nothing clears the materiality gate; and
-- persists a bounded review history through GitHub Actions.
+- Pulls candidate stories from configured RSS sources with per-attempt timeouts, up to three attempts, and conditional requests (`ETag` / `Last-Modified`, `304 Not Modified`).
+- Tracks per-source health and opens a circuit on a feed after repeated failures (default 3 failures, paused for 6 hours; both configurable).
+- Normalizes URLs, strips tracking parameters, and groups related coverage from different publishers into one event without treating publisher count as corroboration.
+- Scores events deterministically against a versioned briefing profile (priority, freshness, trust, novelty) before any model call.
+- Sends a small candidate set to an OpenAI model for a structured `act` / `watch` / `learn` decision; falls back to ranked headlines if the model call fails.
+- Suppresses the email entirely when nothing clears the materiality gate.
+- Delivers through Resend with a content-derived idempotency key, then polls `last_event` so API acceptance and actual delivery state are recorded separately.
+- Optional feedback service: signed, expiring feedback links and Svix-verified Resend webhooks.
 
-The full behavior is defined in [the briefing contract](docs/briefing-contract.md).
+## How it works
 
-## Pipeline
+The job runs once a day in GitHub Actions and keeps its state in `data/state.json`, which the workflow commits back to the repo. Sending is split into two phases so a crash between "decided" and "sent" cannot lose or duplicate an email.
 
-```text
-source registry
-  -> bounded article cache
-  -> cross-source event identity and related coverage
-  -> deterministic priority, freshness, trust, and novelty score
-  -> structured AI decision gate
-  -> Stella-branded evidence-linked brief
-  -> Resend
-  -> reviewed-event, delivery, source-health, and run state
+```mermaid
+flowchart LR
+    subgraph ingest[Ingestion]
+        F[RSS sources] -->|timeout, 3 attempts,<br/>ETag / 304| I[RssIngestor]
+        I --> H[(source health<br/>+ circuit state)]
+    end
+    I --> E[EventIdentity<br/>dedupe + clustering]
+    E --> R[Relevance<br/>deterministic score]
+    R --> A[NewsAi<br/>structured decision]
+    A --> C[DigestComposer]
+    C --> O[(prepared outbox<br/>AES-GCM encrypted)]
+    O -->|Idempotency-Key| S[Resend]
+    S -->|last_event poll| D[(delivery state<br/>+ retry queue)]
+    S -.webhooks.-> W[Feedback API<br/>Svix-verified]
+    O & D & H --> ST[(data/state.json<br/>committed by CI)]
 ```
 
-The deterministic layer keeps the AI input small and auditable. The AI layer performs the context-sensitive judgment that literal keyword scoring cannot: whether a matched item actually changes anything for the reader.
+Reliability mechanisms, all in the code:
 
-## Requirements
+| Concern | Mechanism | Where |
+| --- | --- | --- |
+| Flaky feeds | Per-attempt timeout, 3 attempts, conditional GET | `RssIngestor.cs` |
+| Persistently broken feeds | Circuit breaker per source, bounded by profile settings | `RssIngestor.cs`, `BriefingProfile.cs` |
+| Duplicate sends | Content-derived idempotency key, stable across clock/date boundaries; advances only after a recorded retryable terminal failure | `DigestIdempotency.cs`, `ResendEmailClient.cs` |
+| Crash between prepare and send | Outbox committed before sending (`--prepare-only`), replayed by `--deliver-pending` | `Program.cs`, `.github/workflows/daily-digest.yml` |
+| Ambiguous delivery | Workflow retries `--deliver-pending` with backoff while the outbox is non-empty; unresolved delivery ids are reconciled before new selection | `daily-digest.yml`, `Program.cs` |
+| Retryable vs terminal failures | Retryable failures return events to a durable retry queue; complaints and other terminal states stay reviewed | `ReviewPolicy.cs`, `StateStore.cs` |
+| Public state in a public repo | Titles, links, validators and outbox payloads encrypted with AES-GCM; feed URLs replaced by non-reversible identities | `DurableSecretProtection.cs`, `SourceIdentity.cs` |
+| Torn writes | Write to temp file then atomic rename; the feedback journal adds a shared lock file | `StateStore.cs`, `JsonLineJournal.cs` |
+| Oversized webhook bodies | Bounded body reader (256 KB webhooks, 8 KB feedback forms) before parsing | `BoundedBodyReader.cs` |
+| Concurrent runs | Workflow `concurrency` group; a state push conflict fails the job instead of dropping state | `daily-digest.yml` |
 
-- .NET 10 SDK
-- Resend API key
-- OpenAI API key when `ENABLE_AI_SUMMARY=true`
+A JSON file is the right store for a single daily writer. The feedback service is explicitly single-replica with an append-only journal. The full behavior contract is in [docs/briefing-contract.md](docs/briefing-contract.md).
+
+## Getting started
+
+Requires the .NET 10 SDK.
 
 ```bash
 git clone https://github.com/NaxeCode/Cosmic-Digest.git
 cd Cosmic-Digest
 cp .env.example .env
 dotnet restore
-dotnet run
+dotnet build --configuration Release
+dotnet test --configuration Release
 ```
 
-Generate a deterministic presentation preview without network calls or secrets:
+Render a deterministic email preview with no network calls or secrets (written to `artifacts/email-preview.html`):
 
 ```bash
 dotnet run -- --preview
 ```
 
-The resulting `artifacts/email-preview.html` is intentionally gitignored.
-
-## Personalization
-
-The preferred input is a JSON profile. Start from [the example profile](config/briefing-profile.example.json):
+A real run needs `RESEND_API_KEY`, `OUTBOX_ENCRYPTION_KEY`, `MAIL_TO` and `MAIL_FROM`, plus `OPENAI_API_KEY` when `ENABLE_AI_SUMMARY=true`. Personalization comes from a JSON profile; start from [config/briefing-profile.example.json](config/briefing-profile.example.json) and point `DIGEST_PROFILE_PATH` at a local copy (gitignored). In CI the profile is supplied as the `DIGEST_PROFILE_B64` secret.
 
 ```bash
-cp config/briefing-profile.example.json briefing-profile.local.json
+dotnet run -- --prepare-only     # select, compose, and commit the outbox; no send
+dotnet run -- --deliver-pending  # send or reconcile whatever is in the outbox
+dotnet run                       # both, in one process
 ```
 
-Then set this in `.env`:
-
-```dotenv
-DIGEST_PROFILE_PATH=briefing-profile.local.json
-```
-
-The local profile is gitignored. The repository is public, so do not commit real personal context.
-
-For GitHub Actions, store the base64-encoded profile as one repository secret:
-
-```bash
-gh secret set DIGEST_PROFILE_B64 --body "$(base64 -w0 briefing-profile.local.json)"
-```
-
-If no JSON profile is supplied, Cosmic Digest remains backward compatible with `PREF_TOPICS`, `PREF_KEYWORDS`, `PREF_REGIONS`, and `RSS_FEEDS`.
-
-### Profile fields
-
-| Field | Purpose |
-| --- | --- |
-| `version` | Identifies the context revision used in the email |
-| `objective` | Defines what the brief is optimizing |
-| `priorities` | Weighted domains, matching signals, and why each matters |
-| `trustedDomains` | Adds a bounded source-quality boost |
-| `exclusions` | Names recurring classes of noise |
-| `sources` | Named RSS inputs with official/trust metadata and tags |
-| `feeds` | Backward-compatible list converted into source entries |
-| `lookbackHours` | Bounds freshness and cache retention |
-| `candidateLimit` | Caps AI input size |
-| `maxItems` | Caps the brief, never creates a quota |
-| `minimumScore` | Deterministic admission threshold |
-| `eventSimilarityThreshold` | Bounds cross-source title clustering |
-| `feedCircuitFailureThreshold` | Opens a temporary feed circuit after repeated failures |
-| `feedCircuitHours` | Duration of the temporary feed pause |
-
-Keep the profile minimal. It should contain only context needed to rank external developments, never credentials, mutable balances, private records, or raw personal-system files.
-
-## Configuration
-
-```dotenv
-# Required delivery settings
-RESEND_API_KEY=re_xxxxx
-OUTBOX_ENCRYPTION_KEY=replace-with-an-independent-random-secret
-MAIL_TO=you@example.com
-MAIL_FROM=Stella · Cosmic Digest <stella@digest.yourdomain.com>
-TIMEZONE=America/New_York
-RESEND_VERIFY_DELIVERY=true
-
-# Sender identity
-BRAND_NAME=Stella · Cosmic Digest
-BRAND_AVATAR_URL=https://raw.githubusercontent.com/NaxeCode/Cosmic-Digest/main/assets/brand/stella-avatar-128.png
-
-# AI decision layer
-OPENAI_API_KEY=sk-proj-xxxxx
-ENABLE_AI_SUMMARY=true
-OPENAI_MODEL=gpt-6-astra
-OPENAI_REASONING_EFFORT=xhigh
-
-# Preferred profile input
-DIGEST_PROFILE_PATH=briefing-profile.local.json
-
-# Optional outcome loop; both values are required before links appear
-FEEDBACK_BASE_URL=https://feedback.yourdomain.com/feedback
-FEEDBACK_SIGNING_KEY=replace-with-a-long-random-secret
-
-# Legacy fallback inputs
-PREF_TOPICS=ai,backend,developer tooling
-PREF_KEYWORDS=OpenAI,.NET,C#,PostgreSQL
-PREF_REGIONS=United States
-RSS_FEEDS=https://openai.com/news/rss.xml,https://github.blog/changelog/feed/
-```
-
-`gpt-6-astra` with `xhigh` reasoning is the project default in both the application and daily workflow. `OPENAI_MODEL` and `OPENAI_REASONING_EFFORT` remain explicit runtime overrides.
-
-## GitHub Actions
-
-The daily workflow runs at 8:17 AM in `America/New_York`. The off-hour minute reduces top-of-hour queue pressure, while the IANA timezone preserves the local time across daylight-saving changes.
-
-Configure these repository secrets:
-
-- `RESEND_API_KEY`
-- `OUTBOX_ENCRYPTION_KEY`
-- `MAIL_TO`
-- `MAIL_FROM`
-- `OPENAI_API_KEY`
-- `ENABLE_AI_SUMMARY`
-- `DIGEST_PROFILE_B64`
-
-Optional capabilities use `BRAND_AVATAR_URL`, `FEEDBACK_BASE_URL`, `FEEDBACK_SIGNING_KEY`, and `RESEND_VERIFY_DELIVERY`.
-
-`OPENAI_MODEL` and `OPENAI_REASONING_EFFORT` may be set as repository variables. Supported reasoning levels are `low`, `medium`, `high`, and `xhigh`; choose a level supported by the configured model. The workflow has a concurrency guard, runs the test suite before delivery, and fails visibly if reviewed-state persistence cannot be pushed.
-
-Manual dispatch defaults to `validate_only=true`: it prepares against a disposable copy of production state, without sending email or committing state. Use this mode after changing secrets or profiles. Set `validate_only=false` only for an intentional production send; scheduled runs continue to deliver normally.
-
-`OUTBOX_ENCRYPTION_KEY` is required even when no articles are selected because feed health and cached content are protected. A missing key exits before state loading or network requests. Generate an independent key once and keep it stable; never substitute the Resend API key.
-
-The log must show the intended private profile version. `legacy-env` means `DIGEST_PROFILE_B64` has not been activated; it is a compatibility mode, not proof that the private briefing profile was deployed.
-
-Scheduled GitHub Actions may still be delayed under platform load. The workflow preserves correct local scheduling, but GitHub does not provide a real-time delivery SLA.
-
-## State and failure semantics
-
-`data/state.json` stores a short article cache plus reviewed-event, durable delivery-retry, source-health, delivery, and run-metric history.
-
-- Upgrades use the prior `LastDigestUtc` as a migration boundary and persist it until it ages outside the active lookback window.
-- URL tracking parameters are removed before deduplication; functional query values and path/query case remain part of private comparison identity.
-- Compatible titles from independent publishers are grouped as related coverage. Negations, cancellations, delays, and retractions remain distinct from the original event. Publisher count alone does not prove corroboration.
-- New links are also compared with retained reviewed titles without collapsing conflicting versions or reversal signals.
-- AI-rejected candidates are marked reviewed so they do not consume tokens every day.
-- If AI synthesis fails, the email falls back to deterministic ranked headlines; undisplayed candidates stay eligible and are not counted as suppressed.
-- Feed URLs are replaced by non-reversible identities. Functional article URLs and comparison identities are retained only inside authenticated encryption; public URL redaction is not used as an identity key. Feed validators, errors, article titles, summaries, links, and reviewed identities are encrypted with `OUTBOX_ENCRYPTION_KEY` before state is committed. Legacy records migrate on their next write; a missing or incorrect key aborts without overwriting valid ciphertext. Public failure logs contain only controlled error categories or HTTP status, never private parser messages or provider response bodies.
-- Ambiguous delivery failures are retried with the same idempotency key during the active workflow; terminal retryable failures restore included events to the durable retry queue, while AI-rejected candidates remain reviewed.
-- Explicit delivery retries remain eligible beyond the normal freshness lookback until they succeed or become terminal nonretryable outcomes.
-- Resend is polled briefly for `last_event`; all unresolved delivery ids remain available for reconciliation before later selection runs, independently of the bounded completed-delivery history.
-- Content-derived idempotency keys stay stable across clock and date boundaries while a send outcome is ambiguous, then advance only after a recorded retryable terminal failure.
-- A prepared-send outbox is committed before the Resend process begins. It encrypts the exact sender, recipient, subject, and bodies with a stable dedicated key, then replays that payload directly before any new selection work if the outcome was ambiguous.
-- Recipient complaints remain terminal and reviewed; they are never treated as retryable delivery failures.
-- If the state commit conflicts, the workflow fails instead of silently losing state.
-- The workflow commits a state file produced by the digest even when delivery exits nonzero, while preserving the failed job result.
-
-This remains intentionally small. JSON is still the correct store for one daily writer. The optional feedback service is explicitly a single-replica, append-only journal and can be moved to managed storage only when observed volume or multiple replicas justify it.
-
-## Feedback and delivery service
-
-`feedback/CosmicDigest.Feedback.Api` is an optional minimal ASP.NET service with:
-
-- `GET /feedback` for a scanner-safe confirmation page and `POST /feedback` for the signed, expiring `Useful`, `Noise`, `Wrong`, and `I acted` response;
-- `POST /webhooks/resend` for raw-body Svix-verified delivery events with `svix-id` deduplication;
-- `GET /metrics` for aggregate outcomes behind a bearer token; and
-- `GET /health` for hosting checks.
-
-Feedback is deduplicated by validated event identity, so an event can contribute only one outcome even if multiple signal links are confirmed. Feedback and webhook entries use the same atomically replaced journal record, and a shared lock file coordinates overlapping processes on the mounted volume, so an interrupted or concurrent write cannot separate an event from its uniqueness marker.
-Unsigned webhook bodies are rejected above 256 KB before the service constructs the payload string.
-Feedback confirmation bodies accept only URL-encoded forms and are rejected above 8 KB before parsing.
-
-It is deliberately dormant until its URL and secrets are configured. Build its container from the repository root:
+The optional feedback API (`GET/POST /feedback`, `POST /webhooks/resend`, `GET /metrics`, `GET /health`) builds from the repo root:
 
 ```bash
 docker build -f feedback/CosmicDigest.Feedback.Api/Dockerfile -t cosmic-digest-feedback .
 ```
 
-Use persistent storage for `FEEDBACK_DATA_DIR`. The service stores outcomes, not a public digest archive, and it never adjusts profile weights automatically.
+Domain, webhook and test-inbox setup is in [docs/external-setup.md](docs/external-setup.md).
 
-See [external setup](docs/external-setup.md) for the custom domain, Gmail avatar, Resend webhook, Student Pack, and Testmail gates.
+## Status
 
-## Development
+Running daily in GitHub Actions (`daily-digest.yml`, 08:17 America/New_York). CI builds and runs the xUnit suite on every push, and a weekly `email-contract.yml` job sends a real email to a test inbox and checks its content when enabled. Manual dispatch defaults to a validate-only dry run against a copy of production state.
 
-```bash
-dotnet restore
-dotnet build --configuration Release
-dotnet test --configuration Release
-```
-
-Project layout:
-
-```text
-Program.cs                         pipeline and delivery
-BriefingProfile.cs                 private-profile loading and validation
-Relevance.cs                       deterministic selection and URL identity
-NewsAi.cs                          structured AI decision gate
-DigestComposer.cs                  plain-text and HTML-safe rendering
-RssIngestor.cs                     feed ingestion
-EventIdentity.cs                   event clustering and stable identity
-FeedbackSecurity.cs                signed feedback and webhook verification
-ResendEmailClient.cs               idempotent send and delivery-state lookup
-StateStore.cs                      bounded operational memory
-feedback/CosmicDigest.Feedback.Api optional outcome and webhook service
-assets/brand/                      Stella sender identity assets
-tests/CosmicDigest.Tests/          regression tests
-docs/briefing-contract.md          product and failure contract
-```
-
-## Security
-
-- Real profiles and `.env` files are gitignored.
-- GitHub Actions receives the profile through an encrypted secret.
-- Article titles and summaries are treated as untrusted model input.
-- Raw HTML from the model or feeds is disabled during Markdown rendering.
-- The prompt forbids unsupported versions, metrics, prices, dates, and causal claims.
-
-If a key is exposed, revoke it immediately and replace the corresponding repository secret.
-
-## License
-
-MIT
+---
+<sub>Built by [Aladdin Ali](https://github.com/NaxeCode) · [naxecode.github.io](https://naxecode.github.io)</sub>
