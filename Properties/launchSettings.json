@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "ai-newsletter": {
+    "CosmicDigest": {
       "commandName": "Project"
     },
     "Container (Dockerfile)": {
