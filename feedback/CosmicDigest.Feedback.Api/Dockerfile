@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY ai-newsletter.csproj ./
+COPY CosmicDigest.csproj ./
 COPY feedback/CosmicDigest.Feedback.Api/CosmicDigest.Feedback.Api.csproj feedback/CosmicDigest.Feedback.Api/
 RUN dotnet restore feedback/CosmicDigest.Feedback.Api/CosmicDigest.Feedback.Api.csproj
 COPY . .

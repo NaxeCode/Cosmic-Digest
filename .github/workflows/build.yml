@@ -29,10 +29,10 @@ jobs:
       run: dotnet test --no-build --configuration Release
 
     - name: Publish
-      run: dotnet publish ai-newsletter.csproj --no-build --configuration Release --output ./publish
+      run: dotnet publish CosmicDigest.csproj --no-build --configuration Release --output ./publish
       
     - name: Upload artifacts
       uses: actions/upload-artifact@v7
       with:
-        name: ai-newsletter
+        name: CosmicDigest
         path: ./publish
