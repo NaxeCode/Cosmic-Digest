@@ -4,10 +4,10 @@
 
 A daily .NET job that turns RSS feeds into a short, relevance-gated email brief, built to deliver exactly once when feeds and providers fail.
 
-[![status](https://img.shields.io/badge/status-active-a7c080?style=flat&labelColor=2d353b)](https://github.com/NaxeCode/Cosmic-Digest/actions/workflows/daily-digest.yml)
-![.NET](https://img.shields.io/badge/.NET-10-7fbbb3?style=flat&labelColor=2d353b&logo=dotnet&logoColor=d3c6aa)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-scheduled-7fbbb3?style=flat&labelColor=2d353b&logo=githubactions&logoColor=d3c6aa)
-![Resend](https://img.shields.io/badge/Resend-email-7fbbb3?style=flat&labelColor=2d353b&logo=resend&logoColor=d3c6aa)
+[![active](.github/brand/badges/status.svg)](#status)
+![.NET](.github/brand/badges/tech-net.svg)
+![C#](.github/brand/badges/tech-c.svg)
+![GitHub Actions](.github/brand/badges/tech-github-actions.svg)
 
 ## What it does
 
@@ -96,6 +96,18 @@ Domain, webhook and test-inbox setup is in [docs/external-setup.md](docs/externa
 ## Status
 
 Running daily in GitHub Actions (`daily-digest.yml`, 08:17 America/New_York). CI builds and runs the xUnit suite on every push, and a weekly `email-contract.yml` job sends a real email to a test inbox and checks its content when enabled. Manual dispatch defaults to a validate-only dry run against a copy of production state.
+
+## How this project is run
+
+[![tracked in Linear](.github/brand/badges/run-linear.svg)](https://linear.app) [![AI-reviewed · Codex](.github/brand/badges/run-codex.svg)](#how-this-project-is-run) [![PR-only main](.github/brand/badges/run-main.svg)](#how-this-project-is-run)
+
+- **Planning:** tracked in Linear as initiatives → projects → milestones → issues; branch names and PR titles carry the issue ID.
+- **Review:** every pull request gets a Codex review before merge.
+- **Guardrails:** the default branch changes only through pull requests (GitHub ruleset).
+
+## License
+
+MIT. See [LICENSE](LICENSE).
 
 ---
 <sub>Built by [Aladdin Ali](https://github.com/NaxeCode) · [naxecode.github.io](https://naxecode.github.io)</sub>
