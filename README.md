@@ -4,10 +4,10 @@
 
 A daily .NET job that turns RSS feeds into a short, relevance-gated email brief, built to deliver exactly once when feeds and providers fail.
 
-[![status](https://img.shields.io/badge/status-active-a7c080?style=flat&labelColor=2d353b)](https://github.com/NaxeCode/Cosmic-Digest/actions/workflows/daily-digest.yml)
-![.NET](https://img.shields.io/badge/.NET-10-7fbbb3?style=flat&labelColor=2d353b&logo=dotnet&logoColor=d3c6aa)
-![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-scheduled-7fbbb3?style=flat&labelColor=2d353b&logo=githubactions&logoColor=d3c6aa)
-![Resend](https://img.shields.io/badge/Resend-email-7fbbb3?style=flat&labelColor=2d353b&logo=resend&logoColor=d3c6aa)
+[![active](.github/brand/badges/status.svg)](#status)
+![.NET](.github/brand/badges/tech-net.svg)
+![C#](.github/brand/badges/tech-c.svg)
+![GitHub Actions](.github/brand/badges/tech-github-actions.svg)
 
 ## What it does
 
@@ -22,7 +22,7 @@ A daily .NET job that turns RSS feeds into a short, relevance-gated email brief,
 
 ## How it works
 
-The job runs once a day in GitHub Actions and keeps its state in `data/state.json`, which the workflow commits back to the repo. Sending is split into two phases so a crash between "decided" and "sent" cannot lose or duplicate an email.
+The repository name is `Cosmic-Digest`; the project and solution are `CosmicDigest.csproj` / `CosmicDigest.slnx`. The job runs once a day in GitHub Actions and keeps its state in `data/state.json`, which the workflow commits back to the repo. Sending is split into two phases so a crash between "decided" and "sent" cannot lose or duplicate an email.
 
 ```mermaid
 flowchart LR
@@ -45,15 +45,15 @@ Reliability mechanisms, all in the code:
 
 | Concern | Mechanism | Where |
 | --- | --- | --- |
-| Flaky feeds | Per-attempt timeout, 3 attempts, conditional GET | `RssIngestor.cs` |
-| Persistently broken feeds | Circuit breaker per source, bounded by profile settings | `RssIngestor.cs`, `BriefingProfile.cs` |
-| Duplicate sends | Content-derived idempotency key, stable across clock/date boundaries; advances only after a recorded retryable terminal failure | `DigestIdempotency.cs`, `ResendEmailClient.cs` |
+| Flaky feeds | Per-attempt timeout, 3 attempts, conditional GET | `Ingestion/RssIngestor.cs` |
+| Persistently broken feeds | Circuit breaker per source, bounded by profile settings | `Ingestion/RssIngestor.cs`, `Selection/BriefingProfile.cs` |
+| Duplicate sends | Content-derived idempotency key, stable across clock/date boundaries; advances only after a recorded retryable terminal failure | `Delivery/DigestIdempotency.cs`, `Delivery/ResendEmailClient.cs` |
 | Crash between prepare and send | Outbox committed before sending (`--prepare-only`), replayed by `--deliver-pending` | `Program.cs`, `.github/workflows/daily-digest.yml` |
 | Ambiguous delivery | Workflow retries `--deliver-pending` with backoff while the outbox is non-empty; unresolved delivery ids are reconciled before new selection | `daily-digest.yml`, `Program.cs` |
-| Retryable vs terminal failures | Retryable failures return events to a durable retry queue; complaints and other terminal states stay reviewed | `ReviewPolicy.cs`, `StateStore.cs` |
-| Public state in a public repo | Titles, links, validators and outbox payloads encrypted with AES-GCM; feed URLs replaced by non-reversible identities | `DurableSecretProtection.cs`, `SourceIdentity.cs` |
-| Torn writes | Write to temp file then atomic rename; the feedback journal adds a shared lock file | `StateStore.cs`, `JsonLineJournal.cs` |
-| Oversized webhook bodies | Bounded body reader (256 KB webhooks, 8 KB feedback forms) before parsing | `BoundedBodyReader.cs` |
+| Retryable vs terminal failures | Retryable failures return events to a durable retry queue; complaints and other terminal states stay reviewed | `Selection/ReviewPolicy.cs`, `State/StateStore.cs` |
+| Public state in a public repo | Titles, links, validators and outbox payloads encrypted with AES-GCM; feed URLs replaced by non-reversible identities | `Security/DurableSecretProtection.cs`, `Ingestion/SourceIdentity.cs` |
+| Torn writes | Write to temp file then atomic rename; the feedback journal adds a shared lock file | `State/StateStore.cs`, `State/JsonLineJournal.cs` |
+| Oversized webhook bodies | Bounded body reader (256 KB webhooks, 8 KB feedback forms) before parsing | `Security/BoundedBodyReader.cs` |
 | Concurrent runs | Workflow `concurrency` group; a state push conflict fails the job instead of dropping state | `daily-digest.yml` |
 
 A JSON file is the right store for a single daily writer. The feedback service is explicitly single-replica with an append-only journal. The full behavior contract is in [docs/briefing-contract.md](docs/briefing-contract.md).
@@ -96,6 +96,18 @@ Domain, webhook and test-inbox setup is in [docs/external-setup.md](docs/externa
 ## Status
 
 Running daily in GitHub Actions (`daily-digest.yml`, 08:17 America/New_York). CI builds and runs the xUnit suite on every push, and a weekly `email-contract.yml` job sends a real email to a test inbox and checks its content when enabled. Manual dispatch defaults to a validate-only dry run against a copy of production state.
+
+## How this project is run
+
+[![tracked in Linear](.github/brand/badges/run-linear.svg)](https://linear.app) [![AI-reviewed · Codex](.github/brand/badges/run-codex.svg)](#how-this-project-is-run) [![PR-only main](.github/brand/badges/run-main.svg)](#how-this-project-is-run)
+
+- **Planning:** tracked in Linear as initiatives → projects → milestones → issues; branch names and PR titles carry the issue ID.
+- **Review:** every pull request gets a Codex review before merge.
+- **Guardrails:** the default branch changes only through pull requests (GitHub ruleset).
+
+## License
+
+MIT. See [LICENSE](LICENSE).
 
 ---
 <sub>Built by [Aladdin Ali](https://github.com/NaxeCode) · [naxecode.github.io](https://naxecode.github.io)</sub>

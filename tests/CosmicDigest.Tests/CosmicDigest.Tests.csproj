@@ -16,6 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../ai-newsletter.csproj" />
+    <ProjectReference Include="../../CosmicDigest.csproj" />
   </ItemGroup>
 </Project>
