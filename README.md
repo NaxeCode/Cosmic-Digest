@@ -93,6 +93,29 @@ docker build -f feedback/CosmicDigest.Feedback.Api/Dockerfile -t cosmic-digest-f
 
 Domain, webhook and test-inbox setup is in [docs/external-setup.md](docs/external-setup.md).
 
+## Complimentary API allowance
+
+The daily workflow reserves 25,000 input plus output tokens before inference,
+commits that reservation to `data/ai-allowance.json`, and requires a successful
+push before calling OpenAI. There is one attempt per UTC day, no SDK retries,
+a conservative UTF-8 input bound, and a 3,000-token output ceiling. Failed or
+cancelled attempts retain their reservation. Calls in the last five UTC minutes
+are refused. A missing allowance or model failure uses the existing deterministic
+briefing fallback. Manual validate-only runs do not call OpenAI. Local AI runs also
+require a valid `DIGEST_AI_LEASE`; do not reset the ledger to force retries.
+
+Only `gpt-6-astra` is allowed by this reservation policy. Existing project credentials
+remain in GitHub secrets. Personal profile priorities and matched-priority labels
+stay local; the shared prompt includes the selected public news material and a
+generic editorial instruction. Only configure feeds suitable for sharing.
+
+This is a local usage cap, not an OpenAI billing guarantee: the incentive allowance
+is shared by the entire organization, other applications can exhaust it, and
+eligibility can change. Check OpenAI usage for the **Data sharing incentive tier**.
+`store: false` does not disable training sharing. No automatic paid fallback or
+extra background work is enabled. Run `python3 -m unittest discover -s scripts
+-p 'test_*.py'` alongside the .NET tests when changing the allowance.
+
 ## Status
 
 Running daily in GitHub Actions (`daily-digest.yml`, 08:17 America/New_York). CI builds and runs the xUnit suite on every push, and a weekly `email-contract.yml` job sends a real email to a test inbox and checks its content when enabled. Manual dispatch defaults to a validate-only dry run against a copy of production state.

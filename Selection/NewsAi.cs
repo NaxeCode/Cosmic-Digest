@@ -2,6 +2,8 @@ using System.Text;
 using System.Text.Json;
 using System.Diagnostics;
 using OpenAI.Chat;
+using System.ClientModel;
+using System.ClientModel.Primitives;
 
 public sealed record AiBriefingResult(
     BriefingDocument Briefing,
@@ -27,25 +29,35 @@ public static class NewsAi
         var model = Environment.GetEnvironmentVariable("OPENAI_MODEL") ?? "gpt-6-astra";
         var reasoningEffort = ResolveReasoningEffortName();
 
-        var client = new OpenAI.OpenAIClient(apiKey).GetChatClient(model);
+        if (model != "gpt-6-astra")
+            throw new InvalidOperationException("This allocation is qualified only for gpt-6-astra.");
+        var systemPrompt = BuildSystemPrompt(profile);
+        var candidatePrompt = BuildCandidatePrompt(candidates);
+        var schema = BuildSchema(profile.MaxItems);
+        ComplimentaryAllowance.ValidateSize(systemPrompt, candidatePrompt, schema);
+        ComplimentaryAllowance.Claim("data/ai-allowance.json",
+            Environment.GetEnvironmentVariable("DIGEST_AI_LEASE") ?? "", DateTimeOffset.UtcNow);
+        var client = new OpenAI.OpenAIClient(new ApiKeyCredential(apiKey),
+            new OpenAI.OpenAIClientOptions { RetryPolicy = new ClientRetryPolicy(0) }).GetChatClient(model);
         var messages = new List<ChatMessage>
         {
-            ChatMessage.CreateSystemMessage(BuildSystemPrompt(profile)),
-            ChatMessage.CreateUserMessage(BuildCandidatePrompt(candidates))
+            ChatMessage.CreateSystemMessage(systemPrompt),
+            ChatMessage.CreateUserMessage(candidatePrompt)
         };
 
         var options = new ChatCompletionOptions
         {
             ReasoningEffortLevel = ResolveReasoningEffort(),
-            MaxOutputTokenCount = 3_000,
+            MaxOutputTokenCount = ComplimentaryAllowance.MaxOutputTokens,
             ResponseFormat = ChatResponseFormat.CreateJsonSchemaFormat(
                 jsonSchemaFormatName: "personal_intelligence_brief",
-                jsonSchema: BinaryData.FromBytes(BuildSchema(profile.MaxItems)),
+                jsonSchema: BinaryData.FromBytes(schema),
                 jsonSchemaIsStrict: true)
         };
 
         var timer = Stopwatch.StartNew();
-        var response = await client.CompleteChatAsync(messages, options);
+        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(90));
+        var response = await client.CompleteChatAsync(messages, options, deadline.Token);
         timer.Stop();
         var json = response.Value.Content.FirstOrDefault()?.Text
             ?? throw new InvalidOperationException("The model returned no briefing content.");
@@ -126,21 +138,14 @@ public static class NewsAi
 
     private static string BuildSystemPrompt(BriefingProfile profile)
     {
-        var priorities = string.Join('\n', profile.Priorities.Select(priority =>
-            $"- {priority.Name} (weight {priority.Weight}/5): {priority.WhyItMatters}"));
-        var exclusions = string.Join('\n', profile.Exclusions.Select(exclusion => $"- {exclusion}"));
-
         return $$"""
             You are the selection and synthesis layer for a private daily intelligence brief.
 
             OBJECTIVE
-            {{profile.Objective}}
+            Explain material developments supported by the supplied public news reports.
 
-            CURRENT PRIORITIES
-            {{priorities}}
-
-            EXCLUDE
-            {{exclusions}}
+            RELEVANCE
+            Candidates were ranked locally. Personal priorities and exclusions are intentionally not supplied.
 
             DECISION RULES
             - Select zero to {{profile.MaxItems}} items. Never fill a quota.
@@ -173,7 +178,6 @@ public static class NewsAi
             sb.AppendLine($"Source: {PlainText(candidate.Article.Source)}");
             sb.AppendLine($"Published: {candidate.Article.Published:O}");
             sb.AppendLine($"Related coverage ({candidate.SourceCount} publishers; representative report below): {string.Join(", ", candidate.EvidenceSources.Select(PlainText))}");
-            sb.AppendLine($"Matched priorities: {string.Join(", ", candidate.MatchedPriorities)}");
             sb.AppendLine($"Deterministic score: {candidate.Score:F3}");
             sb.AppendLine($"Summary: {PlainText(candidate.Article.Summary)}");
             sb.AppendLine();

@@ -58,6 +58,28 @@ jobs:
 
     - name: Test
       run: dotnet test --no-build --configuration Release
+    - name: Test allowance reservations
+      run: python3 -m unittest discover -s scripts -p "test_*.py"
+
+    - name: Reserve daily AI allowance
+      id: ai-allowance
+      if: ${{ !inputs.validate_only }}
+      env:
+        AI_ENABLED: ${{ secrets.ENABLE_AI_SUMMARY }}
+      run: |
+        if [ "$AI_ENABLED" != "true" ]; then
+          echo "allowed=false" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        python3 scripts/reserve_ai.py
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add data/ai-allowance.json
+        if ! git diff --staged --quiet; then
+          git commit -m "chore: reserve daily AI allowance [skip ci]"
+          # No pull/rebase/retry: a conflict must stop inference.
+          git push origin HEAD:main
+        fi
 
     - name: Prepare digest without sending
       id: prepare-digest
@@ -70,7 +92,8 @@ jobs:
         FEEDBACK_SIGNING_KEY: ${{ secrets.FEEDBACK_SIGNING_KEY }}
         TIMEZONE: ${{ secrets.TIMEZONE }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        ENABLE_AI_SUMMARY: ${{ secrets.ENABLE_AI_SUMMARY }}
+        ENABLE_AI_SUMMARY: ${{ steps.ai-allowance.outputs.allowed == 'true' && 'true' || 'false' }}
+        DIGEST_AI_LEASE: ${{ steps.ai-allowance.outputs.lease }}
         DIGEST_PROFILE_B64: ${{ secrets.DIGEST_PROFILE_B64 }}
         PREF_TOPICS: ${{ secrets.PREF_TOPICS }}
         PREF_REGIONS: ${{ secrets.PREF_REGIONS }}

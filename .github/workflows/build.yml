@@ -27,6 +27,8 @@ jobs:
 
     - name: Test
       run: dotnet test --no-build --configuration Release
+    - name: Test allowance reservations
+      run: python3 -m unittest discover -s scripts -p "test_*.py"
 
     - name: Publish
       run: dotnet publish CosmicDigest.csproj --no-build --configuration Release --output ./publish
