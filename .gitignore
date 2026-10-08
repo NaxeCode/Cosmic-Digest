@@ -54,10 +54,17 @@ desktop.ini
 # Docker
 docker-compose.override.yml
 
-# Data directory - ignore everything except state.json
+# Data directory - keep state and non-sensitive reservation metadata
 data/*
 !data/state.json
+!data/ai-allowance.json
+
+# Python bytecode
+__pycache__/
 
 # Local feedback and preview output
 feedback-data/
 artifacts/
+
+# Ephemeral local dispatch markers; reservation ledger is committed before API use.
+data/ai-allowance.json.consumed-*
