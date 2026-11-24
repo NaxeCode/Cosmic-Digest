@@ -25,9 +25,9 @@ internal static class LocalEvaluation
         string? Error, string[] Selected, bool[] ItemQuotes, bool Rubric, string[] Failures);
     private static string Hash(string text) => Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(text)));
 
-    private static IEnumerable<Trial> Trials()
+    private static IEnumerable<Trial> Trials(string corpus)
     {
-        var path = Path.Combine(AppContext.BaseDirectory, "model-eval", "packets.json");
+        var path = Path.Combine(AppContext.BaseDirectory, "model-eval", corpus);
         var packets = JsonSerializer.Deserialize<Packet[]>(File.ReadAllText(path), Json)!;
         foreach (var packet in packets)
         {
@@ -49,9 +49,9 @@ internal static class LocalEvaluation
         }
     }
 
-    internal static int Prepare(string output)
+    internal static int Prepare(string output, string corpus = "packets.json")
     {
-        var prompts = Trials().Select(t => new { packet = t.Packet.Id, t.Order, t.Ids, t.System, t.User, t.PromptHash });
+        var prompts = Trials(corpus).Select(t => new { packet = t.Packet.Id, t.Order, t.Ids, t.System, t.User, t.PromptHash });
         File.WriteAllText(output, JsonSerializer.Serialize(prompts, Json) + "\n");
         return 0;
     }
@@ -64,10 +64,10 @@ internal static class LocalEvaluation
         return 0;
     }
 
-    internal static string SerializeReport(string raw)
+    internal static string SerializeReport(string raw, string corpus = "packets.json")
     {
         var run = JsonSerializer.Deserialize<Run>(File.ReadAllText(raw), Json)!;
-        var trials = Trials().ToArray();
+        var trials = Trials(corpus).ToArray();
         if (run.Outputs.Length != trials.Length) throw new InvalidDataException("Expected every prompt exactly once.");
         var completions = run.Outputs.ToDictionary(c => (c.Packet, c.Order));
         var outcomes = new List<Outcome>();
@@ -95,6 +95,18 @@ internal static class LocalEvaluation
             retrospectiveAdmitted = admitted.Length, retrospectiveReferred = pairs.Length - admitted.Length,
             admittedAndRubricBothWays = admitted.Count(pair => pair.All(o => o.Rubric)),
         };
+        if (corpus == "corrections.json")
+        {
+            var rows = outcomes.Select(o =>
+            {
+                var reason = o.QuoteGate ? CorrectionReview.Reason(
+                    o.Selected.Select(id => o.Sources[Array.IndexOf(o.Ids, id)]), o.Sources) : null;
+                return new { o.Packet, o.Order, accepted = o.QuoteGate, passedRubric = o.Rubric,
+                    acceptedByChallenger = o.QuoteGate && reason is null, reason, expected = o.Gold.Reason,
+                    o.Selected, o.Sources, o.Inference };
+            }).ToArray();
+            return JsonSerializer.Serialize(new { run.Metadata, rows }, Json);
+        }
         return JsonSerializer.Serialize(new { run.Metadata, metrics, outcomes }, Json);
     }
 

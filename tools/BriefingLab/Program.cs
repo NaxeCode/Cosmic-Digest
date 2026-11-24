@@ -3,6 +3,7 @@ using System.Text.Json;
 
 CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 if (args is ["prepare-model", var prompts]) return LocalEvaluation.Prepare(prompts);
+if (args is ["prepare-corrections", var challenges]) return LocalEvaluation.Prepare(challenges, "corrections.json");
 if (args is ["score-model", var raw, var scores]) return LocalEvaluation.Score(raw, scores);
 
 if (args.Length != 1)

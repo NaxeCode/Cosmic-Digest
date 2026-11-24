@@ -26,6 +26,7 @@ def main():
     parser.add_argument("model_dir", type=Path)
     parser.add_argument("prompts", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--freeze-commit", default="86494f41819498ab173edbdd73c119c51cb4eb57")
     args = parser.parse_args()
     model_dir = args.model_dir.resolve(strict=True)
     with (model_dir / "model.safetensors").open("rb") as weights:
@@ -42,7 +43,7 @@ def main():
     sampler = make_sampler(temp=0)
     metadata = {
         "model": MODEL, "modelRevision": REVISION, "weightSha256": WEIGHTS,
-        "freezeCommit": "86494f41819498ab173edbdd73c119c51cb4eb57",
+        "freezeCommit": args.freeze_commit,
         "startUtc": stamp, "device": mx.device_info()["device_name"], "macOS": platform.mac_ver()[0],
         "python": platform.python_version(),
         "libraries": {name: version(name) for name in ["mlx", "mlx-lm", "tokenizers", "transformers"]},
