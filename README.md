@@ -2,12 +2,26 @@
 
 # Cosmic Digest
 
-A daily .NET job that turns RSS feeds into a short, relevance-gated email brief, built to deliver exactly once when feeds and providers fail.
+A daily .NET job that turns RSS feeds into a short email brief. Each selected item links back to its source, and the job skips the email when nothing clears the relevance threshold.
 
 [![active](.github/brand/badges/status.svg)](#status)
 ![.NET](.github/brand/badges/tech-net.svg)
 ![C#](.github/brand/badges/tech-c.svg)
 ![GitHub Actions](.github/brand/badges/tech-github-actions.svg)
+
+## Try the failure cases
+
+1. **An article reference goes out of range.** A model response cites article 2 in a batch containing only article 1. The validator rejects the response and the job falls back to ranked stories. In a separate fixture, one feed announces a fictional SDK release and another reports its cancellation. The fallback keeps both reports. [Invalid reference](tests/CosmicDigest.Tests/NewsAiTests.cs#L4-L13) · [Fallback in the job](Program.cs#L113-L130) · [Release and correction](tests/CosmicDigest.Tests/NewsAiTests.cs#L69-L87)
+2. **More coverage arrives before a retry.** Even when regenerated text changes, the outbox returns the original subject, text, HTML and idempotency key. An ambiguous attempt keeps its key. A recorded bounce advances the retry key. [Saved payload](tests/CosmicDigest.Tests/DigestIdempotencyTests.cs#L38-L89) · [Retry key](tests/CosmicDigest.Tests/DigestIdempotencyTests.cs#L4-L34)
+3. **The pending email ages out.** At 24 hours from preparation, the job stops automatic replay and leaves the outbox entry for inspection. The regression test exercises a 25-hour-old entry. [Replay guard](Delivery/DigestIdempotency.cs#L59-L75) · [Expired entry](tests/CosmicDigest.Tests/DoctrineReviewRegressionTests.cs#L6-L28)
+
+Run these five tests from the repo root with the .NET 10 SDK. The preview command renders a separate sample brief at `artifacts/email-preview.html`. Both use local fixtures and need no API keys.
+
+```bash
+dotnet test --configuration Release --logger 'console;verbosity=normal' \
+  --filter 'invalid_article_references|both_reports_when|ambiguous_retries|exact_encrypted_payload|Expired_pending_outbox'
+dotnet run -- --preview
+```
 
 ## What it does
 
@@ -22,7 +36,7 @@ A daily .NET job that turns RSS feeds into a short, relevance-gated email brief,
 
 ## How it works
 
-The repository name is `Cosmic-Digest`; the project and solution are `CosmicDigest.csproj` / `CosmicDigest.slnx`. The job runs once a day in GitHub Actions and keeps its state in `data/state.json`, which the workflow commits back to the repo. Sending is split into two phases so a crash between "decided" and "sent" cannot lose or duplicate an email.
+The daily GitHub Actions workflow commits the encrypted email payload to `data/state.json` before sending. If the send result is uncertain, the job can retry the saved payload with the same key during its 24-hour replay window. Resend returns a message ID on acceptance. The job polls that ID for a delivery status.
 
 ```mermaid
 flowchart LR
@@ -69,12 +83,6 @@ cp .env.example .env
 dotnet restore
 dotnet build --configuration Release
 dotnet test --configuration Release
-```
-
-Render a deterministic email preview with no network calls or secrets (written to `artifacts/email-preview.html`):
-
-```bash
-dotnet run -- --preview
 ```
 
 A real run needs `RESEND_API_KEY`, `OUTBOX_ENCRYPTION_KEY`, `MAIL_TO` and `MAIL_FROM`, plus `OPENAI_API_KEY` when `ENABLE_AI_SUMMARY=true`. Personalization comes from a JSON profile; start from [config/briefing-profile.example.json](config/briefing-profile.example.json) and point `DIGEST_PROFILE_PATH` at a local copy (gitignored). In CI the profile is supplied as the `DIGEST_PROFILE_B64` secret.
