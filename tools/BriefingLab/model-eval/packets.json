@@ -1,0 +1,98 @@
+[
+  {
+    "id": "north-hold", "question": "Does the north camera have clearance?",
+    "reports": [
+      ["release","06:05","Vela 2.4 files available","The observatory posted calibration set 2.4 for the north camera. The release notice described the files as ready for observers."],
+      ["desk","09:20","Operations withdraws clearance","The observatory now puts north camera calibration 2.4 on hold. Observers should retain set 2.3 pending new dark frames."]
+    ],
+    "gold": {"id":"desk","requires":["north","hold|withdr|suspend|paus|retain|keep|delay"],"forbids":["all cameras|entire array|both cameras"],"reason":"The later hold applies specifically to the north camera."}
+  },
+  {
+    "id":"pilot-boundary","question":"How many benches can use the pilot?",
+    "reports":[
+      ["plan","06:15","Array team announces a rollout plan","The observatory proposed eventual installation of a new counter on twenty benches. Its proposal named no installation date."],
+      ["commission","09:05","Commissioning log narrows eligibility","The observatory enabled the pilot on four east benches only. Sixteen other benches still use the old counter."]
+    ],
+    "gold":{"id":"commission","requires":["four|\\b4\\b","east","pilot|only|limit|restrict"],"forbids":["all twenty|all 20|fleet.wide"],"reason":"Four east benches received a pilot. The proposed twenty-bench rollout has not occurred."}
+  },
+  {
+    "id":"units","question":"Which exposure delay is supported?",
+    "reports":[
+      ["spec","06:12","Shutter bulletin lists a delay","The observatory bulletin listed an eighteen-second shutter delay for the new dome timer."],
+      ["errata","10:10","Timer erratum corrects the unit","The observatory measured an 18 millisecond shutter delay. The earlier seconds label was a transcription error."]
+    ],
+    "gold":{"id":"errata","requires":["18|eighteen","millisecond|\\bms\\b"],"forbids":["delay (?:is|of) (?:18|eighteen) seconds"],"reason":"The corrected unit is milliseconds."}
+  },
+  {
+    "id":"future-date","question":"Has access opened?",
+    "reports":[
+      ["calendar","07:00","Initial calendar shows archive opening","The observatory expected archive access to begin on November 4."],
+      ["notice","09:15","Archive office reschedules opening","The observatory now plans to open archive access on November 12. Access has not opened yet."]
+    ],
+    "gold":{"id":"notice","requires":["nov(?:ember)?\\.? 12|12 november","plan|schedul|expect|will|postpon|delay|set to|not open"],"forbids":["is now open|has opened|opened on"],"reason":"November 12 is a future scheduled opening."}
+  },
+  {
+    "id":"percentile","question":"Which latency statistic was measured?",
+    "reports":[
+      ["slide","06:45","Preview slide labels readout latency","An observatory preview slide called the readout figure the 95th percentile."],
+      ["data","08:40","Lab log corrects latency definition","The observatory measured median readout latency of 37 milliseconds. The 95th percentile was not measured."]
+    ],
+    "gold":{"id":"data","requires":["median|50th percentile","37|thirty.seven"],"forbids":["95th percentile (?:was|is|of) 37"],"reason":"37 milliseconds is the median."}
+  },
+  {
+    "id":"rollback","question":"Which firmware should the west mount retain?",
+    "reports":[
+      ["candidate","06:20","New firmware staged for mount tests","The observatory staged firmware 3.1 for all mount controllers after a bench test."],
+      ["field","09:35","West mount reverts after drift test","The observatory restored firmware 3.0 on the west mount after drift appeared with 3.1. Other mounts remain unchanged."]
+    ],
+    "gold":{"id":"field","requires":["west","3\\.0","restor|revert|roll.*back|return|retain"],"forbids":["all mounts (?:reverted|restored)|array.wide rollback"],"reason":"The rollback to 3.0 affected the west mount only."}
+  },
+  {
+    "id":"simulation","question":"Did the field trial establish the gain?",
+    "reports":[
+      ["forecast","07:14","Proposal seeks night-sky trial","The observatory requested a field trial for a new tracking predictor. No night-sky measurements were provided."],
+      ["bench","10:01","Simulation records a limited improvement","The observatory simulator reduced tracking error by 12 percent on synthetic traces. No field trial has run."]
+    ],
+    "gold":{"id":"bench","requires":["simulat|synthetic","12|twelve"],"forbids":["field trial (?:showed|confirmed|demonstrated)|in the field by 12"],"reason":"The 12 percent improvement is from simulation alone."}
+  },
+  {
+    "id":"denominator","question":"Which sample actually passed inspection?",
+    "reports":[
+      ["manifest","06:11","Shipment manifest lists detector units","The observatory received forty detector modules. The shipping manifest contains no inspection results."],
+      ["audit","08:55","Inspection desk posts first sample","The observatory inspected six of forty detector modules. All six inspected modules passed. The other thirty-four remain untested."]
+    ],
+    "gold":{"id":"audit","requires":["six|\\b6\\b","forty|\\b40\\b|thirty.four|\\b34\\b","pass"],"forbids":["all forty (?:units |modules )?passed|all 40 (?:units |modules )?passed"],"reason":"Six tested modules passed out of a shipment of forty."}
+  },
+  {
+    "id":"reprint","question":"Which report establishes the present access status?",
+    "reports":[
+      ["authority","08:12","Observatory authority restricts access","The observatory keeps the southern gallery closed for alignment. Its reopening date is unknown."],
+      ["wire","09:59","Wire republishes yesterday's visitor notice","The observatory wire reprinted yesterday's announcement promising open gallery access. It did not verify the gallery's current status."]
+    ],
+    "gold":{"id":"authority","requires":["south","closed|closur|shut|restrict"],"forbids":["now open|has reopened|is open"],"reason":"The later reprint does not supersede the authority's southern-gallery closure."}
+  },
+  {
+    "id":"proposal","question":"Was the upgrade funded?",
+    "reports":[
+      ["pitch","06:55","Council hears mirror upgrade request","The observatory requested funding for a mirror alignment project. Its presentation projected a two-month schedule."],
+      ["minute","09:45","Council minutes defer funding vote","The observatory council deferred the funding vote until its next meeting. No upgrade funds have been approved."]
+    ],
+    "gold":{"id":"minute","requires":["defer|delay|postpon|no .*approv|not .*approv|pending","fund|vote"],"forbids":["has approved funding|funding (?:was|is) approved|funds were approved"],"reason":"The vote was deferred. The projection is not an award."}
+  },
+  {
+    "id":"abstain","question":"Is there a material operating change?",
+    "reports":[
+      ["reminder","07:10","Weekly reminder repeats visiting hours","The observatory repeated its standing Monday reading-room hours. Nothing about access, staffing or schedules changed."],
+      ["poster","09:10","Visitor poster lists existing hours","The observatory reprinted an unchanged visitor poster. It announces no development or action."]
+    ],
+    "gold":{"id":null,"requires":[],"forbids":[],"reason":"Both notices repeat unchanged information. A zero-item brief is expected."}
+  },
+  {
+    "id":"simple","question":"Which replacement inlet is available?",
+    "reports":[
+      ["survey","06:00","Workshop plans a spare-part survey","The observatory workshop plans to ask which inlet sizes might be needed in future."],
+      ["receipt","08:25","Stores receives a replacement inlet","The observatory stores received one 8 mm replacement inlet for the eastern pump. The part is ready for collection."]
+    ],
+    "gold":{"id":"receipt","requires":["8\\s*(?:mm|millimet)|eight.millimet","east","inlet"],"forbids":["installed|all pumps"],"reason":"An 8 mm inlet is available for the eastern pump. Installation is not established."}
+  }
+]
