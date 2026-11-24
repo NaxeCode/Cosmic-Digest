@@ -31,7 +31,7 @@ dotnet run -c Release --project tools/BriefingLab -- artifacts/briefing-lab
 
 ### Can a later notice catch stale advice?
 
-On eight new fictional packets in two source orders, the shipping quote guard accepted seven answers that missed the frozen rubric. A proposed later-notice check accepted three such answers. Both accepted five rubric-passing answers. Of the four new referrals, three caught stale instructions and one flagged a still-valid approval because the later report said “no hold.” The challenger missed a reopened release and remains an offline experiment. [Inspect individual decisions](https://naxe-portfolio-review.vercel.app/labs/cosmic-digest/#corrections) · [Protocol](tools/BriefingLab/model-eval/CORRECTIONS.md)
+On eight new fictional packets in two source orders, the shipping quote guard accepted seven answers that missed the frozen rubric. A proposed later-notice check accepted three such answers. Both accepted five rubric-passing answers. Of the four new referrals, three caught stale instructions and one flagged a still-valid approval because the later report said “no hold.” The challenger missed a reopened release and remains an offline experiment. [Inspect individual decisions](https://naxe.dev/labs/cosmic-digest/#corrections) · [Protocol](tools/BriefingLab/model-eval/CORRECTIONS.md)
 
 ## Try the failure cases
 
