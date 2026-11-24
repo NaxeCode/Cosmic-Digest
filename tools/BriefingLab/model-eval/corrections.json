@@ -1,0 +1,210 @@
+[
+  {
+    "id": "dome-latch",
+    "question": "Can the dome latch be installed?",
+    "reports": [
+      [
+        "first",
+        "06:05",
+        "Dome latch assembly available",
+        "The observatory released assembly DL-17 for installation on the dome latch."
+      ],
+      [
+        "second",
+        "09:20",
+        "Mechanics desk issues stop notice",
+        "The observatory has withdrawn DL-17. Crews must keep the existing dome latch."
+      ]
+    ],
+    "gold": {
+      "id": "second",
+      "requires": [
+        "withdraw|keep|retain|stop"
+      ],
+      "forbids": [],
+      "reason": "The observatory has withdrawn DL-17. Crews must keep the existing dome latch."
+    }
+  },
+  {
+    "id": "ridge-link",
+    "question": "Should the ridge link move tonight?",
+    "reports": [
+      [
+        "first",
+        "06:05",
+        "Ridge change window opens",
+        "The observatory approved routing change RT-62 for the ridge link tonight."
+      ],
+      [
+        "second",
+        "09:20",
+        "Field office suspends tonight’s work",
+        "The observatory suspended RT-62 after a power fault. Keep the ridge link on its current route."
+      ]
+    ],
+    "gold": {
+      "id": "second",
+      "requires": [
+        "suspend|keep|current|cancel|hold"
+      ],
+      "forbids": [],
+      "reason": "The observatory suspended RT-62 after a power fault. Keep the ridge link on its current route."
+    }
+  },
+  {
+    "id": "east-lease",
+    "question": "Is the east service available?",
+    "reports": [
+      [
+        "first",
+        "06:05",
+        "Service lease activated",
+        "The observatory activated lease LS-51 for east-array observations today."
+      ],
+      [
+        "second",
+        "09:20",
+        "Service access reversed",
+        "The observatory rescinded east-array access under LS-51. Observers must use the west array."
+      ]
+    ],
+    "gold": {
+      "id": "second",
+      "requires": [
+        "rescind|west|revo"
+      ],
+      "forbids": [],
+      "reason": "The observatory rescinded east-array access under LS-51. Observers must use the west array."
+    }
+  },
+  {
+    "id": "spectral-release",
+    "question": "Which contour table should operators use?",
+    "reports": [
+      [
+        "first",
+        "06:05",
+        "Contour table now available",
+        "The observatory approved contour table 6.7 for the spectrometer."
+      ],
+      [
+        "second",
+        "09:20",
+        "Scanning desk keeps the earlier table",
+        "The observatory put version 6.7 on hold. Use table 6.6 for the spectrometer."
+      ]
+    ],
+    "gold": {
+      "id": "second",
+      "requires": [
+        "hold|6\\.6"
+      ],
+      "forbids": [],
+      "reason": "The observatory put version 6.7 on hold. Use table 6.6 for the spectrometer."
+    }
+  },
+  {
+    "id": "module-release",
+    "question": "Which power module is ready?",
+    "reports": [
+      [
+        "first",
+        "06:05",
+        "Power module enters service",
+        "The observatory approved PM-31 for deployment across the telescope power racks."
+      ],
+      [
+        "second",
+        "09:20",
+        "Weather vane moved to storage",
+        "The observatory moved a spare weather vane to the storage annex."
+      ]
+    ],
+    "gold": {
+      "id": "first",
+      "requires": [
+        "pm-31|power module"
+      ],
+      "forbids": [],
+      "reason": "The observatory approved PM-31 for deployment across the telescope power racks."
+    }
+  },
+  {
+    "id": "separate-notice",
+    "question": "Is the new mirror coating ready?",
+    "reports": [
+      [
+        "first",
+        "06:05",
+        "Coating approved for mirrors",
+        "The observatory cleared MC-82 for application to the primary mirrors."
+      ],
+      [
+        "second",
+        "09:20",
+        "Parking office changes passes",
+        "The observatory has suspended parking permit PK-92 pending renewal."
+      ]
+    ],
+    "gold": {
+      "id": "first",
+      "requires": [
+        "mc-82|coating|mirrors"
+      ],
+      "forbids": [],
+      "reason": "The observatory cleared MC-82 for application to the primary mirrors."
+    }
+  },
+  {
+    "id": "negated-hold",
+    "question": "Is the drive upgrade still approved?",
+    "reports": [
+      [
+        "first",
+        "06:05",
+        "Drive upgrade enters service",
+        "The observatory approved DV-25 for installation in the guide drive."
+      ],
+      [
+        "second",
+        "09:20",
+        "Desk answers a rumor",
+        "The observatory says there is no hold on DV-25. The existing guide drive approval remains valid."
+      ]
+    ],
+    "gold": {
+      "id": "second",
+      "requires": [
+        "no hold|remain|still|valid|approved"
+      ],
+      "forbids": [],
+      "reason": "The observatory says there is no hold on DV-25. The existing guide drive approval remains valid."
+    }
+  },
+  {
+    "id": "reopened",
+    "question": "What is the latest aperture status?",
+    "reports": [
+      [
+        "first",
+        "06:05",
+        "Aperture work paused",
+        "The observatory suspended AP-14 after a motor stopped during inspection."
+      ],
+      [
+        "second",
+        "09:20",
+        "Aperture returns to service",
+        "The observatory now authorizes AP-14 for operation after the repair."
+      ]
+    ],
+    "gold": {
+      "id": "second",
+      "requires": [
+        "authoriz|operat|restor|return"
+      ],
+      "forbids": [],
+      "reason": "The observatory now authorizes AP-14 for operation after the repair."
+    }
+  }
+]

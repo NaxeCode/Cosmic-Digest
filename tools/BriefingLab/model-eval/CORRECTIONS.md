@@ -1,0 +1,7 @@
+# Correction review experiment
+
+Freeze this policy, eight new synthetic packets, the expected actions and the original model configuration before generating any responses. Use both presentation orders, the same one-item production prompt, quote guard, lexical rubric and pinned local model as the first study. Do not tune on the new outputs.
+
+The challenger refers a guard-accepted answer for review when an item cites an older report and a strictly later candidate mentions the same bulletin identifier or version number along with a cancellation, hold, suspension, withdrawal, recall or postponement. Empty selections follow the existing guard. The challenger has no access to packet IDs, source IDs, expected decisions or rubric patterns. It deliberately does not understand negation, resolve implicit entities or identify all types of corrections.
+
+For each of the shipping quote guard, the challenger and unconditional referral, count accepted outputs that fail the rubric, accepted outputs that pass, and rubric-passing outputs referred. Report baseline rejections separately from additional challenger referrals. A rubric miss is a proxy for a bad recommendation; inspect the actual response before interpreting it as harmful. Orders share a packet, and the fixtures have a single author. Capture actual local generation durations, raw token counts and hardware. No provider billing occurs. Keep the challenger in the lab pending evidence of broad value.
