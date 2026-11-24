@@ -290,6 +290,7 @@ function modelView(id, order) {
       <p>${e(pick.failures.join(" · ") || "All scope criteria met.")}</p><p class="meta">${pick.inference.generatedTokens} output tokens · ${pick.inference.seconds}s · ${e(pick.inference.finishReason)}</p></details></section>
       <section class="sheet"><h3>Sources shown to the model</h3>${sources}</section></div>
     <div class="model-decision"><strong>Use fallback for correction-sensitive packets</strong><p>Keep this local model and prompt in human review, or use the deterministic fallback. A retrospective rule requiring the same source selection and a guard pass in both orders would admit ${metrics.retrospectiveAdmitted}/${metrics.pairs} packets and refer ${metrics.retrospectiveReferred}/${metrics.pairs}. Of the admitted pairs, ${metrics.admittedAndRubricBothWays} met the rubric both ways. With no admitted pairs, precision is undefined.</p></div>
+    <p><a href="#corrections">Try the proposed guard on eight new correction packets →</a></p>
     <details class="model-foot"><summary>Run settings and limits</summary><p>Greedy decoding, seed 0, ${metadata.maxNewTokens} output tokens maximum. Each packet used the same product prompt and schema text. This small model used unconstrained local decoding. Frozen cases and narrow wording checks do not establish real-feed model quality or general factual entailment.</p>
     <p>${e(metadata.model)} at <code>${e(metadata.modelRevision)}</code>. MLX-LM ${e(metadata.libraries["mlx-lm"])}. Wall time ${e(metadata.wallSeconds)}s including load. All ${metrics.trials} raw outputs are embedded in this page and in the JSON report.</p></details>`;
   document.getElementById("model-packet").onchange = (event) => {
@@ -297,9 +298,41 @@ function modelView(id, order) {
   };
 }
 
+function correctionView(id, order) {
+  const { rows, metadata } = report.corrections;
+  const row = rows.find(r => r.packet === id && r.order === order)
+    ?? rows.find(r => r.accepted && !r.acceptedByChallenger) ?? rows[0];
+  const policies = [
+    ["Production quote guard", r => r.accepted],
+    ["Later-notice challenger", r => r.acceptedByChallenger],
+    ["Refer every response", () => false],
+  ];
+  const counts = policies.map(([name, accepts]) => {
+    const totals = [r => accepts(r) && !r.passedRubric, r => accepts(r) && r.passedRubric,
+      r => !accepts(r) && r.passedRubric].map(match => rows.filter(match).length);
+    return `<tr><th scope="row">${name}</th>${totals.map(n => `<td>${n}</td>`).join("")}</tr>`;
+  }).join("");
+  const paths = rows.map(r => `<option value="${e(r.packet)}/${e(r.order)}"${r === row ? " selected" : ""}>${e(r.packet)} · ${e(r.order)}</option>`).join("");
+  const decision = row.reason ?? (row.accepted ? "No later matching hold found." : row.error);
+  content.innerHTML = `<h2>Would you release this guard?</h2>
+    <p>Eight new fictional packets, each shown twice to the same local model. A proposed check sends an answer for review if a newer hold notice shares an identifier with its selected source.</p>
+    <table class="correction-table"><caption>16 model responses scored against the frozen source and wording rubric</caption>
+    <thead><tr><th scope="col">Policy</th><th scope="col">Accepted a miss</th><th scope="col">Accepted a pass</th><th scope="col">Referred a pass</th></tr></thead><tbody>${counts}</tbody></table>
+    <p>Three additional referrals caught stale instructions. The fourth referred a still-valid approval because the later report said “no hold.” The rubric required the newer source in that case. The challenger also accepted a suspension that had since been lifted. <a href="#corrections/reopened/reversed">Inspect the missed reopening</a>.</p>
+    <label class="model-control">Inspect response <select id="correction-trial">${paths}</select></label>
+    <section class="model-decision"><h3>${row.acceptedByChallenger ? "Accept" : "Refer"} · later-notice policy</h3><p>${e(decision)}</p>
+    <p>Production guard: ${row.accepted ? "accept" : "reject"}. Rubric: ${row.passedRubric ? "pass" : e(row.failures.join("; "))}.</p></section>
+    <div class="model-evidence"><section class="sheet"><h3>Two source reports</h3>${row.sources.map(a => `<article><strong>${e(a.title)}</strong><p>${e(clock(a.published))} UTC · ${e(a.summary)}</p></article>`).join("")}</section>
+    <section class="sheet"><h3>Expected action</h3><p>${e(row.expected)}</p><details><summary>Raw model response</summary><pre>${e(row.inference.raw)}</pre></details></section></div>
+    <p>One quantized model, a single author and a lexical rubric. Two orders of one packet share their inputs. The challenger ran offline. Generating the responses took ${e(metadata.wallSeconds)} seconds including model load on ${e(metadata.device)} with zero API calls.</p>`;
+  document.getElementById("correction-trial").onchange = event => {
+    location.hash = "#corrections/" + event.target.value;
+  };
+}
+
 function render() {
   const [view, id, order] = location.hash.slice(1).split("/");
-  const current = ["sources", "results", "model"].includes(view) ? view : "case";
+  const current = ["sources", "results", "model", "corrections"].includes(view) ? view : "case";
   document.querySelectorAll("nav a").forEach((link) => {
     if (link.dataset.view === current) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
@@ -307,6 +340,7 @@ function render() {
   if (current === "sources") sourceView(id);
   else if (current === "results") resultsView();
   else if (current === "model") modelView(id, order);
+  else if (current === "corrections") correctionView(id, order);
   else caseView(caseById.get(id) ?? report.cases[0]);
 }
 drawArrivals();

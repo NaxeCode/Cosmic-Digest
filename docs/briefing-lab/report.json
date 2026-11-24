@@ -1559,6 +1559,731 @@
       }
     ]
   },
+  "corrections": {
+    "metadata": {
+      "model": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+      "modelRevision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+      "weightSha256": "0979f33d1bc58afcf696d13f57977644e7b11a6f0eec3e631d8e9463d18c0717",
+      "freezeCommit": "857c7fe28db5af81cbaf76b73cef7df820e656e5",
+      "startUtc": "2026-11-24T12:24:39.190217\u002B00:00",
+      "device": "Apple M4",
+      "macOS": "27.0.1",
+      "python": "3.12.15",
+      "libraries": {
+        "mlx": "0.32.4",
+        "mlx-lm": "0.32.2",
+        "tokenizers": "0.23.3",
+        "transformers": "5.24.0"
+      },
+      "temperature": 0,
+      "seed": 0,
+      "maxNewTokens": 420,
+      "loadSeconds": 0.292,
+      "wallSeconds": 41.358
+    },
+    "rows": [
+      {
+        "packet": "dome-latch",
+        "order": "ranked",
+        "accepted": false,
+        "passedRubric": true,
+        "acceptedByChallenger": false,
+        "reason": null,
+        "expected": "The observatory has withdrawn DL-17. Crews must keep the existing dome latch.",
+        "selected": [
+          "second"
+        ],
+        "sources": [
+          {
+            "title": "Mechanics desk issues stop notice",
+            "link": "https://second.example/dome-latch",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory has withdrawn DL-17. Crews must keep the existing dome latch.",
+            "feedUrl": null
+          },
+          {
+            "title": "Dome latch assembly available",
+            "link": "https://first.example/dome-latch",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory released assembly DL-17 for installation on the dome latch.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "dome-latch",
+          "order": "ranked",
+          "promptHash": "bae6d42b9a824862244ad52d907417c17c669ee389b650c53712c40f4f8a5233",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory has withdrawn DL-17 from the existing dome latch.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory has withdrawn DL-17 from the existing dome latch.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory has withdrawn DL-17 from the existing dome latch.\u0022,\n      \u0022why_it_matters\u0022: \u0022The withdrawal of DL-17 affects the observatory\u0027s operations.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    }\n  ]\n}",
+          "promptTokens": 855,
+          "generatedTokens": 129,
+          "finishReason": "stop",
+          "seconds": 2.306
+        },
+        "error": "The evidence quote does not occur in the cited article\u0027s visible title or summary.",
+        "failures": []
+      },
+      {
+        "packet": "dome-latch",
+        "order": "reversed",
+        "accepted": true,
+        "passedRubric": false,
+        "acceptedByChallenger": false,
+        "reason": "Later notice about DL-17: Mechanics desk issues stop notice",
+        "expected": "The observatory has withdrawn DL-17. Crews must keep the existing dome latch.",
+        "selected": [
+          "first"
+        ],
+        "sources": [
+          {
+            "title": "Dome latch assembly available",
+            "link": "https://first.example/dome-latch",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory released assembly DL-17 for installation on the dome latch.",
+            "feedUrl": null
+          },
+          {
+            "title": "Mechanics desk issues stop notice",
+            "link": "https://second.example/dome-latch",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory has withdrawn DL-17. Crews must keep the existing dome latch.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "dome-latch",
+          "order": "reversed",
+          "promptHash": "596093b0b0ff51ca5cfb1389cd5b3c50df5cad1fb412baea6d598bf2b65f15bc",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory released assembly DL-17 for installation on the dome latch.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory released assembly DL-17 for installation on the dome latch.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory has released assembly DL-17 for installation on the dome latch.\u0022,\n      \u0022why_it_matters\u0022: \u0022The availability of assembly DL-17 for installation on the dome latch.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the installation process and update the system.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 855,
+          "generatedTokens": 142,
+          "finishReason": "stop",
+          "seconds": 2.393
+        },
+        "error": null,
+        "failures": [
+          "Expected source second",
+          "Missing scope pattern: withdraw|keep|retain|stop"
+        ]
+      },
+      {
+        "packet": "ridge-link",
+        "order": "ranked",
+        "accepted": false,
+        "passedRubric": false,
+        "acceptedByChallenger": false,
+        "reason": null,
+        "expected": "The observatory suspended RT-62 after a power fault. Keep the ridge link on its current route.",
+        "selected": [
+          "second",
+          "first"
+        ],
+        "sources": [
+          {
+            "title": "Field office suspends tonight\u2019s work",
+            "link": "https://second.example/ridge-link",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory suspended RT-62 after a power fault. Keep the ridge link on its current route.",
+            "feedUrl": null
+          },
+          {
+            "title": "Ridge change window opens",
+            "link": "https://first.example/ridge-link",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory approved routing change RT-62 for the ridge link tonight.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "ridge-link",
+          "order": "ranked",
+          "promptHash": "f66f966e3cede38ade6f2ee0123865f151dd2bcbc87ceeb0c1456d2e01bf7e4d",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory suspended RT-62 due to a power fault and approved a routing change for RT-62 on its current ridge link.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory suspended RT-62 after a power fault.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory\u0027s RT-62 was suspended.\u0022,\n      \u0022why_it_matters\u0022: \u0022The power fault affected the observatory\u0027s operations.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    },\n    {\n      \u0022article_index\u0022: 2,\n      \u0022evidence_quote\u0022: \u0022The observatory approved routing change RT-62 for the ridge link tonight.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory\u0027s RT-62 was approved for a routing change.\u0022,\n      \u0022why_it_matters\u0022: \u0022The approval of the routing change is a significant action.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 860,
+          "generatedTokens": 229,
+          "finishReason": "stop",
+          "seconds": 3.22
+        },
+        "error": "The model returned more items than the profile permits.",
+        "failures": [
+          "Expected source second"
+        ]
+      },
+      {
+        "packet": "ridge-link",
+        "order": "reversed",
+        "accepted": true,
+        "passedRubric": false,
+        "acceptedByChallenger": false,
+        "reason": "Later notice about RT-62: Field office suspends tonight\u2019s work",
+        "expected": "The observatory suspended RT-62 after a power fault. Keep the ridge link on its current route.",
+        "selected": [
+          "first"
+        ],
+        "sources": [
+          {
+            "title": "Ridge change window opens",
+            "link": "https://first.example/ridge-link",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory approved routing change RT-62 for the ridge link tonight.",
+            "feedUrl": null
+          },
+          {
+            "title": "Field office suspends tonight\u2019s work",
+            "link": "https://second.example/ridge-link",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory suspended RT-62 after a power fault. Keep the ridge link on its current route.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "ridge-link",
+          "order": "reversed",
+          "promptHash": "edf41e736667eb44690cb479b61d55a137f0f80ce7e261897281791cd6d5b760",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory approved routing change RT-62 for the ridge link tonight.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory approved routing change RT-62 for the ridge link tonight.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory approved a routing change for the ridge link.\u0022,\n      \u0022why_it_matters\u0022: \u0022The change is necessary to maintain the ridge link\u0027s functionality.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the impact on the ridge link\u0027s performance.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 860,
+          "generatedTokens": 135,
+          "finishReason": "stop",
+          "seconds": 2.283
+        },
+        "error": null,
+        "failures": [
+          "Expected source second",
+          "Missing scope pattern: suspend|keep|current|cancel|hold"
+        ]
+      },
+      {
+        "packet": "east-lease",
+        "order": "ranked",
+        "accepted": true,
+        "passedRubric": true,
+        "acceptedByChallenger": true,
+        "reason": null,
+        "expected": "The observatory rescinded east-array access under LS-51. Observers must use the west array.",
+        "selected": [
+          "second"
+        ],
+        "sources": [
+          {
+            "title": "Service access reversed",
+            "link": "https://second.example/east-lease",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory rescinded east-array access under LS-51. Observers must use the west array.",
+            "feedUrl": null
+          },
+          {
+            "title": "Service lease activated",
+            "link": "https://first.example/east-lease",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory activated lease LS-51 for east-array observations today.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "east-lease",
+          "order": "ranked",
+          "promptHash": "1a519788317e33d7f7dd64b17a57bca6a3e0e7e671a4b475aac46466914031ec",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory reversed service access from the east array to the west array.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory rescinded east-array access under LS-51. Observers must use the west array.\u0022,\n      \u0022what_changed\u0022: \u0022Service access from the east array to the west array was reversed.\u0022,\n      \u0022why_it_matters\u0022: \u0022This change affects how data is accessed and managed.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Update access protocols and inform users.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 854,
+          "generatedTokens": 136,
+          "finishReason": "stop",
+          "seconds": 2.299
+        },
+        "error": null,
+        "failures": []
+      },
+      {
+        "packet": "east-lease",
+        "order": "reversed",
+        "accepted": false,
+        "passedRubric": false,
+        "acceptedByChallenger": false,
+        "reason": null,
+        "expected": "The observatory rescinded east-array access under LS-51. Observers must use the west array.",
+        "selected": [
+          "first",
+          "second"
+        ],
+        "sources": [
+          {
+            "title": "Service lease activated",
+            "link": "https://first.example/east-lease",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory activated lease LS-51 for east-array observations today.",
+            "feedUrl": null
+          },
+          {
+            "title": "Service access reversed",
+            "link": "https://second.example/east-lease",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory rescinded east-array access under LS-51. Observers must use the west array.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "east-lease",
+          "order": "reversed",
+          "promptHash": "70d1bd94f0c278f68fed31e55978daa53b42df6089501b777d55b786a349047f",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory activated lease LS-51 for east-array observations on November 1, 2026, while reversing access to the west array under the same lease.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory activated lease LS-51 for east-array observations today.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory activated lease LS-51 for east-array observations.\u0022,\n      \u0022why_it_matters\u0022: \u0022The observatory\u0027s decision to activate a lease for east-array observations.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the east-array observations for any anomalies or issues.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    },\n    {\n      \u0022article_index\u0022: 2,\n      \u0022evidence_quote\u0022: \u0022The observatory rescinded east-array access under LS-51.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory reversed its decision to access the west array under LS-51.\u0022,\n      \u0022why_it_matters\u0022: \u0022The observatory\u0027s reversal of access to the west array.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: \u0022Monitor the west array for any issues or disruptions.\u0022,\n      \u0022confidence\u0022: \u0022medium\u0022\n    }\n  ]\n}",
+          "promptTokens": 854,
+          "generatedTokens": 265,
+          "finishReason": "stop",
+          "seconds": 3.595
+        },
+        "error": "The model returned more items than the profile permits.",
+        "failures": [
+          "Expected source second"
+        ]
+      },
+      {
+        "packet": "spectral-release",
+        "order": "ranked",
+        "accepted": false,
+        "passedRubric": false,
+        "acceptedByChallenger": false,
+        "reason": null,
+        "expected": "The observatory put version 6.7 on hold. Use table 6.6 for the spectrometer.",
+        "selected": [],
+        "sources": [
+          {
+            "title": "Scanning desk keeps the earlier table",
+            "link": "https://second.example/spectral-release",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory put version 6.7 on hold. Use table 6.6 for the spectrometer.",
+            "feedUrl": null
+          },
+          {
+            "title": "Contour table now available",
+            "link": "https://first.example/spectral-release",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory approved contour table 6.7 for the spectrometer.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "spectral-release",
+          "order": "ranked",
+          "promptHash": "5da3ea11c16a47b43a96af7564ca2aebcdd987d1a422a83332667ed5c3101bf0",
+          "raw": "\u0060\u0060\u0060json\n{\n  \u0022bottom_line\u0022: \u0022The observatory approved contour table 6.7 for the spectrometer.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 2,\n      \u0022evidence_quote\u0022: \u0022The observatory approved contour table 6.7 for the spectrometer.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory approved contour table 6.7 for the spectrometer.\u0022,\n      \u0022why_it_matters\u0022: \u0022The approval of the contour table for the spectrometer is a significant update.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Update the spectrometer with the new contour table.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}\n\u0060\u0060\u0060",
+          "promptTokens": 861,
+          "generatedTokens": 143,
+          "finishReason": "stop",
+          "seconds": 2.378
+        },
+        "error": "\u0027\u0060\u0027 is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0.",
+        "failures": [
+          "Response did not parse",
+          "Expected source second",
+          "Missing scope pattern: hold|6\\.6"
+        ]
+      },
+      {
+        "packet": "spectral-release",
+        "order": "reversed",
+        "accepted": true,
+        "passedRubric": false,
+        "acceptedByChallenger": false,
+        "reason": "Later notice about 6.7: Scanning desk keeps the earlier table",
+        "expected": "The observatory put version 6.7 on hold. Use table 6.6 for the spectrometer.",
+        "selected": [
+          "first"
+        ],
+        "sources": [
+          {
+            "title": "Contour table now available",
+            "link": "https://first.example/spectral-release",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory approved contour table 6.7 for the spectrometer.",
+            "feedUrl": null
+          },
+          {
+            "title": "Scanning desk keeps the earlier table",
+            "link": "https://second.example/spectral-release",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory put version 6.7 on hold. Use table 6.6 for the spectrometer.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "spectral-release",
+          "order": "reversed",
+          "promptHash": "21e1651458ca6f13ef121baad11037a3941b46bc4b1abf35c3dfc9e6a40dc623",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory approved contour table 6.7 for the spectrometer.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory approved contour table 6.7 for the spectrometer.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory approved contour table 6.7 for the spectrometer.\u0022,\n      \u0022why_it_matters\u0022: \u0022The observatory\u0027s approval of the new table for the spectrometer.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the implementation and feedback.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 861,
+          "generatedTokens": 134,
+          "finishReason": "stop",
+          "seconds": 2.776
+        },
+        "error": null,
+        "failures": [
+          "Expected source second",
+          "Missing scope pattern: hold|6\\.6"
+        ]
+      },
+      {
+        "packet": "module-release",
+        "order": "ranked",
+        "accepted": true,
+        "passedRubric": false,
+        "acceptedByChallenger": true,
+        "reason": null,
+        "expected": "The observatory approved PM-31 for deployment across the telescope power racks.",
+        "selected": [
+          "second"
+        ],
+        "sources": [
+          {
+            "title": "Weather vane moved to storage",
+            "link": "https://second.example/module-release",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory moved a spare weather vane to the storage annex.",
+            "feedUrl": null
+          },
+          {
+            "title": "Power module enters service",
+            "link": "https://first.example/module-release",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory approved PM-31 for deployment across the telescope power racks.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "module-release",
+          "order": "ranked",
+          "promptHash": "0ee7d6b52568e425f4fa37343d0a3d14b98538464cba841744d8a3e5ade69479",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory moved a spare weather vane to the storage annex.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory moved a spare weather vane to the storage annex.\u0022,\n      \u0022what_changed\u0022: \u0022A spare weather vane was moved to storage.\u0022,\n      \u0022why_it_matters\u0022: \u0022It\u0027s a spare part, not essential for current operations.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    }\n  ]\n}",
+          "promptTokens": 851,
+          "generatedTokens": 120,
+          "finishReason": "stop",
+          "seconds": 2.507
+        },
+        "error": null,
+        "failures": [
+          "Expected source first",
+          "Missing scope pattern: pm-31|power module"
+        ]
+      },
+      {
+        "packet": "module-release",
+        "order": "reversed",
+        "accepted": true,
+        "passedRubric": true,
+        "acceptedByChallenger": true,
+        "reason": null,
+        "expected": "The observatory approved PM-31 for deployment across the telescope power racks.",
+        "selected": [
+          "first"
+        ],
+        "sources": [
+          {
+            "title": "Power module enters service",
+            "link": "https://first.example/module-release",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory approved PM-31 for deployment across the telescope power racks.",
+            "feedUrl": null
+          },
+          {
+            "title": "Weather vane moved to storage",
+            "link": "https://second.example/module-release",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory moved a spare weather vane to the storage annex.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "module-release",
+          "order": "reversed",
+          "promptHash": "b71c848b1eb70fd17357fe6f96a8164455a44a799ee1cb2481e2f0f8b883fcc8",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory approved PM-31 for deployment across the telescope power racks.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory approved PM-31 for deployment across the telescope power racks.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory approved PM-31 for deployment across the telescope power racks.\u0022,\n      \u0022why_it_matters\u0022: \u0022The approval of PM-31 for deployment is a significant milestone in the observatory\u0027s operations.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the deployment process and ensure timely integration.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 851,
+          "generatedTokens": 146,
+          "finishReason": "stop",
+          "seconds": 2.733
+        },
+        "error": null,
+        "failures": []
+      },
+      {
+        "packet": "separate-notice",
+        "order": "ranked",
+        "accepted": true,
+        "passedRubric": false,
+        "acceptedByChallenger": true,
+        "reason": null,
+        "expected": "The observatory cleared MC-82 for application to the primary mirrors.",
+        "selected": [
+          "second"
+        ],
+        "sources": [
+          {
+            "title": "Parking office changes passes",
+            "link": "https://second.example/separate-notice",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory has suspended parking permit PK-92 pending renewal.",
+            "feedUrl": null
+          },
+          {
+            "title": "Coating approved for mirrors",
+            "link": "https://first.example/separate-notice",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory cleared MC-82 for application to the primary mirrors.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "separate-notice",
+          "order": "ranked",
+          "promptHash": "44c3d7fb23d8a3834419144e7ac292cd348747a57123eeffe1b9ed014a9bbbb9",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory has suspended parking permit PK-92 pending renewal.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory has suspended parking permit PK-92 pending renewal.\u0022,\n      \u0022what_changed\u0022: \u0022The parking permit PK-92 has been suspended.\u0022,\n      \u0022why_it_matters\u0022: \u0022It affects the observatory\u0027s ability to park vehicles.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 849,
+          "generatedTokens": 120,
+          "finishReason": "stop",
+          "seconds": 2.527
+        },
+        "error": null,
+        "failures": [
+          "Expected source first",
+          "Missing scope pattern: mc-82|coating|mirrors"
+        ]
+      },
+      {
+        "packet": "separate-notice",
+        "order": "reversed",
+        "accepted": true,
+        "passedRubric": true,
+        "acceptedByChallenger": true,
+        "reason": null,
+        "expected": "The observatory cleared MC-82 for application to the primary mirrors.",
+        "selected": [
+          "first"
+        ],
+        "sources": [
+          {
+            "title": "Coating approved for mirrors",
+            "link": "https://first.example/separate-notice",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory cleared MC-82 for application to the primary mirrors.",
+            "feedUrl": null
+          },
+          {
+            "title": "Parking office changes passes",
+            "link": "https://second.example/separate-notice",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory has suspended parking permit PK-92 pending renewal.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "separate-notice",
+          "order": "reversed",
+          "promptHash": "e00e23e9004582e6e270afe16f6d0c194281ac4db349a959ded7ba797efd9e01",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory has approved MC-82 for application to the primary mirrors.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory cleared MC-82 for application to the primary mirrors.\u0022,\n      \u0022what_changed\u0022: \u0022The approval of MC-82 for application to the primary mirrors.\u0022,\n      \u0022why_it_matters\u0022: \u0022This approval is crucial for the observatory\u0027s operations and the primary mirrors\u0027 functionality.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the observatory\u0027s progress and ensure the approval is implemented.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 849,
+          "generatedTokens": 144,
+          "finishReason": "stop",
+          "seconds": 2.445
+        },
+        "error": null,
+        "failures": []
+      },
+      {
+        "packet": "negated-hold",
+        "order": "ranked",
+        "accepted": true,
+        "passedRubric": true,
+        "acceptedByChallenger": true,
+        "reason": null,
+        "expected": "The observatory says there is no hold on DV-25. The existing guide drive approval remains valid.",
+        "selected": [
+          "second"
+        ],
+        "sources": [
+          {
+            "title": "Desk answers a rumor",
+            "link": "https://second.example/negated-hold",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory says there is no hold on DV-25. The existing guide drive approval remains valid.",
+            "feedUrl": null
+          },
+          {
+            "title": "Drive upgrade enters service",
+            "link": "https://first.example/negated-hold",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory approved DV-25 for installation in the guide drive.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "negated-hold",
+          "order": "ranked",
+          "promptHash": "559c001872c58e12cf3845c1ff5afdb9dabf151254de81c89e9208dbf41eceec",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory says there is no hold on DV-25. The existing guide drive approval remains valid.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory says there is no hold on DV-25.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory\u0027s approval of DV-25 remains valid.\u0022,\n      \u0022why_it_matters\u0022: \u0022The approval of DV-25 is crucial for ongoing operations.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 856,
+          "generatedTokens": 132,
+          "finishReason": "stop",
+          "seconds": 2.325
+        },
+        "error": null,
+        "failures": []
+      },
+      {
+        "packet": "negated-hold",
+        "order": "reversed",
+        "accepted": true,
+        "passedRubric": false,
+        "acceptedByChallenger": false,
+        "reason": "Later notice about DV-25: Desk answers a rumor",
+        "expected": "The observatory says there is no hold on DV-25. The existing guide drive approval remains valid.",
+        "selected": [
+          "first"
+        ],
+        "sources": [
+          {
+            "title": "Drive upgrade enters service",
+            "link": "https://first.example/negated-hold",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory approved DV-25 for installation in the guide drive.",
+            "feedUrl": null
+          },
+          {
+            "title": "Desk answers a rumor",
+            "link": "https://second.example/negated-hold",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory says there is no hold on DV-25. The existing guide drive approval remains valid.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "negated-hold",
+          "order": "reversed",
+          "promptHash": "c6093f3690878b1e9cabc7256e4d2a5806a552bfb9c1f23f0004f20ca92e36c4",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory approved DV-25 for installation in the guide drive.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory approved DV-25 for installation in the guide drive.\u0022,\n      \u0022what_changed\u0022: \u0022DV-25 is now approved for installation in the guide drive.\u0022,\n      \u0022why_it_matters\u0022: \u0022This approval allows for the installation of DV-25, which could improve the drive\u0027s functionality.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the installation process and update the system as needed.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 856,
+          "generatedTokens": 144,
+          "finishReason": "stop",
+          "seconds": 2.489
+        },
+        "error": null,
+        "failures": [
+          "Expected source second"
+        ]
+      },
+      {
+        "packet": "reopened",
+        "order": "ranked",
+        "accepted": true,
+        "passedRubric": true,
+        "acceptedByChallenger": true,
+        "reason": null,
+        "expected": "The observatory now authorizes AP-14 for operation after the repair.",
+        "selected": [
+          "second"
+        ],
+        "sources": [
+          {
+            "title": "Aperture returns to service",
+            "link": "https://second.example/reopened",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory now authorizes AP-14 for operation after the repair.",
+            "feedUrl": null
+          },
+          {
+            "title": "Aperture work paused",
+            "link": "https://first.example/reopened",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory suspended AP-14 after a motor stopped during inspection.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "reopened",
+          "order": "ranked",
+          "promptHash": "dd238d50ce7b3076dd6aa2cd8bd78c5f38bba885b0f370ceca3b9db326a7b4f5",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022Aperture returns to service after repair.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory now authorizes AP-14 for operation after the repair.\u0022,\n      \u0022what_changed\u0022: \u0022Aperture returns to service.\u0022,\n      \u0022why_it_matters\u0022: \u0022The observatory\u0027s decision to authorize AP-14 for operation.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the operational readiness of AP-14.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 851,
+          "generatedTokens": 123,
+          "finishReason": "stop",
+          "seconds": 2.352
+        },
+        "error": null,
+        "failures": []
+      },
+      {
+        "packet": "reopened",
+        "order": "reversed",
+        "accepted": true,
+        "passedRubric": false,
+        "acceptedByChallenger": true,
+        "reason": null,
+        "expected": "The observatory now authorizes AP-14 for operation after the repair.",
+        "selected": [
+          "first"
+        ],
+        "sources": [
+          {
+            "title": "Aperture work paused",
+            "link": "https://first.example/reopened",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian first desk",
+            "summary": "The observatory suspended AP-14 after a motor stopped during inspection.",
+            "feedUrl": null
+          },
+          {
+            "title": "Aperture returns to service",
+            "link": "https://second.example/reopened",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian second desk",
+            "summary": "The observatory now authorizes AP-14 for operation after the repair.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "reopened",
+          "order": "reversed",
+          "promptHash": "0e524569aba93548ff9c5eea3b5c8b3196997af9a35a6d4bf0c7adac940eb26a",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory suspended AP-14 after a motor stopped during inspection.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory suspended AP-14 after a motor stopped during inspection.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory\u0027s AP-14 was paused.\u0022,\n      \u0022why_it_matters\u0022: \u0022The pause affects the observatory\u0027s operations.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    }\n  ]\n}",
+          "promptTokens": 851,
+          "generatedTokens": 120,
+          "finishReason": "stop",
+          "seconds": 2.413
+        },
+        "error": null,
+        "failures": [
+          "Expected source second",
+          "Missing scope pattern: authoriz|operat|restor|return"
+        ]
+      }
+    ]
+  },
   "clock": "2026-09-06T12:00:00+00:00",
   "reports": [
     {
