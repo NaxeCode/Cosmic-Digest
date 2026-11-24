@@ -791,3 +791,138 @@ footer span:first-child {
   color: var(--muted);
   margin-top: 5px;
 }
+
+.model-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 1rem 0;
+  border-block: 1px solid var(--line);
+}
+.model-stats > div {
+  padding: 1rem 1rem 1rem 0;
+}
+.model-stats dt,
+.model-method,
+.model-control label,
+.model-foot {
+  color: var(--muted);
+}
+.model-stats dt {
+  font-size: 0.85rem;
+}
+.model-stats dd {
+  margin: 0;
+  font-size: 2.05rem;
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  color: var(--navy);
+}
+.model-stats dd small {
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+.model-method {
+  max-width: 80ch;
+  font-size: 0.92rem;
+}
+.model-control {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1.4rem 0 0.8rem;
+}
+.model-control label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.82rem;
+}
+.model-control select,
+.model-orders a {
+  font: inherit;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: white;
+  color: var(--ink);
+}
+.model-orders {
+  display: flex;
+  gap: 0.3rem;
+}
+.model-orders a {
+  font-size: 0.83rem;
+  text-decoration: none;
+}
+.model-orders a[aria-current] {
+  background: var(--light);
+  border-color: #9b90da;
+  color: var(--violet);
+}
+.model-evidence .status {
+  margin: 0.3rem 0.3rem 0.3rem 0;
+}
+.model-evidence article + article {
+  border-top: 1px solid var(--line);
+  padding-top: 0.5rem;
+}
+.model-evidence article p,
+.model-expected,
+.model-foot p {
+  font-size: 0.92rem;
+}
+.model-evidence details,
+.model-foot {
+  margin-top: 1rem;
+}
+.model-evidence pre {
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: #eef0f6;
+  padding: 1rem;
+}
+.model-foot {
+  padding: 1rem 0;
+}
+.model-foot code {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 650px) {
+  .model-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .model-stats > div {
+    padding: 0.5rem 0.25rem;
+  }
+  .model-stats dt {
+    font-size: 0.72rem;
+  }
+  .model-control {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .model-control select {
+    width: 100%;
+  }
+  .model-evidence {
+    display: block;
+  }
+  .model-evidence > .sheet + .sheet {
+    margin-top: 0.75rem;
+  }
+}
+
+.model-item {
+  margin: 0.75rem 0;
+}
+.model-item blockquote {
+  margin: 0.3rem 0 0.6rem;
+}
+.model-evidence .model-item p {
+  margin-top: 0.3rem;
+}
+
+.model-decision {margin-top:1rem;padding:.9rem 1rem;border-left:3px solid var(--violet);background:var(--light)}
+.model-decision p {margin:.3rem 0 0;max-width:90ch;font-size:.9rem}

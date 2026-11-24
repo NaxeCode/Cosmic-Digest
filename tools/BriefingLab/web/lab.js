@@ -229,16 +229,84 @@ function resultsView() {
   };
 }
 
+function modelView(id, order) {
+  const { metadata, metrics, outcomes } = report.modelRun;
+  const packets = outcomes.filter((row) => row.order === "ranked");
+  const pick =
+    outcomes.find((row) => row.packet === id && row.order === (order || "ranked")) ||
+    outcomes.find((row) => row.quoteGate && !row.rubric) ||
+    packets[0];
+  const path = (packet, direction) => "#model/" + encodeURIComponent(packet) + "/" + direction;
+  const selected = pick.selected.join(", ") || "No items";
+  let generated = "<p>The response could not be read as a briefing document.</p>";
+  if (pick.parsed) {
+    const doc = JSON.parse(pick.inference.raw);
+    const items = Array.isArray(doc.items) ? doc.items : [];
+    generated =
+      `<p class="claim">${e(doc.bottom_line || "")}</p>` +
+      items
+        .map(
+          (item) =>
+            `<div class="model-item"><p class="meta">Article ${e(item.article_index)} · ${e(item.decision)} · ${e(item.confidence)} confidence</p>
+      <p>${e(item.what_changed)}</p><blockquote>${e(item.evidence_quote)}</blockquote></div>`,
+        )
+        .join("");
+  }
+  const resultLabel = pick.quoteGate
+    ? pick.hasItem
+      ? "Quote gate passed"
+      : "Empty selection passed"
+    : "Guard rejected";
+  const stat = (label, numerator, denominator) =>
+    `<div><dt>${e(label)}</dt><dd>${numerator}<small> / ${denominator}</small></dd></div>`;
+  const sources = pick.sources
+    .map(
+      (source, i) =>
+        `<article><p class="meta">Article ${i + 1} · ${e(pick.ids[i])} · ${clock(source.published)} UTC</p><h4>${e(source.title)}</h4><p>${e(source.summary)}</p></article>`,
+    )
+    .join("");
+  content.innerHTML = `<div class="section-head"><h2>Local model run</h2><p class="intro">One local Qwen2.5-1.5B-Instruct run over twelve fictional source packets, each shown twice in opposite order. Every response below was generated once on an Apple M4.</p></div>
+    <dl class="model-stats">${stat("Production guard passed", metrics.quoteGate, metrics.trials)}${stat("Guard and scope rubric passed", metrics.both, metrics.trials)}${stat("Source choice agreed across orders", metrics.orderAgreement, metrics.pairs)}</dl>
+    <p class="model-method">The guard checks structure and quoted attribution. The model saw the reports and briefing instructions. Packet questions were withheld. The frozen editorial rubric checks source choice and scope terms in the generated brief. Of ${metrics.quoteGate} guard passes, ${metrics.emptyQuoteGate} selected no items and ${metrics.quotePassRubricMiss} missed the rubric. Checked individually, ${metrics.exactItemQuotes}/${metrics.attemptedItemQuotes} submitted excerpts matched their cited source.</p>
+    <div class="model-control"><label>Source packet <select id="model-packet">${packets
+      .map(
+        (row) =>
+          `<option value="${e(row.packet)}" ${row.packet === pick.packet ? "selected" : ""}>${e(row.question)}</option>`,
+      )
+      .join("")}</select></label>
+    <div class="model-orders" aria-label="Candidate presentation order">${["ranked", "reversed"]
+      .map(
+        (dir) =>
+          `<a href="${path(pick.packet, dir)}" ${pick.order === dir ? 'aria-current="true"' : ""}>${dir === "ranked" ? "Ranked order" : "Reverse order"}</a>`,
+      )
+      .join("")}</div></div>
+    <div class="evidence model-evidence"><section class="sheet"><h3>Generated response</h3><p class="meta">Source selection · ${e(selected)}</p>
+      ${generated}
+      <span class="status ${pick.quoteGate ? "accepted" : "fallback"}">${resultLabel}</span>
+      <span class="status ${pick.rubric ? "accepted" : "limit"}">${pick.rubric ? "Rubric passed" : "Rubric missed"}</span>
+      <p class="model-expected"><strong>Frozen expectation</strong><br>${e(pick.gold.reason)}</p>
+      ${pick.error ? `<p class="meta">${e(pick.error)}</p>` : ""}
+      <details><summary>Raw response and scoring details</summary><pre>${e(pick.inference.raw)}</pre>
+      <p>${e(pick.failures.join(" · ") || "All scope criteria met.")}</p><p class="meta">${pick.inference.generatedTokens} output tokens · ${pick.inference.seconds}s · ${e(pick.inference.finishReason)}</p></details></section>
+      <section class="sheet"><h3>Sources shown to the model</h3>${sources}</section></div>
+    <div class="model-decision"><strong>Use fallback for correction-sensitive packets</strong><p>Keep this local model and prompt in human review, or use the deterministic fallback. A retrospective rule requiring the same source selection and a guard pass in both orders would admit ${metrics.retrospectiveAdmitted}/${metrics.pairs} packets and refer ${metrics.retrospectiveReferred}/${metrics.pairs}. Of the admitted pairs, ${metrics.admittedAndRubricBothWays} met the rubric both ways. With no admitted pairs, precision is undefined.</p></div>
+    <details class="model-foot"><summary>Run settings and limits</summary><p>Greedy decoding, seed 0, ${metadata.maxNewTokens} output tokens maximum. Each packet used the same product prompt and schema text. This small model used unconstrained local decoding. Frozen cases and narrow wording checks do not establish real-feed model quality or general factual entailment.</p>
+    <p>${e(metadata.model)} at <code>${e(metadata.modelRevision)}</code>. MLX-LM ${e(metadata.libraries["mlx-lm"])}. Wall time ${e(metadata.wallSeconds)}s including load. All ${metrics.trials} raw outputs are embedded in this page and in the JSON report.</p></details>`;
+  document.getElementById("model-packet").onchange = (event) => {
+    location.hash = path(event.target.value, pick.order);
+  };
+}
+
 function render() {
-  const [view, id] = location.hash.slice(1).split("/");
-  const current = ["sources", "results"].includes(view) ? view : "case";
+  const [view, id, order] = location.hash.slice(1).split("/");
+  const current = ["sources", "results", "model"].includes(view) ? view : "case";
   document.querySelectorAll("nav a").forEach((link) => {
-    if (link.dataset.view === current)
-      link.setAttribute("aria-current", "page");
+    if (link.dataset.view === current) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
   });
   if (current === "sources") sourceView(id);
   else if (current === "results") resultsView();
+  else if (current === "model") modelView(id, order);
   else caseView(caseById.get(id) ?? report.cases[0]);
 }
 drawArrivals();

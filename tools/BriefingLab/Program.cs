@@ -1,13 +1,16 @@
 using System.Globalization;
 using System.Text.Json;
 
+CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+if (args is ["prepare-model", var prompts]) return LocalEvaluation.Prepare(prompts);
+if (args is ["score-model", var raw, var scores]) return LocalEvaluation.Score(raw, scores);
+
 if (args.Length != 1)
 {
     Console.Error.WriteLine("Usage: dotnet run --project tools/BriefingLab -- OUTPUT_DIRECTORY");
     return 2;
 }
 
-CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 var json = new JsonSerializerOptions(JsonSerializerDefaults.Web) { WriteIndented = true };
 var assets = AppContext.BaseDirectory;
 var corpus = Read<Corpus>("corpus.json");
@@ -54,8 +57,10 @@ foreach (var fixture in fixtures)
     Console.WriteLine($"{(matches ? "MATCH" : "MISMATCH"),-8} {fixture.Id,-22} expected {fixture.Expected,-9} actual {actual,-9} [{string.Join(", ", visible)}]");
 }
 
+using var measured = JsonDocument.Parse(LocalEvaluation.SerializeReport(Path.Combine(assets, "model-eval", "run.json")));
 var report = new
 {
+    modelRun = measured.RootElement,
     corpus.Clock, corpus.Reports, corpus.ExpectedRanks, candidates, rankMatches, cases = results,
     matched = results.Count(result => result.Matches),
     additionalRejections = results.Count(result => result.Structure == "Accepted" && result.Actual == "Fallback"),

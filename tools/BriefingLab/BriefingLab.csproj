@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="../../CosmicDigest.csproj" />
     <None Update="fixtures/*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="model-eval/*.json" CopyToOutputDirectory="PreserveNewest" />
     <None Update="web/*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

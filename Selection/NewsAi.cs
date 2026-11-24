@@ -146,7 +146,7 @@ public static class NewsAi
         };
     }
 
-    private static string BuildSystemPrompt(BriefingProfile profile)
+    internal static string BuildSystemPrompt(BriefingProfile profile)
     {
         return $$"""
             You are the selection and synthesis layer for a private daily intelligence brief.
@@ -175,7 +175,7 @@ public static class NewsAi
             """;
     }
 
-    private static string BuildCandidatePrompt(IReadOnlyList<ScoredArticle> candidates)
+    internal static string BuildCandidatePrompt(IReadOnlyList<ScoredArticle> candidates)
     {
         var sb = new StringBuilder();
         sb.AppendLine("Evaluate these candidates. Return the strict JSON object requested by the schema.");
@@ -197,7 +197,7 @@ public static class NewsAi
         return sb.ToString();
     }
 
-    private static byte[] BuildSchema(int maxItems) => Encoding.UTF8.GetBytes($$"""
+    internal static byte[] BuildSchema(int maxItems) => Encoding.UTF8.GetBytes($$"""
         {
           "type": "object",
           "properties": {
