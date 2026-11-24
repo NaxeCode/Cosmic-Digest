@@ -9,23 +9,25 @@ A daily .NET job that turns RSS feeds into a short email brief. Each selected it
 ![C#](.github/brand/badges/tech-c.svg)
 ![GitHub Actions](.github/brand/badges/tech-github-actions.svg)
 
-## Inspect a briefing
+## When a correct quote supports the wrong decision
 
-A fictional observatory announces a camera calibration release at 06:10 UTC. Its operations desk puts the release on hold at 09:35. What happens when a proposed briefing quotes the hold but cites the announcement?
+A fictional observatory released camera calibration 2.4 and later put it on hold. Given the earlier announcement first, a local model quoted it exactly, recommended installing 2.4 and passed the production C# guard. The second source in the same prompt told observers to keep 2.3. [Inspect the generated response and both reports](https://naxe-portfolio-review.vercel.app/labs/cosmic-digest/#model/north-hold/reversed).
 
-[![Side-by-side comparison of a proposed briefing and the cited report, with the validation decision and ranked fallback below](docs/briefing-lab/preview.png)](docs/briefing-lab/index.html)
+[![Local model review shows an accepted north-camera release quote beside the later hold, with the frozen scope rubric marking a miss.](docs/briefing-lab/model-review.png)](https://naxe-portfolio-review.vercel.app/labs/cosmic-digest/#model/north-hold/reversed)
 
-Open the [standalone lab file](docs/briefing-lab/index.html) with GitHub’s **Download raw file** button, then open the downloaded HTML in a browser. Pick a case, follow its source timeline, or inspect the expected and actual results. Everything runs offline.
+The evaluation ran Qwen2.5-1.5B-Instruct locally on twelve frozen synthetic packets, each in two source orders. **13/24** generated briefings passed the production guard. **6/24** passed both the guard and a predeclared editorial rubric for source choice and scope. The model received the reports and the briefing instructions. The questions shown to readers were withheld.
 
-The C# evaluator ranked six synthetic reports into three candidates. Of nine hand-authored responses, five triggered fallback, three were accepted and one selected zero items. **Adding an exact-quote check caught two responses that passed structural validation.** One false conclusion with a real quote still passed. All nine outcomes matched the fixture expectations. This run measures the validator on these cases. Live generation quality remains unmeasured.
+Only **1/12** packet pairs selected the same source IDs both ways. A retrospective rule requiring agreement and two guard passes referred all twelve packets. For this small model and prompt, correction-sensitive briefs warrant human review or the job’s deterministic fallback. [Frozen criteria](tools/BriefingLab/model-eval/PROTOCOL.md) · [Raw completions](tools/BriefingLab/model-eval/run.json) · [Reproduce the local model run](tools/BriefingLab/model-eval/README.md)
 
-Regenerate the lab and its [JSON report](docs/briefing-lab/report.json) with .NET 10. The evaluator exits nonzero when a rank, publisher count, outcome, rejection reason or displayed article set differs from the fixtures.
+### Reproduce the guards
+
+The [briefing lab](https://naxe-portfolio-review.vercel.app/labs/cosmic-digest/) also runs nine hand-authored regression cases against a six-report corpus. Five trigger fallback, three are accepted with items and one selects zero items. Quote verification rejects two responses that pass structural validation. A false conclusion paired with an authentic quote still passes. [Fixture casebook screenshot](docs/briefing-lab/preview.png) · [Case inputs](tools/BriefingLab/fixtures/cases.json)
+
+The [standalone lab file](docs/briefing-lab/index.html) runs offline. Choose **Download raw file** on GitHub and open it in a browser. To rebuild the page and its [JSON report](docs/briefing-lab/report.json) with .NET 10, run the following. The exporter replays the recorded model responses through the current C# validators and checks the expected fixture outcomes.
 
 ```bash
 dotnet run -c Release --project tools/BriefingLab -- artifacts/briefing-lab
 ```
-
-[Source corpus](tools/BriefingLab/fixtures/corpus.json) · [Case inputs and expectations](tools/BriefingLab/fixtures/cases.json) · [Evaluator](tools/BriefingLab/Program.cs) · [Quote verification](Selection/SourceExcerpt.cs)
 
 ## Try the failure cases
 

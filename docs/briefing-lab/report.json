@@ -1,4 +1,1564 @@
 {
+  "modelRun": {
+    "metadata": {
+      "model": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+      "modelRevision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+      "weightSha256": "0979f33d1bc58afcf696d13f57977644e7b11a6f0eec3e631d8e9463d18c0717",
+      "freezeCommit": "86494f41819498ab173edbdd73c119c51cb4eb57",
+      "startUtc": "2026-11-24T00:46:49.788104\u002B00:00",
+      "device": "Apple M4",
+      "macOS": "27.0.1",
+      "python": "3.12.15",
+      "libraries": {
+        "mlx": "0.32.4",
+        "mlx-lm": "0.32.2",
+        "tokenizers": "0.23.3",
+        "transformers": "5.24.0"
+      },
+      "temperature": 0,
+      "seed": 0,
+      "maxNewTokens": 420,
+      "loadSeconds": 1.558,
+      "wallSeconds": 146.471
+    },
+    "metrics": {
+      "trials": 24,
+      "pairs": 12,
+      "parsed": 23,
+      "structure": 17,
+      "quoteGate": 13,
+      "nonemptyQuoteGate": 13,
+      "emptyQuoteGate": 0,
+      "attemptedItemQuotes": 29,
+      "exactItemQuotes": 24,
+      "rubric": 7,
+      "both": 6,
+      "quotePassRubricMiss": 7,
+      "orderAgreement": 1,
+      "retrospectiveAdmitted": 0,
+      "retrospectiveReferred": 12,
+      "admittedAndRubricBothWays": 0
+    },
+    "outcomes": [
+      {
+        "packet": "north-hold",
+        "order": "ranked",
+        "question": "Does the north camera have clearance?",
+        "gold": {
+          "id": "desk",
+          "requires": [
+            "north",
+            "hold|withdr|suspend|paus|retain|keep|delay"
+          ],
+          "forbids": [
+            "all cameras|entire array|both cameras"
+          ],
+          "reason": "The later hold applies specifically to the north camera."
+        },
+        "ids": [
+          "desk",
+          "release"
+        ],
+        "sources": [
+          {
+            "title": "Operations withdraws clearance",
+            "link": "https://desk.example/north-hold",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian desk desk",
+            "summary": "The observatory now puts north camera calibration 2.4 on hold. Observers should retain set 2.3 pending new dark frames.",
+            "feedUrl": null
+          },
+          {
+            "title": "Vela 2.4 files available",
+            "link": "https://release.example/north-hold",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian release desk",
+            "summary": "The observatory posted calibration set 2.4 for the north camera. The release notice described the files as ready for observers.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "north-hold",
+          "order": "ranked",
+          "promptHash": "c5d09a1b5635f099b22419d4ed39889f6e5f6841f4591afedb160e65ae9c1172",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory withdraws clearance for camera calibration 2.4 and puts camera calibration 2.3 on hold.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory now puts north camera calibration 2.4 on hold.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory withdraws clearance for camera calibration 2.4.\u0022,\n      \u0022why_it_matters\u0022: \u0022This action affects the calibration process and may impact the observatory\u0027s ability to observe celestial bodies.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    },\n    {\n      \u0022article_index\u0022: 2,\n      \u0022evidence_quote\u0022: \u0022The observatory posted calibration set 2.4 for the north camera.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory posted calibration set 2.4 for the north camera.\u0022,\n      \u0022why_it_matters\u0022: \u0022This action provides new calibration data for the north camera, which may improve the observatory\u0027s ability to observe celestial bodies.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Review the calibration set and update the camera system.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 878,
+          "generatedTokens": 259,
+          "finishReason": "stop",
+          "seconds": 15.043
+        },
+        "parsed": true,
+        "structure": false,
+        "quoteGate": false,
+        "hasItem": true,
+        "error": "The model returned more items than the profile permits.",
+        "selected": [
+          "desk",
+          "release"
+        ],
+        "itemQuotes": [
+          true,
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source desk"
+        ]
+      },
+      {
+        "packet": "north-hold",
+        "order": "reversed",
+        "question": "Does the north camera have clearance?",
+        "gold": {
+          "id": "desk",
+          "requires": [
+            "north",
+            "hold|withdr|suspend|paus|retain|keep|delay"
+          ],
+          "forbids": [
+            "all cameras|entire array|both cameras"
+          ],
+          "reason": "The later hold applies specifically to the north camera."
+        },
+        "ids": [
+          "release",
+          "desk"
+        ],
+        "sources": [
+          {
+            "title": "Vela 2.4 files available",
+            "link": "https://release.example/north-hold",
+            "published": "2026-11-01T06:05:00\u002B00:00",
+            "source": "Meridian release desk",
+            "summary": "The observatory posted calibration set 2.4 for the north camera. The release notice described the files as ready for observers.",
+            "feedUrl": null
+          },
+          {
+            "title": "Operations withdraws clearance",
+            "link": "https://desk.example/north-hold",
+            "published": "2026-11-01T09:20:00\u002B00:00",
+            "source": "Meridian desk desk",
+            "summary": "The observatory now puts north camera calibration 2.4 on hold. Observers should retain set 2.3 pending new dark frames.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "north-hold",
+          "order": "reversed",
+          "promptHash": "09913709c625e8bfdd7ecfd3328560e7583624329cc7ffc2bc78ca9ce9495367",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory posted calibration set 2.4 for the north camera.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory posted calibration set 2.4 for the north camera.\u0022,\n      \u0022what_changed\u0022: \u0022The north camera calibration set 2.4 is available.\u0022,\n      \u0022why_it_matters\u0022: \u0022Observers can now use the new calibration set.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Update calibration set 2.4 for use.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 878,
+          "generatedTokens": 130,
+          "finishReason": "stop",
+          "seconds": 6.16
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "release"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source desk",
+          "Missing scope pattern: hold|withdr|suspend|paus|retain|keep|delay"
+        ]
+      },
+      {
+        "packet": "pilot-boundary",
+        "order": "ranked",
+        "question": "How many benches can use the pilot?",
+        "gold": {
+          "id": "commission",
+          "requires": [
+            "four|\\b4\\b",
+            "east",
+            "pilot|only|limit|restrict"
+          ],
+          "forbids": [
+            "all twenty|all 20|fleet.wide"
+          ],
+          "reason": "Four east benches received a pilot. The proposed twenty-bench rollout has not occurred."
+        },
+        "ids": [
+          "commission",
+          "plan"
+        ],
+        "sources": [
+          {
+            "title": "Commissioning log narrows eligibility",
+            "link": "https://commission.example/pilot-boundary",
+            "published": "2026-11-01T09:05:00\u002B00:00",
+            "source": "Meridian commission desk",
+            "summary": "The observatory enabled the pilot on four east benches only. Sixteen other benches still use the old counter.",
+            "feedUrl": null
+          },
+          {
+            "title": "Array team announces a rollout plan",
+            "link": "https://plan.example/pilot-boundary",
+            "published": "2026-11-01T06:15:00\u002B00:00",
+            "source": "Meridian plan desk",
+            "summary": "The observatory proposed eventual installation of a new counter on twenty benches. Its proposal named no installation date.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "pilot-boundary",
+          "order": "ranked",
+          "promptHash": "043ec8405911990baef87c45f6fc52d91cb82fd607736ed699894c230b76e768",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory narrowed eligibility for benches to four east benches, while sixteen other benches continue to use the old counter.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory enabled the pilot on four east benches only.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory narrowed eligibility for benches to four east benches.\u0022,\n      \u0022why_it_matters\u0022: \u0022This reduces the number of benches using the new counter, potentially impacting adoption and efficiency.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    },\n    {\n      \u0022article_index\u0022: 2,\n      \u0022evidence_quote\u0022: \u0022The observatory proposed eventual installation of a new counter on twenty benches.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory announced a rollout plan for a new counter on twenty benches.\u0022,\n      \u0022why_it_matters\u0022: \u0022This indicates a planned transition to a new counter, which may impact user experience and adoption.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    }\n  ]\n}",
+          "promptTokens": 866,
+          "generatedTokens": 235,
+          "finishReason": "stop",
+          "seconds": 7.765
+        },
+        "parsed": true,
+        "structure": false,
+        "quoteGate": false,
+        "hasItem": true,
+        "error": "The model returned more items than the profile permits.",
+        "selected": [
+          "commission",
+          "plan"
+        ],
+        "itemQuotes": [
+          true,
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source commission",
+          "Missing scope pattern: pilot|only|limit|restrict"
+        ]
+      },
+      {
+        "packet": "pilot-boundary",
+        "order": "reversed",
+        "question": "How many benches can use the pilot?",
+        "gold": {
+          "id": "commission",
+          "requires": [
+            "four|\\b4\\b",
+            "east",
+            "pilot|only|limit|restrict"
+          ],
+          "forbids": [
+            "all twenty|all 20|fleet.wide"
+          ],
+          "reason": "Four east benches received a pilot. The proposed twenty-bench rollout has not occurred."
+        },
+        "ids": [
+          "plan",
+          "commission"
+        ],
+        "sources": [
+          {
+            "title": "Array team announces a rollout plan",
+            "link": "https://plan.example/pilot-boundary",
+            "published": "2026-11-01T06:15:00\u002B00:00",
+            "source": "Meridian plan desk",
+            "summary": "The observatory proposed eventual installation of a new counter on twenty benches. Its proposal named no installation date.",
+            "feedUrl": null
+          },
+          {
+            "title": "Commissioning log narrows eligibility",
+            "link": "https://commission.example/pilot-boundary",
+            "published": "2026-11-01T09:05:00\u002B00:00",
+            "source": "Meridian commission desk",
+            "summary": "The observatory enabled the pilot on four east benches only. Sixteen other benches still use the old counter.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "pilot-boundary",
+          "order": "reversed",
+          "promptHash": "3565a68dfde4b6e0f6398684ccfaeff54d7bb3a690d34f150ae8b5e902a3c466",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory proposed eventual installation of a new counter on twenty benches, while the commissioning log narrows eligibility to four east benches.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory proposed eventual installation of a new counter on twenty benches.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory\u0027s proposal to install a new counter on twenty benches.\u0022,\n      \u0022why_it_matters\u0022: \u0022The observatory\u0027s proposal to install a new counter on twenty benches.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    },\n    {\n      \u0022article_index\u0022: 2,\n      \u0022evidence_quote\u0022: \u0022The observatory enabled the pilot on four east benches only.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory\u0027s eligibility to the pilot on four east benches.\u0022,\n      \u0022why_it_matters\u0022: \u0022The observatory\u0027s eligibility to the pilot on four east benches.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    }\n  ]\n}",
+          "promptTokens": 866,
+          "generatedTokens": 231,
+          "finishReason": "stop",
+          "seconds": 6.442
+        },
+        "parsed": true,
+        "structure": false,
+        "quoteGate": false,
+        "hasItem": true,
+        "error": "The model returned more items than the profile permits.",
+        "selected": [
+          "plan",
+          "commission"
+        ],
+        "itemQuotes": [
+          true,
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source commission"
+        ]
+      },
+      {
+        "packet": "units",
+        "order": "ranked",
+        "question": "Which exposure delay is supported?",
+        "gold": {
+          "id": "errata",
+          "requires": [
+            "18|eighteen",
+            "millisecond|\\bms\\b"
+          ],
+          "forbids": [
+            "delay (?:is|of) (?:18|eighteen) seconds"
+          ],
+          "reason": "The corrected unit is milliseconds."
+        },
+        "ids": [
+          "errata",
+          "spec"
+        ],
+        "sources": [
+          {
+            "title": "Timer erratum corrects the unit",
+            "link": "https://errata.example/units",
+            "published": "2026-11-01T10:10:00\u002B00:00",
+            "source": "Meridian errata desk",
+            "summary": "The observatory measured an 18 millisecond shutter delay. The earlier seconds label was a transcription error.",
+            "feedUrl": null
+          },
+          {
+            "title": "Shutter bulletin lists a delay",
+            "link": "https://spec.example/units",
+            "published": "2026-11-01T06:12:00\u002B00:00",
+            "source": "Meridian spec desk",
+            "summary": "The observatory bulletin listed an eighteen-second shutter delay for the new dome timer.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "units",
+          "order": "ranked",
+          "promptHash": "ba56ff8670eba56ee54effc70bb2a52414ed85ccfc20a68f67de8d37109bbb43",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory corrected a unit error in the shutter delay.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory measured an 18 millisecond shutter delay. The earlier seconds label was a transcription error.\u0022,\n      \u0022what_changed\u0022: \u0022The unit error in the shutter delay was corrected.\u0022,\n      \u0022why_it_matters\u0022: \u0022The correction ensures accurate timing, affecting observatory operations.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Update the observatory\u0027s systems to reflect the corrected delay.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 864,
+          "generatedTokens": 136,
+          "finishReason": "stop",
+          "seconds": 4.701
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "errata"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Missing scope pattern: 18|eighteen",
+          "Missing scope pattern: millisecond|\\bms\\b"
+        ]
+      },
+      {
+        "packet": "units",
+        "order": "reversed",
+        "question": "Which exposure delay is supported?",
+        "gold": {
+          "id": "errata",
+          "requires": [
+            "18|eighteen",
+            "millisecond|\\bms\\b"
+          ],
+          "forbids": [
+            "delay (?:is|of) (?:18|eighteen) seconds"
+          ],
+          "reason": "The corrected unit is milliseconds."
+        },
+        "ids": [
+          "spec",
+          "errata"
+        ],
+        "sources": [
+          {
+            "title": "Shutter bulletin lists a delay",
+            "link": "https://spec.example/units",
+            "published": "2026-11-01T06:12:00\u002B00:00",
+            "source": "Meridian spec desk",
+            "summary": "The observatory bulletin listed an eighteen-second shutter delay for the new dome timer.",
+            "feedUrl": null
+          },
+          {
+            "title": "Timer erratum corrects the unit",
+            "link": "https://errata.example/units",
+            "published": "2026-11-01T10:10:00\u002B00:00",
+            "source": "Meridian errata desk",
+            "summary": "The observatory measured an 18 millisecond shutter delay. The earlier seconds label was a transcription error.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "units",
+          "order": "reversed",
+          "promptHash": "4b1bace69b98b628101f0e9cb6b370341e91a9560cf46a641ee149d119104e7a",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory bulletin lists a 18-second shutter delay for the new dome timer.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory bulletin lists a 18-second shutter delay for the new dome timer.\u0022,\n      \u0022what_changed\u0022: \u0022The delay from 18 seconds to 18 milliseconds.\u0022,\n      \u0022why_it_matters\u0022: \u0022The change affects the accuracy of the new dome timer.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Update the observatory\u0027s documentation to reflect the new delay.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 864,
+          "generatedTokens": 141,
+          "finishReason": "stop",
+          "seconds": 4.625
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": false,
+        "hasItem": true,
+        "error": "The evidence quote does not occur in the cited article\u0027s visible title or summary.",
+        "selected": [
+          "spec"
+        ],
+        "itemQuotes": [
+          false
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source errata"
+        ]
+      },
+      {
+        "packet": "future-date",
+        "order": "ranked",
+        "question": "Has access opened?",
+        "gold": {
+          "id": "notice",
+          "requires": [
+            "nov(?:ember)?\\.? 12|12 november",
+            "plan|schedul|expect|will|postpon|delay|set to|not open"
+          ],
+          "forbids": [
+            "is now open|has opened|opened on"
+          ],
+          "reason": "November 12 is a future scheduled opening."
+        },
+        "ids": [
+          "notice",
+          "calendar"
+        ],
+        "sources": [
+          {
+            "title": "Archive office reschedules opening",
+            "link": "https://notice.example/future-date",
+            "published": "2026-11-01T09:15:00\u002B00:00",
+            "source": "Meridian notice desk",
+            "summary": "The observatory now plans to open archive access on November 12. Access has not opened yet.",
+            "feedUrl": null
+          },
+          {
+            "title": "Initial calendar shows archive opening",
+            "link": "https://calendar.example/future-date",
+            "published": "2026-11-01T07:00:00\u002B00:00",
+            "source": "Meridian calendar desk",
+            "summary": "The observatory expected archive access to begin on November 4.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "future-date",
+          "order": "ranked",
+          "promptHash": "e5f98f089b95811ed5f978a9d71aa2e295611b253809b0953f98d3fa3f8081be",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory plans to open archive access on November 12.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory now plans to open archive access on November 12.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory\u0027s archive opening date has been rescheduled.\u0022,\n      \u0022why_it_matters\u0022: \u0022This affects the timeline of access to the archive.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the observatory\u0027s actions and update the schedule.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 855,
+          "generatedTokens": 131,
+          "finishReason": "stop",
+          "seconds": 6.661
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "notice"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": true,
+        "failures": []
+      },
+      {
+        "packet": "future-date",
+        "order": "reversed",
+        "question": "Has access opened?",
+        "gold": {
+          "id": "notice",
+          "requires": [
+            "nov(?:ember)?\\.? 12|12 november",
+            "plan|schedul|expect|will|postpon|delay|set to|not open"
+          ],
+          "forbids": [
+            "is now open|has opened|opened on"
+          ],
+          "reason": "November 12 is a future scheduled opening."
+        },
+        "ids": [
+          "calendar",
+          "notice"
+        ],
+        "sources": [
+          {
+            "title": "Initial calendar shows archive opening",
+            "link": "https://calendar.example/future-date",
+            "published": "2026-11-01T07:00:00\u002B00:00",
+            "source": "Meridian calendar desk",
+            "summary": "The observatory expected archive access to begin on November 4.",
+            "feedUrl": null
+          },
+          {
+            "title": "Archive office reschedules opening",
+            "link": "https://notice.example/future-date",
+            "published": "2026-11-01T09:15:00\u002B00:00",
+            "source": "Meridian notice desk",
+            "summary": "The observatory now plans to open archive access on November 12. Access has not opened yet.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "future-date",
+          "order": "reversed",
+          "promptHash": "cd782f55c29b81a553d46cf4e61941a6d8eee4e1a4d92ff868f5f1e008e4c509",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory\u0027s archive access is rescheduled from November 4 to November 12.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory expected archive access to begin on November 4.\u0022,\n      \u0022what_changed\u0022: \u0022The archive access date was changed from November 4 to November 12.\u0022,\n      \u0022why_it_matters\u0022: \u0022The rescheduling affects the observatory\u0027s operational schedule.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    }\n  ]\n}",
+          "promptTokens": 855,
+          "generatedTokens": 129,
+          "finishReason": "stop",
+          "seconds": 7.552
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "calendar"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source notice"
+        ]
+      },
+      {
+        "packet": "percentile",
+        "order": "ranked",
+        "question": "Which latency statistic was measured?",
+        "gold": {
+          "id": "data",
+          "requires": [
+            "median|50th percentile",
+            "37|thirty.seven"
+          ],
+          "forbids": [
+            "95th percentile (?:was|is|of) 37"
+          ],
+          "reason": "37 milliseconds is the median."
+        },
+        "ids": [
+          "data",
+          "slide"
+        ],
+        "sources": [
+          {
+            "title": "Lab log corrects latency definition",
+            "link": "https://data.example/percentile",
+            "published": "2026-11-01T08:40:00\u002B00:00",
+            "source": "Meridian data desk",
+            "summary": "The observatory measured median readout latency of 37 milliseconds. The 95th percentile was not measured.",
+            "feedUrl": null
+          },
+          {
+            "title": "Preview slide labels readout latency",
+            "link": "https://slide.example/percentile",
+            "published": "2026-11-01T06:45:00\u002B00:00",
+            "source": "Meridian slide desk",
+            "summary": "An observatory preview slide called the readout figure the 95th percentile.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "percentile",
+          "order": "ranked",
+          "promptHash": "bd5343c7071879afb49cfd6b776596dc8e4aa379662b4486a3af43607f18a2b7",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory measured median readout latency of 37 milliseconds.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory measured median readout latency of 37 milliseconds.\u0022,\n      \u0022what_changed\u0022: \u0022The median readout latency was measured.\u0022,\n      \u0022why_it_matters\u0022: \u0022This information is crucial for understanding the operational efficiency of the observatory.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the readout latency and update the system if necessary.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 864,
+          "generatedTokens": 131,
+          "finishReason": "stop",
+          "seconds": 4.839
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "data"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": true,
+        "failures": []
+      },
+      {
+        "packet": "percentile",
+        "order": "reversed",
+        "question": "Which latency statistic was measured?",
+        "gold": {
+          "id": "data",
+          "requires": [
+            "median|50th percentile",
+            "37|thirty.seven"
+          ],
+          "forbids": [
+            "95th percentile (?:was|is|of) 37"
+          ],
+          "reason": "37 milliseconds is the median."
+        },
+        "ids": [
+          "slide",
+          "data"
+        ],
+        "sources": [
+          {
+            "title": "Preview slide labels readout latency",
+            "link": "https://slide.example/percentile",
+            "published": "2026-11-01T06:45:00\u002B00:00",
+            "source": "Meridian slide desk",
+            "summary": "An observatory preview slide called the readout figure the 95th percentile.",
+            "feedUrl": null
+          },
+          {
+            "title": "Lab log corrects latency definition",
+            "link": "https://data.example/percentile",
+            "published": "2026-11-01T08:40:00\u002B00:00",
+            "source": "Meridian data desk",
+            "summary": "The observatory measured median readout latency of 37 milliseconds. The 95th percentile was not measured.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "percentile",
+          "order": "reversed",
+          "promptHash": "eea13d99b72ce5fb0783dc32e45afab2f6b4b55ca955fd6c80fc290b128e61bd",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022An observatory preview slide called the readout figure the 95th percentile.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022An observatory preview slide called the readout figure the 95th percentile.\u0022,\n      \u0022what_changed\u0022: \u0022The readout figure is the 95th percentile.\u0022,\n      \u0022why_it_matters\u0022: \u0022It indicates the upper limit of the median readout latency.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    }\n  ]\n}",
+          "promptTokens": 864,
+          "generatedTokens": 128,
+          "finishReason": "stop",
+          "seconds": 4.669
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "slide"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source data",
+          "Missing scope pattern: median|50th percentile",
+          "Missing scope pattern: 37|thirty.seven"
+        ]
+      },
+      {
+        "packet": "rollback",
+        "order": "ranked",
+        "question": "Which firmware should the west mount retain?",
+        "gold": {
+          "id": "field",
+          "requires": [
+            "west",
+            "3\\.0",
+            "restor|revert|roll.*back|return|retain"
+          ],
+          "forbids": [
+            "all mounts (?:reverted|restored)|array.wide rollback"
+          ],
+          "reason": "The rollback to 3.0 affected the west mount only."
+        },
+        "ids": [
+          "field",
+          "candidate"
+        ],
+        "sources": [
+          {
+            "title": "West mount reverts after drift test",
+            "link": "https://field.example/rollback",
+            "published": "2026-11-01T09:35:00\u002B00:00",
+            "source": "Meridian field desk",
+            "summary": "The observatory restored firmware 3.0 on the west mount after drift appeared with 3.1. Other mounts remain unchanged.",
+            "feedUrl": null
+          },
+          {
+            "title": "New firmware staged for mount tests",
+            "link": "https://candidate.example/rollback",
+            "published": "2026-11-01T06:20:00\u002B00:00",
+            "source": "Meridian candidate desk",
+            "summary": "The observatory staged firmware 3.1 for all mount controllers after a bench test.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "rollback",
+          "order": "ranked",
+          "promptHash": "6883a000b8c0f476b5c53dc165de39fa961078670b7119e18b4ab05775a369ac",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory restored firmware 3.0 on the west mount after a drift test, while other mounts remain unchanged.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory restored firmware 3.0 on the west mount after a drift test, while other mounts remain unchanged.\u0022,\n      \u0022what_changed\u0022: \u0022The west mount\u0027s firmware was restored to version 3.0.\u0022,\n      \u0022why_it_matters\u0022: \u0022The drift on the west mount was resolved, ensuring the observatory\u0027s accuracy.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the drift-free operation of the west mount.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 869,
+          "generatedTokens": 157,
+          "finishReason": "stop",
+          "seconds": 5.815
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": false,
+        "hasItem": true,
+        "error": "The evidence quote does not occur in the cited article\u0027s visible title or summary.",
+        "selected": [
+          "field"
+        ],
+        "itemQuotes": [
+          false
+        ],
+        "rubric": true,
+        "failures": []
+      },
+      {
+        "packet": "rollback",
+        "order": "reversed",
+        "question": "Which firmware should the west mount retain?",
+        "gold": {
+          "id": "field",
+          "requires": [
+            "west",
+            "3\\.0",
+            "restor|revert|roll.*back|return|retain"
+          ],
+          "forbids": [
+            "all mounts (?:reverted|restored)|array.wide rollback"
+          ],
+          "reason": "The rollback to 3.0 affected the west mount only."
+        },
+        "ids": [
+          "candidate",
+          "field"
+        ],
+        "sources": [
+          {
+            "title": "New firmware staged for mount tests",
+            "link": "https://candidate.example/rollback",
+            "published": "2026-11-01T06:20:00\u002B00:00",
+            "source": "Meridian candidate desk",
+            "summary": "The observatory staged firmware 3.1 for all mount controllers after a bench test.",
+            "feedUrl": null
+          },
+          {
+            "title": "West mount reverts after drift test",
+            "link": "https://field.example/rollback",
+            "published": "2026-11-01T09:35:00\u002B00:00",
+            "source": "Meridian field desk",
+            "summary": "The observatory restored firmware 3.0 on the west mount after drift appeared with 3.1. Other mounts remain unchanged.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "rollback",
+          "order": "reversed",
+          "promptHash": "44b5b5692eac13898bc36a1a85207ad0c7050363c590d4b785302b3cacc34200",
+          "raw": "\u0060\u0060\u0060json\n[\n  {\n    \u0022article_index\u0022: 1,\n    \u0022evidence_quote\u0022: \u0022The observatory staged firmware 3.1 for all mount controllers after a bench test.\u0022,\n    \u0022what_changed\u0022: \u0022Staged firmware 3.1 for all mount controllers.\u0022,\n    \u0022why_it_matters\u0022: \u0022Provides a baseline for future testing and operational readiness.\u0022,\n    \u0022decision\u0022: \u0022act\u0022,\n    \u0022next_step\u0022: \u0022Monitor firmware updates and test drift.\u0022,\n    \u0022confidence\u0022: \u0022high\u0022\n  },\n  {\n    \u0022article_index\u0022: 2,\n    \u0022evidence_quote\u0022: \u0022The observatory restored firmware 3.0 on the west mount after drift appeared with 3.1.\u0022,\n    \u0022what_changed\u0022: \u0022Restored firmware 3.0 on the west mount.\u0022,\n    \u0022why_it_matters\u0022: \u0022Ensures operational continuity and drift-free performance.\u0022,\n    \u0022decision\u0022: \u0022act\u0022,\n    \u0022next_step\u0022: \u0022Monitor drift and update firmware as needed.\u0022,\n    \u0022confidence\u0022: \u0022high\u0022\n  }\n]\n\u0060\u0060\u0060",
+          "promptTokens": 869,
+          "generatedTokens": 211,
+          "finishReason": "stop",
+          "seconds": 6.025
+        },
+        "parsed": false,
+        "structure": false,
+        "quoteGate": false,
+        "hasItem": false,
+        "error": "\u0027\u0060\u0027 is an invalid start of a value. Path: $ | LineNumber: 0 | BytePositionInLine: 0.",
+        "selected": [],
+        "itemQuotes": [],
+        "rubric": false,
+        "failures": [
+          "Response did not parse",
+          "Expected source field",
+          "Missing scope pattern: west",
+          "Missing scope pattern: 3\\.0",
+          "Missing scope pattern: restor|revert|roll.*back|return|retain"
+        ]
+      },
+      {
+        "packet": "simulation",
+        "order": "ranked",
+        "question": "Did the field trial establish the gain?",
+        "gold": {
+          "id": "bench",
+          "requires": [
+            "simulat|synthetic",
+            "12|twelve"
+          ],
+          "forbids": [
+            "field trial (?:showed|confirmed|demonstrated)|in the field by 12"
+          ],
+          "reason": "The 12 percent improvement is from simulation alone."
+        },
+        "ids": [
+          "bench",
+          "forecast"
+        ],
+        "sources": [
+          {
+            "title": "Simulation records a limited improvement",
+            "link": "https://bench.example/simulation",
+            "published": "2026-11-01T10:01:00\u002B00:00",
+            "source": "Meridian bench desk",
+            "summary": "The observatory simulator reduced tracking error by 12 percent on synthetic traces. No field trial has run.",
+            "feedUrl": null
+          },
+          {
+            "title": "Proposal seeks night-sky trial",
+            "link": "https://forecast.example/simulation",
+            "published": "2026-11-01T07:14:00\u002B00:00",
+            "source": "Meridian forecast desk",
+            "summary": "The observatory requested a field trial for a new tracking predictor. No night-sky measurements were provided.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "simulation",
+          "order": "ranked",
+          "promptHash": "dd8a2e8cd3ab92e15e845a6deeeee214043e2318d2afb8b6f2b3401392d7f3e3",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory simulator reduced tracking error by 12 percent on synthetic traces.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory simulator reduced tracking error by 12 percent on synthetic traces.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory simulator reduced tracking error by 12 percent on synthetic traces.\u0022,\n      \u0022why_it_matters\u0022: \u0022This improvement suggests the simulator\u0027s predictive model is more accurate, potentially leading to better performance in real-world applications.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Evaluate the new tracking predictor for real-world trials to assess its accuracy and reliability.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 865,
+          "generatedTokens": 155,
+          "finishReason": "stop",
+          "seconds": 5.335
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "bench"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": true,
+        "failures": []
+      },
+      {
+        "packet": "simulation",
+        "order": "reversed",
+        "question": "Did the field trial establish the gain?",
+        "gold": {
+          "id": "bench",
+          "requires": [
+            "simulat|synthetic",
+            "12|twelve"
+          ],
+          "forbids": [
+            "field trial (?:showed|confirmed|demonstrated)|in the field by 12"
+          ],
+          "reason": "The 12 percent improvement is from simulation alone."
+        },
+        "ids": [
+          "forecast",
+          "bench"
+        ],
+        "sources": [
+          {
+            "title": "Proposal seeks night-sky trial",
+            "link": "https://forecast.example/simulation",
+            "published": "2026-11-01T07:14:00\u002B00:00",
+            "source": "Meridian forecast desk",
+            "summary": "The observatory requested a field trial for a new tracking predictor. No night-sky measurements were provided.",
+            "feedUrl": null
+          },
+          {
+            "title": "Simulation records a limited improvement",
+            "link": "https://bench.example/simulation",
+            "published": "2026-11-01T10:01:00\u002B00:00",
+            "source": "Meridian bench desk",
+            "summary": "The observatory simulator reduced tracking error by 12 percent on synthetic traces. No field trial has run.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "simulation",
+          "order": "reversed",
+          "promptHash": "16a3ee22c999fe0563fd53eaa208bf75e0e4423e818016b361686cc8cb759519",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory requested a field trial for a new tracking predictor, while the simulator reduced tracking error by 12 percent on synthetic traces.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory requested a field trial for a new tracking predictor.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory requested a field trial for a new tracking predictor.\u0022,\n      \u0022why_it_matters\u0022: \u0022The observatory is interested in the new predictor\u0027s performance in a real-world setting.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    },\n    {\n      \u0022article_index\u0022: 2,\n      \u0022evidence_quote\u0022: \u0022The observatory simulator reduced tracking error by 12 percent on synthetic traces.\u0022,\n      \u0022what_changed\u0022: \u0022The simulator reduced tracking error by 12 percent on synthetic traces.\u0022,\n      \u0022why_it_matters\u0022: \u0022The reduction in error suggests the simulator\u0027s approach is effective.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    }\n  ]\n}",
+          "promptTokens": 865,
+          "generatedTokens": 237,
+          "finishReason": "stop",
+          "seconds": 6.92
+        },
+        "parsed": true,
+        "structure": false,
+        "quoteGate": false,
+        "hasItem": true,
+        "error": "The model returned more items than the profile permits.",
+        "selected": [
+          "forecast",
+          "bench"
+        ],
+        "itemQuotes": [
+          true,
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source bench"
+        ]
+      },
+      {
+        "packet": "denominator",
+        "order": "ranked",
+        "question": "Which sample actually passed inspection?",
+        "gold": {
+          "id": "audit",
+          "requires": [
+            "six|\\b6\\b",
+            "forty|\\b40\\b|thirty.four|\\b34\\b",
+            "pass"
+          ],
+          "forbids": [
+            "all forty (?:units |modules )?passed|all 40 (?:units |modules )?passed"
+          ],
+          "reason": "Six tested modules passed out of a shipment of forty."
+        },
+        "ids": [
+          "audit",
+          "manifest"
+        ],
+        "sources": [
+          {
+            "title": "Inspection desk posts first sample",
+            "link": "https://audit.example/denominator",
+            "published": "2026-11-01T08:55:00\u002B00:00",
+            "source": "Meridian audit desk",
+            "summary": "The observatory inspected six of forty detector modules. All six inspected modules passed. The other thirty-four remain untested.",
+            "feedUrl": null
+          },
+          {
+            "title": "Shipment manifest lists detector units",
+            "link": "https://manifest.example/denominator",
+            "published": "2026-11-01T06:11:00\u002B00:00",
+            "source": "Meridian manifest desk",
+            "summary": "The observatory received forty detector modules. The shipping manifest contains no inspection results.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "denominator",
+          "order": "ranked",
+          "promptHash": "d1c977b2728ae54297fe1ac661d92cf28bf222cbad2bb889e6782590d6d63355",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory inspected six detector modules, all of which passed inspection, while the other thirty-four remain untested.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory inspected six of forty detector modules. All six inspected modules passed.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory inspected six detector modules, all of which passed inspection, while the other thirty-four remain untested.\u0022,\n      \u0022why_it_matters\u0022: \u0022The results indicate that the quality of the detector modules is consistent, with no issues found.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 862,
+          "generatedTokens": 150,
+          "finishReason": "stop",
+          "seconds": 4.641
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "audit"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": true,
+        "failures": []
+      },
+      {
+        "packet": "denominator",
+        "order": "reversed",
+        "question": "Which sample actually passed inspection?",
+        "gold": {
+          "id": "audit",
+          "requires": [
+            "six|\\b6\\b",
+            "forty|\\b40\\b|thirty.four|\\b34\\b",
+            "pass"
+          ],
+          "forbids": [
+            "all forty (?:units |modules )?passed|all 40 (?:units |modules )?passed"
+          ],
+          "reason": "Six tested modules passed out of a shipment of forty."
+        },
+        "ids": [
+          "manifest",
+          "audit"
+        ],
+        "sources": [
+          {
+            "title": "Shipment manifest lists detector units",
+            "link": "https://manifest.example/denominator",
+            "published": "2026-11-01T06:11:00\u002B00:00",
+            "source": "Meridian manifest desk",
+            "summary": "The observatory received forty detector modules. The shipping manifest contains no inspection results.",
+            "feedUrl": null
+          },
+          {
+            "title": "Inspection desk posts first sample",
+            "link": "https://audit.example/denominator",
+            "published": "2026-11-01T08:55:00\u002B00:00",
+            "source": "Meridian audit desk",
+            "summary": "The observatory inspected six of forty detector modules. All six inspected modules passed. The other thirty-four remain untested.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "denominator",
+          "order": "reversed",
+          "promptHash": "4efa20991bd19db51b09f71e1bdcd5c9863643a9b7022c7c595a0e623359ddcd",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory received forty detector modules, but the shipping manifest contains no inspection results. The observatory inspected six of the forty modules, and all passed.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory received forty detector modules. The shipping manifest contains no inspection results.\u0022,\n      \u0022what_changed\u0022: \u0022The shipping manifest contains no inspection results.\u0022,\n      \u0022why_it_matters\u0022: \u0022The observatory\u0027s inspection process is not transparent, and the results are not available.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    },\n    {\n      \u0022article_index\u0022: 2,\n      \u0022evidence_quote\u0022: \u0022The observatory inspected six of the forty modules, and all passed.\u0022,\n      \u0022what_changed\u0022: \u0022Six of the forty modules passed inspection.\u0022,\n      \u0022why_it_matters\u0022: \u0022The results of the inspection are positive, but the process is not transparent.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    }\n  ]\n}",
+          "promptTokens": 862,
+          "generatedTokens": 233,
+          "finishReason": "stop",
+          "seconds": 7.195
+        },
+        "parsed": true,
+        "structure": false,
+        "quoteGate": false,
+        "hasItem": true,
+        "error": "The model returned more items than the profile permits.",
+        "selected": [
+          "manifest",
+          "audit"
+        ],
+        "itemQuotes": [
+          true,
+          false
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source audit"
+        ]
+      },
+      {
+        "packet": "reprint",
+        "order": "ranked",
+        "question": "Which report establishes the present access status?",
+        "gold": {
+          "id": "authority",
+          "requires": [
+            "south",
+            "closed|closur|shut|restrict"
+          ],
+          "forbids": [
+            "now open|has reopened|is open"
+          ],
+          "reason": "The later reprint does not supersede the authority\u0027s southern-gallery closure."
+        },
+        "ids": [
+          "authority",
+          "wire"
+        ],
+        "sources": [
+          {
+            "title": "Observatory authority restricts access",
+            "link": "https://authority.example/reprint",
+            "published": "2026-11-01T08:12:00\u002B00:00",
+            "source": "Meridian authority desk",
+            "summary": "The observatory keeps the southern gallery closed for alignment. Its reopening date is unknown.",
+            "feedUrl": null
+          },
+          {
+            "title": "Wire republishes yesterday\u0027s visitor notice",
+            "link": "https://wire.example/reprint",
+            "published": "2026-11-01T09:59:00\u002B00:00",
+            "source": "Meridian wire desk",
+            "summary": "The observatory wire reprinted yesterday\u0027s announcement promising open gallery access. It did not verify the gallery\u0027s current status.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "reprint",
+          "order": "ranked",
+          "promptHash": "9a93d4148912b26926c2c90a0c1ad84e9bd9c08e24e662c28de26172d63d0826",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory restricts access to the southern gallery for alignment, with an unknown reopening date.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory keeps the southern gallery closed for alignment. Its reopening date is unknown.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory\u0027s gallery access is restricted.\u0022,\n      \u0022why_it_matters\u0022: \u0022The restriction affects the gallery\u0027s usability and may impact visitor experience.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    }\n  ]\n}",
+          "promptTokens": 865,
+          "generatedTokens": 128,
+          "finishReason": "stop",
+          "seconds": 4.612
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "authority"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": true,
+        "failures": []
+      },
+      {
+        "packet": "reprint",
+        "order": "reversed",
+        "question": "Which report establishes the present access status?",
+        "gold": {
+          "id": "authority",
+          "requires": [
+            "south",
+            "closed|closur|shut|restrict"
+          ],
+          "forbids": [
+            "now open|has reopened|is open"
+          ],
+          "reason": "The later reprint does not supersede the authority\u0027s southern-gallery closure."
+        },
+        "ids": [
+          "wire",
+          "authority"
+        ],
+        "sources": [
+          {
+            "title": "Wire republishes yesterday\u0027s visitor notice",
+            "link": "https://wire.example/reprint",
+            "published": "2026-11-01T09:59:00\u002B00:00",
+            "source": "Meridian wire desk",
+            "summary": "The observatory wire reprinted yesterday\u0027s announcement promising open gallery access. It did not verify the gallery\u0027s current status.",
+            "feedUrl": null
+          },
+          {
+            "title": "Observatory authority restricts access",
+            "link": "https://authority.example/reprint",
+            "published": "2026-11-01T08:12:00\u002B00:00",
+            "source": "Meridian authority desk",
+            "summary": "The observatory keeps the southern gallery closed for alignment. Its reopening date is unknown.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "reprint",
+          "order": "reversed",
+          "promptHash": "b6c017e476e05d77e6d93214b1e10d01b30216df119478ce44409cef79a37ab0",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory wire reprinted yesterday\u0027s announcement promising open gallery access, but did not verify the gallery\u0027s current status.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory wire reprinted yesterday\u0027s announcement promising open gallery access, but did not verify the gallery\u0027s current status.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory wire reprinted yesterday\u0027s announcement promising open gallery access, but did not verify the gallery\u0027s current status.\u0022,\n      \u0022why_it_matters\u0022: \u0022The lack of verification can lead to misinformation.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    }\n  ]\n}",
+          "promptTokens": 865,
+          "generatedTokens": 151,
+          "finishReason": "stop",
+          "seconds": 5.524
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": false,
+        "hasItem": true,
+        "error": "The evidence quote does not occur in the cited article\u0027s visible title or summary.",
+        "selected": [
+          "wire"
+        ],
+        "itemQuotes": [
+          false
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source authority",
+          "Missing scope pattern: south",
+          "Missing scope pattern: closed|closur|shut|restrict"
+        ]
+      },
+      {
+        "packet": "proposal",
+        "order": "ranked",
+        "question": "Was the upgrade funded?",
+        "gold": {
+          "id": "minute",
+          "requires": [
+            "defer|delay|postpon|no .*approv|not .*approv|pending",
+            "fund|vote"
+          ],
+          "forbids": [
+            "has approved funding|funding (?:was|is) approved|funds were approved"
+          ],
+          "reason": "The vote was deferred. The projection is not an award."
+        },
+        "ids": [
+          "minute",
+          "pitch"
+        ],
+        "sources": [
+          {
+            "title": "Council minutes defer funding vote",
+            "link": "https://minute.example/proposal",
+            "published": "2026-11-01T09:45:00\u002B00:00",
+            "source": "Meridian minute desk",
+            "summary": "The observatory council deferred the funding vote until its next meeting. No upgrade funds have been approved.",
+            "feedUrl": null
+          },
+          {
+            "title": "Council hears mirror upgrade request",
+            "link": "https://pitch.example/proposal",
+            "published": "2026-11-01T06:55:00\u002B00:00",
+            "source": "Meridian pitch desk",
+            "summary": "The observatory requested funding for a mirror alignment project. Its presentation projected a two-month schedule.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "proposal",
+          "order": "ranked",
+          "promptHash": "3160c5589ff62ef420f334b188b834f8693f1ae67146ff2ba8b03cc48dac9f39",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory council deferred the funding vote until its next meeting.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory council deferred the funding vote until its next meeting.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory council deferred the funding vote until its next meeting.\u0022,\n      \u0022why_it_matters\u0022: \u0022The council\u0027s decision to defer the funding vote until its next meeting is crucial for the observatory\u0027s operations.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the next council meeting for the funding vote.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 860,
+          "generatedTokens": 140,
+          "finishReason": "stop",
+          "seconds": 5.077
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "minute"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": true,
+        "failures": []
+      },
+      {
+        "packet": "proposal",
+        "order": "reversed",
+        "question": "Was the upgrade funded?",
+        "gold": {
+          "id": "minute",
+          "requires": [
+            "defer|delay|postpon|no .*approv|not .*approv|pending",
+            "fund|vote"
+          ],
+          "forbids": [
+            "has approved funding|funding (?:was|is) approved|funds were approved"
+          ],
+          "reason": "The vote was deferred. The projection is not an award."
+        },
+        "ids": [
+          "pitch",
+          "minute"
+        ],
+        "sources": [
+          {
+            "title": "Council hears mirror upgrade request",
+            "link": "https://pitch.example/proposal",
+            "published": "2026-11-01T06:55:00\u002B00:00",
+            "source": "Meridian pitch desk",
+            "summary": "The observatory requested funding for a mirror alignment project. Its presentation projected a two-month schedule.",
+            "feedUrl": null
+          },
+          {
+            "title": "Council minutes defer funding vote",
+            "link": "https://minute.example/proposal",
+            "published": "2026-11-01T09:45:00\u002B00:00",
+            "source": "Meridian minute desk",
+            "summary": "The observatory council deferred the funding vote until its next meeting. No upgrade funds have been approved.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "proposal",
+          "order": "reversed",
+          "promptHash": "c5d3862dd184bdf040717d54c053704a0a1822f93983be2361d4a8c2a7c24338",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory requested funding for a mirror alignment project, which was deferred by the council until its next meeting.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory requested funding for a mirror alignment project. Its presentation projected a two-month schedule.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory requested funding for a mirror alignment project.\u0022,\n      \u0022why_it_matters\u0022: \u0022The council\u0027s decision to defer the funding vote until its next meeting.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    }\n  ]\n}",
+          "promptTokens": 860,
+          "generatedTokens": 136,
+          "finishReason": "stop",
+          "seconds": 5.429
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "pitch"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source minute"
+        ]
+      },
+      {
+        "packet": "abstain",
+        "order": "ranked",
+        "question": "Is there a material operating change?",
+        "gold": {
+          "id": null,
+          "requires": [],
+          "forbids": [],
+          "reason": "Both notices repeat unchanged information. A zero-item brief is expected."
+        },
+        "ids": [
+          "poster",
+          "reminder"
+        ],
+        "sources": [
+          {
+            "title": "Visitor poster lists existing hours",
+            "link": "https://poster.example/abstain",
+            "published": "2026-11-01T09:10:00\u002B00:00",
+            "source": "Meridian poster desk",
+            "summary": "The observatory reprinted an unchanged visitor poster. It announces no development or action.",
+            "feedUrl": null
+          },
+          {
+            "title": "Weekly reminder repeats visiting hours",
+            "link": "https://reminder.example/abstain",
+            "published": "2026-11-01T07:10:00\u002B00:00",
+            "source": "Meridian reminder desk",
+            "summary": "The observatory repeated its standing Monday reading-room hours. Nothing about access, staffing or schedules changed.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "abstain",
+          "order": "ranked",
+          "promptHash": "129c7e5f3864f789643ba44b1e2bda56c0134202f3fcb424e117c90d38f7fc84",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory reprinted an unchanged visitor poster and repeated its standing Monday reading-room hours.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory reprinted an unchanged visitor poster.\u0022,\n      \u0022what_changed\u0022: \u0022No new information or action.\u0022,\n      \u0022why_it_matters\u0022: \u0022The poster\u0027s content remains the same.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    },\n    {\n      \u0022article_index\u0022: 2,\n      \u0022evidence_quote\u0022: \u0022The observatory repeated its standing Monday reading-room hours.\u0022,\n      \u0022what_changed\u0022: \u0022No new information or action.\u0022,\n      \u0022why_it_matters\u0022: \u0022The hours remain unchanged.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    }\n  ]\n}",
+          "promptTokens": 858,
+          "generatedTokens": 188,
+          "finishReason": "stop",
+          "seconds": 6.644
+        },
+        "parsed": true,
+        "structure": false,
+        "quoteGate": false,
+        "hasItem": true,
+        "error": "The model returned more items than the profile permits.",
+        "selected": [
+          "poster",
+          "reminder"
+        ],
+        "itemQuotes": [
+          true,
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected abstention"
+        ]
+      },
+      {
+        "packet": "abstain",
+        "order": "reversed",
+        "question": "Is there a material operating change?",
+        "gold": {
+          "id": null,
+          "requires": [],
+          "forbids": [],
+          "reason": "Both notices repeat unchanged information. A zero-item brief is expected."
+        },
+        "ids": [
+          "reminder",
+          "poster"
+        ],
+        "sources": [
+          {
+            "title": "Weekly reminder repeats visiting hours",
+            "link": "https://reminder.example/abstain",
+            "published": "2026-11-01T07:10:00\u002B00:00",
+            "source": "Meridian reminder desk",
+            "summary": "The observatory repeated its standing Monday reading-room hours. Nothing about access, staffing or schedules changed.",
+            "feedUrl": null
+          },
+          {
+            "title": "Visitor poster lists existing hours",
+            "link": "https://poster.example/abstain",
+            "published": "2026-11-01T09:10:00\u002B00:00",
+            "source": "Meridian poster desk",
+            "summary": "The observatory reprinted an unchanged visitor poster. It announces no development or action.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "abstain",
+          "order": "reversed",
+          "promptHash": "711d118f2318b61be31412cdcc64d986dc121e38f97f94f3f926b489614389a4",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory repeated its standing Monday reading-room hours.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory repeated its standing Monday reading-room hours.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory\u0027s reading-room hours were repeated on Monday.\u0022,\n      \u0022why_it_matters\u0022: \u0022No new information or changes were announced.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022low\u0022\n    }\n  ]\n}",
+          "promptTokens": 858,
+          "generatedTokens": 112,
+          "finishReason": "stop",
+          "seconds": 4.284
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "reminder"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected abstention"
+        ]
+      },
+      {
+        "packet": "simple",
+        "order": "ranked",
+        "question": "Which replacement inlet is available?",
+        "gold": {
+          "id": "receipt",
+          "requires": [
+            "8\\s*(?:mm|millimet)|eight.millimet",
+            "east",
+            "inlet"
+          ],
+          "forbids": [
+            "installed|all pumps"
+          ],
+          "reason": "An 8 mm inlet is available for the eastern pump. Installation is not established."
+        },
+        "ids": [
+          "receipt",
+          "survey"
+        ],
+        "sources": [
+          {
+            "title": "Stores receives a replacement inlet",
+            "link": "https://receipt.example/simple",
+            "published": "2026-11-01T08:25:00\u002B00:00",
+            "source": "Meridian receipt desk",
+            "summary": "The observatory stores received one 8 mm replacement inlet for the eastern pump. The part is ready for collection.",
+            "feedUrl": null
+          },
+          {
+            "title": "Workshop plans a spare-part survey",
+            "link": "https://survey.example/simple",
+            "published": "2026-11-01T06:00:00\u002B00:00",
+            "source": "Meridian survey desk",
+            "summary": "The observatory workshop plans to ask which inlet sizes might be needed in future.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "simple",
+          "order": "ranked",
+          "promptHash": "b3f8e21c4eb9b58fa4b58b59d59e087689d5f405decc19963cafafa4ab724e51",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022Stores receives a replacement inlet for the eastern pump.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022Stores receives a replacement inlet for the eastern pump.\u0022,\n      \u0022what_changed\u0022: \u0022Stores received a replacement inlet for the eastern pump.\u0022,\n      \u0022why_it_matters\u0022: \u0022The part is ready for collection.\u0022,\n      \u0022decision\u0022: \u0022act\u0022,\n      \u0022next_step\u0022: \u0022Monitor the collection process.\u0022,\n      \u0022confidence\u0022: \u0022high\u0022\n    }\n  ]\n}",
+          "promptTokens": 861,
+          "generatedTokens": 111,
+          "finishReason": "stop",
+          "seconds": 4.735
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": false,
+        "hasItem": true,
+        "error": "The evidence quote does not occur in the cited article\u0027s visible title or summary.",
+        "selected": [
+          "receipt"
+        ],
+        "itemQuotes": [
+          false
+        ],
+        "rubric": false,
+        "failures": [
+          "Missing scope pattern: 8\\s*(?:mm|millimet)|eight.millimet"
+        ]
+      },
+      {
+        "packet": "simple",
+        "order": "reversed",
+        "question": "Which replacement inlet is available?",
+        "gold": {
+          "id": "receipt",
+          "requires": [
+            "8\\s*(?:mm|millimet)|eight.millimet",
+            "east",
+            "inlet"
+          ],
+          "forbids": [
+            "installed|all pumps"
+          ],
+          "reason": "An 8 mm inlet is available for the eastern pump. Installation is not established."
+        },
+        "ids": [
+          "survey",
+          "receipt"
+        ],
+        "sources": [
+          {
+            "title": "Workshop plans a spare-part survey",
+            "link": "https://survey.example/simple",
+            "published": "2026-11-01T06:00:00\u002B00:00",
+            "source": "Meridian survey desk",
+            "summary": "The observatory workshop plans to ask which inlet sizes might be needed in future.",
+            "feedUrl": null
+          },
+          {
+            "title": "Stores receives a replacement inlet",
+            "link": "https://receipt.example/simple",
+            "published": "2026-11-01T08:25:00\u002B00:00",
+            "source": "Meridian receipt desk",
+            "summary": "The observatory stores received one 8 mm replacement inlet for the eastern pump. The part is ready for collection.",
+            "feedUrl": null
+          }
+        ],
+        "inference": {
+          "packet": "simple",
+          "order": "reversed",
+          "promptHash": "fd835dba7424070f226304abb31577f90d1fe4c9f5921aa808690b262429380d",
+          "raw": "{\n  \u0022bottom_line\u0022: \u0022The observatory workshop plans to ask which inlet sizes might be needed in future.\u0022,\n  \u0022items\u0022: [\n    {\n      \u0022article_index\u0022: 1,\n      \u0022evidence_quote\u0022: \u0022The observatory workshop plans to ask which inlet sizes might be needed in future.\u0022,\n      \u0022what_changed\u0022: \u0022The observatory workshop plans to conduct a survey on future inlet sizes.\u0022,\n      \u0022why_it_matters\u0022: \u0022This information is crucial for planning and resource allocation.\u0022,\n      \u0022decision\u0022: \u0022watch\u0022,\n      \u0022next_step\u0022: null,\n      \u0022confidence\u0022: \u0022medium\u0022\n    }\n  ]\n}",
+          "promptTokens": 861,
+          "generatedTokens": 126,
+          "finishReason": "stop",
+          "seconds": 4.122
+        },
+        "parsed": true,
+        "structure": true,
+        "quoteGate": true,
+        "hasItem": true,
+        "error": null,
+        "selected": [
+          "survey"
+        ],
+        "itemQuotes": [
+          true
+        ],
+        "rubric": false,
+        "failures": [
+          "Expected source receipt",
+          "Missing scope pattern: 8\\s*(?:mm|millimet)|eight.millimet",
+          "Missing scope pattern: east"
+        ]
+      }
+    ]
+  },
   "clock": "2026-09-06T12:00:00+00:00",
   "reports": [
     {

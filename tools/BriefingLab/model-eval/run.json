@@ -1,0 +1,265 @@
+{
+  "metadata": {
+    "model": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+    "modelRevision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "weightSha256": "0979f33d1bc58afcf696d13f57977644e7b11a6f0eec3e631d8e9463d18c0717",
+    "freezeCommit": "86494f41819498ab173edbdd73c119c51cb4eb57",
+    "startUtc": "2026-11-24T00:46:49.788104+00:00",
+    "device": "Apple M4",
+    "macOS": "27.0.1",
+    "python": "3.12.15",
+    "libraries": {
+      "mlx": "0.32.4",
+      "mlx-lm": "0.32.2",
+      "tokenizers": "0.23.3",
+      "transformers": "5.24.0"
+    },
+    "temperature": 0,
+    "seed": 0,
+    "maxNewTokens": 420,
+    "loadSeconds": 1.558,
+    "wallSeconds": 146.471
+  },
+  "outputs": [
+    {
+      "packet": "north-hold",
+      "order": "ranked",
+      "promptHash": "c5d09a1b5635f099b22419d4ed39889f6e5f6841f4591afedb160e65ae9c1172",
+      "raw": "{\n  \"bottom_line\": \"The observatory withdraws clearance for camera calibration 2.4 and puts camera calibration 2.3 on hold.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory now puts north camera calibration 2.4 on hold.\",\n      \"what_changed\": \"The observatory withdraws clearance for camera calibration 2.4.\",\n      \"why_it_matters\": \"This action affects the calibration process and may impact the observatory's ability to observe celestial bodies.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    },\n    {\n      \"article_index\": 2,\n      \"evidence_quote\": \"The observatory posted calibration set 2.4 for the north camera.\",\n      \"what_changed\": \"The observatory posted calibration set 2.4 for the north camera.\",\n      \"why_it_matters\": \"This action provides new calibration data for the north camera, which may improve the observatory's ability to observe celestial bodies.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Review the calibration set and update the camera system.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 878,
+      "generatedTokens": 259,
+      "finishReason": "stop",
+      "seconds": 15.043
+    },
+    {
+      "packet": "north-hold",
+      "order": "reversed",
+      "promptHash": "09913709c625e8bfdd7ecfd3328560e7583624329cc7ffc2bc78ca9ce9495367",
+      "raw": "{\n  \"bottom_line\": \"The observatory posted calibration set 2.4 for the north camera.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory posted calibration set 2.4 for the north camera.\",\n      \"what_changed\": \"The north camera calibration set 2.4 is available.\",\n      \"why_it_matters\": \"Observers can now use the new calibration set.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Update calibration set 2.4 for use.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 878,
+      "generatedTokens": 130,
+      "finishReason": "stop",
+      "seconds": 6.16
+    },
+    {
+      "packet": "pilot-boundary",
+      "order": "ranked",
+      "promptHash": "043ec8405911990baef87c45f6fc52d91cb82fd607736ed699894c230b76e768",
+      "raw": "{\n  \"bottom_line\": \"The observatory narrowed eligibility for benches to four east benches, while sixteen other benches continue to use the old counter.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory enabled the pilot on four east benches only.\",\n      \"what_changed\": \"The observatory narrowed eligibility for benches to four east benches.\",\n      \"why_it_matters\": \"This reduces the number of benches using the new counter, potentially impacting adoption and efficiency.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    },\n    {\n      \"article_index\": 2,\n      \"evidence_quote\": \"The observatory proposed eventual installation of a new counter on twenty benches.\",\n      \"what_changed\": \"The observatory announced a rollout plan for a new counter on twenty benches.\",\n      \"why_it_matters\": \"This indicates a planned transition to a new counter, which may impact user experience and adoption.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    }\n  ]\n}",
+      "promptTokens": 866,
+      "generatedTokens": 235,
+      "finishReason": "stop",
+      "seconds": 7.765
+    },
+    {
+      "packet": "pilot-boundary",
+      "order": "reversed",
+      "promptHash": "3565a68dfde4b6e0f6398684ccfaeff54d7bb3a690d34f150ae8b5e902a3c466",
+      "raw": "{\n  \"bottom_line\": \"The observatory proposed eventual installation of a new counter on twenty benches, while the commissioning log narrows eligibility to four east benches.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory proposed eventual installation of a new counter on twenty benches.\",\n      \"what_changed\": \"The observatory's proposal to install a new counter on twenty benches.\",\n      \"why_it_matters\": \"The observatory's proposal to install a new counter on twenty benches.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    },\n    {\n      \"article_index\": 2,\n      \"evidence_quote\": \"The observatory enabled the pilot on four east benches only.\",\n      \"what_changed\": \"The observatory's eligibility to the pilot on four east benches.\",\n      \"why_it_matters\": \"The observatory's eligibility to the pilot on four east benches.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    }\n  ]\n}",
+      "promptTokens": 866,
+      "generatedTokens": 231,
+      "finishReason": "stop",
+      "seconds": 6.442
+    },
+    {
+      "packet": "units",
+      "order": "ranked",
+      "promptHash": "ba56ff8670eba56ee54effc70bb2a52414ed85ccfc20a68f67de8d37109bbb43",
+      "raw": "{\n  \"bottom_line\": \"The observatory corrected a unit error in the shutter delay.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory measured an 18 millisecond shutter delay. The earlier seconds label was a transcription error.\",\n      \"what_changed\": \"The unit error in the shutter delay was corrected.\",\n      \"why_it_matters\": \"The correction ensures accurate timing, affecting observatory operations.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Update the observatory's systems to reflect the corrected delay.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 864,
+      "generatedTokens": 136,
+      "finishReason": "stop",
+      "seconds": 4.701
+    },
+    {
+      "packet": "units",
+      "order": "reversed",
+      "promptHash": "4b1bace69b98b628101f0e9cb6b370341e91a9560cf46a641ee149d119104e7a",
+      "raw": "{\n  \"bottom_line\": \"The observatory bulletin lists a 18-second shutter delay for the new dome timer.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory bulletin lists a 18-second shutter delay for the new dome timer.\",\n      \"what_changed\": \"The delay from 18 seconds to 18 milliseconds.\",\n      \"why_it_matters\": \"The change affects the accuracy of the new dome timer.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Update the observatory's documentation to reflect the new delay.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 864,
+      "generatedTokens": 141,
+      "finishReason": "stop",
+      "seconds": 4.625
+    },
+    {
+      "packet": "future-date",
+      "order": "ranked",
+      "promptHash": "e5f98f089b95811ed5f978a9d71aa2e295611b253809b0953f98d3fa3f8081be",
+      "raw": "{\n  \"bottom_line\": \"The observatory plans to open archive access on November 12.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory now plans to open archive access on November 12.\",\n      \"what_changed\": \"The observatory's archive opening date has been rescheduled.\",\n      \"why_it_matters\": \"This affects the timeline of access to the archive.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the observatory's actions and update the schedule.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 855,
+      "generatedTokens": 131,
+      "finishReason": "stop",
+      "seconds": 6.661
+    },
+    {
+      "packet": "future-date",
+      "order": "reversed",
+      "promptHash": "cd782f55c29b81a553d46cf4e61941a6d8eee4e1a4d92ff868f5f1e008e4c509",
+      "raw": "{\n  \"bottom_line\": \"The observatory's archive access is rescheduled from November 4 to November 12.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory expected archive access to begin on November 4.\",\n      \"what_changed\": \"The archive access date was changed from November 4 to November 12.\",\n      \"why_it_matters\": \"The rescheduling affects the observatory's operational schedule.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    }\n  ]\n}",
+      "promptTokens": 855,
+      "generatedTokens": 129,
+      "finishReason": "stop",
+      "seconds": 7.552
+    },
+    {
+      "packet": "percentile",
+      "order": "ranked",
+      "promptHash": "bd5343c7071879afb49cfd6b776596dc8e4aa379662b4486a3af43607f18a2b7",
+      "raw": "{\n  \"bottom_line\": \"The observatory measured median readout latency of 37 milliseconds.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory measured median readout latency of 37 milliseconds.\",\n      \"what_changed\": \"The median readout latency was measured.\",\n      \"why_it_matters\": \"This information is crucial for understanding the operational efficiency of the observatory.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the readout latency and update the system if necessary.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 864,
+      "generatedTokens": 131,
+      "finishReason": "stop",
+      "seconds": 4.839
+    },
+    {
+      "packet": "percentile",
+      "order": "reversed",
+      "promptHash": "eea13d99b72ce5fb0783dc32e45afab2f6b4b55ca955fd6c80fc290b128e61bd",
+      "raw": "{\n  \"bottom_line\": \"An observatory preview slide called the readout figure the 95th percentile.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"An observatory preview slide called the readout figure the 95th percentile.\",\n      \"what_changed\": \"The readout figure is the 95th percentile.\",\n      \"why_it_matters\": \"It indicates the upper limit of the median readout latency.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    }\n  ]\n}",
+      "promptTokens": 864,
+      "generatedTokens": 128,
+      "finishReason": "stop",
+      "seconds": 4.669
+    },
+    {
+      "packet": "rollback",
+      "order": "ranked",
+      "promptHash": "6883a000b8c0f476b5c53dc165de39fa961078670b7119e18b4ab05775a369ac",
+      "raw": "{\n  \"bottom_line\": \"The observatory restored firmware 3.0 on the west mount after a drift test, while other mounts remain unchanged.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory restored firmware 3.0 on the west mount after a drift test, while other mounts remain unchanged.\",\n      \"what_changed\": \"The west mount's firmware was restored to version 3.0.\",\n      \"why_it_matters\": \"The drift on the west mount was resolved, ensuring the observatory's accuracy.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the drift-free operation of the west mount.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 869,
+      "generatedTokens": 157,
+      "finishReason": "stop",
+      "seconds": 5.815
+    },
+    {
+      "packet": "rollback",
+      "order": "reversed",
+      "promptHash": "44b5b5692eac13898bc36a1a85207ad0c7050363c590d4b785302b3cacc34200",
+      "raw": "```json\n[\n  {\n    \"article_index\": 1,\n    \"evidence_quote\": \"The observatory staged firmware 3.1 for all mount controllers after a bench test.\",\n    \"what_changed\": \"Staged firmware 3.1 for all mount controllers.\",\n    \"why_it_matters\": \"Provides a baseline for future testing and operational readiness.\",\n    \"decision\": \"act\",\n    \"next_step\": \"Monitor firmware updates and test drift.\",\n    \"confidence\": \"high\"\n  },\n  {\n    \"article_index\": 2,\n    \"evidence_quote\": \"The observatory restored firmware 3.0 on the west mount after drift appeared with 3.1.\",\n    \"what_changed\": \"Restored firmware 3.0 on the west mount.\",\n    \"why_it_matters\": \"Ensures operational continuity and drift-free performance.\",\n    \"decision\": \"act\",\n    \"next_step\": \"Monitor drift and update firmware as needed.\",\n    \"confidence\": \"high\"\n  }\n]\n```",
+      "promptTokens": 869,
+      "generatedTokens": 211,
+      "finishReason": "stop",
+      "seconds": 6.025
+    },
+    {
+      "packet": "simulation",
+      "order": "ranked",
+      "promptHash": "dd8a2e8cd3ab92e15e845a6deeeee214043e2318d2afb8b6f2b3401392d7f3e3",
+      "raw": "{\n  \"bottom_line\": \"The observatory simulator reduced tracking error by 12 percent on synthetic traces.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory simulator reduced tracking error by 12 percent on synthetic traces.\",\n      \"what_changed\": \"The observatory simulator reduced tracking error by 12 percent on synthetic traces.\",\n      \"why_it_matters\": \"This improvement suggests the simulator's predictive model is more accurate, potentially leading to better performance in real-world applications.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Evaluate the new tracking predictor for real-world trials to assess its accuracy and reliability.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 865,
+      "generatedTokens": 155,
+      "finishReason": "stop",
+      "seconds": 5.335
+    },
+    {
+      "packet": "simulation",
+      "order": "reversed",
+      "promptHash": "16a3ee22c999fe0563fd53eaa208bf75e0e4423e818016b361686cc8cb759519",
+      "raw": "{\n  \"bottom_line\": \"The observatory requested a field trial for a new tracking predictor, while the simulator reduced tracking error by 12 percent on synthetic traces.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory requested a field trial for a new tracking predictor.\",\n      \"what_changed\": \"The observatory requested a field trial for a new tracking predictor.\",\n      \"why_it_matters\": \"The observatory is interested in the new predictor's performance in a real-world setting.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    },\n    {\n      \"article_index\": 2,\n      \"evidence_quote\": \"The observatory simulator reduced tracking error by 12 percent on synthetic traces.\",\n      \"what_changed\": \"The simulator reduced tracking error by 12 percent on synthetic traces.\",\n      \"why_it_matters\": \"The reduction in error suggests the simulator's approach is effective.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    }\n  ]\n}",
+      "promptTokens": 865,
+      "generatedTokens": 237,
+      "finishReason": "stop",
+      "seconds": 6.92
+    },
+    {
+      "packet": "denominator",
+      "order": "ranked",
+      "promptHash": "d1c977b2728ae54297fe1ac661d92cf28bf222cbad2bb889e6782590d6d63355",
+      "raw": "{\n  \"bottom_line\": \"The observatory inspected six detector modules, all of which passed inspection, while the other thirty-four remain untested.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory inspected six of forty detector modules. All six inspected modules passed.\",\n      \"what_changed\": \"The observatory inspected six detector modules, all of which passed inspection, while the other thirty-four remain untested.\",\n      \"why_it_matters\": \"The results indicate that the quality of the detector modules is consistent, with no issues found.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 862,
+      "generatedTokens": 150,
+      "finishReason": "stop",
+      "seconds": 4.641
+    },
+    {
+      "packet": "denominator",
+      "order": "reversed",
+      "promptHash": "4efa20991bd19db51b09f71e1bdcd5c9863643a9b7022c7c595a0e623359ddcd",
+      "raw": "{\n  \"bottom_line\": \"The observatory received forty detector modules, but the shipping manifest contains no inspection results. The observatory inspected six of the forty modules, and all passed.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory received forty detector modules. The shipping manifest contains no inspection results.\",\n      \"what_changed\": \"The shipping manifest contains no inspection results.\",\n      \"why_it_matters\": \"The observatory's inspection process is not transparent, and the results are not available.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    },\n    {\n      \"article_index\": 2,\n      \"evidence_quote\": \"The observatory inspected six of the forty modules, and all passed.\",\n      \"what_changed\": \"Six of the forty modules passed inspection.\",\n      \"why_it_matters\": \"The results of the inspection are positive, but the process is not transparent.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    }\n  ]\n}",
+      "promptTokens": 862,
+      "generatedTokens": 233,
+      "finishReason": "stop",
+      "seconds": 7.195
+    },
+    {
+      "packet": "reprint",
+      "order": "ranked",
+      "promptHash": "9a93d4148912b26926c2c90a0c1ad84e9bd9c08e24e662c28de26172d63d0826",
+      "raw": "{\n  \"bottom_line\": \"The observatory restricts access to the southern gallery for alignment, with an unknown reopening date.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory keeps the southern gallery closed for alignment. Its reopening date is unknown.\",\n      \"what_changed\": \"The observatory's gallery access is restricted.\",\n      \"why_it_matters\": \"The restriction affects the gallery's usability and may impact visitor experience.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    }\n  ]\n}",
+      "promptTokens": 865,
+      "generatedTokens": 128,
+      "finishReason": "stop",
+      "seconds": 4.612
+    },
+    {
+      "packet": "reprint",
+      "order": "reversed",
+      "promptHash": "b6c017e476e05d77e6d93214b1e10d01b30216df119478ce44409cef79a37ab0",
+      "raw": "{\n  \"bottom_line\": \"The observatory wire reprinted yesterday's announcement promising open gallery access, but did not verify the gallery's current status.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory wire reprinted yesterday's announcement promising open gallery access, but did not verify the gallery's current status.\",\n      \"what_changed\": \"The observatory wire reprinted yesterday's announcement promising open gallery access, but did not verify the gallery's current status.\",\n      \"why_it_matters\": \"The lack of verification can lead to misinformation.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    }\n  ]\n}",
+      "promptTokens": 865,
+      "generatedTokens": 151,
+      "finishReason": "stop",
+      "seconds": 5.524
+    },
+    {
+      "packet": "proposal",
+      "order": "ranked",
+      "promptHash": "3160c5589ff62ef420f334b188b834f8693f1ae67146ff2ba8b03cc48dac9f39",
+      "raw": "{\n  \"bottom_line\": \"The observatory council deferred the funding vote until its next meeting.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory council deferred the funding vote until its next meeting.\",\n      \"what_changed\": \"The observatory council deferred the funding vote until its next meeting.\",\n      \"why_it_matters\": \"The council's decision to defer the funding vote until its next meeting is crucial for the observatory's operations.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the next council meeting for the funding vote.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 860,
+      "generatedTokens": 140,
+      "finishReason": "stop",
+      "seconds": 5.077
+    },
+    {
+      "packet": "proposal",
+      "order": "reversed",
+      "promptHash": "c5d3862dd184bdf040717d54c053704a0a1822f93983be2361d4a8c2a7c24338",
+      "raw": "{\n  \"bottom_line\": \"The observatory requested funding for a mirror alignment project, which was deferred by the council until its next meeting.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory requested funding for a mirror alignment project. Its presentation projected a two-month schedule.\",\n      \"what_changed\": \"The observatory requested funding for a mirror alignment project.\",\n      \"why_it_matters\": \"The council's decision to defer the funding vote until its next meeting.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    }\n  ]\n}",
+      "promptTokens": 860,
+      "generatedTokens": 136,
+      "finishReason": "stop",
+      "seconds": 5.429
+    },
+    {
+      "packet": "abstain",
+      "order": "ranked",
+      "promptHash": "129c7e5f3864f789643ba44b1e2bda56c0134202f3fcb424e117c90d38f7fc84",
+      "raw": "{\n  \"bottom_line\": \"The observatory reprinted an unchanged visitor poster and repeated its standing Monday reading-room hours.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory reprinted an unchanged visitor poster.\",\n      \"what_changed\": \"No new information or action.\",\n      \"why_it_matters\": \"The poster's content remains the same.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    },\n    {\n      \"article_index\": 2,\n      \"evidence_quote\": \"The observatory repeated its standing Monday reading-room hours.\",\n      \"what_changed\": \"No new information or action.\",\n      \"why_it_matters\": \"The hours remain unchanged.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    }\n  ]\n}",
+      "promptTokens": 858,
+      "generatedTokens": 188,
+      "finishReason": "stop",
+      "seconds": 6.644
+    },
+    {
+      "packet": "abstain",
+      "order": "reversed",
+      "promptHash": "711d118f2318b61be31412cdcc64d986dc121e38f97f94f3f926b489614389a4",
+      "raw": "{\n  \"bottom_line\": \"The observatory repeated its standing Monday reading-room hours.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory repeated its standing Monday reading-room hours.\",\n      \"what_changed\": \"The observatory's reading-room hours were repeated on Monday.\",\n      \"why_it_matters\": \"No new information or changes were announced.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    }\n  ]\n}",
+      "promptTokens": 858,
+      "generatedTokens": 112,
+      "finishReason": "stop",
+      "seconds": 4.284
+    },
+    {
+      "packet": "simple",
+      "order": "ranked",
+      "promptHash": "b3f8e21c4eb9b58fa4b58b59d59e087689d5f405decc19963cafafa4ab724e51",
+      "raw": "{\n  \"bottom_line\": \"Stores receives a replacement inlet for the eastern pump.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"Stores receives a replacement inlet for the eastern pump.\",\n      \"what_changed\": \"Stores received a replacement inlet for the eastern pump.\",\n      \"why_it_matters\": \"The part is ready for collection.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the collection process.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 861,
+      "generatedTokens": 111,
+      "finishReason": "stop",
+      "seconds": 4.735
+    },
+    {
+      "packet": "simple",
+      "order": "reversed",
+      "promptHash": "fd835dba7424070f226304abb31577f90d1fe4c9f5921aa808690b262429380d",
+      "raw": "{\n  \"bottom_line\": \"The observatory workshop plans to ask which inlet sizes might be needed in future.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory workshop plans to ask which inlet sizes might be needed in future.\",\n      \"what_changed\": \"The observatory workshop plans to conduct a survey on future inlet sizes.\",\n      \"why_it_matters\": \"This information is crucial for planning and resource allocation.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    }\n  ]\n}",
+      "promptTokens": 861,
+      "generatedTokens": 126,
+      "finishReason": "stop",
+      "seconds": 4.122
+    }
+  ]
+}
