@@ -126,6 +126,9 @@ public sealed class BriefingItem
     [JsonPropertyName("article_index")]
     public int ArticleIndex { get; set; }
 
+    [JsonPropertyName("evidence_quote")]
+    public string EvidenceQuote { get; set; } = "";
+
     [JsonPropertyName("what_changed")]
     public string WhatChanged { get; set; } = "";
 

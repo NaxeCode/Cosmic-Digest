@@ -1,0 +1,656 @@
+{
+  "clock": "2026-09-06T12:00:00+00:00",
+  "reports": [
+    {
+      "id": "archive",
+      "kind": "Archive",
+      "title": "Vela Array calibration 1.9 leaves beta",
+      "source": "Indigo Instruments",
+      "published": "2026-09-01T18:30:00+00:00",
+      "link": "https://indigo.example/notes/1-9",
+      "summary": "Calibration set 1.9 graduated from beta after three nights of commissioning."
+    },
+    {
+      "id": "release",
+      "kind": "Release note",
+      "title": "Vela Array releases calibration set 2.4",
+      "source": "Indigo Instruments",
+      "published": "2026-09-06T06:10:00+00:00",
+      "link": "https://indigo.example/notes/2-4",
+      "summary": "Calibration set 2.4 is available for the north camera. The release updates the dark frames used in low-light reduction."
+    },
+    {
+      "id": "wire",
+      "kind": "Syndicated report",
+      "title": "Vela Array releases calibration set 2.4",
+      "source": "Observatory Wire",
+      "published": "2026-09-06T06:40:00+00:00",
+      "link": "https://obswire.example/vela-release",
+      "summary": "Observatory Wire republishes the north camera calibration notice. Its availability report is attributed to Indigo Instruments."
+    },
+    {
+      "id": "noise",
+      "kind": "Community notice",
+      "title": "Autumn sky atlas reading room opens",
+      "source": "Valley Sky Club",
+      "published": "2026-09-06T07:00:00+00:00",
+      "link": "https://valleysky.example/atlas",
+      "summary": "The library will open its sky atlas collection for two evenings in September."
+    },
+    {
+      "id": "correction",
+      "kind": "Operations correction",
+      "title": "Vela Array will not release calibration set 2.4",
+      "source": "Meridian Operations",
+      "published": "2026-09-06T09:35:00+00:00",
+      "link": "https://meridian.example/log/hold",
+      "summary": "Calibration set 2.4 is on hold after an offset in the dark frames. The operations desk asks observers to keep using set 2.3 until it issues a replacement."
+    },
+    {
+      "id": "trial",
+      "kind": "Bench report",
+      "title": "Mesa bench repeats the low-light offset test",
+      "source": "Mesa Imaging Lab",
+      "published": "2026-09-06T10:20:00+00:00",
+      "link": "https://mesalab.example/bench/offset",
+      "summary": "The calibration team repeated the offset test on one north camera sensor. The southern instruments were outside the trial."
+    }
+  ],
+  "expectedRanks": [
+    {
+      "sourceId": "release",
+      "publishers": 2
+    },
+    {
+      "sourceId": "correction",
+      "publishers": 1
+    },
+    {
+      "sourceId": "trial",
+      "publishers": 1
+    }
+  ],
+  "candidates": [
+    {
+      "index": 1,
+      "sourceId": "release",
+      "score": 7.278,
+      "publishers": 2,
+      "coverage": [
+        "Indigo Instruments",
+        "Observatory Wire"
+      ]
+    },
+    {
+      "index": 2,
+      "sourceId": "correction",
+      "score": 6.2,
+      "publishers": 1,
+      "coverage": [
+        "Meridian Operations"
+      ]
+    },
+    {
+      "index": 3,
+      "sourceId": "trial",
+      "score": 1.965,
+      "publishers": 1,
+      "coverage": [
+        "Mesa Imaging Lab"
+      ]
+    }
+  ],
+  "rankMatches": true,
+  "cases": [
+    {
+      "fixture": {
+        "id": "borrowed-quote",
+        "title": "The quote belongs to another report",
+        "note": "The line is genuine. The proposed response attributes the later hold to the earlier release note.",
+        "knownLimit": false,
+        "expected": "Fallback",
+        "expectedError": "does not occur",
+        "expectedVisible": [
+          "release",
+          "correction",
+          "trial"
+        ],
+        "response": {
+          "bottom_line": "The release desk has placed the calibration on hold.",
+          "items": [
+            {
+              "article_index": 1,
+              "evidence_quote": "Calibration set 2.4 is on hold",
+              "what_changed": "Operations put the north camera calibration on hold.",
+              "why_it_matters": "Observers need to retain the previous reduction files.",
+              "decision": "act",
+              "next_step": "Keep set 2.3 in the observing plan.",
+              "confidence": "medium"
+            }
+          ]
+        }
+      },
+      "structure": "Accepted",
+      "actual": "Fallback",
+      "error": "The evidence quote does not occur in the cited article\u0027s visible title or summary.",
+      "displayed": {
+        "bottom_line": "3 new developments matched current priorities.",
+        "items": [
+          {
+            "article_index": 1,
+            "evidence_quote": "",
+            "what_changed": "Calibration set 2.4 is available for the north camera. The release updates the dark frames used in low-light reduction.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          },
+          {
+            "article_index": 2,
+            "evidence_quote": "",
+            "what_changed": "Calibration set 2.4 is on hold after an offset in the dark frames. The operations desk asks observers to keep using set 2.3 until it issues a replacement.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          },
+          {
+            "article_index": 3,
+            "evidence_quote": "",
+            "what_changed": "The calibration team repeated the offset test on one north camera sensor. The southern instruments were outside the trial.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          }
+        ]
+      },
+      "visible": [
+        "release",
+        "correction",
+        "trial"
+      ],
+      "matches": true
+    },
+    {
+      "fixture": {
+        "id": "matched-correction",
+        "title": "The correction supports an action",
+        "note": "The cited operations entry names both the hold and the version observers should keep.",
+        "knownLimit": false,
+        "expected": "Accepted",
+        "expectedError": null,
+        "expectedVisible": [
+          "correction"
+        ],
+        "response": {
+          "bottom_line": "Operations put version 2.4 on hold.",
+          "items": [
+            {
+              "article_index": 2,
+              "evidence_quote": "Calibration set 2.4 is on hold",
+              "what_changed": "Operations put the north camera calibration on hold.",
+              "why_it_matters": "Observers need to retain the previous reduction files.",
+              "decision": "act",
+              "next_step": "Keep set 2.3 in the observing plan.",
+              "confidence": "medium"
+            }
+          ]
+        }
+      },
+      "structure": "Accepted",
+      "actual": "Accepted",
+      "error": null,
+      "displayed": {
+        "bottom_line": "Operations put version 2.4 on hold.",
+        "items": [
+          {
+            "article_index": 2,
+            "evidence_quote": "Calibration set 2.4 is on hold",
+            "what_changed": "Operations put the north camera calibration on hold.",
+            "why_it_matters": "Observers need to retain the previous reduction files.",
+            "decision": "act",
+            "next_step": "Keep set 2.3 in the observing plan.",
+            "confidence": "medium"
+          }
+        ]
+      },
+      "visible": [
+        "correction"
+      ],
+      "matches": true
+    },
+    {
+      "fixture": {
+        "id": "invented-precision",
+        "title": "A number appears from nowhere",
+        "note": "The proposed 41% improvement appears nowhere in the cited bench report.",
+        "knownLimit": false,
+        "expected": "Fallback",
+        "expectedError": "does not occur",
+        "expectedVisible": [
+          "release",
+          "correction",
+          "trial"
+        ],
+        "response": {
+          "bottom_line": "The repeat test improved the offset by 41%.",
+          "items": [
+            {
+              "article_index": 3,
+              "evidence_quote": "The offset fell by 41%.",
+              "what_changed": "The offset fell by 41% in the repeat test.",
+              "why_it_matters": "The result leaves the southern instruments untested.",
+              "decision": "watch",
+              "next_step": "",
+              "confidence": "medium"
+            }
+          ]
+        }
+      },
+      "structure": "Accepted",
+      "actual": "Fallback",
+      "error": "The evidence quote does not occur in the cited article\u0027s visible title or summary.",
+      "displayed": {
+        "bottom_line": "3 new developments matched current priorities.",
+        "items": [
+          {
+            "article_index": 1,
+            "evidence_quote": "",
+            "what_changed": "Calibration set 2.4 is available for the north camera. The release updates the dark frames used in low-light reduction.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          },
+          {
+            "article_index": 2,
+            "evidence_quote": "",
+            "what_changed": "Calibration set 2.4 is on hold after an offset in the dark frames. The operations desk asks observers to keep using set 2.3 until it issues a replacement.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          },
+          {
+            "article_index": 3,
+            "evidence_quote": "",
+            "what_changed": "The calibration team repeated the offset test on one north camera sensor. The southern instruments were outside the trial.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          }
+        ]
+      },
+      "visible": [
+        "release",
+        "correction",
+        "trial"
+      ],
+      "matches": true
+    },
+    {
+      "fixture": {
+        "id": "unsupported-scope",
+        "title": "A real quote supports a false conclusion",
+        "note": "A reviewer marked the claim unsupported. The report tested one northern sensor and explicitly excludes the southern instruments.",
+        "knownLimit": true,
+        "expected": "Accepted",
+        "expectedError": null,
+        "expectedVisible": [
+          "trial"
+        ],
+        "response": {
+          "bottom_line": "The southern array passed.",
+          "items": [
+            {
+              "article_index": 3,
+              "evidence_quote": "one north camera sensor",
+              "what_changed": "All southern instruments passed the repeat test.",
+              "why_it_matters": "The entire array can adopt the correction.",
+              "decision": "watch",
+              "next_step": "",
+              "confidence": "high"
+            }
+          ]
+        }
+      },
+      "structure": "Accepted",
+      "actual": "Accepted",
+      "error": null,
+      "displayed": {
+        "bottom_line": "The southern array passed.",
+        "items": [
+          {
+            "article_index": 3,
+            "evidence_quote": "one north camera sensor",
+            "what_changed": "All southern instruments passed the repeat test.",
+            "why_it_matters": "The entire array can adopt the correction.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "high"
+          }
+        ]
+      },
+      "visible": [
+        "trial"
+      ],
+      "matches": true
+    },
+    {
+      "fixture": {
+        "id": "missing-article",
+        "title": "The cited article does not exist",
+        "note": "The response asks for article 4. This batch contains three ranked candidates.",
+        "knownLimit": false,
+        "expected": "Fallback",
+        "expectedError": "invalid article index",
+        "expectedVisible": [
+          "release",
+          "correction",
+          "trial"
+        ],
+        "response": {
+          "bottom_line": "Article four describes the hold.",
+          "items": [
+            {
+              "article_index": 4,
+              "evidence_quote": "Calibration set 2.4 is on hold",
+              "what_changed": "Operations put the north camera calibration on hold.",
+              "why_it_matters": "Observers need to retain the previous reduction files.",
+              "decision": "act",
+              "next_step": "Keep set 2.3 in the observing plan.",
+              "confidence": "medium"
+            }
+          ]
+        }
+      },
+      "structure": "Rejected",
+      "actual": "Fallback",
+      "error": "The model referenced invalid article index 4.",
+      "displayed": {
+        "bottom_line": "3 new developments matched current priorities.",
+        "items": [
+          {
+            "article_index": 1,
+            "evidence_quote": "",
+            "what_changed": "Calibration set 2.4 is available for the north camera. The release updates the dark frames used in low-light reduction.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          },
+          {
+            "article_index": 2,
+            "evidence_quote": "",
+            "what_changed": "Calibration set 2.4 is on hold after an offset in the dark frames. The operations desk asks observers to keep using set 2.3 until it issues a replacement.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          },
+          {
+            "article_index": 3,
+            "evidence_quote": "",
+            "what_changed": "The calibration team repeated the offset test on one north camera sensor. The southern instruments were outside the trial.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          }
+        ]
+      },
+      "visible": [
+        "release",
+        "correction",
+        "trial"
+      ],
+      "matches": true
+    },
+    {
+      "fixture": {
+        "id": "duplicate-selection",
+        "title": "One report is selected twice",
+        "note": "Each item cites a real excerpt, but both entries spend attention on the same candidate.",
+        "knownLimit": false,
+        "expected": "Fallback",
+        "expectedError": "more than once",
+        "expectedVisible": [
+          "release",
+          "correction",
+          "trial"
+        ],
+        "response": {
+          "bottom_line": "Two items cover the bench test.",
+          "items": [
+            {
+              "article_index": 3,
+              "evidence_quote": "one north camera sensor",
+              "what_changed": "The bench tested one northern sensor.",
+              "why_it_matters": "The result leaves the southern instruments untested.",
+              "decision": "watch",
+              "next_step": "",
+              "confidence": "medium"
+            },
+            {
+              "article_index": 3,
+              "evidence_quote": "one north camera sensor",
+              "what_changed": "The bench tested one northern sensor.",
+              "why_it_matters": "The result leaves the southern instruments untested.",
+              "decision": "watch",
+              "next_step": "",
+              "confidence": "medium"
+            }
+          ]
+        }
+      },
+      "structure": "Rejected",
+      "actual": "Fallback",
+      "error": "The model selected article 3 more than once.",
+      "displayed": {
+        "bottom_line": "3 new developments matched current priorities.",
+        "items": [
+          {
+            "article_index": 1,
+            "evidence_quote": "",
+            "what_changed": "Calibration set 2.4 is available for the north camera. The release updates the dark frames used in low-light reduction.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          },
+          {
+            "article_index": 2,
+            "evidence_quote": "",
+            "what_changed": "Calibration set 2.4 is on hold after an offset in the dark frames. The operations desk asks observers to keep using set 2.3 until it issues a replacement.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          },
+          {
+            "article_index": 3,
+            "evidence_quote": "",
+            "what_changed": "The calibration team repeated the offset test on one north camera sensor. The southern instruments were outside the trial.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          }
+        ]
+      },
+      "visible": [
+        "release",
+        "correction",
+        "trial"
+      ],
+      "matches": true
+    },
+    {
+      "fixture": {
+        "id": "missing-next-step",
+        "title": "An action has no next step",
+        "note": "The excerpt matches the correction. The action still needs a concrete next move.",
+        "knownLimit": false,
+        "expected": "Fallback",
+        "expectedError": "without a next step",
+        "expectedVisible": [
+          "release",
+          "correction",
+          "trial"
+        ],
+        "response": {
+          "bottom_line": "A hold requires action.",
+          "items": [
+            {
+              "article_index": 2,
+              "evidence_quote": "Calibration set 2.4 is on hold",
+              "what_changed": "Operations put the north camera calibration on hold.",
+              "why_it_matters": "Observers need to retain the previous reduction files.",
+              "decision": "act",
+              "next_step": "",
+              "confidence": "medium"
+            }
+          ]
+        }
+      },
+      "structure": "Rejected",
+      "actual": "Fallback",
+      "error": "The model returned an action without a next step for article 2.",
+      "displayed": {
+        "bottom_line": "3 new developments matched current priorities.",
+        "items": [
+          {
+            "article_index": 1,
+            "evidence_quote": "",
+            "what_changed": "Calibration set 2.4 is available for the north camera. The release updates the dark frames used in low-light reduction.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          },
+          {
+            "article_index": 2,
+            "evidence_quote": "",
+            "what_changed": "Calibration set 2.4 is on hold after an offset in the dark frames. The operations desk asks observers to keep using set 2.3 until it issues a replacement.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          },
+          {
+            "article_index": 3,
+            "evidence_quote": "",
+            "what_changed": "The calibration team repeated the offset test on one north camera sensor. The southern instruments were outside the trial.",
+            "why_it_matters": "Matched: Instrument calibration.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "low"
+          }
+        ]
+      },
+      "visible": [
+        "release",
+        "correction",
+        "trial"
+      ],
+      "matches": true
+    },
+    {
+      "fixture": {
+        "id": "two-sources",
+        "title": "Two entries preserve the disagreement",
+        "note": "The response cites the original availability notice and the later hold separately.",
+        "knownLimit": false,
+        "expected": "Accepted",
+        "expectedError": null,
+        "expectedVisible": [
+          "release",
+          "correction"
+        ],
+        "response": {
+          "bottom_line": "The release notice is followed by an operations hold.",
+          "items": [
+            {
+              "article_index": 1,
+              "evidence_quote": "available for the north camera",
+              "what_changed": "The instrument desk announced the north camera release.",
+              "why_it_matters": "A later correction changes how to use the notice.",
+              "decision": "watch",
+              "next_step": "",
+              "confidence": "medium"
+            },
+            {
+              "article_index": 2,
+              "evidence_quote": "Calibration set 2.4 is on hold",
+              "what_changed": "Operations put the north camera calibration on hold.",
+              "why_it_matters": "Observers need to retain the previous reduction files.",
+              "decision": "act",
+              "next_step": "Keep set 2.3 in the observing plan.",
+              "confidence": "medium"
+            }
+          ]
+        }
+      },
+      "structure": "Accepted",
+      "actual": "Accepted",
+      "error": null,
+      "displayed": {
+        "bottom_line": "The release notice is followed by an operations hold.",
+        "items": [
+          {
+            "article_index": 1,
+            "evidence_quote": "available for the north camera",
+            "what_changed": "The instrument desk announced the north camera release.",
+            "why_it_matters": "A later correction changes how to use the notice.",
+            "decision": "watch",
+            "next_step": "",
+            "confidence": "medium"
+          },
+          {
+            "article_index": 2,
+            "evidence_quote": "Calibration set 2.4 is on hold",
+            "what_changed": "Operations put the north camera calibration on hold.",
+            "why_it_matters": "Observers need to retain the previous reduction files.",
+            "decision": "act",
+            "next_step": "Keep set 2.3 in the observing plan.",
+            "confidence": "medium"
+          }
+        ]
+      },
+      "visible": [
+        "release",
+        "correction"
+      ],
+      "matches": true
+    },
+    {
+      "fixture": {
+        "id": "empty-selection",
+        "title": "The response keeps zero items",
+        "note": "An empty selection is allowed. The job suppresses delivery when no items survive.",
+        "knownLimit": false,
+        "expected": "No items",
+        "expectedError": null,
+        "expectedVisible": [],
+        "response": {
+          "bottom_line": "No decision warrants a briefing.",
+          "items": []
+        }
+      },
+      "structure": "Accepted",
+      "actual": "No items",
+      "error": null,
+      "displayed": {
+        "bottom_line": "No decision warrants a briefing.",
+        "items": []
+      },
+      "visible": [],
+      "matches": true
+    }
+  ],
+  "matched": 9,
+  "additionalRejections": 2,
+  "unsupportedAccepted": 1
+}

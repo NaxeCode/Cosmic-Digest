@@ -9,9 +9,27 @@ A daily .NET job that turns RSS feeds into a short email brief. Each selected it
 ![C#](.github/brand/badges/tech-c.svg)
 ![GitHub Actions](.github/brand/badges/tech-github-actions.svg)
 
+## Inspect a briefing
+
+A fictional observatory announces a camera calibration release at 06:10 UTC. Its operations desk puts the release on hold at 09:35. What happens when a proposed briefing quotes the hold but cites the announcement?
+
+[![Side-by-side comparison of a proposed briefing and the cited report, with the validation decision and ranked fallback below](docs/briefing-lab/preview.png)](docs/briefing-lab/index.html)
+
+Open the [standalone lab file](docs/briefing-lab/index.html) with GitHub’s **Download raw file** button, then open the downloaded HTML in a browser. Pick a case, follow its source timeline, or inspect the expected and actual results. Everything runs offline.
+
+The C# evaluator ranked six synthetic reports into three candidates. Of nine hand-authored responses, five triggered fallback, three were accepted and one selected zero items. **Adding an exact-quote check caught two responses that passed structural validation.** One false conclusion with a real quote still passed. All nine outcomes matched the fixture expectations. This run measures the validator on these cases. Live generation quality remains unmeasured.
+
+Regenerate the lab and its [JSON report](docs/briefing-lab/report.json) with .NET 10. The evaluator exits nonzero when a rank, publisher count, outcome, rejection reason or displayed article set differs from the fixtures.
+
+```bash
+dotnet run -c Release --project tools/BriefingLab -- artifacts/briefing-lab
+```
+
+[Source corpus](tools/BriefingLab/fixtures/corpus.json) · [Case inputs and expectations](tools/BriefingLab/fixtures/cases.json) · [Evaluator](tools/BriefingLab/Program.cs) · [Quote verification](Selection/SourceExcerpt.cs)
+
 ## Try the failure cases
 
-1. **An article reference goes out of range.** A model response cites article 2 in a batch containing only article 1. The validator rejects the response and the job falls back to ranked stories. In a separate fixture, one feed announces a fictional SDK release and another reports its cancellation. The fallback keeps both reports. [Invalid reference](tests/CosmicDigest.Tests/NewsAiTests.cs#L4-L13) · [Fallback in the job](Program.cs#L113-L130) · [Release and correction](tests/CosmicDigest.Tests/NewsAiTests.cs#L69-L87)
+1. **An article reference goes out of range.** A model response cites article 2 in a batch containing only article 1. The validator rejects the response and the job falls back to ranked stories. In a separate fixture, one feed announces a fictional SDK release and another reports its cancellation. The fallback keeps both reports. [Invalid reference](tests/CosmicDigest.Tests/NewsAiTests.cs#L4-L13) · [Fallback in the job](Program.cs#L113-L130) · [Release and correction](tests/CosmicDigest.Tests/NewsAiTests.cs#L70-L88)
 2. **More coverage arrives before a retry.** Even when regenerated text changes, the outbox returns the original subject, text, HTML and idempotency key. An ambiguous attempt keeps its key. A recorded bounce advances the retry key. [Saved payload](tests/CosmicDigest.Tests/DigestIdempotencyTests.cs#L38-L89) · [Retry key](tests/CosmicDigest.Tests/DigestIdempotencyTests.cs#L4-L34)
 3. **The pending email ages out.** At 24 hours from preparation, the job stops automatic replay and leaves the outbox entry for inspection. The regression test exercises a 25-hour-old entry. [Replay guard](Delivery/DigestIdempotency.cs#L59-L75) · [Expired entry](tests/CosmicDigest.Tests/DoctrineReviewRegressionTests.cs#L6-L28)
 
@@ -130,9 +148,9 @@ Running daily in GitHub Actions (`daily-digest.yml`, 08:17 America/New_York). CI
 
 ## How this project is run
 
-[![tracked in Linear](.github/brand/badges/run-linear.svg)](https://linear.app) [![AI-reviewed · Codex](.github/brand/badges/run-codex.svg)](#how-this-project-is-run) [![PR-only main](.github/brand/badges/run-main.svg)](#how-this-project-is-run)
+[![AI-reviewed · Codex](.github/brand/badges/run-codex.svg)](#how-this-project-is-run) [![PR-only main](.github/brand/badges/run-main.svg)](#how-this-project-is-run)
 
-- **Planning:** tracked in Linear as initiatives → projects → milestones → issues; branch names and PR titles carry the issue ID.
+- **Planning:** tracked in [GitHub issues and milestones](https://github.com/NaxeCode/Cosmic-Digest/milestones).
 - **Review:** every pull request gets a Codex review before merge.
 - **Guardrails:** the default branch changes only through pull requests (GitHub ruleset).
 

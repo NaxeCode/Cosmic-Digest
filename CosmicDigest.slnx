@@ -2,4 +2,5 @@
   <Project Path="CosmicDigest.csproj" />
   <Project Path="feedback/CosmicDigest.Feedback.Api/CosmicDigest.Feedback.Api.csproj" />
   <Project Path="tests/CosmicDigest.Tests/CosmicDigest.Tests.csproj" />
+  <Project Path="tools/BriefingLab/BriefingLab.csproj" />
 </Solution>

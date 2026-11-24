@@ -154,6 +154,8 @@ public static class DigestComposer
             }
 
             sb.AppendLine();
+            if (!string.IsNullOrWhiteSpace(item.EvidenceQuote))
+                sb.AppendLine($"Source excerpt ({EscapeMarkdown(article.Source)}): “{EscapeMarkdown(item.EvidenceQuote)}”");
             sb.AppendLine($"Evidence: {EscapeMarkdown(string.Join(", ", candidate.EvidenceSources))} · {article.Published:yyyy-MM-dd} · {item.Confidence} confidence{CoverageSuffix(candidate)}");
         }
     }
@@ -182,6 +184,8 @@ public static class DigestComposer
             AppendLabeledParagraph(sb, "Why for you", item.WhyItMatters);
             if (!string.IsNullOrWhiteSpace(item.NextStep))
                 AppendLabeledParagraph(sb, "Next move", item.NextStep);
+            if (!string.IsNullOrWhiteSpace(item.EvidenceQuote))
+                AppendLabeledParagraph(sb, "Source excerpt", $"“{item.EvidenceQuote}” ({article.Source})");
             sb.AppendLine($"<p class=\"muted\" style=\"margin:14px 0 0;color:#737e95;font-size:12px;line-height:18px;\">{Html(string.Join(", ", candidate.EvidenceSources))} · {article.Published:yyyy-MM-dd} · {Html(item.Confidence)} confidence{Html(CoverageSuffix(candidate))}</p>");
 
             if (decision is "act" or "learn")
