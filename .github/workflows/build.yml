@@ -27,6 +27,12 @@ jobs:
 
     - name: Test
       run: dotnet test --no-build --configuration Release
+    - name: Reproduce the offline briefing lab
+      run: |
+        dotnet run --no-build -c Release --project tools/BriefingLab -- artifacts/briefing-lab
+        diff docs/briefing-lab/index.html artifacts/briefing-lab/index.html
+        diff docs/briefing-lab/report.json artifacts/briefing-lab/report.json
+
     - name: Test allowance reservations
       run: python3 -m unittest discover -s scripts -p "test_*.py"
 

@@ -32,6 +32,8 @@ Every selected item states:
 
 `learn` is permitted for at most one mechanism-changing capability with a small independent practice step. It is not a quota or a recurring tutorial slot.
 
+Model-selected items include a contiguous 12–240-character quote from the cited representative title or summary. The validator checks case and punctuation against the same visible text the prompt used, after HTML decoding and whitespace normalization. Each prompt field is limited to 1,800 UTF-16 code units. The email displays the quote beside its source. Matching a quote verifies its origin. A valid quote can still accompany an unsupported claim.
+
 The model may not invent versions, metrics, prices, dates, availability, or causality. Article text is untrusted input and cannot modify the briefing instructions.
 Items judged low-value are omitted and marked reviewed; they never create an email on their own.
 

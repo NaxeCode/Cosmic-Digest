@@ -1,0 +1,91 @@
+{
+  "clock": "2026-09-06T12:00:00Z",
+  "profile": {
+    "maxItems": 3,
+    "minimumScore": 1.5,
+    "lookbackHours": 36,
+    "priorities": [
+      {
+        "name": "Instrument calibration",
+        "weight": 5,
+        "signals": [
+          "calibration",
+          "dark frames"
+        ]
+      }
+    ],
+    "trustedDomains": [
+      "indigo.example"
+    ]
+  },
+  "reports": [
+    {
+      "id": "archive",
+      "kind": "Archive",
+      "title": "Vela Array calibration 1.9 leaves beta",
+      "source": "Indigo Instruments",
+      "published": "2026-09-01T18:30:00Z",
+      "link": "https://indigo.example/notes/1-9",
+      "summary": "Calibration set 1.9 graduated from beta after three nights of commissioning."
+    },
+    {
+      "id": "release",
+      "kind": "Release note",
+      "title": "Vela Array releases calibration set 2.4",
+      "source": "Indigo Instruments",
+      "published": "2026-09-06T06:10:00Z",
+      "link": "https://indigo.example/notes/2-4",
+      "summary": "Calibration set 2.4 is available for the north camera. The release updates the dark frames used in low-light reduction."
+    },
+    {
+      "id": "wire",
+      "kind": "Syndicated report",
+      "title": "Vela Array releases calibration set 2.4",
+      "source": "Observatory Wire",
+      "published": "2026-09-06T06:40:00Z",
+      "link": "https://obswire.example/vela-release",
+      "summary": "Observatory Wire republishes the north camera calibration notice. Its availability report is attributed to Indigo Instruments."
+    },
+    {
+      "id": "noise",
+      "kind": "Community notice",
+      "title": "Autumn sky atlas reading room opens",
+      "source": "Valley Sky Club",
+      "published": "2026-09-06T07:00:00Z",
+      "link": "https://valleysky.example/atlas",
+      "summary": "The library will open its sky atlas collection for two evenings in September."
+    },
+    {
+      "id": "correction",
+      "kind": "Operations correction",
+      "title": "Vela Array will not release calibration set 2.4",
+      "source": "Meridian Operations",
+      "published": "2026-09-06T09:35:00Z",
+      "link": "https://meridian.example/log/hold",
+      "summary": "Calibration set 2.4 is on hold after an offset in the dark frames. The operations desk asks observers to keep using set 2.3 until it issues a replacement."
+    },
+    {
+      "id": "trial",
+      "kind": "Bench report",
+      "title": "Mesa bench repeats the low-light offset test",
+      "source": "Mesa Imaging Lab",
+      "published": "2026-09-06T10:20:00Z",
+      "link": "https://mesalab.example/bench/offset",
+      "summary": "The calibration team repeated the offset test on one north camera sensor. The southern instruments were outside the trial."
+    }
+  ],
+  "expectedRanks": [
+    {
+      "sourceId": "release",
+      "publishers": 2
+    },
+    {
+      "sourceId": "correction",
+      "publishers": 1
+    },
+    {
+      "sourceId": "trial",
+      "publishers": 1
+    }
+  ]
+}

@@ -1,10 +1,3 @@
-## Linear work gate
-Do not continue feature or implement work in this repository until Linear is filled out for it.
+## Work tracking
 
-Required:
-- Linear workspace: Cadence (https://linear.app/cadence-naxecode)
-- Team: Neutrino (key NU)
-- A project for this repo with milestones and at least one actionable issue
-- Project: https://linear.app/cadence-naxecode/project/cosmic-digest-e00c9f6e4aad
-
-If any of that is missing, stop. Create or fill the Linear project first (or hand off to Stella). Stub projects already exist for many repos; fill milestones and issues before coding.
+Track feature work in an actionable GitHub issue with a milestone. Link the issue from the pull request.

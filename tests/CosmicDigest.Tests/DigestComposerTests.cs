@@ -32,6 +32,7 @@ public sealed class DigestComposerTests
                 new()
                 {
                     ArticleIndex = 1,
+                    EvidenceQuote = "Orbit & sky <script> ![image](https://attacker.example/pixel)",
                     WhatChanged = "A <script> tag changed.\n# deceptive ![track](https://attacker.example/pixel)",
                     WhyItMatters = "See [fake evidence](https://attacker.example/deceptive).",
                     Decision = "watch",
@@ -51,6 +52,8 @@ public sealed class DigestComposerTests
         Assert.DoesNotContain("<img", rendered, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("href=\"https://attacker.example", rendered, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("\n# deceptive", markdown, StringComparison.Ordinal);
+        Assert.Contains("Source excerpt", markdown);
+        Assert.Contains("Orbit &amp; sky &lt;script&gt;", markdown);
         Assert.Contains("One &lt;b&gt;real&lt;/b&gt; update.", markdown);
         Assert.Contains("Reader's Intelligence Brief", markdown);
         Assert.Single(DigestComposer.DisplayedArticles(candidates, briefing));
@@ -96,6 +99,7 @@ public sealed class DigestComposerTests
                 new()
                 {
                     ArticleIndex = 1,
+                    EvidenceQuote = "Sky & sea < example",
                     WhatChanged = "The supported API changed.",
                     WhyItMatters = "It changes the implementation choice.",
                     Decision = "act",
@@ -112,6 +116,7 @@ public sealed class DigestComposerTests
             DateTimeOffset.Parse("2026-09-03T12:00:00Z"),
             new EmailBrandOptions("Stella · Cosmic Digest", "https://example.com/stella.png"));
 
+        Assert.Contains("Sky &amp; sea &lt; example", html);
         Assert.Contains("Stella", html);
         Assert.Contains("Cosmic Digest", html);
         Assert.Contains("Reader&#39;s Intelligence Brief", html);

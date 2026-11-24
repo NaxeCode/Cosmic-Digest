@@ -44,7 +44,7 @@ public sealed class NewsAiTests
         var candidates = new[]
         {
             Candidates()[0],
-            new ScoredArticle(new NewsItem("Second", "https://example.com/second", DateTimeOffset.UtcNow, "Example"), 4, new[] { "Backend" })
+            new ScoredArticle(new NewsItem("Another mechanism changed.", "https://example.com/second", DateTimeOffset.UtcNow, "Example"), 4, new[] { "Backend" })
         };
         var briefing = ValidBriefing();
         briefing.Items[0].Decision = "learn";
@@ -52,6 +52,7 @@ public sealed class NewsAiTests
         briefing.Items.Add(new BriefingItem
         {
             ArticleIndex = 2,
+            EvidenceQuote = "Another mechanism changed.",
             WhatChanged = "Another mechanism changed.",
             WhyItMatters = "It affects implementation.",
             Decision = "learn",
@@ -91,7 +92,7 @@ public sealed class NewsAiTests
     private static IReadOnlyList<ScoredArticle> Candidates() => new[]
     {
         new ScoredArticle(
-            new NewsItem("Release", "https://example.com/release", DateTimeOffset.UtcNow, "Example"),
+            new NewsItem("Representative release notes", "https://example.com/release", DateTimeOffset.UtcNow, "Example"),
             5,
             new[] { "Backend" })
     };
@@ -104,6 +105,7 @@ public sealed class NewsAiTests
             new()
             {
                 ArticleIndex = 1,
+                EvidenceQuote = "Representative release notes",
                 WhatChanged = "A supported change.",
                 WhyItMatters = "It affects the current implementation.",
                 Decision = "watch",

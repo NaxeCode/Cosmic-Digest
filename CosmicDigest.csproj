@@ -18,6 +18,8 @@
   <ItemGroup>
     <Compile Remove="tests/**/*.cs" />
     <Compile Remove="feedback/**/*.cs" />
+    <Compile Remove="tools/**/*.cs" />
+    <InternalsVisibleTo Include="BriefingLab" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resources/public_suffix_list.dat" />
