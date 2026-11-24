@@ -11,9 +11,9 @@ A daily .NET job that turns RSS feeds into a short email brief. Each selected it
 
 ## When a correct quote supports the wrong decision
 
-A fictional observatory released camera calibration 2.4 and later put it on hold. Given the earlier announcement first, a local model quoted it exactly, recommended installing 2.4 and passed the production C# guard. The second source in the same prompt told observers to keep 2.3. [Inspect the generated response and both reports](https://naxe-portfolio-review.vercel.app/labs/cosmic-digest/#model/north-hold/reversed).
+A fictional observatory released camera calibration 2.4 and later put it on hold. Given the earlier announcement first, a local model quoted it exactly, recommended installing 2.4 and passed the production C# guard. The second source in the same prompt told observers to keep 2.3. [Inspect the generated response and both reports](https://naxe.dev/labs/cosmic-digest/#model/north-hold/reversed).
 
-[![Local model review shows an accepted north-camera release quote beside the later hold, with the frozen scope rubric marking a miss.](docs/briefing-lab/model-review.png)](https://naxe-portfolio-review.vercel.app/labs/cosmic-digest/#model/north-hold/reversed)
+[![Local model review shows an accepted north-camera release quote beside the later hold, with the frozen scope rubric marking a miss.](docs/briefing-lab/model-review.png)](https://naxe.dev/labs/cosmic-digest/#model/north-hold/reversed)
 
 The evaluation ran Qwen2.5-1.5B-Instruct locally on twelve frozen synthetic packets, each in two source orders. **13/24** generated briefings passed the production guard. **6/24** passed both the guard and a predeclared editorial rubric for source choice and scope. The model received the reports and the briefing instructions. The questions shown to readers were withheld.
 
@@ -21,7 +21,7 @@ Only **1/12** packet pairs selected the same source IDs both ways. A retrospecti
 
 ### Reproduce the guards
 
-The [briefing lab](https://naxe-portfolio-review.vercel.app/labs/cosmic-digest/) also runs nine hand-authored regression cases against a six-report corpus. Five trigger fallback, three are accepted with items and one selects zero items. Quote verification rejects two responses that pass structural validation. A false conclusion paired with an authentic quote still passes. [Fixture casebook screenshot](docs/briefing-lab/preview.png) · [Case inputs](tools/BriefingLab/fixtures/cases.json)
+The [briefing lab](https://naxe.dev/labs/cosmic-digest/) also runs nine hand-authored regression cases against a six-report corpus. Five trigger fallback, three are accepted with items and one selects zero items. Quote verification rejects two responses that pass structural validation. A false conclusion paired with an authentic quote still passes. [Fixture casebook screenshot](docs/briefing-lab/preview.png) · [Case inputs](tools/BriefingLab/fixtures/cases.json)
 
 The [standalone lab file](docs/briefing-lab/index.html) runs offline. Choose **Download raw file** on GitHub and open it in a browser. To rebuild the page and its [JSON report](docs/briefing-lab/report.json) with .NET 10, run the following. The exporter replays the recorded model responses through the current C# validators and checks the expected fixture outcomes.
 
