@@ -926,3 +926,8 @@ footer span:first-child {
 
 .model-decision {margin-top:1rem;padding:.9rem 1rem;border-left:3px solid var(--violet);background:var(--light)}
 .model-decision p {margin:.3rem 0 0;max-width:90ch;font-size:.9rem}
+
+.correction-table { width:100%; border-collapse:collapse; margin:1.25rem 0; font-variant-numeric:tabular-nums; }
+.correction-table caption { text-align:left; margin-bottom:.6rem; }
+.correction-table th, .correction-table td { text-align:left; padding:.65rem .35rem; border-bottom:1px solid var(--line); }
+@media (max-width:480px) { .correction-table { font-size:.78rem; } }

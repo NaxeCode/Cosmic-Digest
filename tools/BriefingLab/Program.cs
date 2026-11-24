@@ -4,6 +4,11 @@ using System.Text.Json;
 CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
 if (args is ["prepare-model", var prompts]) return LocalEvaluation.Prepare(prompts);
 if (args is ["prepare-corrections", var challenges]) return LocalEvaluation.Prepare(challenges, "corrections.json");
+if (args is ["score-corrections", var candidateRun, var resultsFile])
+{
+    File.WriteAllText(resultsFile, LocalEvaluation.SerializeReport(candidateRun, "corrections.json") + "\n");
+    return 0;
+}
 if (args is ["score-model", var raw, var scores]) return LocalEvaluation.Score(raw, scores);
 
 if (args.Length != 1)
@@ -59,9 +64,12 @@ foreach (var fixture in fixtures)
 }
 
 using var measured = JsonDocument.Parse(LocalEvaluation.SerializeReport(Path.Combine(assets, "model-eval", "run.json")));
+using var corrections = JsonDocument.Parse(LocalEvaluation.SerializeReport(
+    Path.Combine(assets, "model-eval", "correction-run.json"), "corrections.json"));
 var report = new
 {
     modelRun = measured.RootElement,
+    corrections = corrections.RootElement,
     corpus.Clock, corpus.Reports, corpus.ExpectedRanks, candidates, rankMatches, cases = results,
     matched = results.Count(result => result.Matches),
     additionalRejections = results.Count(result => result.Structure == "Accepted" && result.Actual == "Fallback"),

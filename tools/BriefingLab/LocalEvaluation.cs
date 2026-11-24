@@ -103,7 +103,7 @@ internal static class LocalEvaluation
                     o.Selected.Select(id => o.Sources[Array.IndexOf(o.Ids, id)]), o.Sources) : null;
                 return new { o.Packet, o.Order, accepted = o.QuoteGate, passedRubric = o.Rubric,
                     acceptedByChallenger = o.QuoteGate && reason is null, reason, expected = o.Gold.Reason,
-                    o.Selected, o.Sources, o.Inference };
+                    o.Selected, o.Sources, o.Inference, o.Error, o.Failures };
             }).ToArray();
             return JsonSerializer.Serialize(new { run.Metadata, rows }, Json);
         }

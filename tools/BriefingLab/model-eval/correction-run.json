@@ -1,0 +1,185 @@
+{
+  "metadata": {
+    "model": "mlx-community/Qwen2.5-1.5B-Instruct-4bit",
+    "modelRevision": "8b403126fc14f14cfc99bb4cfa72ecbc129ea677",
+    "weightSha256": "0979f33d1bc58afcf696d13f57977644e7b11a6f0eec3e631d8e9463d18c0717",
+    "freezeCommit": "857c7fe28db5af81cbaf76b73cef7df820e656e5",
+    "startUtc": "2026-11-24T12:24:39.190217+00:00",
+    "device": "Apple M4",
+    "macOS": "27.0.1",
+    "python": "3.12.15",
+    "libraries": {
+      "mlx": "0.32.4",
+      "mlx-lm": "0.32.2",
+      "tokenizers": "0.23.3",
+      "transformers": "5.24.0"
+    },
+    "temperature": 0,
+    "seed": 0,
+    "maxNewTokens": 420,
+    "loadSeconds": 0.292,
+    "wallSeconds": 41.358
+  },
+  "outputs": [
+    {
+      "packet": "dome-latch",
+      "order": "ranked",
+      "promptHash": "bae6d42b9a824862244ad52d907417c17c669ee389b650c53712c40f4f8a5233",
+      "raw": "{\n  \"bottom_line\": \"The observatory has withdrawn DL-17 from the existing dome latch.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory has withdrawn DL-17 from the existing dome latch.\",\n      \"what_changed\": \"The observatory has withdrawn DL-17 from the existing dome latch.\",\n      \"why_it_matters\": \"The withdrawal of DL-17 affects the observatory's operations.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    }\n  ]\n}",
+      "promptTokens": 855,
+      "generatedTokens": 129,
+      "finishReason": "stop",
+      "seconds": 2.306
+    },
+    {
+      "packet": "dome-latch",
+      "order": "reversed",
+      "promptHash": "596093b0b0ff51ca5cfb1389cd5b3c50df5cad1fb412baea6d598bf2b65f15bc",
+      "raw": "{\n  \"bottom_line\": \"The observatory released assembly DL-17 for installation on the dome latch.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory released assembly DL-17 for installation on the dome latch.\",\n      \"what_changed\": \"The observatory has released assembly DL-17 for installation on the dome latch.\",\n      \"why_it_matters\": \"The availability of assembly DL-17 for installation on the dome latch.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the installation process and update the system.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 855,
+      "generatedTokens": 142,
+      "finishReason": "stop",
+      "seconds": 2.393
+    },
+    {
+      "packet": "ridge-link",
+      "order": "ranked",
+      "promptHash": "f66f966e3cede38ade6f2ee0123865f151dd2bcbc87ceeb0c1456d2e01bf7e4d",
+      "raw": "{\n  \"bottom_line\": \"The observatory suspended RT-62 due to a power fault and approved a routing change for RT-62 on its current ridge link.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory suspended RT-62 after a power fault.\",\n      \"what_changed\": \"The observatory's RT-62 was suspended.\",\n      \"why_it_matters\": \"The power fault affected the observatory's operations.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"medium\"\n    },\n    {\n      \"article_index\": 2,\n      \"evidence_quote\": \"The observatory approved routing change RT-62 for the ridge link tonight.\",\n      \"what_changed\": \"The observatory's RT-62 was approved for a routing change.\",\n      \"why_it_matters\": \"The approval of the routing change is a significant action.\",\n      \"decision\": \"act\",\n      \"next_step\": null,\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 860,
+      "generatedTokens": 229,
+      "finishReason": "stop",
+      "seconds": 3.22
+    },
+    {
+      "packet": "ridge-link",
+      "order": "reversed",
+      "promptHash": "edf41e736667eb44690cb479b61d55a137f0f80ce7e261897281791cd6d5b760",
+      "raw": "{\n  \"bottom_line\": \"The observatory approved routing change RT-62 for the ridge link tonight.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory approved routing change RT-62 for the ridge link tonight.\",\n      \"what_changed\": \"The observatory approved a routing change for the ridge link.\",\n      \"why_it_matters\": \"The change is necessary to maintain the ridge link's functionality.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the impact on the ridge link's performance.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 860,
+      "generatedTokens": 135,
+      "finishReason": "stop",
+      "seconds": 2.283
+    },
+    {
+      "packet": "east-lease",
+      "order": "ranked",
+      "promptHash": "1a519788317e33d7f7dd64b17a57bca6a3e0e7e671a4b475aac46466914031ec",
+      "raw": "{\n  \"bottom_line\": \"The observatory reversed service access from the east array to the west array.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory rescinded east-array access under LS-51. Observers must use the west array.\",\n      \"what_changed\": \"Service access from the east array to the west array was reversed.\",\n      \"why_it_matters\": \"This change affects how data is accessed and managed.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Update access protocols and inform users.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 854,
+      "generatedTokens": 136,
+      "finishReason": "stop",
+      "seconds": 2.299
+    },
+    {
+      "packet": "east-lease",
+      "order": "reversed",
+      "promptHash": "70d1bd94f0c278f68fed31e55978daa53b42df6089501b777d55b786a349047f",
+      "raw": "{\n  \"bottom_line\": \"The observatory activated lease LS-51 for east-array observations on November 1, 2026, while reversing access to the west array under the same lease.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory activated lease LS-51 for east-array observations today.\",\n      \"what_changed\": \"The observatory activated lease LS-51 for east-array observations.\",\n      \"why_it_matters\": \"The observatory's decision to activate a lease for east-array observations.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the east-array observations for any anomalies or issues.\",\n      \"confidence\": \"high\"\n    },\n    {\n      \"article_index\": 2,\n      \"evidence_quote\": \"The observatory rescinded east-array access under LS-51.\",\n      \"what_changed\": \"The observatory reversed its decision to access the west array under LS-51.\",\n      \"why_it_matters\": \"The observatory's reversal of access to the west array.\",\n      \"decision\": \"watch\",\n      \"next_step\": \"Monitor the west array for any issues or disruptions.\",\n      \"confidence\": \"medium\"\n    }\n  ]\n}",
+      "promptTokens": 854,
+      "generatedTokens": 265,
+      "finishReason": "stop",
+      "seconds": 3.595
+    },
+    {
+      "packet": "spectral-release",
+      "order": "ranked",
+      "promptHash": "5da3ea11c16a47b43a96af7564ca2aebcdd987d1a422a83332667ed5c3101bf0",
+      "raw": "```json\n{\n  \"bottom_line\": \"The observatory approved contour table 6.7 for the spectrometer.\",\n  \"items\": [\n    {\n      \"article_index\": 2,\n      \"evidence_quote\": \"The observatory approved contour table 6.7 for the spectrometer.\",\n      \"what_changed\": \"The observatory approved contour table 6.7 for the spectrometer.\",\n      \"why_it_matters\": \"The approval of the contour table for the spectrometer is a significant update.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Update the spectrometer with the new contour table.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}\n```",
+      "promptTokens": 861,
+      "generatedTokens": 143,
+      "finishReason": "stop",
+      "seconds": 2.378
+    },
+    {
+      "packet": "spectral-release",
+      "order": "reversed",
+      "promptHash": "21e1651458ca6f13ef121baad11037a3941b46bc4b1abf35c3dfc9e6a40dc623",
+      "raw": "{\n  \"bottom_line\": \"The observatory approved contour table 6.7 for the spectrometer.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory approved contour table 6.7 for the spectrometer.\",\n      \"what_changed\": \"The observatory approved contour table 6.7 for the spectrometer.\",\n      \"why_it_matters\": \"The observatory's approval of the new table for the spectrometer.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the implementation and feedback.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 861,
+      "generatedTokens": 134,
+      "finishReason": "stop",
+      "seconds": 2.776
+    },
+    {
+      "packet": "module-release",
+      "order": "ranked",
+      "promptHash": "0ee7d6b52568e425f4fa37343d0a3d14b98538464cba841744d8a3e5ade69479",
+      "raw": "{\n  \"bottom_line\": \"The observatory moved a spare weather vane to the storage annex.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory moved a spare weather vane to the storage annex.\",\n      \"what_changed\": \"A spare weather vane was moved to storage.\",\n      \"why_it_matters\": \"It's a spare part, not essential for current operations.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    }\n  ]\n}",
+      "promptTokens": 851,
+      "generatedTokens": 120,
+      "finishReason": "stop",
+      "seconds": 2.507
+    },
+    {
+      "packet": "module-release",
+      "order": "reversed",
+      "promptHash": "b71c848b1eb70fd17357fe6f96a8164455a44a799ee1cb2481e2f0f8b883fcc8",
+      "raw": "{\n  \"bottom_line\": \"The observatory approved PM-31 for deployment across the telescope power racks.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory approved PM-31 for deployment across the telescope power racks.\",\n      \"what_changed\": \"The observatory approved PM-31 for deployment across the telescope power racks.\",\n      \"why_it_matters\": \"The approval of PM-31 for deployment is a significant milestone in the observatory's operations.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the deployment process and ensure timely integration.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 851,
+      "generatedTokens": 146,
+      "finishReason": "stop",
+      "seconds": 2.733
+    },
+    {
+      "packet": "separate-notice",
+      "order": "ranked",
+      "promptHash": "44c3d7fb23d8a3834419144e7ac292cd348747a57123eeffe1b9ed014a9bbbb9",
+      "raw": "{\n  \"bottom_line\": \"The observatory has suspended parking permit PK-92 pending renewal.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory has suspended parking permit PK-92 pending renewal.\",\n      \"what_changed\": \"The parking permit PK-92 has been suspended.\",\n      \"why_it_matters\": \"It affects the observatory's ability to park vehicles.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 849,
+      "generatedTokens": 120,
+      "finishReason": "stop",
+      "seconds": 2.527
+    },
+    {
+      "packet": "separate-notice",
+      "order": "reversed",
+      "promptHash": "e00e23e9004582e6e270afe16f6d0c194281ac4db349a959ded7ba797efd9e01",
+      "raw": "{\n  \"bottom_line\": \"The observatory has approved MC-82 for application to the primary mirrors.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory cleared MC-82 for application to the primary mirrors.\",\n      \"what_changed\": \"The approval of MC-82 for application to the primary mirrors.\",\n      \"why_it_matters\": \"This approval is crucial for the observatory's operations and the primary mirrors' functionality.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the observatory's progress and ensure the approval is implemented.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 849,
+      "generatedTokens": 144,
+      "finishReason": "stop",
+      "seconds": 2.445
+    },
+    {
+      "packet": "negated-hold",
+      "order": "ranked",
+      "promptHash": "559c001872c58e12cf3845c1ff5afdb9dabf151254de81c89e9208dbf41eceec",
+      "raw": "{\n  \"bottom_line\": \"The observatory says there is no hold on DV-25. The existing guide drive approval remains valid.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory says there is no hold on DV-25.\",\n      \"what_changed\": \"The observatory's approval of DV-25 remains valid.\",\n      \"why_it_matters\": \"The approval of DV-25 is crucial for ongoing operations.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 856,
+      "generatedTokens": 132,
+      "finishReason": "stop",
+      "seconds": 2.325
+    },
+    {
+      "packet": "negated-hold",
+      "order": "reversed",
+      "promptHash": "c6093f3690878b1e9cabc7256e4d2a5806a552bfb9c1f23f0004f20ca92e36c4",
+      "raw": "{\n  \"bottom_line\": \"The observatory approved DV-25 for installation in the guide drive.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory approved DV-25 for installation in the guide drive.\",\n      \"what_changed\": \"DV-25 is now approved for installation in the guide drive.\",\n      \"why_it_matters\": \"This approval allows for the installation of DV-25, which could improve the drive's functionality.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the installation process and update the system as needed.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 856,
+      "generatedTokens": 144,
+      "finishReason": "stop",
+      "seconds": 2.489
+    },
+    {
+      "packet": "reopened",
+      "order": "ranked",
+      "promptHash": "dd238d50ce7b3076dd6aa2cd8bd78c5f38bba885b0f370ceca3b9db326a7b4f5",
+      "raw": "{\n  \"bottom_line\": \"Aperture returns to service after repair.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory now authorizes AP-14 for operation after the repair.\",\n      \"what_changed\": \"Aperture returns to service.\",\n      \"why_it_matters\": \"The observatory's decision to authorize AP-14 for operation.\",\n      \"decision\": \"act\",\n      \"next_step\": \"Monitor the operational readiness of AP-14.\",\n      \"confidence\": \"high\"\n    }\n  ]\n}",
+      "promptTokens": 851,
+      "generatedTokens": 123,
+      "finishReason": "stop",
+      "seconds": 2.352
+    },
+    {
+      "packet": "reopened",
+      "order": "reversed",
+      "promptHash": "0e524569aba93548ff9c5eea3b5c8b3196997af9a35a6d4bf0c7adac940eb26a",
+      "raw": "{\n  \"bottom_line\": \"The observatory suspended AP-14 after a motor stopped during inspection.\",\n  \"items\": [\n    {\n      \"article_index\": 1,\n      \"evidence_quote\": \"The observatory suspended AP-14 after a motor stopped during inspection.\",\n      \"what_changed\": \"The observatory's AP-14 was paused.\",\n      \"why_it_matters\": \"The pause affects the observatory's operations.\",\n      \"decision\": \"watch\",\n      \"next_step\": null,\n      \"confidence\": \"low\"\n    }\n  ]\n}",
+      "promptTokens": 851,
+      "generatedTokens": 120,
+      "finishReason": "stop",
+      "seconds": 2.413
+    }
+  ]
+}

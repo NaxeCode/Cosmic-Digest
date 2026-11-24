@@ -29,6 +29,10 @@ The [standalone lab file](docs/briefing-lab/index.html) runs offline. Choose **D
 dotnet run -c Release --project tools/BriefingLab -- artifacts/briefing-lab
 ```
 
+### Can a later notice catch stale advice?
+
+On eight new fictional packets in two source orders, the shipping quote guard accepted seven answers that missed the frozen rubric. A proposed later-notice check accepted three such answers. Both accepted five rubric-passing answers. Of the four new referrals, three caught stale instructions and one flagged a still-valid approval because the later report said “no hold.” The challenger missed a reopened release and remains an offline experiment. [Inspect individual decisions](https://naxe.dev/labs/cosmic-digest/#corrections) · [Protocol](tools/BriefingLab/model-eval/CORRECTIONS.md)
+
 ## Try the failure cases
 
 1. **An article reference goes out of range.** A model response cites article 2 in a batch containing only article 1. The validator rejects the response and the job falls back to ranked stories. In a separate fixture, one feed announces a fictional SDK release and another reports its cancellation. The fallback keeps both reports. [Invalid reference](tests/CosmicDigest.Tests/NewsAiTests.cs#L4-L13) · [Fallback in the job](Program.cs#L113-L130) · [Release and correction](tests/CosmicDigest.Tests/NewsAiTests.cs#L70-L88)
